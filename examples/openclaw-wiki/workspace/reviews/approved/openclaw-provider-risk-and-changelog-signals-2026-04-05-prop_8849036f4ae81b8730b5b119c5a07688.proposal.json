@@ -6,7 +6,7 @@
   "status": "approved",
   "proposalType": "create_page",
   "title": "Create Provider dependency risk concept page",
-  "generatedAt": "2026-04-05T19:36:54.315Z",
+  "generatedAt": "2026-04-05T19:36:54.735Z",
   "provider": "openai",
   "model": "gpt-openclaw-example",
   "promptHash": "3f515226b5d6435e4dd66528221719f48b5ddb14c03108e197b6142740b57eef",
@@ -387,12 +387,12 @@
     }
   ],
   "review": {
-    "reviewedAt": "2026-04-05T19:36:54.329Z",
+    "reviewedAt": "2026-04-05T19:36:54.769Z",
     "note": "Approved to give external provider constraints a durable conceptual page instead of burying them in release notes.",
     "editedBeforeApply": false
   },
   "applyResult": {
-    "appliedAt": "2026-04-05T19:36:54.329Z",
+    "appliedAt": "2026-04-05T19:36:54.769Z",
     "success": true,
     "affectedPaths": [
       "wiki/concepts/provider-dependency-risk.md"

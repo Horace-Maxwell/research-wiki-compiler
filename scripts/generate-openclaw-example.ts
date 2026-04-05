@@ -1,10 +1,22 @@
+import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import type {
   AnswerArtifact,
   AnswererOutput,
 } from "@/lib/contracts/answer";
+import {
+  openClawExampleManifestSchema,
+  openClawExamplePipelineConfigSchema,
+  openClawExampleReferenceBaselineSchema,
+  type OpenClawExampleManifest,
+  type OpenClawExampleMode,
+  type OpenClawExamplePipelineConfig,
+  type OpenClawExampleReferenceBaseline,
+  type OpenClawExampleSourcePlan,
+} from "@/lib/contracts/openclaw-example";
 import type {
   ReviewProposalDetail,
   EditableReviewProposal,
@@ -18,7 +30,16 @@ import { archiveAnswerArtifact } from "@/server/services/answer-archive-service"
 import { runAudit } from "@/server/services/audit-service";
 import { refreshWikiPageSearchIndex } from "@/server/services/candidate-page-recall-service";
 import { getWorkspaceDatabase } from "@/server/db/client";
-import { REPO_ROOT } from "@/server/lib/repo-paths";
+import {
+  OPENCLAW_RENDERED_WORKSPACE_ROOT,
+  REPO_ROOT,
+} from "@/server/lib/repo-paths";
+import {
+  ensureOpenClawRenderedWorkspace,
+} from "@/server/services/openclaw-example-service";
+import {
+  buildOpenClawObsidianVault,
+} from "@/server/services/openclaw-obsidian-vault-service";
 import {
   parseWikiDocument,
   serializeWikiDocument,
@@ -36,6 +57,7 @@ import { updateWorkspaceLlmSettings } from "@/server/services/settings-service";
 import { importSource, getSourceDetail } from "@/server/services/source-service";
 import { summarizeSource } from "@/server/services/source-summary-service";
 import {
+  createWikiPage,
   getWikiPageDetail,
   listWikiPages,
   syncWikiIndex,
@@ -44,17 +66,7 @@ import {
 import { initializeWorkspace } from "@/server/services/workspace-service";
 
 const EXAMPLE_ROOT = path.join(REPO_ROOT, "examples", "openclaw-wiki");
-const SNAPSHOT_ROOT = path.join(EXAMPLE_ROOT, "workspace");
-const CORPUS_ROOT = path.join(EXAMPLE_ROOT, "source-corpus");
-const BUILD_WORKSPACE_ROOT = path.join(REPO_ROOT, "tmp", "openclaw-workspace-build");
-const MANIFEST_PATH = path.join(EXAMPLE_ROOT, "manifest.json");
-
-const CORPUS_FILES = [
-  "2026-03-31-openclaw-release-and-plugin-surface.md",
-  "2026-03-26-openclaw-plugin-sdk-and-policy.md",
-  "2026-04-02-openclaw-release-cadence-and-test-churn.md",
-  "2026-04-05-openclaw-provider-risk-and-changelog.md",
-] as const;
+const PIPELINE_CONFIG_PATH = path.join(EXAMPLE_ROOT, "pipeline.json");
 
 type SourcePlan = {
   importedId: string;
@@ -65,45 +77,25 @@ type SourcePlan = {
   rejectedProposalIds: string[];
 };
 
-type Manifest = {
-  generatedAt: string;
-  exampleName: string;
-  corpusFiles: Array<{
-    snapshotPath: string;
-    originPath: string;
-    excerptScope: string[];
-  }>;
-  sources: Array<{
-    id: string;
-    title: string;
-    summaryMarkdownPath: string | null;
-    summaryJsonPath: string | null;
-    proposalIds: string[];
-    approvedProposalIds: string[];
-    rejectedProposalIds: string[];
-  }>;
-  pages: Array<{
-    title: string;
-    type: string;
-    path: string;
-  }>;
-  answers: Array<{
-    id: string;
-    question: string;
-    shortAnswer: string;
-    archivedPagePath: string | null;
-  }>;
-  audits: Array<{
-    id: string;
-    mode: string;
-    reportPath: string | null;
-    findingCount: number;
-  }>;
-  notes: {
-    mockProvider: string;
-    runtimeWorkspaceRoot: string;
-    committedSnapshotRoot: string;
-  };
+type OpenClawBuildPaths = {
+  corpusRoot: string;
+  snapshotRoot: string;
+  canonicalManifestPath: string;
+  referenceBaselinePath: string;
+  canonicalObsidianVaultRoot: string;
+  runtimeWorkspaceRoot: string;
+  runtimeManifestPath: string;
+  runtimeObsidianVaultRoot: string;
+};
+
+type OpenClawBuildResult = {
+  mode: OpenClawExampleMode;
+  workspaceRoot: string;
+  runtimeManifestPath: string;
+  runtimeObsidianVaultRoot: string;
+  manifest: OpenClawExampleManifest;
+  config: OpenClawExamplePipelineConfig;
+  paths: OpenClawBuildPaths;
 };
 
 function openAiResponse(payload: unknown) {
@@ -124,6 +116,284 @@ function openAiResponse(payload: unknown) {
       },
     },
   );
+}
+
+function sha256(value: string) {
+  return crypto.createHash("sha256").update(value).digest("hex");
+}
+
+function normalizeTextFileContent(value: string) {
+  return value.replace(/\r\n/g, "\n");
+}
+
+async function writeJsonFile(targetPath: string, value: unknown) {
+  await fs.mkdir(path.dirname(targetPath), { recursive: true });
+  await fs.writeFile(targetPath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+}
+
+async function fileExists(targetPath: string) {
+  try {
+    await fs.access(targetPath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function readPipelineConfig() {
+  const raw = await fs.readFile(PIPELINE_CONFIG_PATH, "utf8");
+  return openClawExamplePipelineConfigSchema.parse(JSON.parse(raw));
+}
+
+function getBuildPaths(
+  config: OpenClawExamplePipelineConfig,
+  mode: OpenClawExampleMode,
+): OpenClawBuildPaths {
+  return {
+    corpusRoot: path.join(REPO_ROOT, config.paths.corpusRoot),
+    snapshotRoot: path.join(REPO_ROOT, config.paths.canonicalSnapshotRoot),
+    canonicalManifestPath: path.join(REPO_ROOT, config.paths.canonicalManifestPath),
+    referenceBaselinePath: path.join(REPO_ROOT, config.paths.referenceBaselinePath),
+    canonicalObsidianVaultRoot: path.join(REPO_ROOT, config.paths.canonicalObsidianVaultRoot),
+    runtimeWorkspaceRoot: path.join(
+      REPO_ROOT,
+      mode === "reference"
+        ? config.paths.referenceRuntimeWorkspaceRoot
+        : config.paths.liveRuntimeWorkspaceRoot,
+    ),
+    runtimeManifestPath: path.join(
+      REPO_ROOT,
+      mode === "reference"
+        ? config.paths.referenceRuntimeManifestPath
+        : config.paths.liveRuntimeManifestPath,
+    ),
+    runtimeObsidianVaultRoot: path.join(
+      REPO_ROOT,
+      mode === "reference"
+        ? config.paths.referenceRuntimeObsidianVaultRoot
+        : config.paths.liveRuntimeObsidianVaultRoot,
+    ),
+  };
+}
+
+async function listFilesRecursively(root: string) {
+  const entries = await fs.readdir(root, { withFileTypes: true });
+  const files: string[] = [];
+
+  for (const entry of entries) {
+    const absolutePath = path.join(root, entry.name);
+
+    if (entry.isDirectory()) {
+      files.push(...(await listFilesRecursively(absolutePath)));
+      continue;
+    }
+
+    if (!entry.isFile()) {
+      continue;
+    }
+
+    if (entry.name === ".DS_Store") {
+      continue;
+    }
+
+    files.push(absolutePath);
+  }
+
+  return files.sort();
+}
+
+async function collectHashEntries(params: {
+  root: string;
+  logicalPrefix?: string;
+}) {
+  const files = await listFilesRecursively(params.root);
+
+  return Promise.all(
+    files.map(async (filePath) => {
+      const raw = await fs.readFile(filePath, "utf8");
+
+      return {
+        logicalPath: path.posix.join(
+          params.logicalPrefix ?? "",
+          path.relative(params.root, filePath).split(path.sep).join("/"),
+        ),
+        sha256: sha256(normalizeTextFileContent(raw)),
+      };
+    }),
+  );
+}
+
+async function buildReferenceBaseline(params: {
+  manifestPath: string;
+  snapshotRoot: string;
+  corpusRoot: string;
+  obsidianVaultRoot: string;
+}) {
+  const manifestRaw = await fs.readFile(params.manifestPath, "utf8");
+  const entries = [
+    {
+      logicalPath: "manifest.json",
+      sha256: sha256(normalizeTextFileContent(manifestRaw)),
+    },
+    ...(await collectHashEntries({
+      root: params.snapshotRoot,
+      logicalPrefix: "workspace",
+    })),
+    ...(await collectHashEntries({
+      root: params.obsidianVaultRoot,
+      logicalPrefix: "obsidian-vault",
+    })),
+  ].sort((left, right) => left.logicalPath.localeCompare(right.logicalPath));
+  const corpusEntries = (await collectHashEntries({
+    root: params.corpusRoot,
+    logicalPrefix: "source-corpus",
+  })).sort((left, right) => left.logicalPath.localeCompare(right.logicalPath));
+
+  return openClawExampleReferenceBaselineSchema.parse({
+    schemaVersion: 1,
+    generatedAt: new Date().toISOString(),
+    mode: "reference",
+    manifestLogicalPath: "manifest.json",
+    entries,
+    corpusEntries,
+  });
+}
+
+function compareHashEntries(params: {
+  actual: OpenClawExampleReferenceBaseline["entries"];
+  expected: OpenClawExampleReferenceBaseline["entries"];
+  label: string;
+}) {
+  const expectedMap = new Map(
+    params.expected.map((entry) => [entry.logicalPath, entry.sha256]),
+  );
+  const actualMap = new Map(params.actual.map((entry) => [entry.logicalPath, entry.sha256]));
+  const missing = [...expectedMap.keys()].filter((key) => !actualMap.has(key));
+  const unexpected = [...actualMap.keys()].filter((key) => !expectedMap.has(key));
+  const mismatched = [...expectedMap.entries()]
+    .filter(([key, hash]) => actualMap.has(key) && actualMap.get(key) !== hash)
+    .map(([key]) => key);
+
+  if (missing.length === 0 && unexpected.length === 0 && mismatched.length === 0) {
+    return;
+  }
+
+  const parts = [
+    `${params.label} did not match the canonical reference baseline.`,
+  ];
+
+  if (missing.length > 0) {
+    parts.push(`Missing: ${missing.join(", ")}`);
+  }
+
+  if (unexpected.length > 0) {
+    parts.push(`Unexpected: ${unexpected.join(", ")}`);
+  }
+
+  if (mismatched.length > 0) {
+    parts.push(`Changed: ${mismatched.join(", ")}`);
+  }
+
+  throw new Error(parts.join(" "));
+}
+
+async function withDeterministicRuntime<T>(
+  seedTimestamp: string,
+  callback: () => Promise<T>,
+) {
+  const OriginalDate = Date;
+  const originalRandomUUID = crypto.randomUUID;
+  const baseTime = OriginalDate.parse(seedTimestamp);
+  let tick = 0;
+  let uuidCounter = 0;
+  const nextTime = () => baseTime + tick++;
+
+  class DeterministicDate extends OriginalDate {
+    constructor(...args: unknown[]) {
+      if (args.length === 0) {
+        super(nextTime());
+        return;
+      }
+
+      if (args.length === 1) {
+        super(args[0] as string | number | Date);
+        return;
+      }
+
+      if (args.length === 2) {
+        super(args[0] as number, args[1] as number);
+        return;
+      }
+
+      if (args.length === 3) {
+        super(args[0] as number, args[1] as number, args[2] as number);
+        return;
+      }
+
+      if (args.length === 4) {
+        super(args[0] as number, args[1] as number, args[2] as number, args[3] as number);
+        return;
+      }
+
+      if (args.length === 5) {
+        super(
+          args[0] as number,
+          args[1] as number,
+          args[2] as number,
+          args[3] as number,
+          args[4] as number,
+        );
+        return;
+      }
+
+      if (args.length === 6) {
+        super(
+          args[0] as number,
+          args[1] as number,
+          args[2] as number,
+          args[3] as number,
+          args[4] as number,
+          args[5] as number,
+        );
+        return;
+      }
+
+      super(
+        args[0] as number,
+        args[1] as number,
+        args[2] as number,
+        args[3] as number,
+        args[4] as number,
+        args[5] as number,
+        args[6] as number,
+      );
+    }
+
+    static now() {
+      return nextTime();
+    }
+
+    static parse(value: string) {
+      return OriginalDate.parse(value);
+    }
+
+    static UTC(...args: Parameters<typeof Date.UTC>) {
+      return OriginalDate.UTC(...args);
+    }
+  }
+
+  globalThis.Date = DeterministicDate as DateConstructor;
+  crypto.randomUUID = () => {
+    const suffix = String(uuidCounter++).padStart(12, "0");
+    return `00000000-0000-4000-8000-${suffix}`;
+  };
+
+  try {
+    return await callback();
+  } finally {
+    globalThis.Date = OriginalDate;
+    crypto.randomUUID = originalRandomUUID;
+  }
 }
 
 function extractPromptField(prompt: string, field: string) {
@@ -1250,19 +1520,86 @@ async function cleanDirectory(directory: string) {
   await fs.mkdir(directory, { recursive: true });
 }
 
-async function syncSnapshot(runtimeWorkspaceRoot: string) {
-  await fs.mkdir(SNAPSHOT_ROOT, { recursive: true });
+async function syncDirectory(sourceRoot: string, targetRoot: string) {
+  await fs.rm(targetRoot, { recursive: true, force: true });
+  await fs.mkdir(targetRoot, { recursive: true });
+  await fs.cp(sourceRoot, targetRoot, { recursive: true });
+}
+
+async function syncSnapshot(runtimeWorkspaceRoot: string, snapshotRoot: string) {
+  await fs.mkdir(snapshotRoot, { recursive: true });
 
   for (const name of ["raw", "reviews", "audits", "wiki"]) {
-    await fs.rm(path.join(SNAPSHOT_ROOT, name), { recursive: true, force: true });
+    await fs.rm(path.join(snapshotRoot, name), { recursive: true, force: true });
   }
 
   for (const name of ["raw", "reviews", "audits", "wiki"]) {
     const from = path.join(runtimeWorkspaceRoot, name);
-    const to = path.join(SNAPSHOT_ROOT, name);
+    const to = path.join(snapshotRoot, name);
 
     await fs.cp(from, to, { recursive: true });
   }
+}
+
+async function buildRuntimeEntries(params: {
+  manifestPath: string;
+  workspaceRoot: string;
+  obsidianVaultRoot: string;
+}) {
+  const manifestRaw = await fs.readFile(params.manifestPath, "utf8");
+  const workspaceEntries = [];
+
+  for (const directoryName of ["raw", "reviews", "audits", "wiki"] as const) {
+    workspaceEntries.push(
+      ...(await collectHashEntries({
+        root: path.join(params.workspaceRoot, directoryName),
+        logicalPrefix: path.posix.join("workspace", directoryName),
+      })),
+    );
+  }
+
+  const obsidianEntries = await collectHashEntries({
+    root: params.obsidianVaultRoot,
+    logicalPrefix: "obsidian-vault",
+  });
+
+  return [
+    {
+      logicalPath: "manifest.json",
+      sha256: sha256(normalizeTextFileContent(manifestRaw)),
+    },
+    ...workspaceEntries,
+    ...obsidianEntries,
+  ].sort((left, right) => left.logicalPath.localeCompare(right.logicalPath));
+}
+
+function getLiveProviderSettings(config: OpenClawExamplePipelineConfig) {
+  const provider = process.env.OPENCLAW_EXAMPLE_LIVE_PROVIDER?.trim() || config.modes.live.provider;
+
+  if (provider !== "openai") {
+    throw new Error(
+      `Unsupported OPENCLAW_EXAMPLE_LIVE_PROVIDER "${provider}". This example currently supports live OpenAI execution only.`,
+    );
+  }
+
+  const apiKey = process.env.OPENAI_API_KEY?.trim();
+
+  if (!apiKey) {
+    throw new Error("OPENAI_API_KEY is required for npm run example:openclaw:live.");
+  }
+
+  return {
+    provider: "openai" as const,
+    model: null,
+    openai: {
+      apiKey,
+      model: process.env.OPENCLAW_EXAMPLE_LIVE_MODEL?.trim() || "gpt-5.4",
+    },
+    anthropic: {
+      apiKey: null,
+      model: null,
+    },
+  };
 }
 
 async function checkpointDatabase(workspaceRoot: string) {
@@ -1280,6 +1617,89 @@ async function getPageIdByPath(workspaceRoot: string, pagePath: string) {
   }
 
   return page.id;
+}
+
+function uniqueStringValues(values: string[]) {
+  return [...new Set(values.filter((value) => value.trim().length > 0))];
+}
+
+async function rewritePageByPath(params: {
+  workspaceRoot: string;
+  pagePath: string;
+  mutate: (input: {
+    detail: Awaited<ReturnType<typeof getWikiPageDetail>>;
+    frontmatter: ReturnType<typeof parseWikiDocument>["frontmatter"];
+    body: string;
+  }) => {
+    frontmatter: ReturnType<typeof parseWikiDocument>["frontmatter"];
+    body: string;
+  };
+}) {
+  const pageId = await getPageIdByPath(params.workspaceRoot, params.pagePath);
+  const detail = await getWikiPageDetail(params.workspaceRoot, pageId);
+  const parsed = parseWikiDocument({
+    rawContent: detail.rawContent,
+    relativePath: detail.path,
+  });
+  const next = params.mutate({
+    detail,
+    frontmatter: parsed.frontmatter,
+    body: parsed.body,
+  });
+
+  await updateWikiPage({
+    workspaceRoot: params.workspaceRoot,
+    pageId,
+    rawContent: serializeWikiDocument(next.frontmatter, next.body),
+  });
+}
+
+async function upsertCuratedPage(params: {
+  workspaceRoot: string;
+  title: string;
+  type: "synthesis" | "note";
+  aliases?: string[];
+  tags?: string[];
+  sourceRefs?: string[];
+  pageRefs?: string[];
+  confidence?: number;
+  body: string;
+}) {
+  const pages = await listWikiPages(params.workspaceRoot);
+  const existing = pages.find((page) => page.title === params.title);
+  const detail = existing
+    ? await getWikiPageDetail(params.workspaceRoot, existing.id)
+    : await createWikiPage({
+        workspaceRoot: params.workspaceRoot,
+        title: params.title,
+        type: params.type,
+        aliases: params.aliases ?? [],
+        tags: params.tags ?? [],
+      });
+  const parsed = parseWikiDocument({
+    rawContent: detail.rawContent,
+    relativePath: detail.path,
+  });
+
+  await updateWikiPage({
+    workspaceRoot: params.workspaceRoot,
+    pageId: detail.id,
+    rawContent: serializeWikiDocument(
+      {
+        ...parsed.frontmatter,
+        title: params.title,
+        aliases: uniqueStringValues(params.aliases ?? parsed.frontmatter.aliases),
+        tags: uniqueStringValues(params.tags ?? parsed.frontmatter.tags),
+        source_refs: uniqueStringValues(params.sourceRefs ?? parsed.frontmatter.source_refs),
+        page_refs: uniqueStringValues(params.pageRefs ?? parsed.frontmatter.page_refs),
+        confidence: params.confidence ?? parsed.frontmatter.confidence,
+        review_status: "approved",
+        status: "active",
+        updated_at: new Date().toISOString(),
+      },
+      params.body,
+    ),
+  });
 }
 
 function buildEditedProposal(detail: ReviewProposalDetail, newAfterText: string): EditableReviewProposal {
@@ -1453,7 +1873,8 @@ async function rewriteExampleIndex(workspaceRoot: string, sourceIds: string[]) {
   const nextFrontmatter = {
     ...parsed.frontmatter,
     title: "OpenClaw Example Index",
-    tags: ["workspace", "example", "openclaw"],
+    aliases: ["OpenClaw MOC", "OpenClaw map of content"],
+    tags: ["workspace", "example", "openclaw", "navigation", "start-here"],
     source_refs: sourceIds,
     page_refs: [
       "OpenClaw",
@@ -1461,6 +1882,9 @@ async function rewriteExampleIndex(workspaceRoot: string, sourceIds: string[]) {
       "Plugin compatibility",
       "Provider dependency risk",
       "OpenClaw maintenance watchpoints",
+      "OpenClaw reading paths",
+      "OpenClaw current tensions",
+      "OpenClaw open questions",
       archivedNoteTitle,
     ],
     updated_at: new Date().toISOString(),
@@ -1475,16 +1899,53 @@ async function rewriteExampleIndex(workspaceRoot: string, sourceIds: string[]) {
     "## Start here",
     "",
     "- [[OpenClaw]]",
+    "- [[OpenClaw current tensions]]",
     "- [[OpenClaw release cadence]]",
     "- [[Plugin compatibility]]",
     "- [[Provider dependency risk]]",
     "- [[OpenClaw maintenance watchpoints]]",
+    "- [[OpenClaw reading paths]]",
+    "- [[OpenClaw open questions]]",
     `- [[${archivedNoteTitle}]]`,
+    "",
+    "## How to use this wiki",
+    "",
+    "- Read [[OpenClaw]] first if you want the compact explanation of what the corpus says the product is.",
+    "- Read [[OpenClaw current tensions]] when you want the active risks and trade-offs rather than a neutral overview.",
+    "- Read [[OpenClaw maintenance watchpoints]] and the archived upgrade note when you want the operational checklist.",
+    "- Read [[OpenClaw reading paths]] when you want a small note bundle for orientation, maintenance review, or provenance tracing.",
+    "",
+    "## Key pages",
+    "",
+    "- [[OpenClaw]]: the core entity page.",
+    "- [[OpenClaw release cadence]]: why releases behave like near-term upgrade checkpoints.",
+    "- [[Plugin compatibility]]: the integration and SDK-surface concept page.",
+    "- [[Provider dependency risk]]: the concept page for external provider constraints.",
+    "- [[OpenClaw maintenance watchpoints]]: the maintainer-facing synthesis.",
+    "",
+    "## Open fronts",
+    "",
+    "- [[OpenClaw current tensions]]",
+    "- [[OpenClaw open questions]]",
+    "",
+    "## Open questions",
+    "",
+    "- Which release signals should trigger a full local regression run?",
+    "- Which plugin assumptions are most likely to break next?",
+    "- Which provider-side changes would materially change upgrade or adoption decisions?",
     "",
     "## Corpus",
     "",
     "- Four curated excerpts from the user's Obsidian AI news digests between 2026-03-26 and 2026-04-05.",
     "- The corpus emphasizes releases, plugin/API baseline changes, provider-facing refactors, and external provider-policy risk signals.",
+    "",
+    "## Artifact ladder",
+    "",
+    "- Source excerpts enter through `source-corpus/` and `raw/processed/`.",
+    "- Source summaries make the first abstraction layer visible under `raw/processed/summaries/`.",
+    "- Review proposals preserve the mutation gate under `reviews/approved/` and `reviews/rejected/`.",
+    "- Durable compiled pages remain in `wiki/` and stay the source of truth.",
+    "- The archived note and coverage audit show how ask/archive/audit re-enter the knowledge base.",
     "",
     "## Visible artifacts",
     "",
@@ -1506,11 +1967,304 @@ async function rewriteExampleIndex(workspaceRoot: string, sourceIds: string[]) {
   await refreshWikiPageSearchIndex(workspaceRoot);
 }
 
+async function applyKnowledgeWorkOptimization(workspaceRoot: string, sourceIds: string[]) {
+  const archivedNoteTitle = "Note: What should I monitor before upgrading OpenClaw";
+
+  await upsertCuratedPage({
+    workspaceRoot,
+    title: "OpenClaw reading paths",
+    type: "synthesis",
+    tags: ["navigation", "reading-paths", "openclaw", "synthesis"],
+    sourceRefs: sourceIds,
+    pageRefs: [
+      "OpenClaw",
+      "OpenClaw release cadence",
+      "Plugin compatibility",
+      "Provider dependency risk",
+      "OpenClaw maintenance watchpoints",
+      "OpenClaw current tensions",
+      "OpenClaw open questions",
+      archivedNoteTitle,
+    ],
+    confidence: 0.82,
+    body: [
+      "# OpenClaw reading paths",
+      "",
+      "## Overview",
+      "",
+      "This page organizes the example into small working bundles so a reader can load only the notes needed for orientation, maintenance review, or provenance tracing.",
+      "",
+      "## Orientation pass",
+      "",
+      "1. [[OpenClaw]]",
+      "2. [[OpenClaw current tensions]]",
+      "3. [[OpenClaw maintenance watchpoints]]",
+      "",
+      "## Maintenance pass",
+      "",
+      "1. [[OpenClaw release cadence]]",
+      "2. [[Plugin compatibility]]",
+      "3. [[Provider dependency risk]]",
+      "4. [[Note: What should I monitor before upgrading OpenClaw]]",
+      "",
+      "## Provenance pass",
+      "",
+      "1. [[OpenClaw]]",
+      "2. [[Plugin compatibility]]",
+      "3. [[OpenClaw current tensions]]",
+      "4. [[OpenClaw open questions]]",
+      "5. [[Note: What should I monitor before upgrading OpenClaw]]",
+      "",
+      "## Related pages",
+      "",
+      "- [[OpenClaw Example Index]]",
+      "- [[OpenClaw maintenance watchpoints]]",
+      "- [[OpenClaw open questions]]",
+    ].join("\n"),
+  });
+
+  await upsertCuratedPage({
+    workspaceRoot,
+    title: "OpenClaw current tensions",
+    type: "synthesis",
+    tags: ["tensions", "risk", "openclaw", "synthesis"],
+    sourceRefs: sourceIds,
+    pageRefs: [
+      "OpenClaw",
+      "Plugin compatibility",
+      "Provider dependency risk",
+      "OpenClaw maintenance watchpoints",
+      "OpenClaw open questions",
+    ],
+    confidence: 0.79,
+    body: [
+      "# OpenClaw current tensions",
+      "",
+      "## Summary",
+      "",
+      "The most important tension in this corpus is that OpenClaw looks useful precisely where it is still moving: releases are frequent, plugin surfaces are changing, and provider-side constraints remain outside the project's direct control.",
+      "",
+      "## Current tensions",
+      "",
+      "- Release speed versus local workflow stability.",
+      "- Plugin-surface progress versus integration breakage risk.",
+      "- Provider leverage versus durable access assumptions.",
+      "",
+      "## Why they matter",
+      "",
+      "- A maintainer can read the release notes and still miss workflow drift if they do not also inspect compatibility and provider assumptions.",
+      "- The same fast motion that makes the project interesting also makes upgrade timing and regression depth more important.",
+      "",
+      "## Related pages",
+      "",
+      "- [[OpenClaw]]",
+      "- [[Plugin compatibility]]",
+      "- [[Provider dependency risk]]",
+      "- [[OpenClaw maintenance watchpoints]]",
+      "- [[OpenClaw open questions]]",
+    ].join("\n"),
+  });
+
+  await upsertCuratedPage({
+    workspaceRoot,
+    title: "OpenClaw open questions",
+    type: "note",
+    tags: ["open-questions", "next-work", "openclaw", "note"],
+    sourceRefs: sourceIds,
+    pageRefs: [
+      "OpenClaw",
+      "OpenClaw release cadence",
+      "Plugin compatibility",
+      "Provider dependency risk",
+      "OpenClaw maintenance watchpoints",
+      "OpenClaw current tensions",
+      archivedNoteTitle,
+    ],
+    confidence: 0.74,
+    body: [
+      "# OpenClaw open questions",
+      "",
+      "## Summary",
+      "",
+      "These are the highest-leverage unresolved questions if you want to keep the OpenClaw example current or use it as an operational case study.",
+      "",
+      "## Questions",
+      "",
+      "- Which release-note or changelog signals should trigger a full regression run instead of a light upgrade check?",
+      "- Which plugin or SDK assumptions are most likely to drift between releases?",
+      "- Which provider-side changes would change adoption or upgrade decisions the fastest?",
+      "",
+      "## What would resolve them",
+      "",
+      "- More explicit release notes that connect shipped fixes to workflow-facing breakpoints.",
+      "- Additional source excerpts that show how plugin API or SDK boundaries evolve over multiple releases.",
+      "- Stronger evidence about how provider restrictions show up in actual workflow outcomes, not just community chatter.",
+      "",
+      "## Related pages",
+      "",
+      "- [[OpenClaw]]",
+      "- [[OpenClaw release cadence]]",
+      "- [[Plugin compatibility]]",
+      "- [[Provider dependency risk]]",
+      "- [[OpenClaw maintenance watchpoints]]",
+      `- [[${archivedNoteTitle}]]`,
+    ].join("\n"),
+  });
+
+  await rewritePageByPath({
+    workspaceRoot,
+    pagePath: "wiki/entities/openclaw.md",
+    mutate: ({ frontmatter, body }) => ({
+      frontmatter: {
+        ...frontmatter,
+        aliases: uniqueStringValues(["open claw", ...frontmatter.aliases]),
+        tags: ["entity", "openclaw", "entry-point", "core-page"],
+        page_refs: [
+          "OpenClaw release cadence",
+          "Plugin compatibility",
+          "Provider dependency risk",
+          "OpenClaw maintenance watchpoints",
+          "OpenClaw current tensions",
+          "OpenClaw open questions",
+        ],
+        source_refs: sourceIds,
+        updated_at: new Date().toISOString(),
+      },
+      body,
+    }),
+  });
+
+  await rewritePageByPath({
+    workspaceRoot,
+    pagePath: "wiki/topics/openclaw-release-cadence.md",
+    mutate: ({ frontmatter, body }) => ({
+      frontmatter: {
+        ...frontmatter,
+        tags: ["topic", "openclaw", "releases", "upgrade-planning"],
+        page_refs: [
+          "OpenClaw",
+          "OpenClaw maintenance watchpoints",
+          "OpenClaw current tensions",
+          archivedNoteTitle,
+        ],
+        updated_at: new Date().toISOString(),
+      },
+      body,
+    }),
+  });
+
+  await rewritePageByPath({
+    workspaceRoot,
+    pagePath: "wiki/concepts/plugin-compatibility.md",
+    mutate: ({ frontmatter, body }) => ({
+      frontmatter: {
+        ...frontmatter,
+        tags: ["concept", "openclaw", "plugins", "integration"],
+        page_refs: [
+          "OpenClaw",
+          "OpenClaw release cadence",
+          "OpenClaw maintenance watchpoints",
+          "OpenClaw current tensions",
+          "OpenClaw open questions",
+        ],
+        updated_at: new Date().toISOString(),
+      },
+      body,
+    }),
+  });
+
+  await rewritePageByPath({
+    workspaceRoot,
+    pagePath: "wiki/concepts/provider-dependency-risk.md",
+    mutate: ({ frontmatter, body }) => ({
+      frontmatter: {
+        ...frontmatter,
+        tags: ["concept", "openclaw", "providers", "risk"],
+        page_refs: [
+          "OpenClaw",
+          "OpenClaw current tensions",
+          "OpenClaw maintenance watchpoints",
+          archivedNoteTitle,
+        ],
+        updated_at: new Date().toISOString(),
+      },
+      body,
+    }),
+  });
+
+  await rewritePageByPath({
+    workspaceRoot,
+    pagePath: "wiki/syntheses/openclaw-maintenance-watchpoints.md",
+    mutate: ({ frontmatter, body }) => ({
+      frontmatter: {
+        ...frontmatter,
+        tags: ["synthesis", "openclaw", "monitoring", "operations"],
+        page_refs: [
+          "OpenClaw",
+          "OpenClaw release cadence",
+          "Plugin compatibility",
+          "Provider dependency risk",
+          "OpenClaw current tensions",
+          "OpenClaw open questions",
+          archivedNoteTitle,
+        ],
+        updated_at: new Date().toISOString(),
+      },
+      body,
+    }),
+  });
+
+  await rewritePageByPath({
+    workspaceRoot,
+    pagePath: "wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md",
+    mutate: ({ frontmatter, body }) => ({
+      frontmatter: {
+        ...frontmatter,
+        aliases: uniqueStringValues([
+          "OpenClaw upgrade checklist",
+          ...frontmatter.aliases,
+        ]),
+        tags: uniqueStringValues([
+          ...frontmatter.tags,
+          "openclaw",
+          "monitoring",
+          "upgrade",
+          "next-work",
+        ]),
+        page_refs: [
+          "OpenClaw release cadence",
+          "Plugin compatibility",
+          "Provider dependency risk",
+          "OpenClaw maintenance watchpoints",
+          "OpenClaw current tensions",
+          "OpenClaw open questions",
+        ],
+        updated_at: new Date().toISOString(),
+      },
+      body: body.replace(
+        "## Based-on pages\n\n- No directly grounded wiki pages were attached to this answer artifact.",
+        [
+          "## Based-on pages",
+          "",
+          "- [[OpenClaw release cadence]]",
+          "- [[Plugin compatibility]]",
+          "- [[Provider dependency risk]]",
+          "",
+          "These pages are the most useful compiled follow-through even though the original answer artifact fell back to source summaries.",
+        ].join("\n"),
+      ),
+    }),
+  });
+}
+
 async function buildManifest(params: {
   workspaceRoot: string;
   sourcePlans: SourcePlan[];
   answers: AnswerArtifact[];
   auditIds: string[];
+  config: OpenClawExamplePipelineConfig;
+  paths: OpenClawBuildPaths;
+  mode: OpenClawExampleMode;
 }) {
   const pages = await listWikiPages(params.workspaceRoot);
   const audits = params.auditIds.map((auditId) => {
@@ -1524,24 +2278,15 @@ async function buildManifest(params: {
   });
 
   return {
+    schemaVersion: 1,
     generatedAt: new Date().toISOString(),
-    exampleName: "OpenClaw example wiki",
-    corpusFiles: await Promise.all(
-      CORPUS_FILES.map(async (fileName) => {
-        const raw = await fs.readFile(path.join(CORPUS_ROOT, fileName), "utf8");
-        const frontmatterMatch = raw.match(/^---\n([\s\S]+?)\n---/);
-        const originPath = frontmatterMatch?.[1].match(/origin_path:\s*"(.+)"/)?.[1] ?? "";
-        const excerptScope = [
-          ...raw.matchAll(/^\s*-\s+"(.+)"$/gm),
-        ].map((match) => match[1]!);
-
-        return {
-          snapshotPath: `examples/openclaw-wiki/source-corpus/${fileName}`,
-          originPath,
-          excerptScope,
-        };
-      }),
-    ),
+    generatedMode: params.mode,
+    exampleName: params.config.exampleName,
+    corpusFiles: params.config.corpusFiles.map((file) => ({
+      snapshotPath: file.snapshotPath,
+      originPath: file.originPath,
+      excerptScope: file.excerptScope,
+    })),
     sources: params.sourcePlans.map((sourcePlan) => ({
       id: sourcePlan.importedId,
       title: "",
@@ -1569,11 +2314,24 @@ async function buildManifest(params: {
       findingCount: audit.findings.length,
     })),
     notes: {
-      mockProvider: "openai structured mock transport via real service calls",
-      runtimeWorkspaceRoot: "tmp/openclaw-workspace-build",
-      committedSnapshotRoot: "examples/openclaw-wiki/workspace",
+      mockProvider:
+        params.mode === "reference"
+          ? "openai structured mock transport via real service calls"
+          : null,
+      runtimeWorkspaceRoot: path
+        .relative(REPO_ROOT, params.paths.runtimeWorkspaceRoot)
+        .split(path.sep)
+        .join("/"),
+      committedSnapshotRoot: path
+        .relative(REPO_ROOT, params.paths.snapshotRoot)
+        .split(path.sep)
+        .join("/"),
+      reproducibility: {
+        referenceMode: params.config.modes.reference.description,
+        liveMode: params.config.modes.live.description,
+      },
     },
-  } satisfies Manifest;
+  } satisfies OpenClawExampleManifest;
 }
 
 const runAuditResultCache = new Map<
@@ -1581,43 +2339,175 @@ const runAuditResultCache = new Map<
   Awaited<ReturnType<typeof runAudit>>
 >();
 
-async function main() {
-  await cleanDirectory(BUILD_WORKSPACE_ROOT);
-  await fs.mkdir(path.join(REPO_ROOT, "tmp"), { recursive: true });
+async function validateWorkspaceAgainstConfig(params: {
+  workspaceRoot: string;
+  manifest: OpenClawExampleManifest;
+  config: OpenClawExamplePipelineConfig;
+}) {
+  for (const directoryName of params.config.validation.requiredWorkspaceDirectories) {
+    const absolutePath = path.join(params.workspaceRoot, directoryName);
 
-  await initializeWorkspace({
-    workspaceRoot: BUILD_WORKSPACE_ROOT,
-    workspaceName: "OpenClaw Example Workspace",
-    initializeGit: false,
-  });
+    if (!(await fileExists(absolutePath))) {
+      throw new Error(`Missing required workspace directory: ${directoryName}`);
+    }
+  }
 
-  await updateWorkspaceLlmSettings(BUILD_WORKSPACE_ROOT, {
-    provider: "openai",
-    model: null,
-    openai: {
-      apiKey: "sk-openclaw-example",
-      model: "gpt-openclaw-example",
-    },
-    anthropic: {
-      apiKey: null,
-      model: null,
-    },
-  });
+  for (const relativePath of params.config.validation.requiredArtifactPaths) {
+    if (!(await fileExists(path.join(params.workspaceRoot, relativePath)))) {
+      throw new Error(`Missing required artifact: ${relativePath}`);
+    }
+  }
+
+  for (const expectedPage of params.config.validation.requiredWikiPages) {
+    const absolutePath = path.join(params.workspaceRoot, expectedPage.path);
+
+    if (!(await fileExists(absolutePath))) {
+      throw new Error(`Missing required wiki page: ${expectedPage.path}`);
+    }
+
+    const raw = await fs.readFile(absolutePath, "utf8");
+    const parsed = parseWikiDocument({
+      rawContent: raw,
+      relativePath: expectedPage.path,
+    });
+
+    if (parsed.frontmatter.title !== expectedPage.title) {
+      throw new Error(
+        `Wiki page ${expectedPage.path} has title "${parsed.frontmatter.title}" but expected "${expectedPage.title}".`,
+      );
+    }
+
+    for (const heading of expectedPage.requiredHeadings) {
+      if (!parsed.body.includes(`## ${heading}`)) {
+        throw new Error(
+          `Wiki page ${expectedPage.path} is missing required heading "## ${heading}".`,
+        );
+      }
+    }
+  }
+
+  const approvedProposalCount = (
+    await listFilesRecursively(path.join(params.workspaceRoot, "reviews", "approved"))
+  ).filter((filePath) => filePath.endsWith(".proposal.json")).length;
+  const rejectedProposalCount = (
+    await listFilesRecursively(path.join(params.workspaceRoot, "reviews", "rejected"))
+  ).filter((filePath) => filePath.endsWith(".proposal.json")).length;
+
+  if (approvedProposalCount !== params.config.validation.requiredApprovedProposalCount) {
+    throw new Error(
+      `Expected ${params.config.validation.requiredApprovedProposalCount} approved proposals, found ${approvedProposalCount}.`,
+    );
+  }
+
+  if (rejectedProposalCount !== params.config.validation.requiredRejectedProposalCount) {
+    throw new Error(
+      `Expected ${params.config.validation.requiredRejectedProposalCount} rejected proposals, found ${rejectedProposalCount}.`,
+    );
+  }
+
+  const manifestPagePaths = new Set(params.manifest.pages.map((page) => page.path));
+
+  for (const page of params.config.validation.requiredWikiPages) {
+    if (!manifestPagePaths.has(page.path)) {
+      throw new Error(`Manifest is missing expected page path ${page.path}.`);
+    }
+  }
+
+  const archivedAnswer = params.manifest.answers.find(
+    (answer) => answer.archivedPagePath === params.config.validation.archivedAnswerPagePath,
+  );
+
+  if (!archivedAnswer) {
+    throw new Error(
+      `Manifest is missing archived answer page ${params.config.validation.archivedAnswerPagePath}.`,
+    );
+  }
+
+  for (const requiredMode of params.config.validation.requiredAuditModes) {
+    if (!params.manifest.audits.some((audit) => audit.mode === requiredMode)) {
+      throw new Error(`Manifest is missing required audit mode ${requiredMode}.`);
+    }
+  }
+}
+
+async function validateObsidianVaultAgainstConfig(params: {
+  vaultRoot: string;
+  config: OpenClawExamplePipelineConfig;
+}) {
+  for (const expectedNote of params.config.validation.requiredObsidianNotes) {
+    const absolutePath = path.join(params.vaultRoot, expectedNote.path);
+
+    if (!(await fileExists(absolutePath))) {
+      throw new Error(`Missing required Obsidian note: ${expectedNote.path}`);
+    }
+
+    const raw = await fs.readFile(absolutePath, "utf8");
+
+    if (!new RegExp(`^#\\s+${expectedNote.title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "m").test(raw)) {
+      throw new Error(
+        `Obsidian note ${expectedNote.path} is missing title heading "# ${expectedNote.title}".`,
+      );
+    }
+
+    for (const heading of expectedNote.requiredHeadings) {
+      if (!raw.includes(`## ${heading}`)) {
+        throw new Error(
+          `Obsidian note ${expectedNote.path} is missing required heading "## ${heading}".`,
+        );
+      }
+    }
+  }
+}
+
+export async function runOpenClawExampleBuild(params?: {
+  mode?: OpenClawExampleMode;
+  syncSnapshot?: boolean;
+}) {
+  const mode = params?.mode ?? "reference";
+  const config = await readPipelineConfig();
+  const paths = getBuildPaths(config, mode);
+  runAuditResultCache.clear();
 
   const sourcePlans: SourcePlan[] = [];
+  const runner = async () => {
+    await cleanDirectory(paths.runtimeWorkspaceRoot);
+    await fs.mkdir(path.join(REPO_ROOT, "tmp"), { recursive: true });
 
-  await withMockedOpenAi(async () => {
-    for (const fileName of CORPUS_FILES) {
-      const filePath = path.join(CORPUS_ROOT, fileName);
+    await initializeWorkspace({
+      workspaceRoot: paths.runtimeWorkspaceRoot,
+      workspaceName: "OpenClaw Example Workspace",
+      initializeGit: false,
+    });
+
+    await updateWorkspaceLlmSettings(
+      paths.runtimeWorkspaceRoot,
+      mode === "reference"
+        ? {
+            provider: "openai",
+            model: null,
+            openai: {
+              apiKey: "sk-openclaw-example",
+              model: "gpt-openclaw-example",
+            },
+            anthropic: {
+              apiKey: null,
+              model: null,
+            },
+          }
+        : getLiveProviderSettings(config),
+    );
+
+    for (const corpusFile of config.corpusFiles) {
+      const filePath = path.join(paths.corpusRoot, corpusFile.fileName);
       const imported = await importSource({
-        workspaceRoot: BUILD_WORKSPACE_ROOT,
+        workspaceRoot: paths.runtimeWorkspaceRoot,
         importKind: "local_file_path",
         filePath,
       });
-      const summarized = await summarizeSource(BUILD_WORKSPACE_ROOT, imported.id);
-      const planned = await planPatchProposalsForSource(BUILD_WORKSPACE_ROOT, imported.id);
+      const summarized = await summarizeSource(paths.runtimeWorkspaceRoot, imported.id);
+      const planned = await planPatchProposalsForSource(paths.runtimeWorkspaceRoot, imported.id);
       const approvals = await applyProposalsForSource(
-        BUILD_WORKSPACE_ROOT,
+        paths.runtimeWorkspaceRoot,
         summarized.title,
         planned.proposalIds,
       );
@@ -1632,63 +2522,275 @@ async function main() {
       });
     }
 
-    const questions = [
-      "What is OpenClaw in this corpus?",
-      "Which parts of OpenClaw look most unstable or fast-moving?",
-      "What should I monitor before upgrading OpenClaw?",
-    ] as const;
     const answers: AnswerArtifact[] = [];
 
-    for (const question of questions) {
-      answers.push(await answerQuestion(BUILD_WORKSPACE_ROOT, question));
+    for (const question of config.questions) {
+      answers.push(await answerQuestion(paths.runtimeWorkspaceRoot, question.question));
     }
 
-    const archived = await archiveAnswerArtifact(
-      BUILD_WORKSPACE_ROOT,
-      answers[2]!.id,
-      "note",
+    const archivedQuestionIndex = config.questions.findIndex(
+      (question) => question.archiveAs !== null,
     );
-    answers[2] = archived;
 
-    const coverageAudit = await runAudit(BUILD_WORKSPACE_ROOT, "coverage");
+    if (archivedQuestionIndex !== -1) {
+      const archiveTarget = config.questions[archivedQuestionIndex]!;
+      const archived = await archiveAnswerArtifact(
+        paths.runtimeWorkspaceRoot,
+        answers[archivedQuestionIndex]!.id,
+        archiveTarget.archiveAs!,
+      );
+      answers[archivedQuestionIndex] = archived;
+    }
+
+    const coverageAudit = await runAudit(paths.runtimeWorkspaceRoot, "coverage");
     runAuditResultCache.set(coverageAudit.id, coverageAudit);
 
-    await rewriteExampleIndex(
-      BUILD_WORKSPACE_ROOT,
+    await applyKnowledgeWorkOptimization(
+      paths.runtimeWorkspaceRoot,
       sourcePlans.map((plan) => plan.importedId),
     );
-    await checkpointDatabase(BUILD_WORKSPACE_ROOT);
-    await syncSnapshot(BUILD_WORKSPACE_ROOT);
+    await rewriteExampleIndex(
+      paths.runtimeWorkspaceRoot,
+      sourcePlans.map((plan) => plan.importedId),
+    );
+    await checkpointDatabase(paths.runtimeWorkspaceRoot);
 
     const manifest = await buildManifest({
-      workspaceRoot: BUILD_WORKSPACE_ROOT,
+      workspaceRoot: paths.runtimeWorkspaceRoot,
       sourcePlans,
       answers,
       auditIds: [coverageAudit.id],
+      config,
+      paths,
+      mode,
     });
 
     manifest.sources = await Promise.all(
       manifest.sources.map(async (source) => {
-        const detail = await getSourceDetail(BUILD_WORKSPACE_ROOT, source.id);
-        return {
+        const detail = await getSourceDetail(paths.runtimeWorkspaceRoot, source.id);
+        return openClawExampleManifestSchema.shape.sources.element.parse({
           ...source,
           title: detail.title,
-        };
+        }) as OpenClawExampleSourcePlan;
       }),
     );
 
-    await fs.writeFile(MANIFEST_PATH, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+    await writeJsonFile(
+      paths.runtimeManifestPath,
+      openClawExampleManifestSchema.parse(manifest),
+    );
 
-    console.log("OpenClaw example generated.");
-    console.log(`Snapshot: ${SNAPSHOT_ROOT}`);
-    console.log(`Manifest: ${MANIFEST_PATH}`);
-    console.log(`Archived page: ${archived.archivedPage?.path ?? "none"}`);
-    console.log(`Coverage audit: ${coverageAudit.reportPath ?? "none"}`);
+    await buildOpenClawObsidianVault({
+      workspaceRoot: paths.runtimeWorkspaceRoot,
+      outputRoot: paths.runtimeObsidianVaultRoot,
+      manifest,
+      config,
+    });
+
+    if (params?.syncSnapshot) {
+      if (mode !== "reference") {
+        throw new Error("Canonical snapshot sync is only supported in reference mode.");
+      }
+
+      await syncSnapshot(paths.runtimeWorkspaceRoot, paths.snapshotRoot);
+      await syncDirectory(paths.runtimeObsidianVaultRoot, paths.canonicalObsidianVaultRoot);
+      await writeJsonFile(paths.canonicalManifestPath, manifest);
+      const baseline = await buildReferenceBaseline({
+        manifestPath: paths.canonicalManifestPath,
+        snapshotRoot: paths.snapshotRoot,
+        corpusRoot: paths.corpusRoot,
+        obsidianVaultRoot: paths.canonicalObsidianVaultRoot,
+      });
+      await writeJsonFile(paths.referenceBaselinePath, baseline);
+    }
+
+    return {
+      mode,
+      workspaceRoot: paths.runtimeWorkspaceRoot,
+      runtimeManifestPath: paths.runtimeManifestPath,
+      runtimeObsidianVaultRoot: paths.runtimeObsidianVaultRoot,
+      manifest,
+      config,
+      paths,
+    } satisfies OpenClawBuildResult;
+  };
+
+  const result =
+    mode === "reference"
+      ? await withDeterministicRuntime(config.modes.reference.seedTimestamp, async () =>
+          withMockedOpenAi(runner),
+        )
+      : await runner();
+
+  await validateWorkspaceAgainstConfig({
+    workspaceRoot: result.workspaceRoot,
+    manifest: result.manifest,
+    config: result.config,
   });
+  await validateObsidianVaultAgainstConfig({
+    vaultRoot: result.runtimeObsidianVaultRoot,
+    config: result.config,
+  });
+
+  return result;
 }
 
-main().catch((error) => {
-  console.error("Failed to generate the OpenClaw example.");
-  console.error(error);
-  process.exitCode = 1;
-});
+export async function validateOpenClawExampleReference() {
+  const config = await readPipelineConfig();
+  const paths = getBuildPaths(config, "reference");
+
+  const baselineRaw = await fs.readFile(paths.referenceBaselinePath, "utf8");
+  const baseline = openClawExampleReferenceBaselineSchema.parse(JSON.parse(baselineRaw));
+  const canonicalManifestRaw = await fs.readFile(paths.canonicalManifestPath, "utf8");
+  const canonicalManifest = openClawExampleManifestSchema.parse(
+    JSON.parse(canonicalManifestRaw),
+  );
+
+  await validateWorkspaceAgainstConfig({
+    workspaceRoot: paths.snapshotRoot,
+    manifest: canonicalManifest,
+    config,
+  });
+  await validateObsidianVaultAgainstConfig({
+    vaultRoot: paths.canonicalObsidianVaultRoot,
+    config,
+  });
+
+  const canonicalBaseline = await buildReferenceBaseline({
+    manifestPath: paths.canonicalManifestPath,
+    snapshotRoot: paths.snapshotRoot,
+    corpusRoot: paths.corpusRoot,
+    obsidianVaultRoot: paths.canonicalObsidianVaultRoot,
+  });
+
+  compareHashEntries({
+    actual: canonicalBaseline.entries,
+    expected: baseline.entries,
+    label: "Committed OpenClaw reference snapshot",
+  });
+  compareHashEntries({
+    actual: canonicalBaseline.corpusEntries,
+    expected: baseline.corpusEntries,
+    label: "Committed OpenClaw source corpus",
+  });
+
+  const buildResult = await runOpenClawExampleBuild({
+    mode: "reference",
+    syncSnapshot: false,
+  });
+  const runtimeEntries = await buildRuntimeEntries({
+    manifestPath: buildResult.runtimeManifestPath,
+    workspaceRoot: buildResult.workspaceRoot,
+    obsidianVaultRoot: buildResult.runtimeObsidianVaultRoot,
+  });
+
+  compareHashEntries({
+    actual: runtimeEntries,
+    expected: baseline.entries,
+    label: "Reference-mode build output",
+  });
+
+  const renderedWorkspaceRoot = await ensureOpenClawRenderedWorkspace();
+  const renderedPages = await listWikiPages(renderedWorkspaceRoot);
+
+  if (renderedPages.length !== canonicalManifest.pages.length) {
+    throw new Error(
+      `Rendered example workspace has ${renderedPages.length} pages, expected ${canonicalManifest.pages.length}.`,
+    );
+  }
+
+  return {
+    baseline,
+    buildResult,
+    renderedWorkspaceRoot,
+  };
+}
+
+export async function resetOpenClawExampleRuntime() {
+  const config = await readPipelineConfig();
+  const referencePaths = getBuildPaths(config, "reference");
+  const livePaths = getBuildPaths(config, "live");
+
+  for (const target of [
+    referencePaths.runtimeWorkspaceRoot,
+    referencePaths.runtimeObsidianVaultRoot,
+    livePaths.runtimeWorkspaceRoot,
+    livePaths.runtimeObsidianVaultRoot,
+    OPENCLAW_RENDERED_WORKSPACE_ROOT,
+  ]) {
+    await fs.rm(target, {
+      recursive: true,
+      force: true,
+    });
+  }
+}
+
+function parseCliArgs(argv: string[]) {
+  const parsed = {
+    mode: "reference" as OpenClawExampleMode,
+    syncSnapshot: false,
+  };
+
+  for (const argument of argv) {
+    if (argument.startsWith("--mode=")) {
+      const value = argument.slice("--mode=".length);
+
+      if (value === "reference" || value === "live") {
+        parsed.mode = value;
+        continue;
+      }
+
+      throw new Error(`Unsupported --mode value "${value}".`);
+    }
+
+    if (argument === "--sync-snapshot") {
+      parsed.syncSnapshot = true;
+      continue;
+    }
+  }
+
+  return parsed;
+}
+
+async function main() {
+  const args = parseCliArgs(process.argv.slice(2));
+  const result = await runOpenClawExampleBuild({
+    mode: args.mode,
+    syncSnapshot: args.syncSnapshot,
+  });
+
+  console.log("OpenClaw example generated.");
+  console.log(`Mode: ${result.mode}`);
+  console.log(`Workspace: ${result.workspaceRoot}`);
+  console.log(`Manifest: ${result.runtimeManifestPath}`);
+  console.log(`Obsidian vault: ${result.runtimeObsidianVaultRoot}`);
+  console.log(
+    `Archived page: ${
+      result.manifest.answers.find((answer) => answer.archivedPagePath)?.archivedPagePath ?? "none"
+    }`,
+  );
+  console.log(
+    `Coverage audit: ${
+      result.manifest.audits.find((audit) => audit.mode === "coverage")?.reportPath ?? "none"
+    }`,
+  );
+
+  if (args.syncSnapshot) {
+    console.log(`Canonical snapshot: ${result.paths.snapshotRoot}`);
+    console.log(`Canonical manifest: ${result.paths.canonicalManifestPath}`);
+    console.log(`Reference baseline: ${result.paths.referenceBaselinePath}`);
+    console.log(`Canonical Obsidian vault: ${result.paths.canonicalObsidianVaultRoot}`);
+  }
+}
+
+const isDirectExecution =
+  process.argv[1] !== undefined &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+
+if (isDirectExecution) {
+  main().catch((error) => {
+    console.error("Failed to generate the OpenClaw example.");
+    console.error(error);
+    process.exitCode = 1;
+  });
+}

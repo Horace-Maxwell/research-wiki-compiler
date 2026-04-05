@@ -2,15 +2,22 @@
 title: Provider dependency risk
 slug: provider-dependency-risk
 type: concept
-created_at: '2026-04-05T19:36:54.323Z'
-updated_at: '2026-04-05T19:36:54.323Z'
+created_at: '2026-04-05T19:36:54.741Z'
+updated_at: '2026-04-05T19:36:55.857Z'
 status: active
 aliases: []
-tags: []
+tags:
+  - concept
+  - openclaw
+  - providers
+  - risk
 source_refs:
   - src_359c7879b0c1f818df8434be7b27682d
 page_refs:
   - OpenClaw
+  - OpenClaw current tensions
+  - OpenClaw maintenance watchpoints
+  - 'Note: What should I monitor before upgrading OpenClaw'
 confidence: 0.2
 review_status: approved
 ---

@@ -2,15 +2,23 @@
 title: Plugin compatibility
 slug: plugin-compatibility
 type: concept
-created_at: '2026-04-05T19:36:54.191Z'
-updated_at: '2026-04-05T19:36:54.191Z'
+created_at: '2026-04-05T19:36:54.530Z'
+updated_at: '2026-04-05T19:36:55.723Z'
 status: active
 aliases: []
-tags: []
+tags:
+  - concept
+  - openclaw
+  - plugins
+  - integration
 source_refs:
   - src_6e48b953a265ca3f7f72796952b364b0
 page_refs:
   - OpenClaw
+  - OpenClaw release cadence
+  - OpenClaw maintenance watchpoints
+  - OpenClaw current tensions
+  - OpenClaw open questions
 confidence: 0.2
 review_status: approved
 ---

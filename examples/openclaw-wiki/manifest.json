@@ -1,5 +1,7 @@
 {
-  "generatedAt": "2026-04-05T19:36:54.490Z",
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-05T19:36:56.537Z",
+  "generatedMode": "reference",
   "exampleName": "OpenClaw example wiki",
   "corpusFiles": [
     {
@@ -131,9 +133,24 @@
       "path": "wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md"
     },
     {
+      "title": "OpenClaw open questions",
+      "type": "note",
+      "path": "wiki/notes/openclaw-open-questions.md"
+    },
+    {
+      "title": "OpenClaw current tensions",
+      "type": "synthesis",
+      "path": "wiki/syntheses/openclaw-current-tensions.md"
+    },
+    {
       "title": "OpenClaw maintenance watchpoints",
       "type": "synthesis",
       "path": "wiki/syntheses/openclaw-maintenance-watchpoints.md"
+    },
+    {
+      "title": "OpenClaw reading paths",
+      "type": "synthesis",
+      "path": "wiki/syntheses/openclaw-reading-paths.md"
     },
     {
       "title": "OpenClaw release cadence",
@@ -143,19 +160,19 @@
   ],
   "answers": [
     {
-      "id": "ans_8c4ded93069c51b73a9637c54c2fdd87",
+      "id": "ans_e2db64631ad1dab2f231182120782a9a",
       "question": "What is OpenClaw in this corpus?",
       "shortAnswer": "In this corpus, OpenClaw appears as a fast-moving AI developer tool and workflow surface centered on model integration, Control UI, and plugin compatibility.",
       "archivedPagePath": null
     },
     {
-      "id": "ans_0a2e7db7feda45c3a9e4c0045db9709c",
+      "id": "ans_fc80dff0e1fe71d19e9c93fe7b2c4af0",
       "question": "Which parts of OpenClaw look most unstable or fast-moving?",
       "shortAnswer": "The fastest-moving parts of OpenClaw in this corpus are the release cadence, plugin/integration surface, and provider-facing configuration path.",
       "archivedPagePath": null
     },
     {
-      "id": "ans_f108ee6ebac0f5235833d544e84d26da",
+      "id": "ans_c62546aa8a924b8d3a6cf034d6d1c9e0",
       "question": "What should I monitor before upgrading OpenClaw?",
       "shortAnswer": "Before upgrading OpenClaw, monitor release/changelog packaging, plugin compatibility, and provider-side changes that could alter access paths or defaults.",
       "archivedPagePath": "wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md"
@@ -163,15 +180,19 @@
   ],
   "audits": [
     {
-      "id": "audit_906f0327c1be22ec2865298cc679094f",
+      "id": "audit_6a6295384244ffb48e58d3d3721cf26d",
       "mode": "coverage",
-      "reportPath": "audits/2026-04-05T19-36-54-424Z-coverage-audit_906f0327c1be22ec2865298cc679094f.md",
+      "reportPath": "audits/2026-04-05T19-36-55-062Z-coverage-audit_6a6295384244ffb48e58d3d3721cf26d.md",
       "findingCount": 2
     }
   ],
   "notes": {
     "mockProvider": "openai structured mock transport via real service calls",
     "runtimeWorkspaceRoot": "tmp/openclaw-workspace-build",
-    "committedSnapshotRoot": "examples/openclaw-wiki/workspace"
+    "committedSnapshotRoot": "examples/openclaw-wiki/workspace",
+    "reproducibility": {
+      "referenceMode": "Runs the real pipeline with a deterministic clock and a mocked OpenAI structured transport so the canonical example can be rebuilt without external credentials.",
+      "liveMode": "Runs the same pipeline against a live provider configuration. This preserves the real product path but is not expected to be perfectly reproducible."
+    }
   }
 }

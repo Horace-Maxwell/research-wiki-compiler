@@ -2,17 +2,25 @@
 title: OpenClaw maintenance watchpoints
 slug: openclaw-maintenance-watchpoints
 type: synthesis
-created_at: '2026-04-05T19:36:54.354Z'
-updated_at: '2026-04-05T19:36:54.354Z'
+created_at: '2026-04-05T19:36:54.826Z'
+updated_at: '2026-04-05T19:36:55.991Z'
 status: active
 aliases: []
-tags: []
+tags:
+  - synthesis
+  - openclaw
+  - monitoring
+  - operations
 source_refs:
   - src_359c7879b0c1f818df8434be7b27682d
 page_refs:
   - OpenClaw
   - OpenClaw release cadence
   - Plugin compatibility
+  - Provider dependency risk
+  - OpenClaw current tensions
+  - OpenClaw open questions
+  - 'Note: What should I monitor before upgrading OpenClaw'
 confidence: 0.2
 review_status: approved
 ---

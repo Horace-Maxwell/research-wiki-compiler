@@ -1,0 +1,426 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-05T19:36:56.538Z",
+  "mode": "reference",
+  "manifestLogicalPath": "manifest.json",
+  "entries": [
+    {
+      "logicalPath": "manifest.json",
+      "sha256": "2bdc92f6b4204e26c99623550c0ccff890a7c200d5928705f0f581ffddef7986"
+    },
+    {
+      "logicalPath": "obsidian-vault/.gitignore",
+      "sha256": "0ac2f41cc81f45b6cda590268e5a15aa9f04443744ac5e3b63ab2f01aeb47853"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Artifact Map.md",
+      "sha256": "68e2b8de426da92c44d49eb5f67c926423117a1daa3674c170200633be8d73f9"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Current Tensions.md",
+      "sha256": "62ce26b1f3cd899c7bb21855102bb22bba60e219a7899331e455a65311801fd1"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Key Pages.md",
+      "sha256": "f5eda3022e78a52447d1ad15fb0934050541a4584823cd3f76ca1ce585b70a13"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/LLM Context Pack.md",
+      "sha256": "2ec3598f5c3820770294b08118275f8b9e81f70d2eafa8bc69eba14532762e8f"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Monitoring.md",
+      "sha256": "0b8ba0b0deea5d3bddbef78f1390f076899917e85d5a39be89d8deab8ec86133"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Open Questions.md",
+      "sha256": "29eaaac69638dd5c855ea42feeb83dac543e239622688c8abddcb76ffb325728"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Reading Paths.md",
+      "sha256": "84c4405f47665a51589be876656376d193388017b7d409426eaf75eddf306ecf"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Start Here.md",
+      "sha256": "8c99fb8534a356eb4d5cb7b9e030ef6903df1f0d1563c88c977937892f9ad15d"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Topic Map.md",
+      "sha256": "0f38d10d2b02d80bee2ae9a258a6508fc1a7757defa86aafb83c506365fde9e3"
+    },
+    {
+      "logicalPath": "obsidian-vault/05 Context Packs/Explain OpenClaw.md",
+      "sha256": "0d926196b6c0dc4aef93eb7e2990bd9ad44815d6bc4739bc0a5aabab3af96ae1"
+    },
+    {
+      "logicalPath": "obsidian-vault/05 Context Packs/Provenance And Review.md",
+      "sha256": "8090560c7665d448d1e411e10c4a2f93996e91e4b267fe3d4a60a5f097eacb01"
+    },
+    {
+      "logicalPath": "obsidian-vault/05 Context Packs/Upgrade Watchpoints.md",
+      "sha256": "a72d829878bf5b3669c8bac36a86d127ed84c3261e87672577d342fc965cfdb3"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/Note - What should I monitor before upgrading OpenClaw.md",
+      "sha256": "ab7220d73491114886cb1cc3241ed4a593a2586fd35f823c7ac127476ccea6f4"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/OpenClaw current tensions.md",
+      "sha256": "0d2e94f3451b1ec1ea07a8ff20379ec1ffa4aa41150f82d3e78532398a7e037e"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/OpenClaw Example Index.md",
+      "sha256": "a9d5c57c8dec552939492c10b64e5a9552407d533aa54ba473caefb67c6fe9de"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/OpenClaw maintenance watchpoints.md",
+      "sha256": "c99c9cd8c565af15de27b25b5897d44079405c6c79fa16137bec67e650c1ab6f"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/OpenClaw open questions.md",
+      "sha256": "c2f8a0daf39ee94d5fe8431f863b011d097cde7ab89a315bb183a458f512d00d"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/OpenClaw reading paths.md",
+      "sha256": "c9fca0322b3d701c8214489498477b6d876b548526d1e22b87eed950fd827b24"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/OpenClaw release cadence.md",
+      "sha256": "b9f77e111c5139b5a21e5b12012d6305cbaa5b5f7ded0dae0a531ff8322661bf"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/OpenClaw.md",
+      "sha256": "3d27e1207173fea7db8887ce462f6c4dfe246651f6156551ea52dc2ecba62e78"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/Plugin compatibility.md",
+      "sha256": "69a09522f3771ab41511ac26b4881e1ef9c0b550bcad6f9321e53f41daec0924"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/Provider dependency risk.md",
+      "sha256": "dc8f64f7ec69ee0324ffb8d8f65057713df80828193b83ce12b9bfeb871274c4"
+    },
+    {
+      "logicalPath": "obsidian-vault/20 Sources/Corpus Atlas.md",
+      "sha256": "a3b322a863b1b86edd99106a6365be597ca01e23eb14f9a2f4d96ab8561a3077"
+    },
+    {
+      "logicalPath": "obsidian-vault/20 Sources/Corpus/2026-03-26-openclaw-plugin-sdk-and-policy.md",
+      "sha256": "dcb34cc5c45eb12e3559ebcb615e82a79d3d51cf47da7bb61fba344805dff4ab"
+    },
+    {
+      "logicalPath": "obsidian-vault/20 Sources/Corpus/2026-03-31-openclaw-release-and-plugin-surface.md",
+      "sha256": "72e108874e39bb6d6d5677fae3d844a36b1ca81bbb7b1709dfec45fa7d9d8a17"
+    },
+    {
+      "logicalPath": "obsidian-vault/20 Sources/Corpus/2026-04-02-openclaw-release-cadence-and-test-churn.md",
+      "sha256": "b080abe622a736d2c95b301a4317b85758ea886b84f8fccae213d5df2319c26c"
+    },
+    {
+      "logicalPath": "obsidian-vault/20 Sources/Corpus/2026-04-05-openclaw-provider-risk-and-changelog.md",
+      "sha256": "9cf4eee7dc452ebbc074ad2f7865ea8cde26a4b93f59b92ded2781bf49a300e8"
+    },
+    {
+      "logicalPath": "obsidian-vault/25 Normalized Sources/Processed Source Atlas.md",
+      "sha256": "b79d5f8c302e7d7a0dfbbe0e609882c024510ef309ef1ee2f40b54efa461de41"
+    },
+    {
+      "logicalPath": "obsidian-vault/25 Normalized Sources/Processed/2026-03-26-openclaw-plugin-sdk-and-policy.normalized.md",
+      "sha256": "074937cdd92ab8210f82005979647c00797e215cdeb435d08ee7799ca7757919"
+    },
+    {
+      "logicalPath": "obsidian-vault/25 Normalized Sources/Processed/2026-03-31-openclaw-release-and-plugin-surface.normalized.md",
+      "sha256": "e92d60617fbef3f9f6d2f7169ac9cca35b40b3bd8d137128c5995eeec7173e8b"
+    },
+    {
+      "logicalPath": "obsidian-vault/25 Normalized Sources/Processed/2026-04-02-openclaw-release-cadence-and-test-churn.normalized.md",
+      "sha256": "c77c22a209f41cd5db97b4aa9e3b4716c13f6995ce7fc61a5f1fe4cf16282ac1"
+    },
+    {
+      "logicalPath": "obsidian-vault/25 Normalized Sources/Processed/2026-04-05-openclaw-provider-risk-and-changelog.normalized.md",
+      "sha256": "cd3dcbefc5a54d145b2938420377f9188c9fed8096d45f45cf2a30b93f55ccc3"
+    },
+    {
+      "logicalPath": "obsidian-vault/30 Summaries/openclaw-plugin-sdk-baseline-and-policy-fixtures-2026-03-26-src_6e48b953a265ca3f7f72796952b364b0.summary.md",
+      "sha256": "e30f72ee0aa83c9570fb74d1e808d376c29416bb850a9c553af4b7f16c6eea8c"
+    },
+    {
+      "logicalPath": "obsidian-vault/30 Summaries/openclaw-provider-risk-and-changelog-signals-2026-04-05-src_359c7879b0c1f818df8434be7b27682d.summary.md",
+      "sha256": "66c9639aced81b8651b6046edd70af716288dbd83002f101ba247553f389a747"
+    },
+    {
+      "logicalPath": "obsidian-vault/30 Summaries/openclaw-release-and-plugin-surface-update-2026-03-31-src_f7b5dd4068ac4fd7925a1bdabe45697f.summary.md",
+      "sha256": "6a2d444326c0f4aa40be2fabe595956ab6b5bd3c4f4f048e1ed8f629401d24ee"
+    },
+    {
+      "logicalPath": "obsidian-vault/30 Summaries/openclaw-release-cadence-and-test-churn-2026-04-02-src_b8a041127f611d206f833fcb70e56ac2.summary.md",
+      "sha256": "dfa78b2843a75b2cca4a047fac1af084ec3791a43fee5ed75c199b930b8161dc"
+    },
+    {
+      "logicalPath": "obsidian-vault/30 Summaries/Summary Atlas.md",
+      "sha256": "d218bbd8f38eb795144462d0a5958cd1a7097e61648b2553a5c77b113a7c0698"
+    },
+    {
+      "logicalPath": "obsidian-vault/40 Reviews/Approved/openclaw-plugin-sdk-baseline-and-policy-fixtures-2026-03-26-prop_a31f58e926f2482f75c68d4da794fafd.proposal.md",
+      "sha256": "222258a5e647335da750b5950d0d2cb6f9f4a9af9f480054685432e51c1069fa"
+    },
+    {
+      "logicalPath": "obsidian-vault/40 Reviews/Approved/openclaw-plugin-sdk-baseline-and-policy-fixtures-2026-03-26-prop_f56eedfe6d56997367381f6d166b6c1a.proposal.md",
+      "sha256": "f3f5ab62b6cdf5cc495be195ff31bd3321ff5fafed9aaa4e0edffd8fa52015a8"
+    },
+    {
+      "logicalPath": "obsidian-vault/40 Reviews/Approved/openclaw-provider-risk-and-changelog-signals-2026-04-05-prop_8849036f4ae81b8730b5b119c5a07688.proposal.md",
+      "sha256": "3a0a92797ff798efbb8ecd022231705497246addcbdeb2cb0e7bd20434d594c8"
+    },
+    {
+      "logicalPath": "obsidian-vault/40 Reviews/Approved/openclaw-provider-risk-and-changelog-signals-2026-04-05-prop_c664356a18627fca26bda31d156db2d7.proposal.md",
+      "sha256": "fc07e95894d9bee1ae9f89bc47742addb0059e715c887d8092cf8710554a15b9"
+    },
+    {
+      "logicalPath": "obsidian-vault/40 Reviews/Approved/openclaw-provider-risk-and-changelog-signals-2026-04-05-prop_ca63627c65c360ae9ba6316fea33d47f.proposal.md",
+      "sha256": "100d2bb0f791e248a90f2ed65d437dfc7b0a7a6bc515857e0c7f689186cbc43a"
+    },
+    {
+      "logicalPath": "obsidian-vault/40 Reviews/Approved/openclaw-release-and-plugin-surface-update-2026-03-31-prop_89bbe1666ea38d31b604433256300e84.proposal.md",
+      "sha256": "45bcbe3b066263a09b84fa2677edc5d274a7982744551d067b76fc7eb9bb33bc"
+    },
+    {
+      "logicalPath": "obsidian-vault/40 Reviews/Approved/openclaw-release-and-plugin-surface-update-2026-03-31-prop_d96f9d19efd3f82f4eabdddd63dccfe7.proposal.md",
+      "sha256": "90bd9b5615fcf777b9ec4e0a93d4840404c64a654643c2579ac06e81e1827931"
+    },
+    {
+      "logicalPath": "obsidian-vault/40 Reviews/Approved/openclaw-release-cadence-and-test-churn-2026-04-02-prop_78e20882efb3992f6174af23eb29410c.proposal.md",
+      "sha256": "1075ce9d67ece8cb127b0a7a3cb071e03d4973875f9df7e1ba89a6a479b1252d"
+    },
+    {
+      "logicalPath": "obsidian-vault/40 Reviews/Approved/openclaw-release-cadence-and-test-churn-2026-04-02-prop_c2f560b2916a946bb009352a43fd662d.proposal.md",
+      "sha256": "4d822d857ba8bff2a878b5248725f418bc25a956616884cf0b7aac29eff388eb"
+    },
+    {
+      "logicalPath": "obsidian-vault/40 Reviews/Rejected/openclaw-release-cadence-and-test-churn-2026-04-02-prop_c23e7865dcf38941826e9fed8ce166ed.proposal.md",
+      "sha256": "1377f857cdd858756e6498a48ca33714c60af973a84f9ecb7ea33606fcdafbfa"
+    },
+    {
+      "logicalPath": "obsidian-vault/40 Reviews/Review History.md",
+      "sha256": "f2188a461af5ae2ad9d1e89b6161787dfed99292b96ea3c65d61214ebc715b37"
+    },
+    {
+      "logicalPath": "obsidian-vault/50 Audits/2026-04-05T19-36-55-062Z-coverage-audit_6a6295384244ffb48e58d3d3721cf26d.md",
+      "sha256": "4783c0d797ef1f6b89ebb9c5831bb4a9a3c305507a5e2bcbbdb0521f27dc38fe"
+    },
+    {
+      "logicalPath": "obsidian-vault/50 Audits/Audit Atlas.md",
+      "sha256": "4284ea5dfd1e67f136b196aca3b3ac03a894f8c1235d186153446f34300de793"
+    },
+    {
+      "logicalPath": "obsidian-vault/README.md",
+      "sha256": "6f70eb6c6a51cd1a78c8e48c42f17f4e15b67320f58124944d5e2938833cf403"
+    },
+    {
+      "logicalPath": "workspace/audits/2026-04-05T19-36-55-062Z-coverage-audit_6a6295384244ffb48e58d3d3721cf26d.md",
+      "sha256": "4783c0d797ef1f6b89ebb9c5831bb4a9a3c305507a5e2bcbbdb0521f27dc38fe"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/2026-03-26-openclaw-plugin-sdk-and-policy.md",
+      "sha256": "dcb34cc5c45eb12e3559ebcb615e82a79d3d51cf47da7bb61fba344805dff4ab"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/2026-03-26-openclaw-plugin-sdk-and-policy.normalized.md",
+      "sha256": "074937cdd92ab8210f82005979647c00797e215cdeb435d08ee7799ca7757919"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/2026-03-31-openclaw-release-and-plugin-surface.md",
+      "sha256": "72e108874e39bb6d6d5677fae3d844a36b1ca81bbb7b1709dfec45fa7d9d8a17"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/2026-03-31-openclaw-release-and-plugin-surface.normalized.md",
+      "sha256": "e92d60617fbef3f9f6d2f7169ac9cca35b40b3bd8d137128c5995eeec7173e8b"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/2026-04-02-openclaw-release-cadence-and-test-churn.md",
+      "sha256": "b080abe622a736d2c95b301a4317b85758ea886b84f8fccae213d5df2319c26c"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/2026-04-02-openclaw-release-cadence-and-test-churn.normalized.md",
+      "sha256": "c77c22a209f41cd5db97b4aa9e3b4716c13f6995ce7fc61a5f1fe4cf16282ac1"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/2026-04-05-openclaw-provider-risk-and-changelog.md",
+      "sha256": "9cf4eee7dc452ebbc074ad2f7865ea8cde26a4b93f59b92ded2781bf49a300e8"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/2026-04-05-openclaw-provider-risk-and-changelog.normalized.md",
+      "sha256": "cd3dcbefc5a54d145b2938420377f9188c9fed8096d45f45cf2a30b93f55ccc3"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/summaries/openclaw-plugin-sdk-baseline-and-policy-fixtures-2026-03-26-src_6e48b953a265ca3f7f72796952b364b0.summary.json",
+      "sha256": "7afdecbf877738406d36fa95d61f7ec9ef5ba529bddc8af55b04d3d71e0b0f1d"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/summaries/openclaw-plugin-sdk-baseline-and-policy-fixtures-2026-03-26-src_6e48b953a265ca3f7f72796952b364b0.summary.md",
+      "sha256": "e30f72ee0aa83c9570fb74d1e808d376c29416bb850a9c553af4b7f16c6eea8c"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/summaries/openclaw-provider-risk-and-changelog-signals-2026-04-05-src_359c7879b0c1f818df8434be7b27682d.summary.json",
+      "sha256": "419cad77679dd47879d10bc83f57574bc8139e2a286b48b1c49e04328f18a13a"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/summaries/openclaw-provider-risk-and-changelog-signals-2026-04-05-src_359c7879b0c1f818df8434be7b27682d.summary.md",
+      "sha256": "66c9639aced81b8651b6046edd70af716288dbd83002f101ba247553f389a747"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/summaries/openclaw-release-and-plugin-surface-update-2026-03-31-src_f7b5dd4068ac4fd7925a1bdabe45697f.summary.json",
+      "sha256": "ba7c0a52b7ba92c0c486d305df549cde884dd282793313eff2ccf5af0fa1cef4"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/summaries/openclaw-release-and-plugin-surface-update-2026-03-31-src_f7b5dd4068ac4fd7925a1bdabe45697f.summary.md",
+      "sha256": "6a2d444326c0f4aa40be2fabe595956ab6b5bd3c4f4f048e1ed8f629401d24ee"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/summaries/openclaw-release-cadence-and-test-churn-2026-04-02-src_b8a041127f611d206f833fcb70e56ac2.summary.json",
+      "sha256": "6a34bdb16c3722d66f68d9efd0a88b78d8facf36528e093aaad1e88356165f91"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/summaries/openclaw-release-cadence-and-test-churn-2026-04-02-src_b8a041127f611d206f833fcb70e56ac2.summary.md",
+      "sha256": "dfa78b2843a75b2cca4a047fac1af084ec3791a43fee5ed75c199b930b8161dc"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-plugin-sdk-baseline-and-policy-fixtures-2026-03-26-prop_a31f58e926f2482f75c68d4da794fafd.proposal.json",
+      "sha256": "5089f074ef691fa131fa047931501f32bd08ac9c8423eb0ef4dc9092134f9396"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-plugin-sdk-baseline-and-policy-fixtures-2026-03-26-prop_a31f58e926f2482f75c68d4da794fafd.proposal.md",
+      "sha256": "222258a5e647335da750b5950d0d2cb6f9f4a9af9f480054685432e51c1069fa"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-plugin-sdk-baseline-and-policy-fixtures-2026-03-26-prop_f56eedfe6d56997367381f6d166b6c1a.proposal.json",
+      "sha256": "bde8009d5075565a960cb6e0d90d24d5f9452e0d7727c2c310ada25c6ad9d593"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-plugin-sdk-baseline-and-policy-fixtures-2026-03-26-prop_f56eedfe6d56997367381f6d166b6c1a.proposal.md",
+      "sha256": "f3f5ab62b6cdf5cc495be195ff31bd3321ff5fafed9aaa4e0edffd8fa52015a8"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-provider-risk-and-changelog-signals-2026-04-05-prop_8849036f4ae81b8730b5b119c5a07688.proposal.json",
+      "sha256": "9bed270fb25612b1c92960b0c2808c984737d0176cee728eac479fe11a84f6c9"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-provider-risk-and-changelog-signals-2026-04-05-prop_8849036f4ae81b8730b5b119c5a07688.proposal.md",
+      "sha256": "3a0a92797ff798efbb8ecd022231705497246addcbdeb2cb0e7bd20434d594c8"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-provider-risk-and-changelog-signals-2026-04-05-prop_c664356a18627fca26bda31d156db2d7.proposal.json",
+      "sha256": "e416f980b08e47e56c7a7a3ba5cb8bbad0f4d987c0720867b3fd04addb075598"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-provider-risk-and-changelog-signals-2026-04-05-prop_c664356a18627fca26bda31d156db2d7.proposal.md",
+      "sha256": "fc07e95894d9bee1ae9f89bc47742addb0059e715c887d8092cf8710554a15b9"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-provider-risk-and-changelog-signals-2026-04-05-prop_ca63627c65c360ae9ba6316fea33d47f.proposal.json",
+      "sha256": "8e2fbcfdf875c3d752fb53e1a6eebde30acdb1e54ca3b161b38bc34b82729d7d"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-provider-risk-and-changelog-signals-2026-04-05-prop_ca63627c65c360ae9ba6316fea33d47f.proposal.md",
+      "sha256": "100d2bb0f791e248a90f2ed65d437dfc7b0a7a6bc515857e0c7f689186cbc43a"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-release-and-plugin-surface-update-2026-03-31-prop_89bbe1666ea38d31b604433256300e84.proposal.json",
+      "sha256": "7e2fc399f1677c82223775b23b81a24027d9849c3f83cceda41c19058edde107"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-release-and-plugin-surface-update-2026-03-31-prop_89bbe1666ea38d31b604433256300e84.proposal.md",
+      "sha256": "45bcbe3b066263a09b84fa2677edc5d274a7982744551d067b76fc7eb9bb33bc"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-release-and-plugin-surface-update-2026-03-31-prop_d96f9d19efd3f82f4eabdddd63dccfe7.proposal.json",
+      "sha256": "d52f59c54db010e9bfebfe647ad23ecccf873af9964dfa3723ce252f8f89d0d7"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-release-and-plugin-surface-update-2026-03-31-prop_d96f9d19efd3f82f4eabdddd63dccfe7.proposal.md",
+      "sha256": "90bd9b5615fcf777b9ec4e0a93d4840404c64a654643c2579ac06e81e1827931"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-release-cadence-and-test-churn-2026-04-02-prop_78e20882efb3992f6174af23eb29410c.proposal.json",
+      "sha256": "9a2f48ba3aeb05794bdd9bc28fb73cd78f9b026a922c2a248b4753d4722552c5"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-release-cadence-and-test-churn-2026-04-02-prop_78e20882efb3992f6174af23eb29410c.proposal.md",
+      "sha256": "1075ce9d67ece8cb127b0a7a3cb071e03d4973875f9df7e1ba89a6a479b1252d"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-release-cadence-and-test-churn-2026-04-02-prop_c2f560b2916a946bb009352a43fd662d.proposal.json",
+      "sha256": "dad7597536c1f2e94b9eeb6ae31d7dbe986bfc662cf01fc1066ac3d71e3f58a3"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/openclaw-release-cadence-and-test-churn-2026-04-02-prop_c2f560b2916a946bb009352a43fd662d.proposal.md",
+      "sha256": "4d822d857ba8bff2a878b5248725f418bc25a956616884cf0b7aac29eff388eb"
+    },
+    {
+      "logicalPath": "workspace/reviews/rejected/openclaw-release-cadence-and-test-churn-2026-04-02-prop_c23e7865dcf38941826e9fed8ce166ed.proposal.json",
+      "sha256": "ff8bddc5802495d3188f4381909f54201ce58f3d4b59b68a1fe7da36c9562c09"
+    },
+    {
+      "logicalPath": "workspace/reviews/rejected/openclaw-release-cadence-and-test-churn-2026-04-02-prop_c23e7865dcf38941826e9fed8ce166ed.proposal.md",
+      "sha256": "1377f857cdd858756e6498a48ca33714c60af973a84f9ecb7ea33606fcdafbfa"
+    },
+    {
+      "logicalPath": "workspace/wiki/concepts/plugin-compatibility.md",
+      "sha256": "e2922ab8a2d9144223d70b9375ed7e50319d0281694b8970365cd30a93b464ca"
+    },
+    {
+      "logicalPath": "workspace/wiki/concepts/provider-dependency-risk.md",
+      "sha256": "4ac75626c679a0c2f0170055b858c7a27e824c175d2e0de0d1b54238fb713302"
+    },
+    {
+      "logicalPath": "workspace/wiki/entities/openclaw.md",
+      "sha256": "2183a678b8f8c5df94915abe0a523fe84d0dcd997ff0e87adecc204282f1e0ec"
+    },
+    {
+      "logicalPath": "workspace/wiki/index.md",
+      "sha256": "c07cd857612dbf0ceda30206e5b1473d26793358b5d8513cab107651fdb311e8"
+    },
+    {
+      "logicalPath": "workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md",
+      "sha256": "1d898acb47e91fad0677afd1c0cce3ea21fcdd12e79e64c5ac76860fd59b6b26"
+    },
+    {
+      "logicalPath": "workspace/wiki/notes/openclaw-open-questions.md",
+      "sha256": "5eee99d8909fd1a9f8810c76c9b55516181b02e980d5218aeb483a557f41ab0e"
+    },
+    {
+      "logicalPath": "workspace/wiki/syntheses/openclaw-current-tensions.md",
+      "sha256": "42ca483b945154333a1c9dd9d1682db27414a9dda6a2e98e761a8963f64f0e9d"
+    },
+    {
+      "logicalPath": "workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md",
+      "sha256": "c67adab2275a4de92cf8f94a1ab20097db0a0bdf9a170817d020aaa9d9a1bf7b"
+    },
+    {
+      "logicalPath": "workspace/wiki/syntheses/openclaw-reading-paths.md",
+      "sha256": "41672a1f069221ea290e4083c8f4726783c1f8eeb407773f4e168548229d1045"
+    },
+    {
+      "logicalPath": "workspace/wiki/topics/openclaw-release-cadence.md",
+      "sha256": "2ba4fa5e6039278264495f2ae1f2b0734caee3f3cc969a8203a7534ef438c2d6"
+    }
+  ],
+  "corpusEntries": [
+    {
+      "logicalPath": "source-corpus/2026-03-26-openclaw-plugin-sdk-and-policy.md",
+      "sha256": "dcb34cc5c45eb12e3559ebcb615e82a79d3d51cf47da7bb61fba344805dff4ab"
+    },
+    {
+      "logicalPath": "source-corpus/2026-03-31-openclaw-release-and-plugin-surface.md",
+      "sha256": "72e108874e39bb6d6d5677fae3d844a36b1ca81bbb7b1709dfec45fa7d9d8a17"
+    },
+    {
+      "logicalPath": "source-corpus/2026-04-02-openclaw-release-cadence-and-test-churn.md",
+      "sha256": "b080abe622a736d2c95b301a4317b85758ea886b84f8fccae213d5df2319c26c"
+    },
+    {
+      "logicalPath": "source-corpus/2026-04-05-openclaw-provider-risk-and-changelog.md",
+      "sha256": "9cf4eee7dc452ebbc074ad2f7865ea8cde26a4b93f59b92ded2781bf49a300e8"
+    }
+  ]
+}

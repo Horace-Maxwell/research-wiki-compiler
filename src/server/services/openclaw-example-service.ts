@@ -2,32 +2,16 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 import {
+  openClawExampleManifestSchema,
+  type OpenClawExampleManifest,
+} from "@/lib/contracts/openclaw-example";
+import {
   OPENCLAW_EXAMPLE_MANIFEST_PATH,
   OPENCLAW_EXAMPLE_SNAPSHOT_ROOT,
   OPENCLAW_RENDERED_WORKSPACE_ROOT,
 } from "@/server/lib/repo-paths";
-import { syncWikiIndex } from "@/server/services/wiki-page-service";
+import { listWikiPages, syncWikiIndex } from "@/server/services/wiki-page-service";
 import { initializeWorkspace } from "@/server/services/workspace-service";
-
-type OpenClawExampleManifest = {
-  generatedAt: string;
-  exampleName: string;
-  corpusFiles: Array<{
-    snapshotPath: string;
-    originPath: string;
-    excerptScope: string[];
-  }>;
-  pages: Array<{
-    title: string;
-    type: string;
-    path: string;
-  }>;
-  notes: {
-    mockProvider: string;
-    runtimeWorkspaceRoot: string;
-    committedSnapshotRoot: string;
-  };
-};
 
 const EXAMPLE_SYNC_MARKER_PATH = path.join(
   OPENCLAW_RENDERED_WORKSPACE_ROOT,
@@ -97,7 +81,7 @@ async function rebuildOpenClawRenderedWorkspace(manifest: OpenClawExampleManifes
 
 export async function getOpenClawExampleManifest() {
   const raw = await fs.readFile(OPENCLAW_EXAMPLE_MANIFEST_PATH, "utf8");
-  return JSON.parse(raw) as OpenClawExampleManifest;
+  return openClawExampleManifestSchema.parse(JSON.parse(raw));
 }
 
 export async function ensureOpenClawRenderedWorkspace() {
@@ -118,4 +102,10 @@ export async function ensureOpenClawRenderedWorkspace() {
   }
 
   return openClawWorkspacePromise;
+}
+
+export async function getOpenClawRenderedExamplePageCount() {
+  const workspaceRoot = await ensureOpenClawRenderedWorkspace();
+  const pages = await listWikiPages(workspaceRoot);
+  return pages.length;
 }

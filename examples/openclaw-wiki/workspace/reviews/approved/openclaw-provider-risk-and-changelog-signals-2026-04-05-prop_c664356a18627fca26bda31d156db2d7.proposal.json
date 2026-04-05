@@ -6,7 +6,7 @@
   "status": "approved",
   "proposalType": "conflict_note",
   "title": "Record external tensions on OpenClaw",
-  "generatedAt": "2026-04-05T19:36:54.315Z",
+  "generatedAt": "2026-04-05T19:36:54.735Z",
   "provider": "openai",
   "model": "gpt-openclaw-example",
   "promptHash": "3f515226b5d6435e4dd66528221719f48b5ddb14c03108e197b6142740b57eef",
@@ -434,12 +434,12 @@
     }
   ],
   "review": {
-    "reviewedAt": "2026-04-05T19:36:54.348Z",
+    "reviewedAt": "2026-04-05T19:36:54.819Z",
     "note": "Approved to keep the Anthropic-related signal visible as a tension, not as a silent assumption.",
     "editedBeforeApply": false
   },
   "applyResult": {
-    "appliedAt": "2026-04-05T19:36:54.348Z",
+    "appliedAt": "2026-04-05T19:36:54.819Z",
     "success": true,
     "affectedPaths": [
       "wiki/entities/openclaw.md"

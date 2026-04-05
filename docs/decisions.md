@@ -407,3 +407,69 @@ Add standard repository health files, issue templates, PR templates, and CI usin
 
 Why:
 The goal is to make the repository trustworthy and easy to publish later without overstating maturity or adding maintenance burden before launch.
+
+## Product Experience Redesign Decisions
+
+### D-049: The dashboard is a workspace front door, not a module scoreboard
+
+Decision:
+Redesign the dashboard around workspace state, next actions, recent knowledge movement, and direct wiki entry rather than a flat grid of metric cards.
+
+Why:
+The product is a compiled research wiki, so the dashboard should feel like the front door to a living knowledge environment instead of a control-panel summary of modules.
+
+### D-050: The wiki reading surface should own the visual center of gravity
+
+Decision:
+Shift the wiki experience toward a calmer, denser reading environment with clearer page hierarchy, stronger provenance presentation, and a more deliberate separation between reading and editing states.
+
+Why:
+The product promise depends on the wiki being the durable truth layer; if the wiki feels secondary or tool-like, the whole application feels like a demo instead of a serious knowledge product.
+
+### D-051: Product chrome should recede so knowledge surfaces can lead
+
+Decision:
+Refactor the shell and shared page framing to reduce admin-panel chrome, tighten navigation hierarchy, and make workspace context plus wiki-oriented actions more prominent than generic surface switching.
+
+Why:
+High-quality knowledge tools feel trustworthy when the interface frames the content and workflow clearly instead of competing with them through noisy containers and generic dashboard styling.
+
+### D-052: Second-pass refinement should reduce boxed-dashboard energy and deepen the editorial wiki feel
+
+Decision:
+Follow the first redesign with a narrower second pass focused on typography, spacing rhythm, panel treatment, and microcopy so the dashboard reads less like a set of polished cards and the wiki feels more like a composed reading environment.
+
+Why:
+The first pass fixed the information architecture, but product quality still depends on visual tone. A serious knowledge tool needs calmer surfaces, clearer focal hierarchy, and more authored interaction copy than a component-library dashboard naturally produces.
+
+### D-053: First-view product surfaces should server-render real workspace content when possible
+
+Decision:
+Preload dashboard and wiki workspace state on the server for their first render instead of letting those routes open on large client-only loading placeholders by default.
+
+Why:
+When a knowledge product opens on empty skeletons instead of real workspace state, it immediately feels like an internal scaffold. Showing the actual workspace on first paint makes the app feel more trustworthy, more demo-worthy, and more like a real tool.
+
+### D-054: Secondary dashboard panels should read as guidance, not boxed widgets
+
+Decision:
+Refine dashboard side panels and supporting sections toward quieter editorial lists, flatter posture blocks, and clearer action rhythm instead of stacking equally loud bordered cards.
+
+Why:
+Once the information architecture is correct, the remaining product-quality gap often comes from visual tone. A knowledge workspace feels more deliberate when the dashboard reads like a guided front door instead of a component gallery.
+
+### D-055: Wiki side rails should frame the page body instead of competing with it
+
+Decision:
+Reduce the visual weight of the wiki knowledge-map and context rails, tighten the page header rhythm, and make the main reading surface visually stronger than the surrounding chrome.
+
+Why:
+The wiki only feels like the durable center of gravity when the page body clearly dominates. Side context matters, but it should behave like support structure rather than a peer surface fighting for attention.
+
+### D-056: Wiki article pages should borrow encyclopedia reading qualities without copying encyclopedia branding
+
+Decision:
+Refine the wiki reading surface toward an encyclopedia-like article experience by emphasizing a stronger title plus lead, calmer long-form reading rhythm, compact contents navigation, infobox-like article facts, and article-style references.
+
+Why:
+The product promise is durable knowledge, not just rendered markdown. Borrowing the structural reading qualities of serious encyclopedia articles makes the wiki feel more authoritative and navigable while still keeping the local-first, file-first product identity distinct from any external brand.

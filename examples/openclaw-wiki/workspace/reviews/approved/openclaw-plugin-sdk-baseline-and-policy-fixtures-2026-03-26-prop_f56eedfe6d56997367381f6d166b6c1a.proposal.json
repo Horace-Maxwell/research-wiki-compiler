@@ -6,7 +6,7 @@
   "status": "approved",
   "proposalType": "update_page",
   "title": "Add integration-surface evidence to OpenClaw",
-  "generatedAt": "2026-04-05T19:36:54.185Z",
+  "generatedAt": "2026-04-05T19:36:54.524Z",
   "provider": "openai",
   "model": "gpt-openclaw-example",
   "promptHash": "3f515226b5d6435e4dd66528221719f48b5ddb14c03108e197b6142740b57eef",
@@ -286,12 +286,12 @@
     }
   ],
   "review": {
-    "reviewedAt": "2026-04-05T19:36:54.224Z",
+    "reviewedAt": "2026-04-05T19:36:54.588Z",
     "note": "Approved to land the SDK baseline and policy-fixture evidence on the core OpenClaw page.",
     "editedBeforeApply": false
   },
   "applyResult": {
-    "appliedAt": "2026-04-05T19:36:54.224Z",
+    "appliedAt": "2026-04-05T19:36:54.588Z",
     "success": true,
     "affectedPaths": [
       "wiki/entities/openclaw.md"

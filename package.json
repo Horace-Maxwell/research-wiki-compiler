@@ -32,7 +32,12 @@
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
     "demo:reset": "tsx scripts/seed-demo-workspace.ts",
-    "example:openclaw": "tsx scripts/generate-openclaw-example.ts",
+    "example:openclaw": "npm run example:openclaw:build",
+    "example:openclaw:reset": "tsx scripts/reset-openclaw-example.ts",
+    "example:openclaw:build": "tsx scripts/generate-openclaw-example.ts --mode=reference",
+    "example:openclaw:validate": "tsx scripts/validate-openclaw-example.ts",
+    "example:openclaw:live": "tsx scripts/generate-openclaw-example.ts --mode=live",
+    "example:openclaw:sync": "tsx scripts/generate-openclaw-example.ts --mode=reference --sync-snapshot",
     "db:generate": "drizzle-kit generate",
     "db:check": "drizzle-kit check"
   },

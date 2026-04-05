@@ -37,3 +37,6 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Validate OpenClaw reference example
+        run: npm run example:openclaw:validate

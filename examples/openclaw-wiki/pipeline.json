@@ -1,0 +1,480 @@
+{
+  "schemaVersion": 1,
+  "exampleName": "OpenClaw example wiki",
+  "renderedRoute": "/examples/openclaw",
+  "paths": {
+    "corpusRoot": "examples/openclaw-wiki/source-corpus",
+    "canonicalSnapshotRoot": "examples/openclaw-wiki/workspace",
+    "canonicalManifestPath": "examples/openclaw-wiki/manifest.json",
+    "referenceBaselinePath": "examples/openclaw-wiki/reference-baseline.json",
+    "canonicalObsidianVaultRoot": "examples/openclaw-wiki/obsidian-vault",
+    "referenceRuntimeWorkspaceRoot": "tmp/openclaw-workspace-build",
+    "referenceRuntimeManifestPath": "tmp/openclaw-workspace-build/run-manifest.json",
+    "referenceRuntimeObsidianVaultRoot": "tmp/openclaw-obsidian-vault-build",
+    "liveRuntimeWorkspaceRoot": "tmp/openclaw-workspace-live",
+    "liveRuntimeManifestPath": "tmp/openclaw-workspace-live/run-manifest.json",
+    "liveRuntimeObsidianVaultRoot": "tmp/openclaw-obsidian-vault-live"
+  },
+  "modes": {
+    "reference": {
+      "description": "Runs the real pipeline with a deterministic clock and a mocked OpenAI structured transport so the canonical example can be rebuilt without external credentials.",
+      "provider": "mocked_openai_structured",
+      "seedTimestamp": "2026-04-05T19:36:54.424Z"
+    },
+    "live": {
+      "description": "Runs the same pipeline against a live provider configuration. This preserves the real product path but is not expected to be perfectly reproducible.",
+      "provider": "openai",
+      "requiredEnvVars": [
+        "OPENAI_API_KEY"
+      ],
+      "optionalEnvVars": [
+        "OPENCLAW_EXAMPLE_LIVE_MODEL"
+      ]
+    }
+  },
+  "corpusFiles": [
+    {
+      "fileName": "2026-03-31-openclaw-release-and-plugin-surface.md",
+      "snapshotPath": "examples/openclaw-wiki/source-corpus/2026-03-31-openclaw-release-and-plugin-surface.md",
+      "originPath": "Obsidian Vault/AI/News Digests/2026/2026-03-31 AI News Digest.md",
+      "excerptScope": [
+        "Tech Radar 5 > T1. OpenClaw 发布 openclaw 2026.3.31",
+        "Tech Radar 5 > T5. OpenClaw：更新文档相关模块：refresh plugin sdk api baseline"
+      ]
+    },
+    {
+      "fileName": "2026-03-26-openclaw-plugin-sdk-and-policy.md",
+      "snapshotPath": "examples/openclaw-wiki/source-corpus/2026-03-26-openclaw-plugin-sdk-and-policy.md",
+      "originPath": "Obsidian Vault/AI/News Digests/2026/2026-03-26 AI News Digest.md",
+      "excerptScope": [
+        "Tech Radar 5 > T1. build: refresh plugin sdk api baseline",
+        "Tech Radar 5 > T4. test(feishu): type policy fixtures"
+      ]
+    },
+    {
+      "fileName": "2026-04-02-openclaw-release-cadence-and-test-churn.md",
+      "snapshotPath": "examples/openclaw-wiki/source-corpus/2026-04-02-openclaw-release-cadence-and-test-churn.md",
+      "originPath": "Obsidian Vault/AI/News Digests/2026/2026-04-02 AI News Digest.md",
+      "excerptScope": [
+        "Tech Radar 5 > T1. OpenClaw 发布 openclaw 2026.4.2",
+        "Tech Radar 5 > T4. OpenClaw：更新测试相关模块：reduce agent test import churn"
+      ]
+    },
+    {
+      "fileName": "2026-04-05-openclaw-provider-risk-and-changelog.md",
+      "snapshotPath": "examples/openclaw-wiki/source-corpus/2026-04-05-openclaw-provider-risk-and-changelog.md",
+      "originPath": "Obsidian Vault/AI/News Digests/2026/2026-04-05 AI News Digest.md",
+      "excerptScope": [
+        "Trend Radar 6 > OpenClaw 发布 openclaw 2026.3.28",
+        "Trend Radar 6 > OpenClaw：更新文档相关模块：refresh unreleased 变更日志",
+        "What Matters Most Today > Tell HN: Anthropic no longer allowing Claude Code subscriptions to use OpenClaw",
+        "Tech Radar 5 > T1/T2 OpenClaw provider and changelog updates"
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question": "What is OpenClaw in this corpus?",
+      "archiveAs": null
+    },
+    {
+      "question": "Which parts of OpenClaw look most unstable or fast-moving?",
+      "archiveAs": null
+    },
+    {
+      "question": "What should I monitor before upgrading OpenClaw?",
+      "archiveAs": "note"
+    }
+  ],
+  "validation": {
+    "requiredWorkspaceDirectories": [
+      "raw",
+      "reviews",
+      "audits",
+      "wiki"
+    ],
+    "requiredWikiPages": [
+      {
+        "path": "wiki/index.md",
+        "title": "OpenClaw Example Index",
+        "type": "index",
+        "requiredHeadings": [
+          "Overview",
+          "Start here",
+          "How to use this wiki",
+          "Key pages",
+          "Open fronts",
+          "Open questions",
+          "Corpus",
+          "Artifact ladder",
+          "Visible artifacts",
+          "Reading path"
+        ]
+      },
+      {
+        "path": "wiki/entities/openclaw.md",
+        "title": "OpenClaw",
+        "type": "entity",
+        "requiredHeadings": [
+          "Summary",
+          "Key signals",
+          "Related pages",
+          "Integration surface",
+          "Workflow cautions",
+          "Configuration drift signals",
+          "Tensions"
+        ]
+      },
+      {
+        "path": "wiki/topics/openclaw-release-cadence.md",
+        "title": "OpenClaw release cadence",
+        "type": "topic",
+        "requiredHeadings": [
+          "Summary",
+          "Evidence",
+          "Related pages",
+          "Upgrade implications"
+        ]
+      },
+      {
+        "path": "wiki/concepts/plugin-compatibility.md",
+        "title": "Plugin compatibility",
+        "type": "concept",
+        "requiredHeadings": [
+          "Summary",
+          "Why it matters",
+          "Related pages"
+        ]
+      },
+      {
+        "path": "wiki/concepts/provider-dependency-risk.md",
+        "title": "Provider dependency risk",
+        "type": "concept",
+        "requiredHeadings": [
+          "Summary",
+          "Signals",
+          "Related pages"
+        ]
+      },
+      {
+        "path": "wiki/syntheses/openclaw-maintenance-watchpoints.md",
+        "title": "OpenClaw maintenance watchpoints",
+        "type": "synthesis",
+        "requiredHeadings": [
+          "Thesis",
+          "Watchpoints",
+          "Related pages"
+        ]
+      },
+      {
+        "path": "wiki/syntheses/openclaw-reading-paths.md",
+        "title": "OpenClaw reading paths",
+        "type": "synthesis",
+        "requiredHeadings": [
+          "Overview",
+          "Orientation pass",
+          "Maintenance pass",
+          "Provenance pass",
+          "Related pages"
+        ]
+      },
+      {
+        "path": "wiki/syntheses/openclaw-current-tensions.md",
+        "title": "OpenClaw current tensions",
+        "type": "synthesis",
+        "requiredHeadings": [
+          "Summary",
+          "Current tensions",
+          "Why they matter",
+          "Related pages"
+        ]
+      },
+      {
+        "path": "wiki/notes/openclaw-open-questions.md",
+        "title": "OpenClaw open questions",
+        "type": "note",
+        "requiredHeadings": [
+          "Summary",
+          "Questions",
+          "What would resolve them",
+          "Related pages"
+        ]
+      },
+      {
+        "path": "wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md",
+        "title": "Note: What should I monitor before upgrading OpenClaw",
+        "type": "note",
+        "requiredHeadings": [
+          "Prompt",
+          "Answer summary",
+          "Archived notes",
+          "Based-on pages",
+          "Citations",
+          "Caveats",
+          "Follow-up questions",
+          "Archive provenance"
+        ]
+      }
+    ],
+    "requiredArtifactPaths": [
+      "raw/processed/2026-03-26-openclaw-plugin-sdk-and-policy.md",
+      "raw/processed/2026-03-26-openclaw-plugin-sdk-and-policy.normalized.md",
+      "raw/processed/2026-03-31-openclaw-release-and-plugin-surface.md",
+      "raw/processed/2026-03-31-openclaw-release-and-plugin-surface.normalized.md",
+      "raw/processed/2026-04-02-openclaw-release-cadence-and-test-churn.md",
+      "raw/processed/2026-04-02-openclaw-release-cadence-and-test-churn.normalized.md",
+      "raw/processed/2026-04-05-openclaw-provider-risk-and-changelog.md",
+      "raw/processed/2026-04-05-openclaw-provider-risk-and-changelog.normalized.md",
+      "raw/processed/summaries/openclaw-plugin-sdk-baseline-and-policy-fixtures-2026-03-26-src_6e48b953a265ca3f7f72796952b364b0.summary.md",
+      "raw/processed/summaries/openclaw-plugin-sdk-baseline-and-policy-fixtures-2026-03-26-src_6e48b953a265ca3f7f72796952b364b0.summary.json",
+      "raw/processed/summaries/openclaw-release-and-plugin-surface-update-2026-03-31-src_f7b5dd4068ac4fd7925a1bdabe45697f.summary.md",
+      "raw/processed/summaries/openclaw-release-and-plugin-surface-update-2026-03-31-src_f7b5dd4068ac4fd7925a1bdabe45697f.summary.json",
+      "raw/processed/summaries/openclaw-release-cadence-and-test-churn-2026-04-02-src_b8a041127f611d206f833fcb70e56ac2.summary.md",
+      "raw/processed/summaries/openclaw-release-cadence-and-test-churn-2026-04-02-src_b8a041127f611d206f833fcb70e56ac2.summary.json",
+      "raw/processed/summaries/openclaw-provider-risk-and-changelog-signals-2026-04-05-src_359c7879b0c1f818df8434be7b27682d.summary.md",
+      "raw/processed/summaries/openclaw-provider-risk-and-changelog-signals-2026-04-05-src_359c7879b0c1f818df8434be7b27682d.summary.json",
+      "reviews/rejected/openclaw-release-cadence-and-test-churn-2026-04-02-prop_c23e7865dcf38941826e9fed8ce166ed.proposal.md",
+      "reviews/rejected/openclaw-release-cadence-and-test-churn-2026-04-02-prop_c23e7865dcf38941826e9fed8ce166ed.proposal.json"
+    ],
+    "requiredApprovedProposalCount": 9,
+    "requiredRejectedProposalCount": 1,
+    "requiredAuditModes": [
+      "coverage"
+    ],
+    "archivedAnswerPagePath": "wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md",
+    "keyInspectionPaths": [
+      "workspace/wiki/index.md",
+      "workspace/wiki/entities/openclaw.md",
+      "workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md",
+      "workspace/wiki/syntheses/openclaw-reading-paths.md",
+      "workspace/wiki/syntheses/openclaw-current-tensions.md",
+      "workspace/wiki/notes/openclaw-open-questions.md",
+      "workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md"
+    ],
+    "requiredObsidianNotes": [
+      {
+        "path": "README.md",
+        "title": "OpenClaw Obsidian Vault",
+        "requiredHeadings": [
+          "Start here",
+          "Vault layout",
+          "How to work inside Obsidian"
+        ]
+      },
+      {
+        "path": "00 Atlas/Start Here.md",
+        "title": "Start Here",
+        "requiredHeadings": [
+          "What this vault is",
+          "Primary reading path",
+          "Artifact ladder",
+          "Obsidian habits"
+        ]
+      },
+      {
+        "path": "00 Atlas/Reading Paths.md",
+        "title": "Reading Paths",
+        "requiredHeadings": [
+          "Ten-minute orientation",
+          "Maintenance pass",
+          "Provenance pass"
+        ]
+      },
+      {
+        "path": "00 Atlas/Topic Map.md",
+        "title": "Topic Map",
+        "requiredHeadings": [
+          "Core pages",
+          "Decision surfaces",
+          "Next working surfaces"
+        ]
+      },
+      {
+        "path": "00 Atlas/Key Pages.md",
+        "title": "Key Pages",
+        "requiredHeadings": [
+          "Read these first",
+          "Read these when operating",
+          "Read these when checking provenance"
+        ]
+      },
+      {
+        "path": "00 Atlas/Open Questions.md",
+        "title": "Open Questions",
+        "requiredHeadings": [
+          "Highest-leverage open questions",
+          "What would reduce uncertainty"
+        ]
+      },
+      {
+        "path": "00 Atlas/Current Tensions.md",
+        "title": "Current Tensions",
+        "requiredHeadings": [
+          "Main tensions",
+          "Where to inspect them"
+        ]
+      },
+      {
+        "path": "00 Atlas/Monitoring.md",
+        "title": "Monitoring",
+        "requiredHeadings": [
+          "What to monitor",
+          "Fast maintenance bundle",
+          "Escalation questions"
+        ]
+      },
+      {
+        "path": "00 Atlas/LLM Context Pack.md",
+        "title": "LLM Context Pack",
+        "requiredHeadings": [
+          "Working principle",
+          "Pack 1: Explain OpenClaw",
+          "Pack 2: Upgrade watchpoints",
+          "Pack 3: Provenance check"
+        ]
+      },
+      {
+        "path": "05 Context Packs/Explain OpenClaw.md",
+        "title": "Explain OpenClaw",
+        "requiredHeadings": [
+          "Use this pack when",
+          "Load these notes",
+          "Optional deepening"
+        ]
+      },
+      {
+        "path": "05 Context Packs/Upgrade Watchpoints.md",
+        "title": "Upgrade Watchpoints",
+        "requiredHeadings": [
+          "Use this pack when",
+          "Load these notes",
+          "Questions to keep active"
+        ]
+      },
+      {
+        "path": "05 Context Packs/Provenance And Review.md",
+        "title": "Provenance And Review",
+        "requiredHeadings": [
+          "Use this pack when",
+          "Load these notes",
+          "Walk order"
+        ]
+      },
+      {
+        "path": "00 Atlas/Artifact Map.md",
+        "title": "Artifact Map",
+        "requiredHeadings": [
+          "Read the compiled wiki first",
+          "Then inspect the artifact trail"
+        ]
+      },
+      {
+        "path": "20 Sources/Corpus Atlas.md",
+        "title": "Corpus Atlas",
+        "requiredHeadings": [
+          "Source notes",
+          "Why these sources matter"
+        ]
+      },
+      {
+        "path": "25 Normalized Sources/Processed Source Atlas.md",
+        "title": "Processed Source Atlas",
+        "requiredHeadings": [
+          "Normalized notes",
+          "How this layer helps"
+        ]
+      },
+      {
+        "path": "30 Summaries/Summary Atlas.md",
+        "title": "Summary Atlas",
+        "requiredHeadings": [
+          "Summary notes",
+          "How to use them"
+        ]
+      },
+      {
+        "path": "40 Reviews/Review History.md",
+        "title": "Review History",
+        "requiredHeadings": [
+          "Approved proposals",
+          "Rejected proposals",
+          "How to read this layer"
+        ]
+      },
+      {
+        "path": "50 Audits/Audit Atlas.md",
+        "title": "Audit Atlas",
+        "requiredHeadings": [
+          "Audit notes",
+          "What to inspect"
+        ]
+      },
+      {
+        "path": "10 Articles/OpenClaw.md",
+        "title": "OpenClaw",
+        "requiredHeadings": [
+          "Article map",
+          "Connected notes",
+          "Summary",
+          "Key signals"
+        ]
+      },
+      {
+        "path": "10 Articles/OpenClaw maintenance watchpoints.md",
+        "title": "OpenClaw maintenance watchpoints",
+        "requiredHeadings": [
+          "Use this note when",
+          "Article map",
+          "Connected notes",
+          "Thesis",
+          "Watchpoints"
+        ]
+      },
+      {
+        "path": "10 Articles/OpenClaw reading paths.md",
+        "title": "OpenClaw reading paths",
+        "requiredHeadings": [
+          "Use this note when",
+          "Article map",
+          "Connected notes",
+          "Overview",
+          "Orientation pass"
+        ]
+      },
+      {
+        "path": "10 Articles/OpenClaw current tensions.md",
+        "title": "OpenClaw current tensions",
+        "requiredHeadings": [
+          "Use this note when",
+          "Article map",
+          "Connected notes",
+          "Summary",
+          "Current tensions"
+        ]
+      },
+      {
+        "path": "10 Articles/OpenClaw open questions.md",
+        "title": "OpenClaw open questions",
+        "requiredHeadings": [
+          "Use this note when",
+          "Article map",
+          "Connected notes",
+          "Summary",
+          "Questions"
+        ]
+      },
+      {
+        "path": "10 Articles/Note - What should I monitor before upgrading OpenClaw.md",
+        "title": "Note: What should I monitor before upgrading OpenClaw",
+        "requiredHeadings": [
+          "Use this note when",
+          "Article map",
+          "Connected notes",
+          "Prompt",
+          "Answer summary",
+          "Citations"
+        ]
+      }
+    ]
+  }
+}

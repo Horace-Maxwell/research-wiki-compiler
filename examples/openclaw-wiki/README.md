@@ -1,100 +1,139 @@
 # OpenClaw Example Wiki
 
-This directory is a committed end-to-end example of the Research Wiki Compiler running on a bounded OpenClaw corpus derived from the user's own files first.
+This directory is the official end-to-end example workflow for the Research Wiki Compiler. It preserves both the final high-quality wiki output and the reproducible execution path that generated it.
 
-## Rendered example
+## What lives here
 
-Run the app, then open:
+- `source-corpus/`: the bounded OpenClaw corpus, derived from the user's files first.
+- `workspace/`: the committed canonical reference output.
+- `obsidian-vault/`: an Obsidian-first projection of the same example, optimized for local reading and context assembly.
+- `manifest.json`: the canonical reference manifest for the committed example.
+- `pipeline.json`: the source-controlled pipeline spec for corpus order, modes, and validation targets.
+- `reference-baseline.json`: the canonical hash baseline used by `npm run example:openclaw:validate`.
 
-```text
-/examples/openclaw
-```
+## Two execution modes
 
-That route is the rendered showcase entry point for this example. The Markdown files in this directory remain the source of truth; the app renders those same files into the wiki experience.
+### Reference mode
 
-## What this example is
+Reference mode is the official reproducible path.
 
-- A reproducible example workspace for the topic `OpenClaw / open claw`.
-- A real pipeline run using the repository's existing service layer for:
-  - import / normalize
-  - summarize
-  - patch planning
-  - review / apply
-  - ask
-  - archive
-  - audit
-- A committed snapshot of the resulting workspace artifacts, including wiki pages, source summaries, review proposals, and an audit report.
+- It runs the real import, summarize, plan, review/apply, ask, archive, and audit services.
+- It uses a deterministic clock plus a mocked OpenAI structured transport.
+- It does not require live provider credentials.
+- It rebuilds the official example into `tmp/openclaw-workspace-build`.
+- It also projects an Obsidian-ready vault into `tmp/openclaw-obsidian-vault-build`.
+- It is expected to match the canonical committed baseline exactly.
 
-## Corpus used
+### Live mode
 
-The committed corpus is intentionally small and high-signal. It contains four curated excerpts derived from the user's Obsidian AI news digests:
+Live mode preserves the real provider-backed path.
 
-- `source-corpus/2026-03-26-openclaw-plugin-sdk-and-policy.md`
-- `source-corpus/2026-03-31-openclaw-release-and-plugin-surface.md`
-- `source-corpus/2026-04-02-openclaw-release-cadence-and-test-churn.md`
-- `source-corpus/2026-04-05-openclaw-provider-risk-and-changelog.md`
+- It runs the same workflow against a live OpenAI configuration.
+- It requires `OPENAI_API_KEY`.
+- It writes into `tmp/openclaw-workspace-live`.
+- It also projects an Obsidian-ready vault into `tmp/openclaw-obsidian-vault-live`.
+- It is useful for real pipeline exercise, but it is not expected to match the canonical baseline byte-for-byte.
 
-Each file includes frontmatter that records the original user-file path and the excerpt scope that was selected. The full original digests are not committed here; only the bounded OpenClaw-relevant excerpts are.
-
-## How it was generated
-
-Run:
+## Official commands
 
 ```bash
 npm install
-npm run example:openclaw
+npm run example:openclaw:reset
+npm run example:openclaw:build
+npm run example:openclaw:validate
 ```
 
-The generator script lives at [`../../scripts/generate-openclaw-example.ts`](../../scripts/generate-openclaw-example.ts).
+Additional commands:
 
-Important details:
+```bash
+npm run example:openclaw:live
+npm run example:openclaw:sync
+```
 
-- The script creates a fresh runtime workspace under `tmp/openclaw-workspace-build`.
-- It uses the real workspace, source, summary, review, ask, archive, and audit services already implemented in the app.
-- It uses a deterministic mocked OpenAI transport so the example can be rebuilt without live API keys while still exercising the real prompts, contracts, and service flow.
-- After generation, it syncs the visible workspace artifacts into `workspace/` for commit-friendly inspection.
-- It does not commit `.research-wiki/app.db` because that runtime database contains machine-specific state, including absolute local paths.
+What each command does:
+
+- `example:openclaw:reset`: removes the temporary reference, live, and rendered-example runtime directories.
+- `example:openclaw:build`: runs the official reference pipeline into `tmp/openclaw-workspace-build` and generates the matching Obsidian vault projection in `tmp/openclaw-obsidian-vault-build`.
+- `example:openclaw:validate`: rebuilds the reference example, compares it to the canonical baseline, verifies the Obsidian vault projection, and checks that the rendered example workspace can be restored.
+- `example:openclaw:live`: runs the same workflow with a live OpenAI provider.
+- `example:openclaw:sync`: maintainer-only command that regenerates the canonical committed snapshot, manifest, Obsidian vault projection, and hash baseline from reference mode.
+
+## Reproducibility strategy
+
+The repository does not pretend that live LLM calls are perfectly deterministic.
+
+Instead, it formalizes two separate truths:
+
+- Reference mode is the reproducible baseline. It freezes the provider behavior through a mocked structured transport and freezes time through a deterministic runtime wrapper.
+- Live mode is the real provider-backed workflow. It preserves the authentic product path, but its outputs may drift over time.
+
+This split keeps the example honest while still preserving the real product loop.
+
+## What validation checks
+
+`npm run example:openclaw:validate` verifies all of the following:
+
+- the committed `source-corpus/` and canonical `workspace/` still match `reference-baseline.json`
+- the committed `obsidian-vault/` still matches the canonical reference baseline
+- a fresh reference rebuild matches the canonical manifest and workspace output exactly
+- a fresh Obsidian vault projection matches the committed Obsidian vault exactly
+- required wiki pages exist
+- required headings exist on the key final pages
+- required Obsidian entry notes exist
+- required summaries, review artifacts, archived note, and audit output exist
+- the rendered example workspace can be recreated for `/examples/openclaw`
+
+## Obsidian projection
+
+The Obsidian layer is additive. It does not replace the source-of-truth wiki.
+
+- `workspace/wiki/` remains the canonical compiled wiki.
+- `obsidian-vault/` is a projection of the same example into an Obsidian-friendly folder layout.
+- Start with [`obsidian-vault/README.md`](obsidian-vault/README.md) and [`obsidian-vault/00 Atlas/Start Here.md`](obsidian-vault/00%20Atlas/Start%20Here.md).
+- The vault now adds stronger maps of content, discrete context-pack notes, open-question and current-tension notes, normalized-source atlases, and article-first projections tuned for day-to-day reading and compact context assembly.
+
+Key vault notes:
+
+- [`obsidian-vault/00 Atlas/Topic Map.md`](obsidian-vault/00%20Atlas/Topic%20Map.md)
+- [`obsidian-vault/00 Atlas/Open Questions.md`](obsidian-vault/00%20Atlas/Open%20Questions.md)
+- [`obsidian-vault/00 Atlas/Current Tensions.md`](obsidian-vault/00%20Atlas/Current%20Tensions.md)
+- [`obsidian-vault/00 Atlas/Monitoring.md`](obsidian-vault/00%20Atlas/Monitoring.md)
+- [`obsidian-vault/05 Context Packs/Explain OpenClaw.md`](obsidian-vault/05%20Context%20Packs/Explain%20OpenClaw.md)
+- [`obsidian-vault/05 Context Packs/Upgrade Watchpoints.md`](obsidian-vault/05%20Context%20Packs/Upgrade%20Watchpoints.md)
+- [`obsidian-vault/05 Context Packs/Provenance And Review.md`](obsidian-vault/05%20Context%20Packs/Provenance%20And%20Review.md)
 
 ## What to inspect first
 
 Start here:
 
-- the rendered route: `/examples/openclaw`
+- rendered route: `/examples/openclaw`
 - [`workspace/wiki/index.md`](workspace/wiki/index.md)
 - [`workspace/wiki/entities/openclaw.md`](workspace/wiki/entities/openclaw.md)
-- [`workspace/wiki/topics/openclaw-release-cadence.md`](workspace/wiki/topics/openclaw-release-cadence.md)
-- [`workspace/wiki/concepts/plugin-compatibility.md`](workspace/wiki/concepts/plugin-compatibility.md)
-- [`workspace/wiki/concepts/provider-dependency-risk.md`](workspace/wiki/concepts/provider-dependency-risk.md)
+- [`workspace/wiki/syntheses/openclaw-current-tensions.md`](workspace/wiki/syntheses/openclaw-current-tensions.md)
 - [`workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md`](workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md)
+- [`workspace/wiki/syntheses/openclaw-reading-paths.md`](workspace/wiki/syntheses/openclaw-reading-paths.md)
+- [`workspace/wiki/notes/openclaw-open-questions.md`](workspace/wiki/notes/openclaw-open-questions.md)
 - [`workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md`](workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md)
+- [`obsidian-vault/README.md`](obsidian-vault/README.md)
+- [`obsidian-vault/00 Atlas/Start Here.md`](obsidian-vault/00%20Atlas/Start%20Here.md)
+- [`obsidian-vault/00 Atlas/LLM Context Pack.md`](obsidian-vault/00%20Atlas/LLM%20Context%20Pack.md)
 
-Then inspect the visible intermediate artifacts:
+Then inspect the visible intermediate layer:
 
-- raw source excerpts under [`source-corpus/`](source-corpus/)
-- source summaries under [`workspace/raw/processed/summaries/`](workspace/raw/processed/summaries/)
-- approved and rejected proposals under [`workspace/reviews/`](workspace/reviews/)
-- the coverage audit report under [`workspace/audits/`](workspace/audits/)
-- the run manifest at [`manifest.json`](manifest.json)
+- [`source-corpus/`](source-corpus/)
+- [`workspace/raw/processed/summaries/`](workspace/raw/processed/summaries/)
+- [`workspace/reviews/`](workspace/reviews/)
+- [`workspace/audits/`](workspace/audits/)
+- [`manifest.json`](manifest.json)
+- [`pipeline.json`](pipeline.json)
+- [`reference-baseline.json`](reference-baseline.json)
 
-## Raw vs rendered
+## Maintainer note
 
-GitHub is intentionally showing the inspectable source layer of the example:
+Only run `npm run example:openclaw:sync` when you intentionally want to refresh the official canonical baseline after reviewing the result. The command updates:
 
-- `source-corpus/` contains the bounded raw input set.
-- `workspace/wiki/` contains the final Markdown wiki pages.
-- `workspace/raw/`, `workspace/reviews/`, and `workspace/audits/` contain the intermediate artifact trail.
+- `examples/openclaw-wiki/workspace/`
+- `examples/openclaw-wiki/manifest.json`
+- `examples/openclaw-wiki/reference-baseline.json`
 
-The app route `/examples/openclaw` renders that same file-backed workspace as a guided wiki experience. The architecture stays file-first; the rendered route is the product view on top of the Markdown source of truth.
-
-## What this example demonstrates
-
-- Durable compiled knowledge instead of one-off chat output.
-- Visible source-to-summary-to-proposal traceability.
-- Review-first wiki mutation, including a preserved rejected proposal.
-- Wiki-first retrieval with a real ask flow.
-- Answer archive back into the wiki.
-- Audit output that highlights remaining coverage gaps in the example corpus.
-
-## Rebuild notes
-
-If you rerun the generator, timestamps and generated artifact IDs may change. That is expected. The content structure and workflow should remain the same.
+That command should be treated as a baseline refresh, not as an ordinary local build.

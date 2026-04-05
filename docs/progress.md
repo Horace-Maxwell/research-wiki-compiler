@@ -2,6 +2,155 @@
 
 This document is the historical build log for the product. It is intentionally milestone-oriented, while [README.md](../README.md) explains the current MVP as an external-facing repository entry point.
 
+## Product Experience Redesign Pass
+
+Status: Completed
+
+### Goal
+
+Reframe the shipped MVP so the app feels like a serious research wiki product instead of an internal demo shell, with the biggest changes centered on the dashboard, the wiki reading surface, the navigation shell, and the example entry path.
+
+### Completed Tasks
+
+1. Rebuild the dashboard around workspace state, recent knowledge movement, and next actions.
+2. Expand the dashboard data contract and service so the front page can show real wiki, review, archive, source, and audit previews.
+3. Refactor the app shell into a calmer knowledge-workspace frame with grouped navigation and a stronger example entry path.
+4. Redesign the wiki browser into a denser reading surface with clearer provenance, page graph, and edit-mode separation.
+5. Tighten shared styling primitives so the app reads more like a product and less like a scaffold.
+6. Update tests and documentation to reflect the new product-experience direction.
+
+### Design Inputs
+
+- the current shipped UI overuses evenly weighted cards and generic shell framing, which makes the product feel unfinished even though the core loops are implemented
+- reference patterns being applied include quieter chrome, stronger content-first hierarchy, and more deliberate sidebars from products such as Linear, Obsidian, and modern knowledge tools
+
+### Built In This Pass
+
+- a workspace-front-door dashboard with stronger primary CTAs, featured wiki pages, review focus, archive previews, audit summaries, and a living activity feed
+- richer dashboard overview APIs and contracts so the UI can emphasize knowledge state instead of only counts
+- a more intentional application shell with grouped navigation, stronger active-state treatment, explicit workspace framing, and a direct route into the rendered OpenClaw example
+- a calmer wiki browsing experience with improved page reading hierarchy, better metadata and provenance panels, and clearer edit vs read distinction
+- shared typography, surface, and button refinements that reduce admin-panel energy across the app
+
+### Verification
+
+- `npm run lint`
+- `npm test`
+- `npm run build`
+- manual browser inspection of `/dashboard`
+- manual browser inspection of `/wiki`
+- manual browser inspection of `/examples/openclaw`
+
+## Example Workflow Productization Pass
+
+Status: Completed
+
+### Goal
+
+Encode the polished OpenClaw example workflow into source-controlled scripts, manifests, validation paths, and canonical artifacts so another developer can rebuild and verify the official example on a different machine.
+
+### Built In This Pass
+
+- a source-controlled `pipeline.json` that defines the official corpus order, reference/live modes, validation targets, and key inspection pages
+- a hardened `generate-openclaw-example.ts` flow that now supports reproducible reference builds, live builds, and canonical snapshot sync
+- deterministic reference-mode execution through a frozen clock plus mocked structured provider responses
+- a committed `reference-baseline.json` hash baseline for the official example output
+- an additive `obsidian-vault/` projection for the official example, plus temporary Obsidian vault outputs during reference/live builds
+- a second-pass knowledge-work layer with reading-path pages, open-question pages, current-tension pages, and richer Obsidian context packs
+- dedicated `example:openclaw:reset`, `example:openclaw:build`, `example:openclaw:validate`, `example:openclaw:live`, and `example:openclaw:sync` commands
+- CI integration for the deterministic example validation path
+- updated docs that explain the split between canonical reference output and live provider-backed generation
+
+### Verification
+
+- `npm run example:openclaw:build`
+- `npm run example:openclaw:sync`
+- `npm run example:openclaw:validate`
+
+## Product Experience Refinement Pass
+
+Status: Completed
+
+### Goal
+
+Take the redesigned MVP shell and make it feel more composed, editorial, and product-grade without changing the underlying product architecture or adding new feature surfaces.
+
+### Diagnosis
+
+- the first pass improved structure, but the dashboard still carries too much boxed card energy in places where a stronger typographic section rhythm would feel more authored
+- the wiki layout is substantially better, but some panel treatments still compete with the page body instead of framing it quietly
+- the shell is clearer than before, yet some copy and active-state styling still read as competent scaffolding instead of a fully composed product surface
+
+### Refinement Direction
+
+- reduce unnecessary borders and equal-weight container treatment so the dashboard feels more like a workspace home than a card gallery
+- strengthen the dashboard focal hierarchy around the wiki, next actions, and living knowledge movement
+- make the wiki body calmer and more editorial through better spacing rhythm, metadata placement, and lower-noise side panels
+- tighten shell copy and state treatment so the product feels quieter, sharper, and more trustworthy
+
+### Built In This Pass
+
+- lighter shared visual language with calmer shell chrome, subtler active states, and less heavy component framing
+- second-pass dashboard composition that reduces equal-weight card energy, merges related operational sections, and strengthens wiki-forward hierarchy
+- a more editorial wiki reading surface with externalized page framing, calmer metadata treatment, quieter rails, and a cleaner page graph presentation
+- tighter microcopy and interaction tone across dashboard, wiki, and shell framing
+- server-preloaded dashboard and wiki first views so the app opens on real workspace content instead of large client-only loading placeholders
+
+### Verification
+
+- `npm run lint`
+- `npm test`
+- `npm run build`
+- browser screenshots of `/dashboard`, `/wiki`, and `/examples/openclaw` using Playwright's Chromium runner
+
+## Product Experience Polish Pass
+
+Status: Completed
+
+### Goal
+
+Take the refined structure from the redesign passes and push it one step further toward a calmer, denser, more product-grade feel by tuning visual weight, panel hierarchy, reading-surface dominance, and interaction tone.
+
+### Diagnosis
+
+- the dashboard was materially stronger, but the right column and supporting sections still carried traces of boxed admin-panel energy
+- the wiki information architecture was right, yet the side rails still competed a little too much with the page body on first view
+- the shell and shared controls were coherent, but some borders, paddings, and control treatments still felt more like good scaffolding than fully composed product surfaces
+
+### Refinement Direction
+
+- flatten secondary dashboard panels into quieter action and posture framing while keeping the workspace hero dominant
+- reduce the visual weight of the wiki rails so the page body feels more obviously like the main object
+- tighten shared button, badge, card, and header styling so density improves without turning the UI noisy
+- keep the product calm and serious by preferring hierarchy, spacing, and restraint over added visual flourish
+
+### Built In This Pass
+
+- quieter dashboard action lists, flatter workspace posture framing, and calmer secondary surfaces that feel less like stacked widgets
+- a more page-forward wiki layout with lighter side rails, tighter page metadata rhythm, and lower-noise provenance presentation
+- a more disciplined shell through subtler nav emphasis, calmer sidebar blocks, and tighter control styling
+- small typography, spacing, and container refinements across the app so the overall product feels more intentional and demo-worthy
+
+### Verification
+
+- `npm run lint`
+- `npm test`
+- `npm run build`
+- refreshed Playwright screenshots of `/dashboard`, `/wiki`, and `/examples/openclaw`
+
+### Encyclopedia Reading Follow-Up
+
+- refined the wiki surface again so pages read more like real knowledge articles and less like markdown panes
+- added a compact in-page contents treatment, a structured article-summary rail, a stronger title-plus-lead hierarchy, and article-style references plus linked-knowledge sections
+- kept the result original by preserving the app shell, product framing, color system, and local/file/review-first product model instead of mimicking any encyclopedia brand or layout literally
+
+### Encyclopedia Structure Pass
+
+- reduced route-level chrome on detail pages so the article title becomes the real primary heading
+- moved the page structure closer to an encyclopedia entry sequence: header, lead, infobox-like summary, contents, body, references, related knowledge, and page cues
+- pulled see-also, categories, and page metadata into article end matter instead of leaving them as competing side widgets
+- widened the reading column, tightened article typography, and removed the separate right rail during normal article reading so the page body clearly becomes the center of gravity
+
 ## Milestone 0
 
 Status: Completed

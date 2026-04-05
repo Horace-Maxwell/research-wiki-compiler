@@ -78,8 +78,9 @@ If you want the fastest path to understanding this project, do not start with th
 | --- | --- |
 | Rendered example route: `/examples/openclaw` | 这是产品里的渲染视图，能直接看到 wiki 页面、链接关系和示例入口。<br />This is the rendered product view, where the wiki pages, links, and example framing are easiest to understand. |
 | Source-of-truth wiki files: [`examples/openclaw-wiki/workspace/wiki/`](./examples/openclaw-wiki/workspace/wiki/) | 这些 Markdown 文件就是最终 wiki 内容本身。<br />These Markdown files are the wiki content itself. |
+| Obsidian-ready vault: [`examples/openclaw-wiki/obsidian-vault/`](./examples/openclaw-wiki/obsidian-vault/) | 这是额外生成的 Obsidian 投影视图，保留同一份知识内容，但更适合本地阅读、链接和小上下文组装。<br />This is an additive Obsidian projection of the same knowledge, optimized for local reading, linking, and small context packs. |
 | Raw source corpus: [`examples/openclaw-wiki/source-corpus/`](./examples/openclaw-wiki/source-corpus/) | 这是 OpenClaw 示例最初使用的原始材料。<br />This is the original source corpus used for the OpenClaw example. |
-| Example guide: [`examples/openclaw-wiki/README.md`](./examples/openclaw-wiki/README.md) | 这里解释了示例如何生成、该看哪些页面、以及 artifact 在哪里。<br />This explains how the example was generated, which pages to inspect, and where the artifacts live. |
+| Example guide: [`examples/openclaw-wiki/README.md`](./examples/openclaw-wiki/README.md) | 这里解释了 reference/live 两种模式、基线验证、以及该看哪些页面。<br />This explains the reference/live workflow, baseline validation, and which pages to inspect first. |
 
 GitHub 正在展示这个项目的底层 artifact layer，这不是退而求其次，而是设计选择：Markdown 文件是 source of truth，app 负责把这些文件渲染成真正的 wiki 体验。  
 GitHub is intentionally showing the artifact layer of the system. That is not a fallback. It is the design: Markdown files are the source of truth, and the app renders those same files into the actual wiki experience.
@@ -209,20 +210,56 @@ For a fuller browser smoke pass, see [MANUAL_QA.md](./MANUAL_QA.md).
 仓库包含一个完整的 OpenClaw 端到端示例，位置在 [examples/openclaw-wiki/](./examples/openclaw-wiki/)。它优先使用用户提供的 OpenClaw 相关语料，跑通 import、summarize、plan patches、review/apply、ask、archive 和 audit，并把最终 wiki、summary、proposal 与 audit artifact 一起提交进仓库。  
 The repository includes a full OpenClaw end-to-end example at [examples/openclaw-wiki/](./examples/openclaw-wiki/). It uses user-provided OpenClaw-related material first, runs import, summarize, patch planning, review/apply, ask, archive, and audit, and commits the resulting wiki, summaries, proposals, and audit artifacts into the repo.
 
+官方命令：  
+Official commands:
+
 ```bash
-npm run example:openclaw
+npm run example:openclaw:reset
+npm run example:openclaw:build
+npm run example:openclaw:validate
+```
+
+可选 live mode：  
+Optional live mode:
+
+```bash
+npm run example:openclaw:live
 ```
 
 渲染后的示例入口：`/examples/openclaw`  
 Rendered example route: `/examples/openclaw`
+
+这个仓库现在明确区分两种运行方式：  
+The repository now makes the two execution paths explicit:
+
+- `reference mode`：使用 deterministic clock + mocked structured provider，重建官方 canonical baseline。  
+  `reference mode`: uses a deterministic clock plus a mocked structured provider to rebuild the official canonical baseline.
+- `live mode`：使用真实 provider 跑同样流程，但输出不承诺逐字稳定。  
+  `live mode`: runs the same workflow against a real provider, but does not promise byte-for-byte stability.
+
+此外还有一个额外的 Obsidian 投影视图：  
+There is also an additive Obsidian projection:
+
+- `examples/openclaw-wiki/obsidian-vault/`：仓库内置的官方 Obsidian vault，可直接作为本地阅读和笔记组织入口。  
+  `examples/openclaw-wiki/obsidian-vault/`: the committed Obsidian-ready vault for local reading and note organization.
+- `npm run example:openclaw:build`：除了 reference build 之外，也会生成 `tmp/openclaw-obsidian-vault-build/`。  
+  `npm run example:openclaw:build`: in addition to the reference build, this now generates `tmp/openclaw-obsidian-vault-build/`.
 
 优先查看：  
 Start with:
 
 - [examples/openclaw-wiki/workspace/wiki/index.md](./examples/openclaw-wiki/workspace/wiki/index.md)
 - [examples/openclaw-wiki/workspace/wiki/entities/openclaw.md](./examples/openclaw-wiki/workspace/wiki/entities/openclaw.md)
+- [examples/openclaw-wiki/workspace/wiki/syntheses/openclaw-current-tensions.md](./examples/openclaw-wiki/workspace/wiki/syntheses/openclaw-current-tensions.md)
 - [examples/openclaw-wiki/workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md](./examples/openclaw-wiki/workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md)
+- [examples/openclaw-wiki/workspace/wiki/syntheses/openclaw-reading-paths.md](./examples/openclaw-wiki/workspace/wiki/syntheses/openclaw-reading-paths.md)
+- [examples/openclaw-wiki/workspace/wiki/notes/openclaw-open-questions.md](./examples/openclaw-wiki/workspace/wiki/notes/openclaw-open-questions.md)
 - [examples/openclaw-wiki/workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md](./examples/openclaw-wiki/workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md)
+- [examples/openclaw-wiki/obsidian-vault/README.md](./examples/openclaw-wiki/obsidian-vault/README.md)
+- [examples/openclaw-wiki/obsidian-vault/00 Atlas/Start Here.md](./examples/openclaw-wiki/obsidian-vault/00%20Atlas/Start%20Here.md)
+- [examples/openclaw-wiki/obsidian-vault/00 Atlas/LLM Context Pack.md](./examples/openclaw-wiki/obsidian-vault/00%20Atlas/LLM%20Context%20Pack.md)
+- [examples/openclaw-wiki/obsidian-vault/00 Atlas/Topic Map.md](./examples/openclaw-wiki/obsidian-vault/00%20Atlas/Topic%20Map.md)
+- [examples/openclaw-wiki/obsidian-vault/05 Context Packs/Upgrade Watchpoints.md](./examples/openclaw-wiki/obsidian-vault/05%20Context%20Packs/Upgrade%20Watchpoints.md)
 
 这个示例是一个好的 showcase，因为它不是手写静态样品，而是完整跑过：
 - import
@@ -232,6 +269,9 @@ Start with:
 - ask
 - archive
 - audit
+
+验证和基线细节见 [examples/openclaw-wiki/README.md](./examples/openclaw-wiki/README.md)、[examples/openclaw-wiki/pipeline.json](./examples/openclaw-wiki/pipeline.json)、[examples/openclaw-wiki/reference-baseline.json](./examples/openclaw-wiki/reference-baseline.json)。  
+For the validation path and baseline details, see [examples/openclaw-wiki/README.md](./examples/openclaw-wiki/README.md), [examples/openclaw-wiki/pipeline.json](./examples/openclaw-wiki/pipeline.json), and [examples/openclaw-wiki/reference-baseline.json](./examples/openclaw-wiki/reference-baseline.json).
 
 ## 截图 / Screenshots
 

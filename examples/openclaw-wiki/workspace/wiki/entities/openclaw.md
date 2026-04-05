@@ -2,11 +2,16 @@
 title: OpenClaw
 slug: openclaw
 type: entity
-created_at: '2026-04-05T19:36:54.137Z'
-updated_at: '2026-04-05T19:36:54.340Z'
+created_at: '2026-04-05T19:36:54.460Z'
+updated_at: '2026-04-05T19:36:55.455Z'
 status: active
-aliases: []
-tags: []
+aliases:
+  - open claw
+tags:
+  - entity
+  - openclaw
+  - entry-point
+  - core-page
 source_refs:
   - src_f7b5dd4068ac4fd7925a1bdabe45697f
   - src_6e48b953a265ca3f7f72796952b364b0
@@ -15,6 +20,10 @@ source_refs:
 page_refs:
   - OpenClaw release cadence
   - Plugin compatibility
+  - Provider dependency risk
+  - OpenClaw maintenance watchpoints
+  - OpenClaw current tensions
+  - OpenClaw open questions
 confidence: 0.2
 review_status: approved
 ---

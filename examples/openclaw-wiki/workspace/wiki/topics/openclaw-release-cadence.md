@@ -2,16 +2,23 @@
 title: OpenClaw release cadence
 slug: openclaw-release-cadence
 type: topic
-created_at: '2026-04-05T19:36:54.157Z'
-updated_at: '2026-04-05T19:36:54.261Z'
+created_at: '2026-04-05T19:36:54.477Z'
+updated_at: '2026-04-05T19:36:55.589Z'
 status: active
 aliases: []
-tags: []
+tags:
+  - topic
+  - openclaw
+  - releases
+  - upgrade-planning
 source_refs:
   - src_f7b5dd4068ac4fd7925a1bdabe45697f
   - src_b8a041127f611d206f833fcb70e56ac2
 page_refs:
   - OpenClaw
+  - OpenClaw maintenance watchpoints
+  - OpenClaw current tensions
+  - 'Note: What should I monitor before upgrading OpenClaw'
 confidence: 0.2
 review_status: approved
 ---

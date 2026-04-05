@@ -19,6 +19,35 @@ function emptyWikiTypeCounts() {
   return Object.fromEntries(WIKI_PAGE_TYPES.map((type) => [type, 0]));
 }
 
+function toIso(value: Date | null | undefined) {
+  return value ? value.toISOString() : null;
+}
+
+function reviewStatusPriority(status: string) {
+  switch (status) {
+    case "pending":
+      return 0;
+    case "approved":
+      return 1;
+    case "rejected":
+      return 2;
+    default:
+      return 3;
+  }
+}
+
+function severityPriority(value: "low" | "medium" | "high") {
+  switch (value) {
+    case "high":
+      return 3;
+    case "medium":
+      return 2;
+    case "low":
+    default:
+      return 1;
+  }
+}
+
 export async function getDashboardOverview(workspaceRoot: string): Promise<DashboardOverview> {
   const status = await getWorkspaceStatus(workspaceRoot);
 
@@ -30,6 +59,11 @@ export async function getDashboardOverview(workspaceRoot: string): Promise<Dashb
       gitInitialized: status.gitInitialized,
       databaseInitialized: status.databaseInitialized,
       counts: null,
+      featuredPages: [],
+      recentSources: [],
+      reviewFocus: [],
+      archivedAnswers: [],
+      recentAudits: [],
       recentActivity: [],
     });
   }
@@ -71,6 +105,131 @@ export async function getDashboardOverview(workspaceRoot: string): Promise<Dashb
   const reviewsByStatus = countBy(reviewRows.map((row) => row.status));
   const auditsByStatus = countBy(auditRows.map((row) => row.status));
   const jobsByStatus = countBy(jobRows.map((row) => row.status));
+  const pageById = new Map(wikiRows.map((row) => [row.id, row]));
+
+  const featuredPages = wikiRows
+    .filter((row) => row.type !== "index")
+    .sort((left, right) => right.updatedAt.getTime() - left.updatedAt.getTime())
+    .slice(0, 5)
+    .map((row) => ({
+      id: row.id,
+      title: row.title,
+      type: row.type,
+      path: row.path,
+      reviewStatus: row.reviewStatus,
+      sourceRefCount: row.sourceRefsJson.length,
+      pageRefCount: row.pageRefsJson.length,
+      updatedAt: row.updatedAt.toISOString(),
+      href: `/wiki?${new URLSearchParams({
+        workspaceRoot: normalizedWorkspaceRoot,
+        pageId: row.id,
+      }).toString()}`,
+    }));
+
+  const recentSources = sourceRows
+    .sort((left, right) => {
+      const leftTime = (left.importedAt ?? left.createdAt).getTime();
+      const rightTime = (right.importedAt ?? right.createdAt).getTime();
+
+      return rightTime - leftTime;
+    })
+    .slice(0, 4)
+    .map((row) => ({
+      id: row.id,
+      title: row.title,
+      sourceType: row.sourceType,
+      status: row.status,
+      summaryStatus: row.summaryStatus,
+      importedAt: toIso(row.importedAt),
+      updatedAt: row.updatedAt.toISOString(),
+      href: `/sources?${new URLSearchParams({
+        workspaceRoot: normalizedWorkspaceRoot,
+        sourceId: row.id,
+      }).toString()}`,
+    }));
+
+  const reviewFocus = reviewRows
+    .sort((left, right) => {
+      const statusDifference =
+        reviewStatusPriority(left.status) - reviewStatusPriority(right.status);
+
+      if (statusDifference !== 0) {
+        return statusDifference;
+      }
+
+      return right.updatedAt.getTime() - left.updatedAt.getTime();
+    })
+    .slice(0, 4)
+    .map((row) => ({
+      id: row.id,
+      title: row.title,
+      status: row.status,
+      riskLevel: row.riskLevel,
+      proposalType: row.proposalType,
+      targetPageTitle: row.targetPageTitle ?? row.proposedPageTitle ?? null,
+      updatedAt: row.updatedAt.toISOString(),
+      href: `/reviews?${new URLSearchParams({
+        workspaceRoot: normalizedWorkspaceRoot,
+        status: row.status,
+        reviewId: row.id,
+      }).toString()}`,
+    }));
+
+  const archivedAnswers = answerRows
+    .filter((row) => Boolean(row.archivedPageId))
+    .sort((left, right) => right.updatedAt.getTime() - left.updatedAt.getTime())
+    .slice(0, 3)
+    .map((row) => {
+      const archivedPage = row.archivedPageId ? pageById.get(row.archivedPageId) : null;
+
+      return {
+        id: row.id,
+        question: row.question,
+        archivedPageTitle: archivedPage?.title ?? null,
+        archivedPagePath: archivedPage?.path ?? null,
+        updatedAt: row.updatedAt.toISOString(),
+        href: `/ask?${new URLSearchParams({
+          workspaceRoot: normalizedWorkspaceRoot,
+          answerId: row.id,
+        }).toString()}`,
+      };
+    });
+
+  const recentAudits = auditRows
+    .sort((left, right) => {
+      const leftTime = (left.completedAt ?? left.createdAt).getTime();
+      const rightTime = (right.completedAt ?? right.createdAt).getTime();
+
+      return rightTime - leftTime;
+    })
+    .slice(0, 3)
+    .map((row) => {
+      const highestSeverity = row.findingsJson.reduce<"low" | "medium" | "high" | null>(
+        (currentHighest, finding) => {
+          if (!currentHighest) {
+            return finding.severity;
+          }
+
+          return severityPriority(finding.severity) > severityPriority(currentHighest)
+            ? finding.severity
+            : currentHighest;
+        },
+        null,
+      );
+
+      return {
+        id: row.id,
+        mode: row.mode,
+        status: row.status,
+        findingsCount: row.findingsJson.length,
+        highestSeverity,
+        completedAt: toIso(row.completedAt),
+        href: `/audits?${new URLSearchParams({
+          workspaceRoot: normalizedWorkspaceRoot,
+          auditId: row.id,
+        }).toString()}`,
+      };
+    });
 
   return dashboardOverviewSchema.parse({
     workspaceRoot: normalizedWorkspaceRoot,
@@ -105,6 +264,11 @@ export async function getDashboardOverview(workspaceRoot: string): Promise<Dashb
         byStatus: jobsByStatus,
       },
     },
+    featuredPages,
+    recentSources,
+    reviewFocus,
+    archivedAnswers,
+    recentAudits,
     recentActivity,
   });
 }

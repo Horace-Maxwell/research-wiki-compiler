@@ -71,6 +71,64 @@ function createDashboardPayload() {
           },
         },
       },
+      featuredPages: [
+        {
+          id: "page_1",
+          title: "Compiled research wiki",
+          type: "topic",
+          path: "wiki/topics/compiled-research-wiki.md",
+          reviewStatus: "approved",
+          sourceRefCount: 2,
+          pageRefCount: 1,
+          updatedAt: "2026-04-05T18:00:00.000Z",
+          href: "/wiki?workspaceRoot=%2Ftmp%2Fresearch-demo&pageId=page_1",
+        },
+      ],
+      recentSources: [
+        {
+          id: "src_1",
+          title: "Local-first systems digest",
+          sourceType: "markdown",
+          status: "processed",
+          summaryStatus: "completed",
+          importedAt: "2026-04-05T17:30:00.000Z",
+          updatedAt: "2026-04-05T17:31:00.000Z",
+          href: "/sources?workspaceRoot=%2Ftmp%2Fresearch-demo&sourceId=src_1",
+        },
+      ],
+      reviewFocus: [
+        {
+          id: "review_1",
+          title: "Patch proposal approved",
+          status: "approved",
+          riskLevel: "low",
+          proposalType: "update_page",
+          targetPageTitle: "Local-first software",
+          updatedAt: "2026-04-05T18:00:00.000Z",
+          href: "/reviews?workspaceRoot=%2Ftmp%2Fresearch-demo&status=approved&reviewId=review_1",
+        },
+      ],
+      archivedAnswers: [
+        {
+          id: "ans_1",
+          question: "Why does a compiled research wiki use reviewable patches?",
+          archivedPageTitle: "Weekly research cadence note",
+          archivedPagePath: "wiki/notes/weekly-research-cadence-note.md",
+          updatedAt: "2026-04-05T18:10:00.000Z",
+          href: "/ask?workspaceRoot=%2Ftmp%2Fresearch-demo&answerId=ans_1",
+        },
+      ],
+      recentAudits: [
+        {
+          id: "audit_1",
+          mode: "coverage",
+          status: "completed",
+          findingsCount: 1,
+          highestSeverity: "medium",
+          completedAt: "2026-04-05T18:20:00.000Z",
+          href: "/audits?workspaceRoot=%2Ftmp%2Fresearch-demo&auditId=audit_1",
+        },
+      ],
       recentActivity: [
         {
           id: "review:1",
@@ -129,13 +187,13 @@ describe("dashboard workbench", () => {
 
     render(<DashboardWorkbench defaultWorkspaceRoot="/tmp/research-demo" />);
 
-    expect(await screen.findByText("Visible control surface for the local research workspace")).toBeTruthy();
-    expect(screen.getByText("Workspace setup panel")).toBeTruthy();
-    expect(screen.getByText("Wiki pages")).toBeTruthy();
-    expect(screen.getByText("Imported sources")).toBeTruthy();
-    expect(screen.getByText("Review queue")).toBeTruthy();
-    expect(screen.getByText("Recent local activity")).toBeTruthy();
-    expect(screen.getByText("Patch proposal approved")).toBeTruthy();
+    expect(await screen.findByText(/Research Wiki Demo/)).toBeTruthy();
+    expect(screen.getByText("Open wiki")).toBeTruthy();
+    expect(screen.getAllByText("Knowledge workspace").length).toBeGreaterThan(0);
+    expect(screen.getByText("Pages worth opening next")).toBeTruthy();
+    expect(screen.getByText("Review focus")).toBeTruthy();
+    expect(screen.getByText("Recent movement")).toBeTruthy();
+    expect(screen.getAllByText("Patch proposal approved").length).toBeGreaterThan(0);
   });
 
   it("shows an inline error when the dashboard API request fails", async () => {

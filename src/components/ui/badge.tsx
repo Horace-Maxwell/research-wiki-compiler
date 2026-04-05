@@ -4,14 +4,14 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.16em]",
+  "inline-flex items-center rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.18em]",
   {
     variants: {
       variant: {
-        default: "bg-accent text-accent-foreground",
-        outline: "border border-border bg-background text-muted-foreground",
-        success: "bg-emerald-500/15 text-emerald-700",
-        warning: "bg-amber-500/15 text-amber-700",
+        default: "border-accent/55 bg-accent/60 text-accent-foreground",
+        outline: "border-border/65 bg-background/72 text-muted-foreground",
+        success: "border-emerald-500/18 bg-emerald-500/10 text-emerald-800",
+        warning: "border-amber-500/18 bg-amber-500/10 text-amber-800",
       },
     },
     defaultVariants: {
@@ -25,4 +25,3 @@ type BadgeProps = HTMLAttributes<HTMLDivElement> & VariantProps<typeof badgeVari
 export function Badge({ className, variant, ...props }: BadgeProps) {
   return <div className={cn(badgeVariants({ variant, className }))} {...props} />;
 }
-
