@@ -4,14 +4,10 @@ This checklist is for the first push to a future GitHub repository.
 
 ## Summary
 
-Current recommendation:
+Current repository posture:
 
-- keep the repository private until final validation, screenshots, and launch wording are complete
-
-Future public default recommendation:
-
-- make the existing `Horace-Maxwell/research-wiki-compiler` repository public when the launch is ready
-- use Apache-2.0 as the default public license when the repository is intentionally opened
+- the repository is now public at `https://github.com/Horace-Maxwell/research-wiki-compiler`
+- Apache-2.0 is the active public license
 
 Suggested repository description:
 
@@ -79,8 +75,8 @@ Action before first push:
 ## License Position
 
 - Current license: Apache-2.0 in [LICENSE](../LICENSE), `package.json`, and [CITATION.cff](../CITATION.cff).
-- Current hosting posture: keep the repository private until the founder is ready for a public launch.
-- Before any future public push, make sure `README.md`, `CITATION.cff`, package metadata, and GitHub repository settings all reflect the final public URL and visibility.
+- Current hosting posture: the repository is public.
+- After any future transfer or visibility change, make sure `README.md`, `CITATION.cff`, package metadata, and GitHub repository settings still reflect the canonical public URL.
 
 ## GitHub Features to Enable After Publishing
 
@@ -120,4 +116,4 @@ Additional local release-candidate checks expected before the first push:
 ## Founder Decisions Still Required
 
 - screenshots or a decision to ship with placeholders
-- any last launch-copy adjustments before making the repository public
+- any last launch-copy adjustments now that the repository is public

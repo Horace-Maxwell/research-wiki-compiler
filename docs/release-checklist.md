@@ -4,12 +4,12 @@ Use this checklist before creating the first public tag or publishing release no
 
 Current recommendation:
 
-- keep the repository private until final validation is complete
+- keep the public repository accurate, credible, and release-ready
 
-Future public default recommendation:
+Current public repository posture:
 
 - public GitHub repository
-- Apache-2.0 as the default public license
+- Apache-2.0 as the active public license
 
 ## Product and Docs
 
