@@ -1,0 +1,79 @@
+name: Bug report
+description: Report a reproducible defect in the local-first product workflow.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug.
+
+        Please focus on reproducible behavior. If the report involves private local data, say what can and cannot be shared.
+  - type: dropdown
+    id: loop
+    attributes:
+      label: Which workflow loop is affected?
+      options:
+        - Compile
+        - Review
+        - Ask
+        - Archive
+        - Audit
+        - Workspace / Settings
+    validations:
+      required: true
+  - type: input
+    id: workspace_mode
+    attributes:
+      label: Workspace mode
+      description: Describe the workspace context, such as demo workspace, clean local workspace, or long-lived personal workspace.
+      placeholder: demo-workspace / new local workspace / existing long-lived workspace
+    validations:
+      required: true
+  - type: input
+    id: provider_mode
+    attributes:
+      label: Provider mode
+      description: Note whether the bug occurs with no provider configured, OpenAI, Anthropic, or mocked/local test flows.
+      placeholder: no provider / OpenAI / Anthropic / mocked test flow
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Initialize workspace ...
+        2. Import source ...
+        3. Open review queue ...
+        4. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs, screenshots, or error messages
+      description: Paste relevant local logs, screenshots, or API responses. Redact anything sensitive.
+  - type: dropdown
+    id: data_share
+    attributes:
+      label: Can local data be shared?
+      options:
+        - Yes, workspace samples can be shared
+        - Partially, sanitized excerpts only
+        - No, local data cannot be shared
+    validations:
+      required: true

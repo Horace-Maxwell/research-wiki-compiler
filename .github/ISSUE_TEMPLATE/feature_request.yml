@@ -1,0 +1,49 @@
+name: Feature request
+description: Propose an improvement to the compiled wiki workflow.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please describe the user problem first, then the proposed solution.
+  - type: dropdown
+    id: loop
+    attributes:
+      label: Which workflow loop does this improve?
+      options:
+        - Compile
+        - Review
+        - Ask
+        - Archive
+        - Audit
+        - Cross-cutting / Platform
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What user problem or repeated friction does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed improvement
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints or non-goals
+      description: Note any local-first, file-first, review-first, or maintainability constraints that matter.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence, examples, or references

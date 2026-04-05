@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+:root {
+  --background: oklch(0.985 0.008 95);
+  --foreground: oklch(0.23 0.018 248);
+  --card: oklch(0.995 0.002 95);
+  --card-foreground: oklch(0.23 0.018 248);
+  --popover: oklch(0.995 0.002 95);
+  --popover-foreground: oklch(0.23 0.018 248);
+  --primary: oklch(0.56 0.1 65);
+  --primary-foreground: oklch(0.985 0.003 95);
+  --secondary: oklch(0.94 0.012 95);
+  --secondary-foreground: oklch(0.28 0.02 248);
+  --muted: oklch(0.95 0.008 90);
+  --muted-foreground: oklch(0.5 0.017 248);
+  --accent: oklch(0.92 0.02 80);
+  --accent-foreground: oklch(0.26 0.02 248);
+  --destructive: oklch(0.58 0.21 27);
+  --destructive-foreground: oklch(0.99 0.001 95);
+  --border: oklch(0.87 0.01 88);
+  --input: oklch(0.9 0.01 88);
+  --ring: oklch(0.62 0.085 67);
+  --sidebar: oklch(0.978 0.006 95);
+  --radius: 1rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --font-sans: var(--font-ibm-plex-sans);
+  --font-mono: var(--font-ibm-plex-mono);
+  --radius-sm: calc(var(--radius) - 0.35rem);
+  --radius-md: calc(var(--radius) - 0.1rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.35rem);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  min-height: 100vh;
+  color: var(--foreground);
+  font-family: var(--font-ibm-plex-sans), sans-serif;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--primary) 28%, white);
+}

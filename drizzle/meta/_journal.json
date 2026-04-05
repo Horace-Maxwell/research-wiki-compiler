@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1775363367191,
+      "tag": "0000_purple_pretty_boy",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1775366665834,
+      "tag": "0001_clear_tana_nile",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1775367722786,
+      "tag": "0002_dry_medusa",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1775370070102,
+      "tag": "0003_quick_dragon_lord",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1775371618988,
+      "tag": "0004_perfect_miracleman",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1775373909262,
+      "tag": "0005_complete_misty_knight",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1775375243671,
+      "tag": "0006_tearful_sentinel",
+      "breakpoints": true
+    }
+  ]
+}

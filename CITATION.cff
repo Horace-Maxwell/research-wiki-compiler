@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: >-
+  If you use this project in research, writing, or technical evaluation, please
+  cite it using the metadata below. The repository is currently hosted
+  privately, but the project is licensed under Apache-2.0.
+title: Research Wiki Compiler
+type: software
+version: 0.1.0
+abstract: >-
+  A local-first knowledge compiler that turns research sources into a durable,
+  reviewable Markdown wiki with visible summaries, patch proposals, answer
+  artifacts, and audits.
+authors:
+  - family-names: Horace
+keywords:
+  - local-first
+  - research
+  - wiki
+  - markdown
+  - knowledge-management
+license: Apache-2.0
