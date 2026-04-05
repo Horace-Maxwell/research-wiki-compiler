@@ -38,6 +38,13 @@
   <a href="./CONTRIBUTING.md">Contributing / 贡献</a>
 </p>
 
+<p align="center">
+  <img alt="License Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-1f6feb?style=flat-square" />
+  <img alt="Node >=20" src="https://img.shields.io/badge/node-%3E%3D20-15803d?style=flat-square" />
+  <img alt="Stack Next.js + SQLite + FTS5" src="https://img.shields.io/badge/stack-Next.js%20%2B%20SQLite%20%2B%20FTS5-0f172a?style=flat-square" />
+  <img alt="Mode local-first and review-first" src="https://img.shields.io/badge/mode-local--first%20%2F%20review--first-0f766e?style=flat-square" />
+</p>
+
 Research Wiki Compiler 不是“上传文件然后聊天”的壳。它把原始资料放进本地工作区，生成可见的 summary、review proposal、answer artifact 和 audit report，并把真正长期维护的知识沉淀为 Markdown wiki 页面。  
 Research Wiki Compiler is not an upload-and-chat shell. It lands raw material in a local workspace, produces visible summaries, review proposals, answer artifacts, and audit reports, and stores the durable knowledge layer as Markdown wiki pages.
 
@@ -47,6 +54,10 @@ Research Wiki Compiler is not an upload-and-chat shell. It lands raw material in
   The end state is a maintained Markdown wiki, not a one-shot model output.
 - 好答案会重新进入 wiki，审计会继续暴露结构缺口。  
   Good answers re-enter the wiki, and audits keep exposing structural gaps.
+
+| Visible artifacts / 可见产物 | Review-first mutation / 审阅优先变更 | Wiki-first retrieval / Wiki 优先检索 |
+| --- | --- | --- |
+| prompt、summary、proposal、audit 都保留在文件系统里。<br />Prompts, summaries, proposals, and audits stay visible on disk. | 知识更新先变成 proposal，再决定是否进入 wiki。<br />Knowledge updates become proposals before they mutate the wiki. | 回答先查 compiled wiki，再回退到 summary 和 raw chunks。<br />Answers consult the compiled wiki first, then fall back to summaries and raw chunks. |
 
 ## 为什么要做 / Why It Exists
 
