@@ -2,6 +2,16 @@
 
 This directory is a committed end-to-end example of the Research Wiki Compiler running on a bounded OpenClaw corpus derived from the user's own files first.
 
+## Rendered example
+
+Run the app, then open:
+
+```text
+/examples/openclaw
+```
+
+That route is the rendered showcase entry point for this example. The Markdown files in this directory remain the source of truth; the app renders those same files into the wiki experience.
+
 ## What this example is
 
 - A reproducible example workspace for the topic `OpenClaw / open claw`.
@@ -49,6 +59,7 @@ Important details:
 
 Start here:
 
+- the rendered route: `/examples/openclaw`
 - [`workspace/wiki/index.md`](workspace/wiki/index.md)
 - [`workspace/wiki/entities/openclaw.md`](workspace/wiki/entities/openclaw.md)
 - [`workspace/wiki/topics/openclaw-release-cadence.md`](workspace/wiki/topics/openclaw-release-cadence.md)
@@ -59,10 +70,21 @@ Start here:
 
 Then inspect the visible intermediate artifacts:
 
+- raw source excerpts under [`source-corpus/`](source-corpus/)
 - source summaries under [`workspace/raw/processed/summaries/`](workspace/raw/processed/summaries/)
 - approved and rejected proposals under [`workspace/reviews/`](workspace/reviews/)
 - the coverage audit report under [`workspace/audits/`](workspace/audits/)
 - the run manifest at [`manifest.json`](manifest.json)
+
+## Raw vs rendered
+
+GitHub is intentionally showing the inspectable source layer of the example:
+
+- `source-corpus/` contains the bounded raw input set.
+- `workspace/wiki/` contains the final Markdown wiki pages.
+- `workspace/raw/`, `workspace/reviews/`, and `workspace/audits/` contain the intermediate artifact trail.
+
+The app route `/examples/openclaw` renders that same file-backed workspace as a guided wiki experience. The architecture stays file-first; the rendered route is the product view on top of the Markdown source of truth.
 
 ## What this example demonstrates
 

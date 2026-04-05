@@ -17,6 +17,8 @@
 </p>
 
 <p align="center">
+  <a href="#rendered-example--渲染示例">Rendered Example / 渲染示例</a>
+  ·
   <a href="#quickstart--快速开始">Quickstart / 快速开始</a>
   ·
   <a href="#quick-demo--快速体验">Quick Demo / 快速体验</a>
@@ -61,6 +63,26 @@ Research Wiki Compiler is not an upload-and-chat shell. It lands raw material in
 | Visible artifacts / 可见产物 | Review-first mutation / 审阅优先变更 | Wiki-first retrieval / Wiki 优先检索 |
 | --- | --- | --- |
 | prompt、summary、proposal、audit 都保留在文件系统里。<br />Prompts, summaries, proposals, and audits stay visible on disk. | 知识更新先变成 proposal，再决定是否进入 wiki。<br />Knowledge updates become proposals before they mutate the wiki. | 回答先查 compiled wiki，再回退到 summary 和 raw chunks。<br />Answers consult the compiled wiki first, then fall back to summaries and raw chunks. |
+
+## Rendered Example / 渲染示例
+
+如果你想最快理解这个项目，不要先从文件树开始。先跑 app，然后打开渲染后的 OpenClaw 示例路线。  
+If you want the fastest path to understanding this project, do not start with the file tree. Run the app first, then open the rendered OpenClaw showcase route.
+
+> Start here / 从这里开始  
+> 1. `npm install && npm run dev`  
+> 2. 打开 `http://localhost:3000/examples/openclaw`  
+> 3. 再回来看 GitHub 里的 Markdown 源文件和中间 artifact
+
+| What to open | Why it matters |
+| --- | --- |
+| Rendered example route: `/examples/openclaw` | 这是产品里的渲染视图，能直接看到 wiki 页面、链接关系和示例入口。<br />This is the rendered product view, where the wiki pages, links, and example framing are easiest to understand. |
+| Source-of-truth wiki files: [`examples/openclaw-wiki/workspace/wiki/`](./examples/openclaw-wiki/workspace/wiki/) | 这些 Markdown 文件就是最终 wiki 内容本身。<br />These Markdown files are the wiki content itself. |
+| Raw source corpus: [`examples/openclaw-wiki/source-corpus/`](./examples/openclaw-wiki/source-corpus/) | 这是 OpenClaw 示例最初使用的原始材料。<br />This is the original source corpus used for the OpenClaw example. |
+| Example guide: [`examples/openclaw-wiki/README.md`](./examples/openclaw-wiki/README.md) | 这里解释了示例如何生成、该看哪些页面、以及 artifact 在哪里。<br />This explains how the example was generated, which pages to inspect, and where the artifacts live. |
+
+GitHub 正在展示这个项目的底层 artifact layer，这不是退而求其次，而是设计选择：Markdown 文件是 source of truth，app 负责把这些文件渲染成真正的 wiki 体验。  
+GitHub is intentionally showing the artifact layer of the system. That is not a fallback. It is the design: Markdown files are the source of truth, and the app renders those same files into the actual wiki experience.
 
 ## 为什么要做 / Why It Exists
 
@@ -191,6 +213,9 @@ The repository includes a full OpenClaw end-to-end example at [examples/openclaw
 npm run example:openclaw
 ```
 
+渲染后的示例入口：`/examples/openclaw`  
+Rendered example route: `/examples/openclaw`
+
 优先查看：  
 Start with:
 
@@ -198,6 +223,15 @@ Start with:
 - [examples/openclaw-wiki/workspace/wiki/entities/openclaw.md](./examples/openclaw-wiki/workspace/wiki/entities/openclaw.md)
 - [examples/openclaw-wiki/workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md](./examples/openclaw-wiki/workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md)
 - [examples/openclaw-wiki/workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md](./examples/openclaw-wiki/workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md)
+
+这个示例是一个好的 showcase，因为它不是手写静态样品，而是完整跑过：
+- import
+- summarize
+- plan patches
+- review/apply
+- ask
+- archive
+- audit
 
 ## 截图 / Screenshots
 

@@ -36,6 +36,20 @@ import { Textarea } from "@/components/ui/textarea";
 
 type WikiBrowserProps = {
   defaultWorkspaceRoot: string;
+  preferredInitialPagePath?: string;
+  internalLinkBasePath?: string;
+  workspaceRootMode?: "sticky" | "fixed";
+  showWorkspaceRootCard?: boolean;
+  allowCreate?: boolean;
+  allowEdit?: boolean;
+  allowRefreshLinks?: boolean;
+  header?: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    badge?: string;
+  };
+  intro?: ReactNode;
 };
 
 async function fetchPageList(workspaceRoot: string) {
@@ -113,7 +127,26 @@ function groupPagesByType(pages: WikiPageSummary[]) {
   return groups;
 }
 
-export function WikiBrowser({ defaultWorkspaceRoot }: WikiBrowserProps) {
+function rewriteRenderedHtmlLinks(renderedHtml: string, internalLinkBasePath: string) {
+  if (internalLinkBasePath === "/wiki") {
+    return renderedHtml;
+  }
+
+  return renderedHtml.replaceAll('href="/wiki?', `href="${internalLinkBasePath}?`);
+}
+
+export function WikiBrowser({
+  defaultWorkspaceRoot,
+  preferredInitialPagePath,
+  internalLinkBasePath = "/wiki",
+  workspaceRootMode = "sticky",
+  showWorkspaceRootCard = true,
+  allowCreate = true,
+  allowEdit = true,
+  allowRefreshLinks = true,
+  header,
+  intro,
+}: WikiBrowserProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -132,16 +165,21 @@ export function WikiBrowser({ defaultWorkspaceRoot }: WikiBrowserProps) {
 
   const queryWorkspaceRoot = searchParams.get("workspaceRoot");
   const selectedPageId = searchParams.get("pageId");
+  const selectedPagePath = searchParams.get("pagePath");
 
   useEffect(() => {
     const storedRoot =
-      queryWorkspaceRoot ??
-      window.localStorage.getItem(ACTIVE_WORKSPACE_STORAGE_KEY) ??
-      defaultWorkspaceRoot;
+      workspaceRootMode === "sticky"
+        ? queryWorkspaceRoot ??
+          window.localStorage.getItem(ACTIVE_WORKSPACE_STORAGE_KEY) ??
+          defaultWorkspaceRoot
+        : queryWorkspaceRoot ?? defaultWorkspaceRoot;
 
     setWorkspaceRoot(storedRoot);
-    window.localStorage.setItem(ACTIVE_WORKSPACE_STORAGE_KEY, storedRoot);
-  }, [defaultWorkspaceRoot, queryWorkspaceRoot]);
+    if (workspaceRootMode === "sticky") {
+      window.localStorage.setItem(ACTIVE_WORKSPACE_STORAGE_KEY, storedRoot);
+    }
+  }, [defaultWorkspaceRoot, queryWorkspaceRoot, workspaceRootMode]);
 
   useEffect(() => {
     let isActive = true;
@@ -187,16 +225,34 @@ export function WikiBrowser({ defaultWorkspaceRoot }: WikiBrowserProps) {
     }
 
     if (!selectedPageId) {
+      const preferredPage =
+        pages.find((page) => page.path === selectedPagePath) ??
+        pages.find((page) => page.path === preferredInitialPagePath) ??
+        pages[0];
+
+      if (!preferredPage) {
+        return;
+      }
+
       const params = new URLSearchParams({
         workspaceRoot,
-        pageId: pages[0].id,
+        pageId: preferredPage.id,
       });
 
       startTransition(() => {
         router.replace(`${pathname}?${params.toString()}`);
       });
     }
-  }, [isLoadingPages, pages, pathname, router, selectedPageId, workspaceRoot]);
+  }, [
+    isLoadingPages,
+    pages,
+    pathname,
+    preferredInitialPagePath,
+    router,
+    selectedPageId,
+    selectedPagePath,
+    workspaceRoot,
+  ]);
 
   useEffect(() => {
     let isActive = true;
@@ -245,6 +301,13 @@ export function WikiBrowser({ defaultWorkspaceRoot }: WikiBrowserProps) {
   }, [selectedPageId, workspaceRoot]);
 
   const groupedPages = useMemo(() => groupPagesByType(pages), [pages]);
+  const renderedHtml = useMemo(() => {
+    if (!detail) {
+      return "";
+    }
+
+    return rewriteRenderedHtmlLinks(detail.renderedHtml, internalLinkBasePath);
+  }, [detail, internalLinkBasePath]);
 
   function navigateToPage(pageId: string, nextWorkspaceRoot: string, replace = false) {
     const params = new URLSearchParams({
@@ -410,7 +473,7 @@ export function WikiBrowser({ defaultWorkspaceRoot }: WikiBrowserProps) {
 
     event.preventDefault();
     startTransition(() => {
-      router.push(href);
+      router.push(`${internalLinkBasePath}${href.slice("/wiki".length)}`);
     });
   }
 
@@ -419,21 +482,25 @@ export function WikiBrowser({ defaultWorkspaceRoot }: WikiBrowserProps) {
       title="Page Tree"
       className="xl:col-span-3"
       actions={
-        <Button onClick={() => setShowCreateForm((current) => !current)} size="sm" variant="outline">
-          <FilePlus2 className="size-4" />
-          New Page
-        </Button>
+        allowCreate ? (
+          <Button onClick={() => setShowCreateForm((current) => !current)} size="sm" variant="outline">
+            <FilePlus2 className="size-4" />
+            New Page
+          </Button>
+        ) : null
       }
     >
       <div className="space-y-4 p-4">
-        <div className="rounded-2xl border border-border/70 bg-muted/35 p-3 text-xs leading-6 text-muted-foreground">
-          <div className="font-mono uppercase tracking-[0.16em] text-foreground">
-            Workspace
+        {showWorkspaceRootCard ? (
+          <div className="rounded-2xl border border-border/70 bg-muted/35 p-3 text-xs leading-6 text-muted-foreground">
+            <div className="font-mono uppercase tracking-[0.16em] text-foreground">
+              Workspace
+            </div>
+            <div className="mt-2 break-all">{workspaceRoot}</div>
           </div>
-          <div className="mt-2 break-all">{workspaceRoot}</div>
-        </div>
+        ) : null}
 
-        {showCreateForm ? (
+        {allowCreate && showCreateForm ? (
           <form className="space-y-3 rounded-2xl border border-border/70 bg-background/70 p-3" onSubmit={handleCreatePage}>
             <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
               Create from template
@@ -531,7 +598,7 @@ export function WikiBrowser({ defaultWorkspaceRoot }: WikiBrowserProps) {
         <div className="flex gap-2">
           {detail ? (
             <>
-              {isEditing ? (
+              {allowEdit && isEditing ? (
                 <>
                   <Button disabled={isSaving} onClick={handleSave} size="sm">
                     <Save className="size-4" />
@@ -550,12 +617,12 @@ export function WikiBrowser({ defaultWorkspaceRoot }: WikiBrowserProps) {
                     Cancel
                   </Button>
                 </>
-              ) : (
+              ) : allowEdit ? (
                 <Button onClick={() => setIsEditing(true)} size="sm" variant="outline">
                   <PencilLine className="size-4" />
                   Edit Markdown
                 </Button>
-              )}
+              ) : null}
             </>
           ) : null}
         </div>
@@ -576,7 +643,7 @@ export function WikiBrowser({ defaultWorkspaceRoot }: WikiBrowserProps) {
           <div className="flex h-full items-center justify-center rounded-2xl border border-dashed border-border/70 bg-background/50 p-8 text-center text-sm leading-7 text-muted-foreground">
             Select a wiki page from the left pane to browse the compiled knowledge base.
           </div>
-        ) : isEditing ? (
+        ) : allowEdit && isEditing ? (
           <Textarea
             className="min-h-[700px] font-mono text-xs leading-6"
             value={draftContent}
@@ -594,7 +661,7 @@ export function WikiBrowser({ defaultWorkspaceRoot }: WikiBrowserProps) {
             </div>
             <div
               className="wiki-render min-h-[620px] flex-1 overflow-auto rounded-2xl border border-border/70 bg-background/70 px-6 py-5 text-sm leading-8 text-foreground [&_a]:font-medium [&_a]:text-primary [&_a:hover]:underline [&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-4 [&_code]:rounded [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_h1]:mt-2 [&_h1]:text-3xl [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-semibold [&_h3]:mt-6 [&_h3]:text-xl [&_li]:ml-4 [&_p]:my-4 [&_pre]:overflow-auto [&_pre]:rounded-xl [&_pre]:bg-slate-950 [&_pre]:p-4 [&_pre]:text-slate-100 [&_ul]:list-disc"
-              dangerouslySetInnerHTML={{ __html: detail.renderedHtml }}
+              dangerouslySetInnerHTML={{ __html: renderedHtml }}
               onClick={handleRenderedClick}
             />
           </div>
@@ -608,7 +675,7 @@ export function WikiBrowser({ defaultWorkspaceRoot }: WikiBrowserProps) {
       title="Metadata"
       className="xl:col-span-3"
       actions={
-        detail ? (
+        detail && allowRefreshLinks ? (
           <Button disabled={isSaving} onClick={handleRefreshLinks} size="sm" variant="ghost">
             <RefreshCw className="size-4" />
             Refresh Links
@@ -757,11 +824,15 @@ export function WikiBrowser({ defaultWorkspaceRoot }: WikiBrowserProps) {
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow="Wiki browser"
-        title="Browse the compiled wiki as files first"
-        description="Read and edit durable markdown knowledge pages with validated frontmatter, wikilink navigation, backlinks, and synchronized SQLite metadata."
-        badge="Compiled wiki"
+        eyebrow={header?.eyebrow ?? "Wiki browser"}
+        title={header?.title ?? "Browse the compiled wiki as files first"}
+        description={
+          header?.description ??
+          "Read and edit durable markdown knowledge pages with validated frontmatter, wikilink navigation, backlinks, and synchronized SQLite metadata."
+        }
+        badge={header?.badge ?? "Compiled wiki"}
       />
+      {intro}
       <div className="grid gap-6 xl:grid-cols-12">
         {leftPane}
         {centerPane}
