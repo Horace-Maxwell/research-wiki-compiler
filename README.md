@@ -132,6 +132,18 @@ For a fuller browser smoke pass, see [MANUAL_QA.md](MANUAL_QA.md).
 6. 打开 `/audits` 运行一次 orphan audit，查看可读报告与 findings。  
    Open `/audits`, run an orphan audit, and inspect the readable report and findings.
 
+## 附带示例 / Included Example
+
+仓库现在包含一个完整的 OpenClaw 端到端示例：[`examples/openclaw-wiki/`](examples/openclaw-wiki/)。它优先使用用户提供语料中的 OpenClaw 相关摘录，跑通 import、summarize、plan patches、review/apply、ask、archive 与 audit，并把最终 wiki、summary、proposal 与 audit artifact 一起提交到仓库。  
+The repository now includes a full OpenClaw end-to-end example at [`examples/openclaw-wiki/`](examples/openclaw-wiki/). It uses OpenClaw-related excerpts from user-provided source material first, runs import, summarize, patch planning, review/apply, ask, archive, and audit, and commits the resulting wiki, summaries, proposals, and audit artifacts into the repo.
+
+- 重新生成示例：`npm run example:openclaw`  
+  Rebuild the example with `npm run example:openclaw`.
+- 先看 [`examples/openclaw-wiki/workspace/wiki/index.md`](examples/openclaw-wiki/workspace/wiki/index.md) 和 [`examples/openclaw-wiki/README.md`](examples/openclaw-wiki/README.md)。  
+  Start with [`examples/openclaw-wiki/workspace/wiki/index.md`](examples/openclaw-wiki/workspace/wiki/index.md) and [`examples/openclaw-wiki/README.md`](examples/openclaw-wiki/README.md).
+- 该脚本会调用真实服务层，但为了让示例可重建且不依赖个人密钥，默认使用确定性的 mocked provider transport。  
+  The script exercises the real service layer, but uses a deterministic mocked provider transport so the example stays rebuildable without personal API keys.
+
 ## 截图 / Screenshots
 
 截图尚未提交到仓库。计划中的截图清单见 [docs/assets/screenshots/README.md](docs/assets/screenshots/README.md)。  

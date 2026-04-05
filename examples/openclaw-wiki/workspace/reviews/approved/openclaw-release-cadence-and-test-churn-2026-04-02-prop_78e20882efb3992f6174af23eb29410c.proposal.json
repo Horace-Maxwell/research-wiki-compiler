@@ -1,0 +1,469 @@
+{
+  "schemaVersion": "m4-patch-proposal-v1",
+  "proposalId": "prop_78e20882efb3992f6174af23eb29410c",
+  "sourceId": "src_b8a041127f611d206f833fcb70e56ac2",
+  "sourceTitle": "OpenClaw release cadence and test churn (2026-04-02)",
+  "status": "approved",
+  "proposalType": "update_page",
+  "title": "Update OpenClaw release cadence with 2026.4.2 evidence",
+  "generatedAt": "2026-04-05T19:36:54.248Z",
+  "provider": "openai",
+  "model": "gpt-openclaw-example",
+  "promptHash": "3f515226b5d6435e4dd66528221719f48b5ddb14c03108e197b6142740b57eef",
+  "promptVersion": "0.4.0-m4",
+  "riskLevel": "low",
+  "patchGoal": "Update the release-cadence topic page with another release checkpoint and its workflow implications.",
+  "rationale": "The later release strengthens the cadence pattern and adds more concrete upgrade pressure.",
+  "targetPages": [
+    {
+      "pageId": "page_8214e26cb3d419e22e8614bc6bd05cb3",
+      "title": "OpenClaw release cadence",
+      "slug": "openclaw-release-cadence",
+      "type": "topic",
+      "path": "wiki/topics/openclaw-release-cadence.md",
+      "relation": "primary",
+      "recallScore": 32.12,
+      "recallReasons": [
+        {
+          "kind": "hint_exact",
+          "label": "Exact page hint match for \"OpenClaw release cadence\"",
+          "score": 7,
+          "matchedValue": "OpenClaw release cadence"
+        },
+        {
+          "kind": "fts",
+          "label": "FTS match for \"OpenClaw release cadence\"",
+          "score": 4,
+          "matchedValue": "OpenClaw release cadence"
+        },
+        {
+          "kind": "fts",
+          "label": "FTS match for \"OpenClaw maintenance watchpoints\"",
+          "score": 4,
+          "matchedValue": "OpenClaw maintenance watchpoints"
+        },
+        {
+          "kind": "fts",
+          "label": "FTS match for \"OpenClaw\"",
+          "score": 4,
+          "matchedValue": "OpenClaw"
+        },
+        {
+          "kind": "fts",
+          "label": "FTS match for \"Control UI\"",
+          "score": 4,
+          "matchedValue": "Control UI"
+        },
+        {
+          "kind": "title_fuzzy",
+          "label": "Fuzzy source title similarity for \"OpenClaw release cadence and test churn (2026-04-02)\"",
+          "score": 3.12,
+          "matchedValue": "OpenClaw release cadence and test churn (2026-04-02)"
+        },
+        {
+          "kind": "entity_overlap",
+          "label": "Entity overlap for \"OpenClaw\"",
+          "score": 2,
+          "matchedValue": "OpenClaw"
+        },
+        {
+          "kind": "concept_overlap",
+          "label": "Concept overlap for \"OpenClaw release cadence\"",
+          "score": 1.75,
+          "matchedValue": "OpenClaw release cadence"
+        },
+        {
+          "kind": "concept_overlap",
+          "label": "Concept overlap for \"Control UI\"",
+          "score": 1.75,
+          "matchedValue": "Control UI"
+        },
+        {
+          "kind": "recency",
+          "label": "Recently updated wiki page",
+          "score": 0.5,
+          "matchedValue": null
+        }
+      ]
+    },
+    {
+      "pageId": "page_07ed1b7748728ef6ac102f22e4ed604d",
+      "title": "OpenClaw",
+      "slug": "openclaw",
+      "type": "entity",
+      "path": "wiki/entities/openclaw.md",
+      "relation": "related",
+      "recallScore": 24.96,
+      "recallReasons": [
+        {
+          "kind": "fts",
+          "label": "FTS match for \"OpenClaw\"",
+          "score": 3.4,
+          "matchedValue": "OpenClaw"
+        },
+        {
+          "kind": "fts",
+          "label": "FTS match for \"Control UI\"",
+          "score": 3.4,
+          "matchedValue": "Control UI"
+        },
+        {
+          "kind": "title_fuzzy",
+          "label": "Fuzzy source title similarity for \"OpenClaw release cadence and test churn (2026-04-02)\"",
+          "score": 3.12,
+          "matchedValue": "OpenClaw release cadence and test churn (2026-04-02)"
+        },
+        {
+          "kind": "hint_fuzzy",
+          "label": "Fuzzy page hint similarity for \"OpenClaw release cadence\"",
+          "score": 3.12,
+          "matchedValue": "OpenClaw release cadence"
+        },
+        {
+          "kind": "hint_fuzzy",
+          "label": "Fuzzy page hint similarity for \"OpenClaw maintenance watchpoints\"",
+          "score": 3.12,
+          "matchedValue": "OpenClaw maintenance watchpoints"
+        },
+        {
+          "kind": "fts",
+          "label": "FTS match for \"OpenClaw release cadence\"",
+          "score": 2.8,
+          "matchedValue": "OpenClaw release cadence"
+        },
+        {
+          "kind": "entity_overlap",
+          "label": "Entity overlap for \"OpenClaw\"",
+          "score": 2,
+          "matchedValue": "OpenClaw"
+        },
+        {
+          "kind": "concept_overlap",
+          "label": "Concept overlap for \"OpenClaw release cadence\"",
+          "score": 1.75,
+          "matchedValue": "OpenClaw release cadence"
+        },
+        {
+          "kind": "concept_overlap",
+          "label": "Concept overlap for \"Control UI\"",
+          "score": 1.75,
+          "matchedValue": "Control UI"
+        },
+        {
+          "kind": "recency",
+          "label": "Recently updated wiki page",
+          "score": 0.5,
+          "matchedValue": null
+        }
+      ]
+    }
+  ],
+  "proposedPage": null,
+  "affectedSections": [
+    "Evidence",
+    "Upgrade implications"
+  ],
+  "supportingClaims": [
+    {
+      "text": "Repeated releases suggest OpenClaw changes are being consolidated into frequent upgrade checkpoints.",
+      "polarity": "supports",
+      "evidenceStrength": "high",
+      "rationale": "The release is framed as another consolidation point in a line of already continuous changes.",
+      "citations": [
+        {
+          "sourceId": "src_b8a041127f611d206f833fcb70e56ac2",
+          "note": "Source summary claim: Repeated releases suggest OpenClaw changes are being consolidated into frequent upgrade checkpoints."
+        }
+      ]
+    },
+    {
+      "text": "Test and import churn signals that default behavior and local workflows may still shift.",
+      "polarity": "supports",
+      "evidenceStrength": "medium",
+      "rationale": "The digest directly ties test/import churn to the need to watch for local workflow behavior changes.",
+      "citations": [
+        {
+          "sourceId": "src_b8a041127f611d206f833fcb70e56ac2",
+          "note": "Source summary claim: Test and import churn signals that default behavior and local workflows may still shift."
+        }
+      ]
+    }
+  ],
+  "citations": [
+    {
+      "sourceId": "src_b8a041127f611d206f833fcb70e56ac2",
+      "note": "Source summary claim: Repeated releases suggest OpenClaw changes are being consolidated into frequent upgrade checkpoints."
+    },
+    {
+      "sourceId": "src_b8a041127f611d206f833fcb70e56ac2",
+      "note": "Source summary claim: Test and import churn signals that default behavior and local workflows may still shift."
+    }
+  ],
+  "conflictNotes": [],
+  "candidateRecall": {
+    "primaryCandidates": [
+      {
+        "pageId": "page_8214e26cb3d419e22e8614bc6bd05cb3",
+        "title": "OpenClaw release cadence",
+        "canonicalTitle": "OpenClaw release cadence",
+        "slug": "openclaw-release-cadence",
+        "type": "topic",
+        "path": "wiki/topics/openclaw-release-cadence.md",
+        "score": 32.12,
+        "reasons": [
+          {
+            "kind": "hint_exact",
+            "label": "Exact page hint match for \"OpenClaw release cadence\"",
+            "score": 7,
+            "matchedValue": "OpenClaw release cadence"
+          },
+          {
+            "kind": "fts",
+            "label": "FTS match for \"OpenClaw release cadence\"",
+            "score": 4,
+            "matchedValue": "OpenClaw release cadence"
+          },
+          {
+            "kind": "fts",
+            "label": "FTS match for \"OpenClaw maintenance watchpoints\"",
+            "score": 4,
+            "matchedValue": "OpenClaw maintenance watchpoints"
+          },
+          {
+            "kind": "fts",
+            "label": "FTS match for \"OpenClaw\"",
+            "score": 4,
+            "matchedValue": "OpenClaw"
+          },
+          {
+            "kind": "fts",
+            "label": "FTS match for \"Control UI\"",
+            "score": 4,
+            "matchedValue": "Control UI"
+          },
+          {
+            "kind": "title_fuzzy",
+            "label": "Fuzzy source title similarity for \"OpenClaw release cadence and test churn (2026-04-02)\"",
+            "score": 3.12,
+            "matchedValue": "OpenClaw release cadence and test churn (2026-04-02)"
+          },
+          {
+            "kind": "entity_overlap",
+            "label": "Entity overlap for \"OpenClaw\"",
+            "score": 2,
+            "matchedValue": "OpenClaw"
+          },
+          {
+            "kind": "concept_overlap",
+            "label": "Concept overlap for \"OpenClaw release cadence\"",
+            "score": 1.75,
+            "matchedValue": "OpenClaw release cadence"
+          },
+          {
+            "kind": "concept_overlap",
+            "label": "Concept overlap for \"Control UI\"",
+            "score": 1.75,
+            "matchedValue": "Control UI"
+          },
+          {
+            "kind": "recency",
+            "label": "Recently updated wiki page",
+            "score": 0.5,
+            "matchedValue": null
+          }
+        ]
+      },
+      {
+        "pageId": "page_07ed1b7748728ef6ac102f22e4ed604d",
+        "title": "OpenClaw",
+        "canonicalTitle": "OpenClaw",
+        "slug": "openclaw",
+        "type": "entity",
+        "path": "wiki/entities/openclaw.md",
+        "score": 24.96,
+        "reasons": [
+          {
+            "kind": "fts",
+            "label": "FTS match for \"OpenClaw\"",
+            "score": 3.4,
+            "matchedValue": "OpenClaw"
+          },
+          {
+            "kind": "fts",
+            "label": "FTS match for \"Control UI\"",
+            "score": 3.4,
+            "matchedValue": "Control UI"
+          },
+          {
+            "kind": "title_fuzzy",
+            "label": "Fuzzy source title similarity for \"OpenClaw release cadence and test churn (2026-04-02)\"",
+            "score": 3.12,
+            "matchedValue": "OpenClaw release cadence and test churn (2026-04-02)"
+          },
+          {
+            "kind": "hint_fuzzy",
+            "label": "Fuzzy page hint similarity for \"OpenClaw release cadence\"",
+            "score": 3.12,
+            "matchedValue": "OpenClaw release cadence"
+          },
+          {
+            "kind": "hint_fuzzy",
+            "label": "Fuzzy page hint similarity for \"OpenClaw maintenance watchpoints\"",
+            "score": 3.12,
+            "matchedValue": "OpenClaw maintenance watchpoints"
+          },
+          {
+            "kind": "fts",
+            "label": "FTS match for \"OpenClaw release cadence\"",
+            "score": 2.8,
+            "matchedValue": "OpenClaw release cadence"
+          },
+          {
+            "kind": "entity_overlap",
+            "label": "Entity overlap for \"OpenClaw\"",
+            "score": 2,
+            "matchedValue": "OpenClaw"
+          },
+          {
+            "kind": "concept_overlap",
+            "label": "Concept overlap for \"OpenClaw release cadence\"",
+            "score": 1.75,
+            "matchedValue": "OpenClaw release cadence"
+          },
+          {
+            "kind": "concept_overlap",
+            "label": "Concept overlap for \"Control UI\"",
+            "score": 1.75,
+            "matchedValue": "Control UI"
+          },
+          {
+            "kind": "recency",
+            "label": "Recently updated wiki page",
+            "score": 0.5,
+            "matchedValue": null
+          }
+        ]
+      },
+      {
+        "pageId": "page_4b2b7b61823f7e01f330cffd502f8fb9",
+        "title": "Plugin compatibility",
+        "canonicalTitle": "Plugin compatibility",
+        "slug": "plugin-compatibility",
+        "type": "concept",
+        "path": "wiki/concepts/plugin-compatibility.md",
+        "score": 9.85,
+        "reasons": [
+          {
+            "kind": "fts",
+            "label": "FTS match for \"OpenClaw release cadence\"",
+            "score": 3.4,
+            "matchedValue": "OpenClaw release cadence"
+          },
+          {
+            "kind": "fts",
+            "label": "FTS match for \"OpenClaw\"",
+            "score": 2.2,
+            "matchedValue": "OpenClaw"
+          },
+          {
+            "kind": "entity_overlap",
+            "label": "Entity overlap for \"OpenClaw\"",
+            "score": 2,
+            "matchedValue": "OpenClaw"
+          },
+          {
+            "kind": "concept_overlap",
+            "label": "Concept overlap for \"OpenClaw release cadence\"",
+            "score": 1.75,
+            "matchedValue": "OpenClaw release cadence"
+          },
+          {
+            "kind": "recency",
+            "label": "Recently updated wiki page",
+            "score": 0.5,
+            "matchedValue": null
+          }
+        ]
+      },
+      {
+        "pageId": "page_b5780e91d9a61b4935e90898642f4c58",
+        "title": "OpenClaw Example Workspace",
+        "canonicalTitle": "OpenClaw Example Workspace",
+        "slug": "index",
+        "type": "index",
+        "path": "wiki/index.md",
+        "score": 5.3,
+        "reasons": [
+          {
+            "kind": "fts",
+            "label": "FTS match for \"OpenClaw\"",
+            "score": 2.8,
+            "matchedValue": "OpenClaw"
+          },
+          {
+            "kind": "entity_overlap",
+            "label": "Entity overlap for \"OpenClaw\"",
+            "score": 2,
+            "matchedValue": "OpenClaw"
+          },
+          {
+            "kind": "recency",
+            "label": "Recently updated wiki page",
+            "score": 0.5,
+            "matchedValue": null
+          }
+        ]
+      }
+    ],
+    "omittedCandidateCount": 0
+  },
+  "hunks": [
+    {
+      "sectionHeading": "Evidence",
+      "operation": "append",
+      "beforeText": null,
+      "afterText": "- By 2026-04-02, another OpenClaw release had already arrived, reinforcing the pattern of closely spaced upgrade checkpoints.",
+      "citations": [
+        {
+          "sourceId": "src_b8a041127f611d206f833fcb70e56ac2",
+          "note": "Source summary claim: Repeated releases suggest OpenClaw changes are being consolidated into frequent upgrade checkpoints."
+        },
+        {
+          "sourceId": "src_b8a041127f611d206f833fcb70e56ac2",
+          "note": "Source summary claim: Test and import churn signals that default behavior and local workflows may still shift."
+        }
+      ]
+    },
+    {
+      "sectionHeading": "Upgrade implications",
+      "operation": "create_section",
+      "beforeText": null,
+      "afterText": "- Release monitoring should include local regression checks because nearby code churn can change default behavior without looking dramatic in release titles.",
+      "citations": [
+        {
+          "sourceId": "src_b8a041127f611d206f833fcb70e56ac2",
+          "note": "Source summary claim: Repeated releases suggest OpenClaw changes are being consolidated into frequent upgrade checkpoints."
+        },
+        {
+          "sourceId": "src_b8a041127f611d206f833fcb70e56ac2",
+          "note": "Source summary claim: Test and import churn signals that default behavior and local workflows may still shift."
+        }
+      ]
+    }
+  ],
+  "review": {
+    "reviewedAt": "2026-04-05T19:36:54.270Z",
+    "note": "Approved because the new release strengthens the cadence pattern rather than duplicating it.",
+    "editedBeforeApply": false
+  },
+  "applyResult": {
+    "appliedAt": "2026-04-05T19:36:54.270Z",
+    "success": true,
+    "affectedPaths": [
+      "wiki/topics/openclaw-release-cadence.md"
+    ],
+    "appliedPageId": "page_8214e26cb3d419e22e8614bc6bd05cb3",
+    "git": null,
+    "error": null
+  }
+}

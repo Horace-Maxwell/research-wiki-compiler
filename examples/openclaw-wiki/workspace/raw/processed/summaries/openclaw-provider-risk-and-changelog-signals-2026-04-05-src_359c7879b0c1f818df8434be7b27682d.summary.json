@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "m3-source-summary-v1",
+  "sourceId": "src_359c7879b0c1f818df8434be7b27682d",
+  "sourceTitle": "OpenClaw provider risk and changelog signals (2026-04-05)",
+  "sourceType": "markdown",
+  "generatedAt": "2026-04-05T19:36:54.302Z",
+  "provider": "openai",
+  "model": "gpt-openclaw-example",
+  "promptHash": "6c209b1cae8f1dea9d17ed186da7fd3d4569023a710ad29a5d2547567d761e67",
+  "chunkStrategy": "direct",
+  "content": {
+    "conciseSummary": "This excerpt connects OpenClaw’s continued provider-side refactors and changelog packaging to a broader operational risk picture: plugin and model access still move quickly, and external provider-policy shifts can materially affect OpenClaw workflows.",
+    "keyEntities": [
+      {
+        "name": "OpenClaw",
+        "description": "The tracked product whose provider, release, and changelog signals are being compiled into maintenance guidance.",
+        "aliases": [
+          "openclaw"
+        ]
+      },
+      {
+        "name": "Anthropic",
+        "description": "An external provider named in a community report about OpenClaw-related subscription restrictions.",
+        "aliases": []
+      }
+    ],
+    "keyConcepts": [
+      {
+        "name": "Provider dependency risk",
+        "description": "The risk that model-provider changes or restrictions reshape OpenClaw capability and adoption paths."
+      },
+      {
+        "name": "Provider configuration",
+        "description": "The provider-specific setup layer that must be watched as OpenClaw changes its core shims and changelog packaging."
+      },
+      {
+        "name": "Control UI",
+        "description": "A still-moving OpenClaw surface that continues to appear in release framing."
+      }
+    ],
+    "majorClaims": [
+      {
+        "text": "OpenClaw still depends on active provider and plugin adjustments, especially around model access and configuration.",
+        "polarity": "supports",
+        "evidenceStrength": "high",
+        "rationale": "The provider-specific shim removal and repeated release framing both point to a still-moving provider and integration layer."
+      },
+      {
+        "text": "External provider-policy shifts can create adoption and upgrade risk for OpenClaw workflows.",
+        "polarity": "mixed",
+        "evidenceStrength": "medium",
+        "rationale": "The Anthropic item is community-reported rather than a primary upstream source, but it is still treated as a meaningful risk signal."
+      },
+      {
+        "text": "Changelog refreshes indicate recent OpenClaw changes are nearing release-level packaging.",
+        "polarity": "supports",
+        "evidenceStrength": "medium",
+        "rationale": "The digest explicitly treats the unreleased changelog refresh as a sign that recent fixes are being consolidated for upgrade decisions."
+      }
+    ],
+    "openQuestions": [
+      "Which provider-level assumptions remain safe for production OpenClaw workflows?",
+      "How often should teams review changelog and provider-doc updates before upgrading?"
+    ],
+    "possibleTargetPageHints": [
+      {
+        "title": "Provider dependency risk",
+        "pageType": "concept",
+        "rationale": "The core new signal is not just product change but the external risk that comes from provider dependence."
+      },
+      {
+        "title": "OpenClaw maintenance watchpoints",
+        "pageType": "synthesis",
+        "rationale": "The source naturally compiles into a checklist of what maintainers should monitor."
+      }
+    ]
+  }
+}

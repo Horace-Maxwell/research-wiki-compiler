@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "m3-source-summary-v1",
+  "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+  "sourceTitle": "OpenClaw release and plugin surface update (2026-03-31)",
+  "sourceType": "markdown",
+  "generatedAt": "2026-04-05T19:36:54.107Z",
+  "provider": "openai",
+  "model": "gpt-openclaw-example",
+  "promptHash": "6c209b1cae8f1dea9d17ed186da7fd3d4569023a710ad29a5d2547567d761e67",
+  "chunkStrategy": "direct",
+  "content": {
+    "conciseSummary": "The digest frames OpenClaw as a fast-moving developer tool whose latest release still centers model integration, Control UI, and plugin compatibility, while the plugin SDK baseline is still changing underneath custom integrations.",
+    "keyEntities": [
+      {
+        "name": "OpenClaw",
+        "description": "The product being tracked across releases, commits, and workflow impact notes.",
+        "aliases": [
+          "openclaw"
+        ]
+      }
+    ],
+    "keyConcepts": [
+      {
+        "name": "OpenClaw release cadence",
+        "description": "Frequent release checkpoints that consolidate scattered OpenClaw changes into upgrade moments."
+      },
+      {
+        "name": "Plugin compatibility",
+        "description": "The compatibility surface for plugins, custom integrations, and MCP-style extensions."
+      },
+      {
+        "name": "Control UI",
+        "description": "A repeatedly mentioned OpenClaw surface that appears alongside CSP and model-integration changes."
+      },
+      {
+        "name": "Provider configuration",
+        "description": "The provider-side setup and model access path that maintainers need to keep aligned with releases."
+      }
+    ],
+    "majorClaims": [
+      {
+        "text": "OpenClaw is shipping rapid release checkpoints while still refining model integration, Control UI, and plugin compatibility.",
+        "polarity": "supports",
+        "evidenceStrength": "high",
+        "rationale": "The release note is framed as another update in an already active line of changes, with the same product surfaces still moving."
+      },
+      {
+        "text": "Plugin SDK baseline changes can force custom plugins and integrations to adjust compatibility layers.",
+        "polarity": "supports",
+        "evidenceStrength": "high",
+        "rationale": "The digest explicitly connects plugin SDK baseline changes to plugin interfaces, runtime detection order, and compatibility layers."
+      }
+    ],
+    "openQuestions": [
+      "How stable are OpenClaw plugin interfaces between releases?",
+      "Which Control UI and provider-doc changes actually require operator intervention?"
+    ],
+    "possibleTargetPageHints": [
+      {
+        "title": "OpenClaw",
+        "pageType": "entity",
+        "rationale": "The source repeatedly treats OpenClaw itself as the stable anchor for releases, commits, and workflow impact."
+      },
+      {
+        "title": "OpenClaw release cadence",
+        "pageType": "topic",
+        "rationale": "The release is described as part of a broader cadence of closely spaced upgrade checkpoints."
+      }
+    ]
+  }
+}

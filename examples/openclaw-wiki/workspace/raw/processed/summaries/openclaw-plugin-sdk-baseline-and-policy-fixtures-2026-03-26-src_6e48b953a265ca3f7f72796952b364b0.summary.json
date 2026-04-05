@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "m3-source-summary-v1",
+  "sourceId": "src_6e48b953a265ca3f7f72796952b364b0",
+  "sourceTitle": "OpenClaw plugin SDK baseline and policy fixtures (2026-03-26)",
+  "sourceType": "markdown",
+  "generatedAt": "2026-04-05T19:36:54.172Z",
+  "provider": "openai",
+  "model": "gpt-openclaw-example",
+  "promptHash": "6c209b1cae8f1dea9d17ed186da7fd3d4569023a710ad29a5d2547567d761e67",
+  "chunkStrategy": "direct",
+  "content": {
+    "conciseSummary": "This digest excerpt focuses on OpenClaw commit activity that touches the plugin SDK baseline and type-policy fixtures, suggesting that both the integration surface and compliance-sensitive workflow edges are still being worked through.",
+    "keyEntities": [
+      {
+        "name": "OpenClaw",
+        "description": "The tracked product whose commit stream is being treated as operationally important to downstream workflows.",
+        "aliases": [
+          "openclaw"
+        ]
+      }
+    ],
+    "keyConcepts": [
+      {
+        "name": "Plugin compatibility",
+        "description": "The ability for plugins and integrations to keep working as SDK baselines move."
+      },
+      {
+        "name": "Policy fixtures",
+        "description": "Typed policy fixtures that hint at compliance, supplier terms, and disclosure constraints in workflow design."
+      },
+      {
+        "name": "Integration surface",
+        "description": "The operational surface where SDK, plugin, and workflow changes affect actual tool adoption."
+      }
+    ],
+    "majorClaims": [
+      {
+        "text": "Plugin SDK baseline refreshes can change OpenClaw integration capabilities and adoption timing.",
+        "polarity": "supports",
+        "evidenceStrength": "high",
+        "rationale": "The digest explicitly says the SDK baseline commit changes workflow, integration style, and available capability."
+      },
+      {
+        "text": "Policy fixture work suggests OpenClaw integrators need to monitor compliance and disclosure boundaries.",
+        "polarity": "supports",
+        "evidenceStrength": "medium",
+        "rationale": "The policy-fixture note frames the impact in terms of formal workflow adoption, supplier terms, and external disclosure."
+      }
+    ],
+    "openQuestions": [
+      "Which integration assumptions break when the plugin SDK baseline changes?",
+      "How much policy-fixture work is precautionary versus required for production usage?"
+    ],
+    "possibleTargetPageHints": [
+      {
+        "title": "OpenClaw",
+        "pageType": "entity",
+        "rationale": "The excerpt still centers OpenClaw as the primary thing being monitored."
+      },
+      {
+        "title": "Plugin compatibility",
+        "pageType": "concept",
+        "rationale": "The strongest recurring change theme is plugin and SDK compatibility."
+      }
+    ]
+  }
+}

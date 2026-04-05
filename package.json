@@ -32,6 +32,7 @@
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
     "demo:reset": "tsx scripts/seed-demo-workspace.ts",
+    "example:openclaw": "tsx scripts/generate-openclaw-example.ts",
     "db:generate": "drizzle-kit generate",
     "db:check": "drizzle-kit check"
   },

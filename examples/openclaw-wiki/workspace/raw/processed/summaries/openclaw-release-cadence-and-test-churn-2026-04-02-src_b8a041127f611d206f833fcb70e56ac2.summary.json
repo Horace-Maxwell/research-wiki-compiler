@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "m3-source-summary-v1",
+  "sourceId": "src_b8a041127f611d206f833fcb70e56ac2",
+  "sourceTitle": "OpenClaw release cadence and test churn (2026-04-02)",
+  "sourceType": "markdown",
+  "generatedAt": "2026-04-05T19:36:54.232Z",
+  "provider": "openai",
+  "model": "gpt-openclaw-example",
+  "promptHash": "6c209b1cae8f1dea9d17ed186da7fd3d4569023a710ad29a5d2547567d761e67",
+  "chunkStrategy": "direct",
+  "content": {
+    "conciseSummary": "The corpus records another OpenClaw release only days later and pairs it with commit activity around test import churn, reinforcing that releases are frequent and that local behavior may still shift under maintainers.",
+    "keyEntities": [
+      {
+        "name": "OpenClaw",
+        "description": "The tracked product whose releases and code churn are being watched for workflow impact.",
+        "aliases": [
+          "openclaw"
+        ]
+      }
+    ],
+    "keyConcepts": [
+      {
+        "name": "OpenClaw release cadence",
+        "description": "The recurring pattern of closely spaced OpenClaw releases that create frequent upgrade checkpoints."
+      },
+      {
+        "name": "Control UI",
+        "description": "A surface that remains part of the release framing alongside plugins and model integration."
+      },
+      {
+        "name": "Provider configuration",
+        "description": "The provider and model setup path that may need synchronized adjustments when behavior shifts."
+      },
+      {
+        "name": "Default behavior drift",
+        "description": "The risk that local workflows change indirectly as test churn and imports are tightened."
+      }
+    ],
+    "majorClaims": [
+      {
+        "text": "Repeated releases suggest OpenClaw changes are being consolidated into frequent upgrade checkpoints.",
+        "polarity": "supports",
+        "evidenceStrength": "high",
+        "rationale": "The release is framed as another consolidation point in a line of already continuous changes."
+      },
+      {
+        "text": "Test and import churn signals that default behavior and local workflows may still shift.",
+        "polarity": "supports",
+        "evidenceStrength": "medium",
+        "rationale": "The digest directly ties test/import churn to the need to watch for local workflow behavior changes."
+      }
+    ],
+    "openQuestions": [
+      "When does release cadence become stable enough for routine upgrades?",
+      "Which local defaults should operators regression-test after each release?"
+    ],
+    "possibleTargetPageHints": [
+      {
+        "title": "OpenClaw release cadence",
+        "pageType": "topic",
+        "rationale": "The strongest new evidence is another release checkpoint and what it means for upgrade rhythm."
+      },
+      {
+        "title": "OpenClaw maintenance watchpoints",
+        "pageType": "synthesis",
+        "rationale": "The source is already phrased as advice about what maintainers should keep watching."
+      }
+    ]
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "generatedAt": "2026-04-05T19:36:54.490Z",
+  "exampleName": "OpenClaw example wiki",
+  "corpusFiles": [
+    {
+      "snapshotPath": "examples/openclaw-wiki/source-corpus/2026-03-31-openclaw-release-and-plugin-surface.md",
+      "originPath": "Obsidian Vault/AI/News Digests/2026/2026-03-31 AI News Digest.md",
+      "excerptScope": [
+        "Tech Radar 5 > T1. OpenClaw 发布 openclaw 2026.3.31",
+        "Tech Radar 5 > T5. OpenClaw：更新文档相关模块：refresh plugin sdk api baseline"
+      ]
+    },
+    {
+      "snapshotPath": "examples/openclaw-wiki/source-corpus/2026-03-26-openclaw-plugin-sdk-and-policy.md",
+      "originPath": "Obsidian Vault/AI/News Digests/2026/2026-03-26 AI News Digest.md",
+      "excerptScope": [
+        "Tech Radar 5 > T1. build: refresh plugin sdk api baseline",
+        "Tech Radar 5 > T4. test(feishu): type policy fixtures"
+      ]
+    },
+    {
+      "snapshotPath": "examples/openclaw-wiki/source-corpus/2026-04-02-openclaw-release-cadence-and-test-churn.md",
+      "originPath": "Obsidian Vault/AI/News Digests/2026/2026-04-02 AI News Digest.md",
+      "excerptScope": [
+        "Tech Radar 5 > T1. OpenClaw 发布 openclaw 2026.4.2",
+        "Tech Radar 5 > T4. OpenClaw：更新测试相关模块：reduce agent test import churn"
+      ]
+    },
+    {
+      "snapshotPath": "examples/openclaw-wiki/source-corpus/2026-04-05-openclaw-provider-risk-and-changelog.md",
+      "originPath": "Obsidian Vault/AI/News Digests/2026/2026-04-05 AI News Digest.md",
+      "excerptScope": [
+        "Trend Radar 6 > OpenClaw 发布 openclaw 2026.3.28",
+        "Trend Radar 6 > OpenClaw：更新文档相关模块：refresh unreleased 变更日志",
+        "What Matters Most Today > Tell HN: Anthropic no longer allowing Claude Code subscriptions to use OpenClaw",
+        "Tech Radar 5 > T1/T2 OpenClaw provider and changelog updates"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+      "title": "OpenClaw release and plugin surface update (2026-03-31)",
+      "summaryMarkdownPath": "raw/processed/summaries/openclaw-release-and-plugin-surface-update-2026-03-31-src_f7b5dd4068ac4fd7925a1bdabe45697f.summary.md",
+      "summaryJsonPath": "raw/processed/summaries/openclaw-release-and-plugin-surface-update-2026-03-31-src_f7b5dd4068ac4fd7925a1bdabe45697f.summary.json",
+      "proposalIds": [
+        "prop_89bbe1666ea38d31b604433256300e84",
+        "prop_d96f9d19efd3f82f4eabdddd63dccfe7"
+      ],
+      "approvedProposalIds": [
+        "prop_89bbe1666ea38d31b604433256300e84",
+        "prop_d96f9d19efd3f82f4eabdddd63dccfe7"
+      ],
+      "rejectedProposalIds": []
+    },
+    {
+      "id": "src_6e48b953a265ca3f7f72796952b364b0",
+      "title": "OpenClaw plugin SDK baseline and policy fixtures (2026-03-26)",
+      "summaryMarkdownPath": "raw/processed/summaries/openclaw-plugin-sdk-baseline-and-policy-fixtures-2026-03-26-src_6e48b953a265ca3f7f72796952b364b0.summary.md",
+      "summaryJsonPath": "raw/processed/summaries/openclaw-plugin-sdk-baseline-and-policy-fixtures-2026-03-26-src_6e48b953a265ca3f7f72796952b364b0.summary.json",
+      "proposalIds": [
+        "prop_a31f58e926f2482f75c68d4da794fafd",
+        "prop_f56eedfe6d56997367381f6d166b6c1a"
+      ],
+      "approvedProposalIds": [
+        "prop_a31f58e926f2482f75c68d4da794fafd",
+        "prop_f56eedfe6d56997367381f6d166b6c1a"
+      ],
+      "rejectedProposalIds": []
+    },
+    {
+      "id": "src_b8a041127f611d206f833fcb70e56ac2",
+      "title": "OpenClaw release cadence and test churn (2026-04-02)",
+      "summaryMarkdownPath": "raw/processed/summaries/openclaw-release-cadence-and-test-churn-2026-04-02-src_b8a041127f611d206f833fcb70e56ac2.summary.md",
+      "summaryJsonPath": "raw/processed/summaries/openclaw-release-cadence-and-test-churn-2026-04-02-src_b8a041127f611d206f833fcb70e56ac2.summary.json",
+      "proposalIds": [
+        "prop_78e20882efb3992f6174af23eb29410c",
+        "prop_c2f560b2916a946bb009352a43fd662d",
+        "prop_c23e7865dcf38941826e9fed8ce166ed"
+      ],
+      "approvedProposalIds": [
+        "prop_78e20882efb3992f6174af23eb29410c",
+        "prop_c2f560b2916a946bb009352a43fd662d"
+      ],
+      "rejectedProposalIds": [
+        "prop_c23e7865dcf38941826e9fed8ce166ed"
+      ]
+    },
+    {
+      "id": "src_359c7879b0c1f818df8434be7b27682d",
+      "title": "OpenClaw provider risk and changelog signals (2026-04-05)",
+      "summaryMarkdownPath": "raw/processed/summaries/openclaw-provider-risk-and-changelog-signals-2026-04-05-src_359c7879b0c1f818df8434be7b27682d.summary.md",
+      "summaryJsonPath": "raw/processed/summaries/openclaw-provider-risk-and-changelog-signals-2026-04-05-src_359c7879b0c1f818df8434be7b27682d.summary.json",
+      "proposalIds": [
+        "prop_8849036f4ae81b8730b5b119c5a07688",
+        "prop_c664356a18627fca26bda31d156db2d7",
+        "prop_ca63627c65c360ae9ba6316fea33d47f"
+      ],
+      "approvedProposalIds": [
+        "prop_8849036f4ae81b8730b5b119c5a07688",
+        "prop_c664356a18627fca26bda31d156db2d7",
+        "prop_ca63627c65c360ae9ba6316fea33d47f"
+      ],
+      "rejectedProposalIds": []
+    }
+  ],
+  "pages": [
+    {
+      "title": "Plugin compatibility",
+      "type": "concept",
+      "path": "wiki/concepts/plugin-compatibility.md"
+    },
+    {
+      "title": "Provider dependency risk",
+      "type": "concept",
+      "path": "wiki/concepts/provider-dependency-risk.md"
+    },
+    {
+      "title": "OpenClaw",
+      "type": "entity",
+      "path": "wiki/entities/openclaw.md"
+    },
+    {
+      "title": "OpenClaw Example Index",
+      "type": "index",
+      "path": "wiki/index.md"
+    },
+    {
+      "title": "Note: What should I monitor before upgrading OpenClaw",
+      "type": "note",
+      "path": "wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md"
+    },
+    {
+      "title": "OpenClaw maintenance watchpoints",
+      "type": "synthesis",
+      "path": "wiki/syntheses/openclaw-maintenance-watchpoints.md"
+    },
+    {
+      "title": "OpenClaw release cadence",
+      "type": "topic",
+      "path": "wiki/topics/openclaw-release-cadence.md"
+    }
+  ],
+  "answers": [
+    {
+      "id": "ans_8c4ded93069c51b73a9637c54c2fdd87",
+      "question": "What is OpenClaw in this corpus?",
+      "shortAnswer": "In this corpus, OpenClaw appears as a fast-moving AI developer tool and workflow surface centered on model integration, Control UI, and plugin compatibility.",
+      "archivedPagePath": null
+    },
+    {
+      "id": "ans_0a2e7db7feda45c3a9e4c0045db9709c",
+      "question": "Which parts of OpenClaw look most unstable or fast-moving?",
+      "shortAnswer": "The fastest-moving parts of OpenClaw in this corpus are the release cadence, plugin/integration surface, and provider-facing configuration path.",
+      "archivedPagePath": null
+    },
+    {
+      "id": "ans_f108ee6ebac0f5235833d544e84d26da",
+      "question": "What should I monitor before upgrading OpenClaw?",
+      "shortAnswer": "Before upgrading OpenClaw, monitor release/changelog packaging, plugin compatibility, and provider-side changes that could alter access paths or defaults.",
+      "archivedPagePath": "wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md"
+    }
+  ],
+  "audits": [
+    {
+      "id": "audit_906f0327c1be22ec2865298cc679094f",
+      "mode": "coverage",
+      "reportPath": "audits/2026-04-05T19-36-54-424Z-coverage-audit_906f0327c1be22ec2865298cc679094f.md",
+      "findingCount": 2
+    }
+  ],
+  "notes": {
+    "mockProvider": "openai structured mock transport via real service calls",
+    "runtimeWorkspaceRoot": "tmp/openclaw-workspace-build",
+    "committedSnapshotRoot": "examples/openclaw-wiki/workspace"
+  }
+}

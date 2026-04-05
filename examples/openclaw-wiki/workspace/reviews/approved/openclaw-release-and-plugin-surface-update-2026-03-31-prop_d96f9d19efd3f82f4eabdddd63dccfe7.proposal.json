@@ -1,0 +1,143 @@
+{
+  "schemaVersion": "m4-patch-proposal-v1",
+  "proposalId": "prop_d96f9d19efd3f82f4eabdddd63dccfe7",
+  "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+  "sourceTitle": "OpenClaw release and plugin surface update (2026-03-31)",
+  "status": "approved",
+  "proposalType": "create_page",
+  "title": "Create OpenClaw release cadence topic page",
+  "generatedAt": "2026-04-05T19:36:54.125Z",
+  "provider": "openai",
+  "model": "gpt-openclaw-example",
+  "promptHash": "3f515226b5d6435e4dd66528221719f48b5ddb14c03108e197b6142740b57eef",
+  "promptVersion": "0.4.0-m4",
+  "riskLevel": "medium",
+  "patchGoal": "Create a topic page that tracks how quickly OpenClaw changes are turning into upgrade decisions.",
+  "rationale": "The release signal is important enough to deserve a dedicated place that later releases can update.",
+  "targetPages": [],
+  "proposedPage": {
+    "title": "OpenClaw release cadence",
+    "pageType": "topic",
+    "suggestedPath": "wiki/topics/openclaw-release-cadence.md",
+    "rationale": "The source repeatedly frames releases as upgrade checkpoints rather than isolated announcements."
+  },
+  "affectedSections": [
+    "Summary",
+    "Evidence",
+    "Related pages"
+  ],
+  "supportingClaims": [
+    {
+      "text": "OpenClaw is shipping rapid release checkpoints while still refining model integration, Control UI, and plugin compatibility.",
+      "polarity": "supports",
+      "evidenceStrength": "high",
+      "rationale": "The release note is framed as another update in an already active line of changes, with the same product surfaces still moving.",
+      "citations": [
+        {
+          "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+          "note": "Source summary claim: OpenClaw is shipping rapid release checkpoints while still refining model integration, Control UI, and plugin compatibility."
+        }
+      ]
+    }
+  ],
+  "citations": [
+    {
+      "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+      "note": "Source summary claim: OpenClaw is shipping rapid release checkpoints while still refining model integration, Control UI, and plugin compatibility."
+    }
+  ],
+  "conflictNotes": [],
+  "candidateRecall": {
+    "primaryCandidates": [
+      {
+        "pageId": "page_b5780e91d9a61b4935e90898642f4c58",
+        "title": "OpenClaw Example Workspace",
+        "canonicalTitle": "OpenClaw Example Workspace",
+        "slug": "index",
+        "type": "index",
+        "path": "wiki/index.md",
+        "score": 9.62,
+        "reasons": [
+          {
+            "kind": "fts",
+            "label": "FTS match for \"OpenClaw\"",
+            "score": 4,
+            "matchedValue": "OpenClaw"
+          },
+          {
+            "kind": "hint_fuzzy",
+            "label": "Fuzzy page hint similarity for \"OpenClaw\"",
+            "score": 3.12,
+            "matchedValue": "OpenClaw"
+          },
+          {
+            "kind": "entity_overlap",
+            "label": "Entity overlap for \"OpenClaw\"",
+            "score": 2,
+            "matchedValue": "OpenClaw"
+          },
+          {
+            "kind": "recency",
+            "label": "Recently updated wiki page",
+            "score": 0.5,
+            "matchedValue": null
+          }
+        ]
+      }
+    ],
+    "omittedCandidateCount": 0
+  },
+  "hunks": [
+    {
+      "sectionHeading": "Summary",
+      "operation": "replace",
+      "beforeText": "TBD",
+      "afterText": "OpenClaw release cadence matters because the corpus keeps treating new versions as near-term upgrade checkpoints with direct workflow impact.",
+      "citations": [
+        {
+          "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+          "note": "Source summary claim: OpenClaw is shipping rapid release checkpoints while still refining model integration, Control UI, and plugin compatibility."
+        }
+      ]
+    },
+    {
+      "sectionHeading": "Evidence",
+      "operation": "create_section",
+      "beforeText": null,
+      "afterText": "- The 2026.3.31 release is described as a consolidation point for ongoing model-integration, Control UI, and plugin changes.\n- Plugin SDK baseline changes are part of the same moving release surface rather than a separate maintenance thread.",
+      "citations": [
+        {
+          "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+          "note": "Source summary claim: OpenClaw is shipping rapid release checkpoints while still refining model integration, Control UI, and plugin compatibility."
+        }
+      ]
+    },
+    {
+      "sectionHeading": "Related pages",
+      "operation": "create_section",
+      "beforeText": null,
+      "afterText": "- [[OpenClaw]]\n- [[Plugin compatibility]]\n- [[OpenClaw maintenance watchpoints]]",
+      "citations": [
+        {
+          "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+          "note": "Source summary claim: OpenClaw is shipping rapid release checkpoints while still refining model integration, Control UI, and plugin compatibility."
+        }
+      ]
+    }
+  ],
+  "review": {
+    "reviewedAt": "2026-04-05T19:36:54.163Z",
+    "note": "Approved to create a durable landing page for later OpenClaw release evidence.",
+    "editedBeforeApply": false
+  },
+  "applyResult": {
+    "appliedAt": "2026-04-05T19:36:54.163Z",
+    "success": true,
+    "affectedPaths": [
+      "wiki/topics/openclaw-release-cadence.md"
+    ],
+    "appliedPageId": "page_8214e26cb3d419e22e8614bc6bd05cb3",
+    "git": null,
+    "error": null
+  }
+}

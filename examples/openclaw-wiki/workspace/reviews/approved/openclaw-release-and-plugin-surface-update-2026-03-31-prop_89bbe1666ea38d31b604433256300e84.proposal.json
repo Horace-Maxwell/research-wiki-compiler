@@ -1,0 +1,171 @@
+{
+  "schemaVersion": "m4-patch-proposal-v1",
+  "proposalId": "prop_89bbe1666ea38d31b604433256300e84",
+  "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+  "sourceTitle": "OpenClaw release and plugin surface update (2026-03-31)",
+  "status": "approved",
+  "proposalType": "create_page",
+  "title": "Create OpenClaw entity page",
+  "generatedAt": "2026-04-05T19:36:54.125Z",
+  "provider": "openai",
+  "model": "gpt-openclaw-example",
+  "promptHash": "3f515226b5d6435e4dd66528221719f48b5ddb14c03108e197b6142740b57eef",
+  "promptVersion": "0.4.0-m4",
+  "riskLevel": "medium",
+  "patchGoal": "Create a core entity page that captures what OpenClaw is and which surfaces in the corpus keep moving.",
+  "rationale": "Without an OpenClaw entity page, later release, plugin, and risk evidence has no durable landing page.",
+  "targetPages": [],
+  "proposedPage": {
+    "title": "OpenClaw",
+    "pageType": "entity",
+    "suggestedPath": "wiki/entities/openclaw.md",
+    "rationale": "The corpus treats OpenClaw itself as the durable anchor for releases, integrations, and workflow impact."
+  },
+  "affectedSections": [
+    "Summary",
+    "Key signals",
+    "Related pages"
+  ],
+  "supportingClaims": [
+    {
+      "text": "OpenClaw is shipping rapid release checkpoints while still refining model integration, Control UI, and plugin compatibility.",
+      "polarity": "supports",
+      "evidenceStrength": "high",
+      "rationale": "The release note is framed as another update in an already active line of changes, with the same product surfaces still moving.",
+      "citations": [
+        {
+          "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+          "note": "Source summary claim: OpenClaw is shipping rapid release checkpoints while still refining model integration, Control UI, and plugin compatibility."
+        }
+      ]
+    },
+    {
+      "text": "Plugin SDK baseline changes can force custom plugins and integrations to adjust compatibility layers.",
+      "polarity": "supports",
+      "evidenceStrength": "high",
+      "rationale": "The digest explicitly connects plugin SDK baseline changes to plugin interfaces, runtime detection order, and compatibility layers.",
+      "citations": [
+        {
+          "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+          "note": "Source summary claim: Plugin SDK baseline changes can force custom plugins and integrations to adjust compatibility layers."
+        }
+      ]
+    }
+  ],
+  "citations": [
+    {
+      "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+      "note": "Source summary claim: OpenClaw is shipping rapid release checkpoints while still refining model integration, Control UI, and plugin compatibility."
+    },
+    {
+      "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+      "note": "Source summary claim: Plugin SDK baseline changes can force custom plugins and integrations to adjust compatibility layers."
+    }
+  ],
+  "conflictNotes": [],
+  "candidateRecall": {
+    "primaryCandidates": [
+      {
+        "pageId": "page_b5780e91d9a61b4935e90898642f4c58",
+        "title": "OpenClaw Example Workspace",
+        "canonicalTitle": "OpenClaw Example Workspace",
+        "slug": "index",
+        "type": "index",
+        "path": "wiki/index.md",
+        "score": 9.62,
+        "reasons": [
+          {
+            "kind": "fts",
+            "label": "FTS match for \"OpenClaw\"",
+            "score": 4,
+            "matchedValue": "OpenClaw"
+          },
+          {
+            "kind": "hint_fuzzy",
+            "label": "Fuzzy page hint similarity for \"OpenClaw\"",
+            "score": 3.12,
+            "matchedValue": "OpenClaw"
+          },
+          {
+            "kind": "entity_overlap",
+            "label": "Entity overlap for \"OpenClaw\"",
+            "score": 2,
+            "matchedValue": "OpenClaw"
+          },
+          {
+            "kind": "recency",
+            "label": "Recently updated wiki page",
+            "score": 0.5,
+            "matchedValue": null
+          }
+        ]
+      }
+    ],
+    "omittedCandidateCount": 0
+  },
+  "hunks": [
+    {
+      "sectionHeading": "Summary",
+      "operation": "replace",
+      "beforeText": "TBD",
+      "afterText": "In this corpus, OpenClaw appears as a fast-moving AI developer tool and workflow surface whose releases, plugin interfaces, and provider-facing behavior all matter to maintainers.",
+      "citations": [
+        {
+          "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+          "note": "Source summary claim: OpenClaw is shipping rapid release checkpoints while still refining model integration, Control UI, and plugin compatibility."
+        },
+        {
+          "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+          "note": "Source summary claim: Plugin SDK baseline changes can force custom plugins and integrations to adjust compatibility layers."
+        }
+      ]
+    },
+    {
+      "sectionHeading": "Key signals",
+      "operation": "create_section",
+      "beforeText": null,
+      "afterText": "- Releases and commits repeatedly emphasize model integration, Control UI / CSP, and plugin compatibility.\n- The corpus treats OpenClaw as something operators actively monitor because changes can alter everyday workflow behavior.",
+      "citations": [
+        {
+          "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+          "note": "Source summary claim: OpenClaw is shipping rapid release checkpoints while still refining model integration, Control UI, and plugin compatibility."
+        },
+        {
+          "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+          "note": "Source summary claim: Plugin SDK baseline changes can force custom plugins and integrations to adjust compatibility layers."
+        }
+      ]
+    },
+    {
+      "sectionHeading": "Related pages",
+      "operation": "create_section",
+      "beforeText": null,
+      "afterText": "- [[OpenClaw release cadence]]\n- [[Plugin compatibility]]\n- [[Provider dependency risk]]",
+      "citations": [
+        {
+          "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+          "note": "Source summary claim: OpenClaw is shipping rapid release checkpoints while still refining model integration, Control UI, and plugin compatibility."
+        },
+        {
+          "sourceId": "src_f7b5dd4068ac4fd7925a1bdabe45697f",
+          "note": "Source summary claim: Plugin SDK baseline changes can force custom plugins and integrations to adjust compatibility layers."
+        }
+      ]
+    }
+  ],
+  "review": {
+    "reviewedAt": "2026-04-05T19:36:54.150Z",
+    "note": "Tightened the summary wording before approval so the page stays explicit about corpus scope.",
+    "editedBeforeApply": true
+  },
+  "applyResult": {
+    "appliedAt": "2026-04-05T19:36:54.150Z",
+    "success": true,
+    "affectedPaths": [
+      "wiki/entities/openclaw.md"
+    ],
+    "appliedPageId": "page_07ed1b7748728ef6ac102f22e4ed604d",
+    "git": null,
+    "error": null
+  }
+}
