@@ -10,7 +10,7 @@ Current recommendation:
 
 Future public default recommendation:
 
-- publish as a public repository under `@maxwelldhx`
+- make the existing `Horace-Maxwell/research-wiki-compiler` repository public when the launch is ready
 - use Apache-2.0 as the default public license when the repository is intentionally opened
 
 Suggested repository description:

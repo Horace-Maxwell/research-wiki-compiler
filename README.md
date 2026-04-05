@@ -4,7 +4,7 @@ Research Wiki Compiler is a local-first product for turning raw research materia
 
 Repository status: this repository is still private and is being prepared locally for a future push. Everything in this repo remains local and file-based for now.
 
-Maintainer: Horace (`@maxwelldhx`).
+Maintainer: Horace.
 
 GitHub repository: [Horace-Maxwell/research-wiki-compiler](https://github.com/Horace-Maxwell/research-wiki-compiler) (currently private).
 
