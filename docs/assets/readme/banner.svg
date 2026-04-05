@@ -1,0 +1,86 @@
+<svg width="1600" height="840" viewBox="0 0 1600 840" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Research Wiki Compiler banner</title>
+  <desc id="desc">A dark banner with a structured knowledge graph motif for the Research Wiki Compiler project.</desc>
+  <defs>
+    <linearGradient id="bg" x1="120" y1="60" x2="1500" y2="780" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#08111F"/>
+      <stop offset="0.55" stop-color="#0B1C34"/>
+      <stop offset="1" stop-color="#10294A"/>
+    </linearGradient>
+    <linearGradient id="glowA" x1="246" y1="138" x2="608" y2="512" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#27C5FF"/>
+      <stop offset="1" stop-color="#1A7CFF"/>
+    </linearGradient>
+    <linearGradient id="glowB" x1="1012" y1="178" x2="1328" y2="478" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5EF0C7"/>
+      <stop offset="1" stop-color="#13B79A"/>
+    </linearGradient>
+    <linearGradient id="panelStroke" x1="264" y1="178" x2="1370" y2="730" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5CC4FF" stop-opacity="0.65"/>
+      <stop offset="1" stop-color="#67E2C7" stop-opacity="0.4"/>
+    </linearGradient>
+    <filter id="blurA" x="0" y="0" width="1600" height="840" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="46"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="840" rx="36" fill="url(#bg)"/>
+
+  <g opacity="0.18">
+    <path d="M0 88H1600" stroke="#8DCFFF"/>
+    <path d="M0 208H1600" stroke="#8DCFFF"/>
+    <path d="M0 328H1600" stroke="#8DCFFF"/>
+    <path d="M0 448H1600" stroke="#8DCFFF"/>
+    <path d="M0 568H1600" stroke="#8DCFFF"/>
+    <path d="M0 688H1600" stroke="#8DCFFF"/>
+    <path d="M126 0V840" stroke="#8DCFFF"/>
+    <path d="M326 0V840" stroke="#8DCFFF"/>
+    <path d="M526 0V840" stroke="#8DCFFF"/>
+    <path d="M726 0V840" stroke="#8DCFFF"/>
+    <path d="M926 0V840" stroke="#8DCFFF"/>
+    <path d="M1126 0V840" stroke="#8DCFFF"/>
+    <path d="M1326 0V840" stroke="#8DCFFF"/>
+  </g>
+
+  <g filter="url(#blurA)" opacity="0.7">
+    <circle cx="312" cy="196" r="112" fill="url(#glowA)"/>
+    <circle cx="1238" cy="226" r="104" fill="url(#glowB)"/>
+    <circle cx="1210" cy="640" r="132" fill="#1A7CFF"/>
+  </g>
+
+  <rect x="78" y="74" width="1444" height="692" rx="32" fill="rgba(8,17,31,0.34)" stroke="url(#panelStroke)" stroke-width="1.5"/>
+
+  <rect x="120" y="118" width="274" height="44" rx="22" fill="rgba(15,31,57,0.92)" stroke="rgba(107,205,255,0.55)"/>
+  <text x="145" y="146" fill="#D7EEFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="20" font-weight="700">LOCAL-FIRST / FILE-FIRST / REVIEW-FIRST</text>
+
+  <text x="120" y="262" fill="#F4FAFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="76" font-weight="800">Research Wiki Compiler</text>
+  <text x="120" y="322" fill="#8EC4F7" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="30" font-weight="500">Compile raw research material into a durable Markdown wiki with visible artifacts and human-reviewed knowledge mutation.</text>
+
+  <rect x="120" y="384" width="654" height="256" rx="28" fill="rgba(8,17,31,0.76)" stroke="rgba(96,200,255,0.36)"/>
+  <text x="156" y="432" fill="#DDF3FF" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace" font-size="24" font-weight="700">SYSTEM VIEW</text>
+  <text x="156" y="486" fill="#F4FAFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">raw sources</text>
+  <text x="330" y="486" fill="#71B9FF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">-&gt;</text>
+  <text x="384" y="486" fill="#F4FAFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">summaries</text>
+  <text x="546" y="486" fill="#71B9FF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">-&gt;</text>
+  <text x="600" y="486" fill="#F4FAFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">review queue</text>
+
+  <text x="156" y="540" fill="#F4FAFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">compiled wiki</text>
+  <text x="356" y="540" fill="#6FE0C2" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">-&gt;</text>
+  <text x="410" y="540" fill="#F4FAFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">ask</text>
+  <text x="474" y="540" fill="#6FE0C2" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">-&gt;</text>
+  <text x="528" y="540" fill="#F4FAFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">archive</text>
+  <text x="654" y="540" fill="#6FE0C2" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">-&gt;</text>
+  <text x="708" y="540" fill="#F4FAFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">audit</text>
+
+  <text x="156" y="598" fill="#8EC4F7" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="22" font-weight="500">Visible prompts. Visible proposals. Visible history. Files stay readable without a hosted control plane.</text>
+
+  <rect x="868" y="384" width="612" height="126" rx="28" fill="rgba(8,17,31,0.76)" stroke="rgba(113,224,194,0.36)"/>
+  <text x="904" y="434" fill="#DDF3FF" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace" font-size="24" font-weight="700">WORKSPACE LAYERS</text>
+  <text x="904" y="484" fill="#F4FAFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="26" font-weight="700">raw / wiki / reviews / audits / prompts / .research-wiki</text>
+
+  <rect x="868" y="542" width="612" height="98" rx="28" fill="rgba(8,17,31,0.76)" stroke="rgba(96,200,255,0.36)"/>
+  <text x="904" y="594" fill="#DDF3FF" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace" font-size="24" font-weight="700">PROJECT LOOPS</text>
+  <text x="904" y="628" fill="#8EC4F7" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="22" font-weight="600">COMPILE   /   REVIEW   /   ASK   /   ARCHIVE   /   AUDIT</text>
+
+  <text x="120" y="714" fill="#8AAED3" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20">A local-first research knowledge compiler for reviewable Markdown wikis.</text>
+</svg>
