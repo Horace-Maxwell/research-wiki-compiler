@@ -53,11 +53,12 @@
   <rect x="120" y="118" width="274" height="44" rx="22" fill="rgba(15,31,57,0.92)" stroke="rgba(107,205,255,0.55)"/>
   <text x="145" y="146" fill="#D7EEFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="20" font-weight="700">LOCAL-FIRST / FILE-FIRST / REVIEW-FIRST</text>
 
-  <text x="120" y="262" fill="#F4FAFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="76" font-weight="800">Research Wiki Compiler</text>
-  <text x="120" y="322" fill="#8EC4F7" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="30" font-weight="500">Compile raw research material into a durable Markdown wiki with visible artifacts and human-reviewed knowledge mutation.</text>
+  <text x="120" y="248" fill="#F4FAFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="76" font-weight="800">Research Wiki Compiler</text>
+  <text x="120" y="304" fill="#DCEEFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">把原始研究材料编译成可审阅、可追踪、可长期维护的本地 Markdown Wiki。</text>
+  <text x="120" y="348" fill="#8EC4F7" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="500">Compile raw research material into a durable Markdown wiki with visible artifacts and human-reviewed knowledge mutation.</text>
 
   <rect x="120" y="384" width="654" height="256" rx="28" fill="rgba(8,17,31,0.76)" stroke="rgba(96,200,255,0.36)"/>
-  <text x="156" y="432" fill="#DDF3FF" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace" font-size="24" font-weight="700">SYSTEM VIEW</text>
+  <text x="156" y="432" fill="#DDF3FF" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace" font-size="24" font-weight="700">SYSTEM VIEW / 系统视图</text>
   <text x="156" y="486" fill="#F4FAFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">raw sources</text>
   <text x="330" y="486" fill="#71B9FF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">-&gt;</text>
   <text x="384" y="486" fill="#F4FAFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">summaries</text>
@@ -72,14 +73,15 @@
   <text x="654" y="540" fill="#6FE0C2" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">-&gt;</text>
   <text x="708" y="540" fill="#F4FAFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700">audit</text>
 
-  <text x="156" y="598" fill="#8EC4F7" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="22" font-weight="500">Visible prompts. Visible proposals. Visible history. Files stay readable without a hosted control plane.</text>
+  <text x="156" y="598" fill="#8EC4F7" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="20" font-weight="600">Visible prompts. Visible proposals. Visible history.</text>
+  <text x="156" y="628" fill="#8EC4F7" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="20" font-weight="500">提示词、提案和历史都可见，文件本身就是长期层。</text>
 
   <rect x="868" y="384" width="612" height="126" rx="28" fill="rgba(8,17,31,0.76)" stroke="rgba(113,224,194,0.36)"/>
-  <text x="904" y="434" fill="#DDF3FF" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace" font-size="24" font-weight="700">WORKSPACE LAYERS</text>
+  <text x="904" y="434" fill="#DDF3FF" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace" font-size="24" font-weight="700">WORKSPACE LAYERS / 工作区层</text>
   <text x="904" y="484" fill="#F4FAFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="26" font-weight="700">raw / wiki / reviews / audits / prompts / .research-wiki</text>
 
   <rect x="868" y="542" width="612" height="98" rx="28" fill="rgba(8,17,31,0.76)" stroke="rgba(96,200,255,0.36)"/>
-  <text x="904" y="594" fill="#DDF3FF" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace" font-size="24" font-weight="700">PROJECT LOOPS</text>
+  <text x="904" y="594" fill="#DDF3FF" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace" font-size="24" font-weight="700">PROJECT LOOPS / 产品闭环</text>
   <text x="904" y="628" fill="#8EC4F7" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="22" font-weight="600">COMPILE   /   REVIEW   /   ASK   /   ARCHIVE   /   AUDIT</text>
 
   <text x="120" y="714" fill="#8AAED3" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20">A local-first research knowledge compiler for reviewable Markdown wikis.</text>

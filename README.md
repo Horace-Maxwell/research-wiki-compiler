@@ -15,6 +15,12 @@
 </p>
 
 <p align="center">
+  编译 → 审阅 → 提问 → 归档 → 审计
+  <br />
+  Compile → Review → Ask → Archive → Audit
+</p>
+
+<p align="center">
   <a href="#quickstart--快速开始">Quickstart / 快速开始</a>
   ·
   <a href="#quick-demo--快速体验">Quick Demo / 快速体验</a>
@@ -34,6 +40,13 @@
 
 Research Wiki Compiler 不是“上传文件然后聊天”的壳。它把原始资料放进本地工作区，生成可见的 summary、review proposal、answer artifact 和 audit report，并把真正长期维护的知识沉淀为 Markdown wiki 页面。  
 Research Wiki Compiler is not an upload-and-chat shell. It lands raw material in a local workspace, produces visible summaries, review proposals, answer artifacts, and audit reports, and stores the durable knowledge layer as Markdown wiki pages.
+
+- 原始材料先变成可见 artifact，再变成可审阅的 wiki mutation。  
+  Raw material becomes visible artifacts first, then reviewable wiki mutation.
+- 最终结果是持续维护的 Markdown wiki，不是一次性的模型输出。  
+  The end state is a maintained Markdown wiki, not a one-shot model output.
+- 好答案会重新进入 wiki，审计会继续暴露结构缺口。  
+  Good answers re-enter the wiki, and audits keep exposing structural gaps.
 
 ## 为什么要做 / Why It Exists
 
