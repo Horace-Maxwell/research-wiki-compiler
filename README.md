@@ -45,6 +45,13 @@
   <img alt="Mode local-first and review-first" src="https://img.shields.io/badge/mode-local--first%20%2F%20review--first-0f766e?style=flat-square" />
 </p>
 
+<p align="center">
+  <a href="./examples/openclaw-wiki/README.md"><img alt="Open the example" src="https://img.shields.io/badge/openclaw-example-0b57d0?style=for-the-badge" /></a>
+  <a href="#quickstart--快速开始"><img alt="Go to quickstart" src="https://img.shields.io/badge/quickstart-111827?style=for-the-badge" /></a>
+  <a href="./docs/architecture.md"><img alt="Read architecture" src="https://img.shields.io/badge/architecture-0f766e?style=for-the-badge" /></a>
+  <a href="./docs/product-spec.md"><img alt="Read product spec" src="https://img.shields.io/badge/product-spec-7c3aed?style=for-the-badge" /></a>
+</p>
+
 Research Wiki Compiler 不是“上传文件然后聊天”的壳。它把原始资料放进本地工作区，生成可见的 summary、review proposal、answer artifact 和 audit report，并把真正长期维护的知识沉淀为 Markdown wiki 页面。  
 Research Wiki Compiler is not an upload-and-chat shell. It lands raw material in a local workspace, produces visible summaries, review proposals, answer artifacts, and audit reports, and stores the durable knowledge layer as Markdown wiki pages.
 
