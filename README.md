@@ -6,6 +6,8 @@ Repository status: this repository is still private and is being prepared locall
 
 Maintainer: Horace (`@maxwelldhx`).
 
+GitHub repository: [Horace-Maxwell/research-wiki-compiler](https://github.com/Horace-Maxwell/research-wiki-compiler) (currently private).
+
 ## Screenshots
 
 Screenshots are not committed yet.
@@ -244,7 +246,7 @@ The historical milestone log remains in [docs/progress.md](docs/progress.md).
 - Patch apply prioritizes safe, local mutations and may fail instead of rewriting too much content.
 - Audit findings are deterministic and conservative rather than autonomous.
 - The product is currently optimized for a single local user, not multi-user collaboration or sync.
-- The final public repo URL and screenshots are still intentionally deferred until the first push is approved.
+- Screenshots are still intentionally deferred until the first public-facing launch pass.
 
 ## Contributing
 

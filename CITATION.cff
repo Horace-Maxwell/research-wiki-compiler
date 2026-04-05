@@ -6,6 +6,8 @@ message: >-
 title: Research Wiki Compiler
 type: software
 version: 0.1.0
+url: https://github.com/Horace-Maxwell/research-wiki-compiler
+repository-code: https://github.com/Horace-Maxwell/research-wiki-compiler
 abstract: >-
   A local-first knowledge compiler that turns research sources into a durable,
   reviewable Markdown wiki with visible summaries, patch proposals, answer

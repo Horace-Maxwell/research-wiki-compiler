@@ -73,7 +73,8 @@ Action before first push:
 - README includes value proposition, architecture summary, quickstart, configuration, demo flow, roadmap, limitations, contribution, security, and license notes.
 - Screenshot placeholders are documented in [docs/assets/screenshots/README.md](assets/screenshots/README.md).
 - Capture and add screenshots if the repo is intended to be more public-facing than internal.
-- `CITATION.cff` intentionally omits a repository URL until the final GitHub repo path is chosen.
+- Repository URL is now `https://github.com/Horace-Maxwell/research-wiki-compiler`.
+- `CITATION.cff` and `package.json` now include the canonical repository URL metadata.
 
 ## License Position
 

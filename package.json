@@ -5,6 +5,14 @@
   "author": "Horace <maxwelldhx@gmail.com>",
   "license": "Apache-2.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Horace-Maxwell/research-wiki-compiler.git"
+  },
+  "homepage": "https://github.com/Horace-Maxwell/research-wiki-compiler",
+  "bugs": {
+    "url": "https://github.com/Horace-Maxwell/research-wiki-compiler/issues"
+  },
   "keywords": [
     "local-first",
     "research",
