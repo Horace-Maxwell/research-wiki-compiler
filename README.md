@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="./docs/assets/readme/banner.svg" alt="Research Wiki Compiler banner" width="100%" />
-</p>
-
 <h1 align="center">Research Wiki Compiler</h1>
 
 <p align="center">
@@ -40,7 +36,7 @@
 
 <p align="center">
   <img alt="License Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-1f6feb?style=flat-square" />
-  <img alt="Node >=20" src="https://img.shields.io/badge/node-%3E%3D20-15803d?style=flat-square" />
+  <img alt="Node 20+" src="https://img.shields.io/badge/node-20%2B-15803d?style=flat-square" />
   <img alt="Stack Next.js + SQLite + FTS5" src="https://img.shields.io/badge/stack-Next.js%20%2B%20SQLite%20%2B%20FTS5-0f172a?style=flat-square" />
   <img alt="Mode local-first and review-first" src="https://img.shields.io/badge/mode-local--first%20%2F%20review--first-0f766e?style=flat-square" />
 </p>
