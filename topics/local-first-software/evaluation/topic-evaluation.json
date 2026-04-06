@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-04-06T04:22:45.988Z",
+  "generatedAt": "2026-04-06T05:04:59.408Z",
   "target": {
     "kind": "topic",
     "id": "local-first-software",
@@ -444,13 +444,13 @@
       "summary": "Monitoring / Watchpoints is doing its job cleanly.",
       "evidence": [
         "4/4 expected headings matched.",
-        "205 body words.",
-        "10 wiki links.",
-        "13 bullet items and 0 ordered steps.",
+        "920 body words.",
+        "23 wiki links.",
+        "62 bullet items and 0 ordered steps.",
         "3/3 expected headings matched.",
-        "141 body words.",
-        "5 wiki links.",
-        "8 bullet items and 0 ordered steps.",
+        "856 body words.",
+        "23 wiki links.",
+        "57 bullet items and 0 ordered steps.",
         "0/1 expected headings matched.",
         "123 body words.",
         "5 wiki links.",
@@ -473,13 +473,13 @@
       "summary": "Maintenance Rhythm is doing its job cleanly.",
       "evidence": [
         "9/9 expected headings matched.",
-        "1967 body words.",
-        "68 wiki links.",
-        "104 bullet items and 0 ordered steps.",
+        "2906 body words.",
+        "89 wiki links.",
+        "172 bullet items and 0 ordered steps.",
         "7/7 expected headings matched.",
-        "1520 body words.",
-        "38 wiki links.",
-        "87 bullet items and 0 ordered steps."
+        "2459 body words.",
+        "68 wiki links.",
+        "155 bullet items and 0 ordered steps."
       ],
       "issues": []
     },

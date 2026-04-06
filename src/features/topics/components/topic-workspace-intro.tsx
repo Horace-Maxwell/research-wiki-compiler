@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { ArrowRight, FlaskConical, FolderTree, Gauge, Radar, RefreshCw, SearchCheck, Sparkles } from "lucide-react";
 
+import type { AcquisitionTaskTopicSummary } from "@/lib/contracts/acquisition-task";
 import type { EvidenceChangeTopicSummary } from "@/lib/contracts/evidence-change";
 import type { EvidenceGapTopicSummary } from "@/lib/contracts/evidence-gap";
+import type { MonitoringTopicSummary } from "@/lib/contracts/monitoring-item";
 import type { QuestionWorkflowTopicSummary } from "@/lib/contracts/research-question";
 import type { ResearchSessionTopicSummary } from "@/lib/contracts/research-session";
 import type { ResearchSynthesisTopicSummary } from "@/lib/contracts/research-synthesis";
@@ -93,16 +95,20 @@ function Surface({
 export function TopicWorkspaceIntro({
   topic,
   comparisonSpotlight,
+  acquisitionSummary,
   evidenceChangeSummary,
   evidenceGapSummary,
+  monitoringSummary,
   questionWorkflow,
   sessionSummary,
   synthesisSummary,
 }: {
   topic: TopicPortfolioItem;
   comparisonSpotlight: TopicPortfolioComparison | null;
+  acquisitionSummary: AcquisitionTaskTopicSummary | null;
   evidenceChangeSummary: EvidenceChangeTopicSummary | null;
   evidenceGapSummary: EvidenceGapTopicSummary | null;
+  monitoringSummary: MonitoringTopicSummary | null;
   questionWorkflow: QuestionWorkflowTopicSummary | null;
   sessionSummary: ResearchSessionTopicSummary | null;
   synthesisSummary: ResearchSynthesisTopicSummary | null;
@@ -387,6 +393,81 @@ export function TopicWorkspaceIntro({
         </Surface>
       ) : null}
 
+      {acquisitionSummary ? (
+        <Surface
+          title="Acquisition tasks"
+          description="These are the bounded evidence-collection passes that should move this topic next. They connect missing evidence to concrete sessions and integration work."
+        >
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="outline">{acquisitionSummary.taskCount} tasks</Badge>
+              <Badge variant="outline">{acquisitionSummary.highPriorityCount} high priority</Badge>
+              <Badge variant="outline">{acquisitionSummary.readyForSessionCount} session ready</Badge>
+              <Badge variant="outline">{acquisitionSummary.awaitingIngestionCount} awaiting ingestion</Badge>
+              <Badge variant="outline">{acquisitionSummary.maturityBlockerCount} maturity blockers</Badge>
+            </div>
+            <div className="grid gap-3 xl:grid-cols-2">
+              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <SearchCheck className="size-4" />
+                  Highest-leverage acquisition
+                </div>
+                <div className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {acquisitionSummary.nextTask ? (
+                    <>
+                      <div className="font-medium text-foreground">
+                        {acquisitionSummary.nextTask.title}
+                      </div>
+                      <div className="mt-1">{acquisitionSummary.nextTask.evidenceTypeToCollect}</div>
+                    </>
+                  ) : (
+                    "No unresolved acquisition task is currently seeded for this topic."
+                  )}
+                </div>
+              </div>
+              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Gauge className="size-4" />
+                  Latest integrated acquisition
+                </div>
+                <div className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {acquisitionSummary.recentIntegrated ? (
+                    <>
+                      <div className="font-medium text-foreground">
+                        {acquisitionSummary.recentIntegrated.title}
+                      </div>
+                      <div className="mt-1">
+                        {acquisitionSummary.recentIntegrated.resultSummary ??
+                          acquisitionSummary.recentIntegrated.summary}
+                      </div>
+                    </>
+                  ) : (
+                    "No integrated acquisition task has been recorded yet."
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild variant="outline">
+                <Link href={`/acquisition?topic=${topic.id}`}>Open topic acquisition queue</Link>
+              </Button>
+              {acquisitionSummary.nextTask ? (
+                <Button asChild variant="ghost">
+                  <Link href={acquisitionSummary.nextTask.links.session.href}>
+                    {acquisitionSummary.nextTask.nextSessionStatus === "active"
+                      ? "Continue acquisition session"
+                      : "Start acquisition session"}
+                  </Link>
+                </Button>
+              ) : null}
+              <Button asChild variant="ghost">
+                <Link href="/acquisition">Open full acquisition portfolio</Link>
+              </Button>
+            </div>
+          </div>
+        </Surface>
+      ) : null}
+
       {sessionSummary ? (
         <Surface
           title="Research sessions"
@@ -594,6 +675,84 @@ export function TopicWorkspaceIntro({
               ) : null}
               <Button asChild variant="ghost">
                 <Link href="/changes">Open full change portfolio</Link>
+              </Button>
+            </div>
+          </div>
+        </Surface>
+      ) : null}
+
+      {monitoringSummary ? (
+        <Surface
+          title="Monitoring"
+          description="Monitoring distinguishes what should stay passive, what needs bounded review, and which watchpoints should actually spawn new acquisition work."
+        >
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="outline">{monitoringSummary.itemCount} monitors</Badge>
+              <Badge variant="outline">{monitoringSummary.spawnedAcquisitionCount} spawned work</Badge>
+              <Badge variant="outline">{monitoringSummary.reviewNeededCount} review needed</Badge>
+              <Badge variant="outline">{monitoringSummary.periodicReviewCount} periodic review</Badge>
+            </div>
+            <div className="grid gap-3 xl:grid-cols-2">
+              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Radar className="size-4" />
+                  Next monitoring trigger
+                </div>
+                <div className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {monitoringSummary.nextAcquisitionTrigger ? (
+                    <>
+                      <div className="font-medium text-foreground">
+                        {monitoringSummary.nextAcquisitionTrigger.title}
+                      </div>
+                      <div className="mt-1">
+                        {monitoringSummary.nextAcquisitionTrigger.recommendedAction}
+                      </div>
+                    </>
+                  ) : monitoringSummary.nextMonitor ? (
+                    <>
+                      <div className="font-medium text-foreground">
+                        {monitoringSummary.nextMonitor.title}
+                      </div>
+                      <div className="mt-1">{monitoringSummary.nextMonitor.recommendedAction}</div>
+                    </>
+                  ) : (
+                    "No monitoring item is currently seeded for this topic."
+                  )}
+                </div>
+              </div>
+              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Gauge className="size-4" />
+                  Monitoring focus
+                </div>
+                <div className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {monitoringSummary.nextMonitor ? (
+                    <>
+                      <div className="font-medium text-foreground">
+                        {monitoringSummary.nextMonitor.title}
+                      </div>
+                      <div className="mt-1">{monitoringSummary.nextMonitor.latestSignalSummary}</div>
+                    </>
+                  ) : (
+                    "No monitoring item currently needs attention."
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild variant="outline">
+                <Link href={`/monitoring?topic=${topic.id}`}>Open topic monitoring queue</Link>
+              </Button>
+              {monitoringSummary.nextAcquisitionTrigger ? (
+                <Button asChild variant="ghost">
+                  <Link href={monitoringSummary.nextAcquisitionTrigger.links.acquisition.href}>
+                    Open linked acquisition
+                  </Link>
+                </Button>
+              ) : null}
+              <Button asChild variant="ghost">
+                <Link href="/monitoring">Open full monitoring portfolio</Link>
               </Button>
             </div>
           </div>

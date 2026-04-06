@@ -93,6 +93,93 @@
 - **Maturity impact**: blocks maintained
 - **Success criteria**: A later source, review, or audit artifact repeats the same repair or conflict signal.; Maintenance rhythm would change in the same direction because of it.
 
+## Acquisition queue
+
+### Local-First Software migration promotion pass
+
+- **Status**: active
+- **Task type**: comparison pass
+- **Collect**: A compact comparison proving that migration pressure now outranks the other starter candidates for durable synthesis.
+- **Why it matters**: The topic matures when the migration playbook earns promotion for evidence-based reasons rather than just because it is the strongest-looking candidate.
+- **Closes gaps**: Local-First Software migration promotion evidence
+- **Start with sources**: Sync engines; Maintenance risks
+- **Source types**: maintenance note; bounded corpus note; review artifact
+- **Load first**: [[Maintenance Triage]], [[Explain Local-First Software]]
+- **Inspect pages**: [[Schema migration pressure]], [[Local-First Software maintenance rhythm]], [[Local-First Software open questions]], [[Note: What should I revisit next for Local-First Software]]
+- **Session handoff**: Promote the migration playbook
+- **Ingestion step**: Update the migration concept page, maintenance rhythm, open questions, and operational handoff together if the playbook earns promotion.
+- **Unlocks questions**: Which migration concerns deserve their own synthesis instead of staying inside a concept page?
+- **Unlocks syntheses**: Local-first migration playbook
+- **Maturity impact**: blocks developing
+- **Done means**: The migration playbook clearly outranks the other candidates.; Maintenance rhythm, open questions, and watchpoints can all be updated from the same promotion decision.
+
+### Local-First Software watchpoint recurrence capture
+
+- **Status**: queued
+- **Task type**: watchpoint follow up
+- **Collect**: A repeated repair or conflict signal showing the same cue changes revisit order or operator behavior more than once.
+- **Why it matters**: A useful watch surface should be grounded by repeated operator-facing signal, not by a single memorable concern.
+- **Closes gaps**: Local-First Software repeated watchpoint evidence
+- **Start with sources**: Maintenance risks; Sync engines
+- **Source types**: new source note; audit note; review artifact
+- **Load first**: [[Maintenance Triage]], [[Provenance And Review]]
+- **Inspect pages**: [[Local-First Software maintenance watchpoints]], [[Local-First Software current tensions]], [[Local-First Software open questions]], [[Note: What should I revisit next for Local-First Software]]
+- **Session handoff**: Collect repeat repair and conflict signals
+- **Ingestion step**: If the same signal recurs again, rewrite watchpoints and maintenance rhythm together instead of broadening the watch list by feel.
+- **Unlocks questions**: Which conflict or repair signals should become explicit watchpoints?
+- **Unlocks syntheses**: Local-First Software maintenance watchpoints
+- **Maturity impact**: blocks maintained
+- **Done means**: The same repair or conflict signal recurs in a later source, audit, or review artifact.; The maintenance rhythm would change in the same direction because of that repeated signal.
+
+## Monitoring queue
+
+### Local-First Software maintenance trigger monitor
+
+- **Status**: spawned acquisition
+- **Mode**: event triggered
+- **Trigger behavior**: spawn acquisition
+- **Latest signal**: The latest maintenance evidence already makes the migration promotion path clearer, so the bounded comparison pass should be active now.
+- **Why it matters**: The system should turn meaningful maintenance movement into bounded acquisition work instead of generic review churn.
+- **Next check**: Re-check after the active migration session or whenever a new bounded evidence pass changes revisit order again.
+- **Load first**: [[Maintenance Triage]], [[Explain Local-First Software]]
+- **Inspect pages**: [[Schema migration pressure]], [[Local-First Software maintenance rhythm]], [[Local-First Software open questions]]
+- **Spawn task**: Local-First Software migration promotion pass
+- **Session handoff**: Promote the migration playbook
+- **Recent changes**: Local-First Software maintenance evidence tightened
+- **Review surfaces**: [[Local-First Software maintenance watchpoints]]
+- **Recommended action**: Keep the migration promotion pass bounded, then update maintenance rhythm and open questions from the same decision rather than widening the whole topic.
+
+### Local-First Software watchpoint recurrence monitor
+
+- **Status**: watching
+- **Mode**: periodic review
+- **Trigger behavior**: spawn acquisition
+- **Latest signal**: The watch surface is useful, but it still lacks repeated evidence showing that the same repair or conflict signal changes operator behavior more than once.
+- **Why it matters**: Monitoring only becomes useful when it has a clear boundary for when the system should collect more evidence instead of merely keeping an eye on things.
+- **Next check**: Re-check after the next source addition, audit pass, or review concern that names the same repair signal again.
+- **Load first**: [[Maintenance Triage]], [[Provenance And Review]]
+- **Inspect pages**: [[Local-First Software maintenance watchpoints]], [[Local-First Software current tensions]], [[Local-First Software open questions]], [[Note: What should I revisit next for Local-First Software]]
+- **Spawn task**: Local-First Software watchpoint recurrence capture
+- **Session handoff**: Collect repeat repair and conflict signals
+- **Recent changes**: Local-First Software maintenance evidence tightened
+- **Review surfaces**: [[Local-First Software maintenance watchpoints]]
+- **Recommended action**: If the same signal recurs again, run the watchpoint recurrence acquisition task instead of broadening the monitoring surface by feel.
+
+### Local-First Software canonical boundary stability monitor
+
+- **Status**: stable
+- **Mode**: passive
+- **Trigger behavior**: keep watching
+- **Latest signal**: Recent evidence changed maintenance and monitoring posture more than it changed the top-level durable explanation.
+- **Why it matters**: A change-aware system should also preserve stable article boundaries, not only surface new work.
+- **Next check**: Re-check only after a new source changes the core framing rather than the surrounding maintenance logic.
+- **Load first**: [[Explain Local-First Software]]
+- **Inspect pages**: [[Local-First Software]], [[Sync engines]], [[Local-First Software current tensions]]
+- **Session handoff**: Ground the durable sync assumptions
+- **Recent changes**: Local-First Software canonical boundary remains stable
+- **Review surfaces**: [[Local-First Software]]
+- **Recommended action**: Keep the canonical entry stable and spend the next pass on maintenance and monitoring surfaces unless the top-level story itself moves.
+
 ## Evidence changes to triage
 
 ### Local-First Software maintenance evidence tightened

@@ -71,6 +71,8 @@ refresh_triggers:
 - [Session queue](#session-queue)
 - [Synthesis decisions](#synthesis-decisions)
 - [Highest-leverage next evidence](#highest-leverage-next-evidence)
+- [Acquisition queue](#acquisition-queue)
+- [Monitoring queue](#monitoring-queue)
 - [Evidence changes to triage](#evidence-changes-to-triage)
 - [Context packs to refresh](#context-packs-to-refresh)
 - [Synthesis candidates](#synthesis-candidates)
@@ -205,6 +207,108 @@ This page is the maintenance control surface for the OpenClaw example. It turns 
 - **If closed, questions advance**: Which provider-side changes would change adoption or upgrade decisions the fastest?
 - **If closed, syntheses advance**: OpenClaw provider exposure map
 - **Success criteria**: Provider-side events clearly change at least one operator decision.; The provider exposure synthesis can publish without leaning on generic uncertainty framing.
+
+## Acquisition queue
+
+### OpenClaw upgrade trigger comparison pass
+
+- **Status**: active
+- **Task type**: comparison pass
+- **Collect**: A compact comparison proving which release and changelog signals truly separate light upgrade checks from full regression runs.
+- **Why it matters**: A durable regression-trigger synthesis should rest on a clear operator rule set, not on ambient maintenance concern.
+- **Closes gaps**: OpenClaw upgrade trigger comparison evidence
+- **Start with sources**: OpenClaw release cadence and test churn (2026-04-02); OpenClaw provider risk and changelog signals (2026-04-05)
+- **Source types**: release note; changelog packaging note; archived operator note
+- **Load first**: `Upgrade Watchpoints`, `Maintenance Triage`
+- **Inspect pages**: [[OpenClaw release cadence]], [[OpenClaw maintenance watchpoints]], [[OpenClaw open questions]], [[Note: What should I monitor before upgrading OpenClaw]]
+- **Session handoff**: Promote upgrade regression triggers into synthesis
+- **Ingestion step**: Update release cadence, watchpoints, maintenance rhythm, and the archived note in the same pass if the trigger matrix hardens.
+- **Unlocks questions**: Which release-note or changelog signals should trigger a full regression run instead of a light upgrade check?
+- **Unlocks syntheses**: OpenClaw upgrade regression triggers
+- **Done means**: The trigger matrix reads like durable operator guidance instead of a loose note bundle.; Release cadence, watchpoints, and the archived upgrade note can all reuse the same trigger vocabulary.
+
+### OpenClaw plugin drift capture
+
+- **Status**: queued
+- **Task type**: freshness refresh
+- **Collect**: A later release-to-release comparison naming concrete plugin or SDK breakpoints instead of a single compatibility baseline.
+- **Why it matters**: Plugin compatibility looks important precisely where the corpus is still thinnest, so the system should keep the next evidence pass explicit.
+- **Closes gaps**: OpenClaw plugin drift longitudinal evidence
+- **Start with sources**: OpenClaw plugin SDK baseline and policy fixtures (2026-03-26); OpenClaw release and plugin surface update (2026-03-31)
+- **Source types**: next release note; compatibility digest; review-history comparison
+- **Load first**: `Upgrade Watchpoints`, `Provenance And Review`
+- **Inspect pages**: [[Plugin compatibility]], [[OpenClaw open questions]], [[Review History]], [[Summary Atlas]]
+- **Session handoff**: Collect plugin and SDK drift evidence
+- **Ingestion step**: Compare the new release evidence against compatibility, review history, and summaries before changing any durable plugin guidance.
+- **Unlocks questions**: Which plugin or SDK assumptions are most likely to drift between releases?
+- **Done means**: A later release names concrete compatibility breakpoints or SDK drift.; Plugin compatibility can cite more than one release-to-release signal before hardening the drift story.
+
+### OpenClaw provider consequence pass
+
+- **Status**: queued
+- **Task type**: provenance strengthening
+- **Collect**: A cleaner bridge from provider-side signal to concrete adoption or upgrade consequences.
+- **Why it matters**: Provider risk should only become durable guidance when it changes adoption or upgrade posture in inspectable ways.
+- **Closes gaps**: OpenClaw provider consequence evidence
+- **Start with sources**: OpenClaw provider risk and changelog signals (2026-04-05)
+- **Source types**: provider policy note; operator consequence note; risk digest
+- **Load first**: `Upgrade Watchpoints`, `Maintenance Triage`
+- **Inspect pages**: [[Provider dependency risk]], [[OpenClaw current tensions]], [[OpenClaw maintenance watchpoints]]
+- **Session handoff**: Tighten the provider exposure map
+- **Ingestion step**: Update provider risk, current tensions, watchpoints, and maintenance rhythm together if provider consequences become concrete enough to publish.
+- **Unlocks questions**: Which provider-side changes would change adoption or upgrade decisions the fastest?
+- **Unlocks syntheses**: OpenClaw provider exposure map
+- **Done means**: Provider-side events clearly change at least one operator decision.; The provider exposure synthesis can publish without leaning on generic uncertainty framing.
+
+## Monitoring queue
+
+### OpenClaw provider restriction monitor
+
+- **Status**: spawned acquisition
+- **Mode**: event triggered
+- **Trigger behavior**: spawn acquisition
+- **Latest signal**: A stronger provider-side signal now affects both the instability story and the upgrade-monitoring guidance, so provider consequence work should be active now.
+- **Why it matters**: Provider-side shifts can invalidate adoption and upgrade assumptions at the same time, so the response should be explicit and bounded.
+- **Next check**: Re-check on any new provider-side restriction or policy change that alters operator posture.
+- **Load first**: `Upgrade Watchpoints`, `Maintenance Triage`
+- **Inspect pages**: [[Provider dependency risk]], [[OpenClaw current tensions]], [[OpenClaw maintenance watchpoints]], [[Note: What should I monitor before upgrading OpenClaw]]
+- **Spawn task**: OpenClaw provider consequence pass
+- **Session handoff**: Tighten the provider exposure map
+- **Recent changes**: Provider-side signal reopens instability framing
+- **Review surfaces**: [[Provider dependency risk]], [[OpenClaw current tensions]]
+- **Recommended action**: Run the provider consequence pass and reopen instability framing before editing provider-risk pages or upgrade guidance in isolation.
+
+### OpenClaw release packaging regression monitor
+
+- **Status**: review needed
+- **Mode**: event triggered
+- **Trigger behavior**: mark review
+- **Latest signal**: Release packaging and tightly spaced releases now look strong enough to affect the durable regression-depth rule set.
+- **Why it matters**: The regression-trigger synthesis is only worth publishing if release evidence hardens into durable operator rules rather than a pile of hints.
+- **Next check**: Re-check after each release note or changelog pass that changes regression posture.
+- **Load first**: `Upgrade Watchpoints`, `Maintenance Triage`
+- **Inspect pages**: [[OpenClaw release cadence]], [[OpenClaw maintenance watchpoints]], [[Note: What should I monitor before upgrading OpenClaw]]
+- **Spawn task**: OpenClaw upgrade trigger comparison pass
+- **Session handoff**: Promote upgrade regression triggers into synthesis
+- **Recent changes**: Release packaging sharpens regression rules
+- **Review surfaces**: [[OpenClaw release cadence]], [[Note: What should I monitor before upgrading OpenClaw]]
+- **Recommended action**: Review release cadence, watchpoints, and the archived upgrade note together before publishing the regression-trigger synthesis.
+
+### OpenClaw plugin drift stability monitor
+
+- **Status**: stable
+- **Mode**: periodic review
+- **Trigger behavior**: keep watching
+- **Latest signal**: The compatibility evidence is real, but still too thin to justify reopening broader durable guidance across the topic.
+- **Why it matters**: A change-aware system should also explain when a concern is still best handled as monitoring rather than as a full reopen event.
+- **Next check**: Re-check after the next release or changelog pass that changes plugin or SDK assumptions.
+- **Load first**: `Upgrade Watchpoints`, `Provenance And Review`
+- **Inspect pages**: [[Plugin compatibility]], [[OpenClaw open questions]], [[Review History]], [[Summary Atlas]]
+- **Spawn task**: OpenClaw plugin drift capture
+- **Session handoff**: Collect plugin and SDK drift evidence
+- **Recent changes**: Plugin drift remains monitoring work
+- **Review surfaces**: [[Plugin compatibility]]
+- **Recommended action**: Keep plugin drift in the monitoring surface and question queue until a later release names concrete compatibility breakpoints.
 
 ## Evidence changes to triage
 

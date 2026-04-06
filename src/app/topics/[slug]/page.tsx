@@ -3,8 +3,10 @@ import { notFound } from "next/navigation";
 import { TopicWorkspaceIntro } from "@/features/topics/components/topic-workspace-intro";
 import { WikiBrowser } from "@/features/wiki/components/wiki-browser";
 import type { WikiPageDetail, WikiPageSummary } from "@/lib/contracts/wiki";
+import { getTopicAcquisitionTaskSummary } from "@/server/services/acquisition-task-service";
 import { getTopicEvidenceChangeSummary } from "@/server/services/evidence-change-service";
 import { getTopicEvidenceGapSummary } from "@/server/services/evidence-gap-service";
+import { getTopicMonitoringSummary } from "@/server/services/monitoring-service";
 import { getOpenClawExampleManifest, ensureOpenClawRenderedWorkspace } from "@/server/services/openclaw-example-service";
 import { getTopicQuestionWorkflow } from "@/server/services/question-workflow-service";
 import { getTopicResearchSessionSummary } from "@/server/services/research-session-service";
@@ -48,12 +50,22 @@ export default async function TopicWorkspacePage({
   const requestedPageId = readParam(routeParams.pageId);
   const requestedPagePath = readParam(routeParams.pagePath);
   const workspaceRoot = await resolveWorkspaceRoot(slug);
-  const [questionWorkflow, sessionSummary, synthesisSummary, evidenceChangeSummary, evidenceGapSummary] = await Promise.all([
+  const [
+    questionWorkflow,
+    sessionSummary,
+    synthesisSummary,
+    evidenceChangeSummary,
+    evidenceGapSummary,
+    acquisitionSummary,
+    monitoringSummary,
+  ] = await Promise.all([
     getTopicQuestionWorkflow(slug),
     getTopicResearchSessionSummary(slug),
     getTopicResearchSynthesisSummary(slug),
     getTopicEvidenceChangeSummary(slug),
     getTopicEvidenceGapSummary(slug),
+    getTopicAcquisitionTaskSummary(slug),
+    getTopicMonitoringSummary(slug),
   ]);
   const initialPages: WikiPageSummary[] = await listWikiPages(workspaceRoot);
   const initialPage =
@@ -92,9 +104,11 @@ export default async function TopicWorkspacePage({
       }}
       intro={
         <TopicWorkspaceIntro
+          acquisitionSummary={acquisitionSummary}
           comparisonSpotlight={portfolio.comparisonSpotlight}
           evidenceChangeSummary={evidenceChangeSummary}
           evidenceGapSummary={evidenceGapSummary}
+          monitoringSummary={monitoringSummary}
           questionWorkflow={questionWorkflow}
           sessionSummary={sessionSummary}
           synthesisSummary={synthesisSummary}

@@ -14,6 +14,7 @@ import {
   FlaskConical,
   LayoutDashboard,
   LibraryBig,
+  Radar,
   RefreshCw,
   SearchCheck,
   Settings2,
@@ -29,9 +30,11 @@ const navIconMap = {
   "/topics": LibraryBig,
   "/questions": CircleHelp,
   "/gaps": SearchCheck,
+  "/acquisition": SearchCheck,
   "/sessions": FlaskConical,
   "/syntheses": Sparkles,
   "/changes": RefreshCw,
+  "/monitoring": Radar,
   "/onboarding": Compass,
   "/dashboard": LayoutDashboard,
   "/sources": FileStack,
@@ -45,7 +48,7 @@ const navIconMap = {
 const navGroups = [
   {
     title: "Portfolio",
-    items: ["/topics", "/questions", "/gaps", "/sessions", "/syntheses", "/changes", "/dashboard", "/onboarding"],
+    items: ["/topics", "/questions", "/gaps", "/acquisition", "/sessions", "/syntheses", "/changes", "/monitoring", "/dashboard", "/onboarding"],
   },
   {
     title: "Knowledge",
@@ -77,6 +80,11 @@ const surfaceCopy = {
     detail:
       "Track what evidence is missing, why it matters, which session should close it next, and which topic is blocked more by evidence quality than by structure.",
   },
+  "/acquisition": {
+    label: "Acquisition queue",
+    detail:
+      "Turn evidence gaps into bounded collection work with explicit session handoffs, first source targets, and integration steps back into the knowledge system.",
+  },
   "/sessions": {
     label: "Research sessions",
     detail:
@@ -95,6 +103,11 @@ const surfaceCopy = {
     label: "Evidence change lane",
     detail:
       "Track the evidence shifts that should reopen questions, stale syntheses, or trigger bounded canonical review instead of broad rewrite churn.",
+  },
+  "/monitoring": {
+    label: "Monitoring queue",
+    detail:
+      "See which watchpoints stay passive, which ones only mark review, and which ones should actually spawn new acquisition work.",
   },
   "/onboarding": {
     label: "Workspace setup",
@@ -143,6 +156,10 @@ function normalizeActivePath(pathname: string) {
     return "/gaps";
   }
 
+  if (pathname.startsWith("/acquisition")) {
+    return "/acquisition";
+  }
+
   if (pathname.startsWith("/sessions")) {
     return "/sessions";
   }
@@ -153,6 +170,10 @@ function normalizeActivePath(pathname: string) {
 
   if (pathname.startsWith("/changes")) {
     return "/changes";
+  }
+
+  if (pathname.startsWith("/monitoring")) {
+    return "/monitoring";
   }
 
   const match = PRODUCT_SURFACE.find((item) => pathname === item.href);
@@ -227,6 +248,12 @@ export function AppShell({ children }: { children: ReactNode }) {
                     </Link>
                   </Button>
                   <Button asChild className="w-full justify-start" variant="ghost">
+                    <Link href="/acquisition">
+                      <SearchCheck className="size-4" />
+                      Open acquisition queue
+                    </Link>
+                  </Button>
+                  <Button asChild className="w-full justify-start" variant="ghost">
                     <Link href="/sessions">
                       <FlaskConical className="size-4" />
                       Open session queue
@@ -242,6 +269,12 @@ export function AppShell({ children }: { children: ReactNode }) {
                     <Link href="/changes">
                       <RefreshCw className="size-4" />
                       Open change lane
+                    </Link>
+                  </Button>
+                  <Button asChild className="w-full justify-start" variant="ghost">
+                    <Link href="/monitoring">
+                      <Radar className="size-4" />
+                      Open monitoring queue
                     </Link>
                   </Button>
                   <Button asChild className="w-full justify-start" variant="ghost">

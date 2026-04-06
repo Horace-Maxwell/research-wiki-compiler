@@ -1,10 +1,14 @@
 import { z } from "zod";
 
 import {
+  acquisitionTaskSeedSchema,
+} from "@/lib/contracts/acquisition-task";
+import {
   evidenceBundleSeedSchema,
   evidenceChangeSeedSchema,
 } from "@/lib/contracts/evidence-change";
 import { evidenceGapSeedSchema } from "@/lib/contracts/evidence-gap";
+import { monitoringItemSeedSchema } from "@/lib/contracts/monitoring-item";
 import { researchQuestionSeedSchema } from "@/lib/contracts/research-question";
 import { researchSessionSeedSchema } from "@/lib/contracts/research-session";
 import { researchSynthesisSeedSchema } from "@/lib/contracts/research-synthesis";
@@ -175,6 +179,8 @@ export const topicBootstrapConfigSchema = z.object({
   researchSessions: z.array(researchSessionSeedSchema).default([]),
   researchSyntheses: z.array(researchSynthesisSeedSchema).default([]),
   evidenceGaps: z.array(evidenceGapSeedSchema).default([]),
+  acquisitionTasks: z.array(acquisitionTaskSeedSchema).default([]),
+  monitoringItems: z.array(monitoringItemSeedSchema).default([]),
   evidenceBundles: z.array(evidenceBundleSeedSchema).default([]),
   evidenceChanges: z.array(evidenceChangeSeedSchema).default([]),
   resolutionSignals: z.array(z.string().min(1)).min(1),

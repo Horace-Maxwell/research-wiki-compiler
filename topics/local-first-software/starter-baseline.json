@@ -30,11 +30,11 @@
     },
     {
       "logicalPath": "obsidian-vault/00 Atlas/Maintenance Rhythm.md",
-      "sha256": "c5ab3ca33d3ef6639e92ffb2b050d6b8e2144f4b0e21d08994453f43277a37ba"
+      "sha256": "35d57c3ed53c8621d280e999099d518a2efd1f05aca65f54416ad4564ec3ea11"
     },
     {
       "logicalPath": "obsidian-vault/00 Atlas/Monitoring.md",
-      "sha256": "6f965f835a135091b872ef465bc86e711b196a3a1c19b490a320633e47bb4d7f"
+      "sha256": "1ec9c4e071c9333045bb531867fb9f63561a21117fd46044a38f05dad67aa1eb"
     },
     {
       "logicalPath": "obsidian-vault/00 Atlas/Open Questions.md",
@@ -74,11 +74,11 @@
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/Local-First Software maintenance rhythm.md",
-      "sha256": "e49c06fdf940721f26588f7a7e270006c6ce308f58e9c343fc100a06f10c6f5d"
+      "sha256": "0905f95344425e4589551652c69b985c608ec3f1eac74b068c340b1b0b6ce504"
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/Local-First Software maintenance watchpoints.md",
-      "sha256": "576a8df8ff2764c0dfbdebce7f2733f58f569e2602fc9ad2576615d7f4e501fb"
+      "sha256": "849d44dd57ee49dbbc0459be1954e8c129a80f4035df473aea070fa0bdf470c8"
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/Local-First Software open questions.md",
@@ -134,7 +134,7 @@
     },
     {
       "logicalPath": "topic.json",
-      "sha256": "3b6eb3c8b45e045038b54b9b5ff78797624e9b1302b900e26ab2d8858b1c8577"
+      "sha256": "ca95f55a48d9d824b316e3380d162d16beb7635b9400dcb13f35a21638de4d70"
     },
     {
       "logicalPath": "workspace/audits/.gitkeep",
@@ -190,11 +190,11 @@
     },
     {
       "logicalPath": "workspace/wiki/syntheses/local-first-software-maintenance-rhythm.md",
-      "sha256": "e49c06fdf940721f26588f7a7e270006c6ce308f58e9c343fc100a06f10c6f5d"
+      "sha256": "0905f95344425e4589551652c69b985c608ec3f1eac74b068c340b1b0b6ce504"
     },
     {
       "logicalPath": "workspace/wiki/syntheses/local-first-software-maintenance-watchpoints.md",
-      "sha256": "576a8df8ff2764c0dfbdebce7f2733f58f569e2602fc9ad2576615d7f4e501fb"
+      "sha256": "849d44dd57ee49dbbc0459be1954e8c129a80f4035df473aea070fa0bdf470c8"
     },
     {
       "logicalPath": "workspace/wiki/syntheses/local-first-software-reading-paths.md",

@@ -11,7 +11,7 @@ This directory is the official end-to-end example workflow for the Research Wiki
 - `pipeline.json`: the source-controlled pipeline spec for corpus order, modes, and validation targets.
 - `reference-baseline.json`: the canonical hash baseline used by `npm run example:openclaw:validate`.
 - `evaluation/`: topic-maturity and topic-quality reports written by `npm run example:openclaw:evaluate`.
-- the rendered app also exposes the question-centered workflow through `/questions` and `/questions?topic=openclaw`.
+- the rendered app also exposes the workflow lanes through `/questions`, `/gaps`, `/acquisition`, `/sessions`, `/syntheses`, `/changes`, and `/monitoring`.
 
 ## Two execution modes
 
@@ -116,6 +116,10 @@ Start here:
 - portfolio route: `/topics`
 - question queue: `/questions`
 - topic question queue: `/questions?topic=openclaw`
+- acquisition queue: `/acquisition`
+- topic acquisition queue: `/acquisition?topic=openclaw`
+- monitoring queue: `/monitoring`
+- topic monitoring queue: `/monitoring?topic=openclaw`
 - topic home: `/topics/openclaw`
 - rendered route: `/examples/openclaw`
 - [`workspace/wiki/index.md`](workspace/wiki/index.md)

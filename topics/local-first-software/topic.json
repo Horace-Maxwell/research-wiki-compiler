@@ -1047,6 +1047,374 @@
       "resolutionSummary": null
     }
   ],
+  "acquisitionTasks": [
+    {
+      "id": "local-first-migration-promotion-pass",
+      "title": "Local-First Software migration promotion pass",
+      "summary": "This acquisition task turns the migration playbook into a bounded comparison pass instead of letting the next synthesis emerge by intuition.",
+      "status": "active",
+      "priority": "high",
+      "taskType": "comparison-pass",
+      "whyItMatters": "The topic matures when the migration playbook earns promotion for evidence-based reasons rather than just because it is the strongest-looking candidate.",
+      "evidenceTypeToCollect": "A compact comparison proving that migration pressure now outranks the other starter candidates for durable synthesis.",
+      "linkedEvidenceGapIds": [
+        "local-first-migration-promotion-gap"
+      ],
+      "linkedQuestionIds": [
+        "migration-playbook"
+      ],
+      "linkedSynthesisIds": [
+        "local-first-migration-playbook"
+      ],
+      "canonicalReviewTitles": [
+        "Schema migration pressure"
+      ],
+      "monitoringTitles": [
+        "Local-First Software maintenance watchpoints",
+        "Local-First Software maintenance rhythm"
+      ],
+      "suggestedSourceTypes": [
+        "maintenance note",
+        "bounded corpus note",
+        "review artifact"
+      ],
+      "suggestedSourceTargets": [
+        "Sync engines",
+        "Maintenance risks"
+      ],
+      "suggestedContextPackTitles": [
+        "Maintenance Triage",
+        "Explain Local-First Software"
+      ],
+      "suggestedPageTitles": [
+        "Schema migration pressure",
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions",
+        "Note: What should I revisit next for Local-First Software"
+      ],
+      "successCriteria": [
+        "The migration playbook clearly outranks the other candidates.",
+        "Maintenance rhythm, open questions, and watchpoints can all be updated from the same promotion decision."
+      ],
+      "nextSessionId": "session-migration-playbook",
+      "ingestionSurfaceTitles": [
+        "Schema migration pressure",
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions",
+        "Note: What should I revisit next for Local-First Software"
+      ],
+      "ingestionNextStep": "Update the migration concept page, maintenance rhythm, open questions, and operational handoff together if the playbook earns promotion.",
+      "resultSourceTitles": [],
+      "resultChangeIds": [
+        "local-first-software-maintenance-evidence-tightened"
+      ],
+      "resultSummary": null,
+      "maturityBlockerStages": [
+        "developing"
+      ],
+      "integratedAt": null
+    },
+    {
+      "id": "local-first-watchpoint-recurrence-capture",
+      "title": "Local-First Software watchpoint recurrence capture",
+      "summary": "This acquisition task keeps the watch surface honest by collecting repeated repair and conflict evidence before the monitoring synthesis hardens into durable guidance.",
+      "status": "queued",
+      "priority": "high",
+      "taskType": "watchpoint-follow-up",
+      "whyItMatters": "A useful watch surface should be grounded by repeated operator-facing signal, not by a single memorable concern.",
+      "evidenceTypeToCollect": "A repeated repair or conflict signal showing the same cue changes revisit order or operator behavior more than once.",
+      "linkedEvidenceGapIds": [
+        "local-first-watchpoint-recurrence-gap"
+      ],
+      "linkedQuestionIds": [
+        "conflict-repair-watchpoints"
+      ],
+      "linkedSynthesisIds": [
+        "local-first-maintenance-watchpoints-synthesis"
+      ],
+      "canonicalReviewTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "monitoringTitles": [
+        "Local-First Software maintenance watchpoints",
+        "Note: What should I revisit next for Local-First Software"
+      ],
+      "suggestedSourceTypes": [
+        "new source note",
+        "audit note",
+        "review artifact"
+      ],
+      "suggestedSourceTargets": [
+        "Maintenance risks",
+        "Sync engines"
+      ],
+      "suggestedContextPackTitles": [
+        "Maintenance Triage",
+        "Provenance And Review"
+      ],
+      "suggestedPageTitles": [
+        "Local-First Software maintenance watchpoints",
+        "Local-First Software current tensions",
+        "Local-First Software open questions",
+        "Note: What should I revisit next for Local-First Software"
+      ],
+      "successCriteria": [
+        "The same repair or conflict signal recurs in a later source, audit, or review artifact.",
+        "The maintenance rhythm would change in the same direction because of that repeated signal."
+      ],
+      "nextSessionId": "session-conflict-watchpoints",
+      "ingestionSurfaceTitles": [
+        "Local-First Software maintenance watchpoints",
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ],
+      "ingestionNextStep": "If the same signal recurs again, rewrite watchpoints and maintenance rhythm together instead of broadening the watch list by feel.",
+      "resultSourceTitles": [],
+      "resultChangeIds": [
+        "local-first-software-maintenance-evidence-tightened"
+      ],
+      "resultSummary": null,
+      "maturityBlockerStages": [
+        "maintained"
+      ],
+      "integratedAt": null
+    },
+    {
+      "id": "local-first-canonical-grounding-pass",
+      "title": "Local-First Software canonical grounding pass",
+      "summary": "This integrated acquisition task explains how the canonical entry became durable without pulling every unresolved local-first trade-off into the article layer.",
+      "status": "integrated",
+      "priority": "medium",
+      "taskType": "provenance-strengthening",
+      "whyItMatters": "Starter topics only become trustworthy when the entry page stays compact and grounded while tensions and questions remain visible elsewhere.",
+      "evidenceTypeToCollect": "A stable canonical framing that recurs across the bounded corpus without collapsing unresolved repair and migration work into the entry page.",
+      "linkedEvidenceGapIds": [
+        "local-first-canonical-grounding-gap"
+      ],
+      "linkedQuestionIds": [
+        "sync-assumptions-durable"
+      ],
+      "linkedSynthesisIds": [
+        "local-first-current-tensions-synthesis"
+      ],
+      "canonicalReviewTitles": [
+        "Local-First Software"
+      ],
+      "monitoringTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "suggestedSourceTypes": [
+        "bounded corpus note",
+        "source summary"
+      ],
+      "suggestedSourceTargets": [
+        "Local-first core ideas",
+        "Sync engines"
+      ],
+      "suggestedContextPackTitles": [
+        "Explain Local-First Software",
+        "Provenance And Review"
+      ],
+      "suggestedPageTitles": [
+        "Local-First Software",
+        "Sync engines",
+        "Local-First Software current tensions",
+        "Local-First Software open questions"
+      ],
+      "successCriteria": [
+        "The canonical entry can stay short and durable.",
+        "Unresolved trade-offs remain in tensions and open questions instead of leaking back into the entry page."
+      ],
+      "nextSessionId": "session-sync-canonical-boundary",
+      "ingestionSurfaceTitles": [
+        "Local-First Software",
+        "Sync engines",
+        "Local-First Software current tensions",
+        "Local-First Software open questions"
+      ],
+      "ingestionNextStep": "Keep the durable article boundary stable, then route later uncertainty into tensions, open questions, and future syntheses.",
+      "resultSourceTitles": [
+        "Local-first core ideas",
+        "Sync engines"
+      ],
+      "resultChangeIds": [
+        "local-first-software-canonical-boundary-remains-stable"
+      ],
+      "resultSummary": "The entry page now holds the shortest durable framing while the working surfaces carry the live migration and repair uncertainty.",
+      "maturityBlockerStages": [],
+      "integratedAt": "2026-04-05T13:00:00.000Z"
+    }
+  ],
+  "monitoringItems": [
+    {
+      "id": "local-first-maintenance-trigger-monitor",
+      "title": "Local-First Software maintenance trigger monitor",
+      "summary": "This monitoring item watches for maintenance evidence that should immediately sharpen the migration playbook boundary instead of just adding another note to the pile.",
+      "status": "spawned-acquisition",
+      "mode": "event-triggered",
+      "priority": "high",
+      "triggerAction": "spawn-acquisition",
+      "whyItMatters": "The system should turn meaningful maintenance movement into bounded acquisition work instead of generic review churn.",
+      "triggerSignals": [
+        "A new bounded source or audit sharpens which migration signal should be promoted next.",
+        "Maintenance rhythm and open questions start pointing to the same tighter promotion decision."
+      ],
+      "latestSignalSummary": "The latest maintenance evidence already makes the migration promotion path clearer, so the bounded comparison pass should be active now.",
+      "linkedWatchpointTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "linkedEvidenceGapIds": [],
+      "linkedAcquisitionTaskIds": [
+        "local-first-migration-promotion-pass"
+      ],
+      "linkedChangeIds": [
+        "local-first-software-maintenance-evidence-tightened"
+      ],
+      "linkedQuestionIds": [
+        "migration-playbook"
+      ],
+      "linkedSynthesisIds": [
+        "local-first-migration-playbook"
+      ],
+      "canonicalReviewTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "reviewSurfaceTitles": [
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ],
+      "suggestedContextPackTitles": [
+        "Maintenance Triage",
+        "Explain Local-First Software"
+      ],
+      "suggestedPageTitles": [
+        "Schema migration pressure",
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ],
+      "spawnSessionId": "session-migration-playbook",
+      "nextCheck": "Re-check after the active migration session or whenever a new bounded evidence pass changes revisit order again.",
+      "recommendedAction": "Keep the migration promotion pass bounded, then update maintenance rhythm and open questions from the same decision rather than widening the whole topic.",
+      "maturityImpactStages": [
+        "developing"
+      ],
+      "lastCheckedAt": "2026-04-05T22:00:00.000Z",
+      "triggeredAt": "2026-04-05T22:00:00.000Z",
+      "stableSince": null
+    },
+    {
+      "id": "local-first-watchpoint-recurrence-monitor",
+      "title": "Local-First Software watchpoint recurrence monitor",
+      "summary": "This monitoring item distinguishes passive watchfulness from the moment repeated repair evidence should actually spawn new acquisition work.",
+      "status": "watching",
+      "mode": "periodic-review",
+      "priority": "high",
+      "triggerAction": "spawn-acquisition",
+      "whyItMatters": "Monitoring only becomes useful when it has a clear boundary for when the system should collect more evidence instead of merely keeping an eye on things.",
+      "triggerSignals": [
+        "The same repair or conflict signal appears in a later source, audit, or review artifact.",
+        "The maintenance rhythm would change for the same reason twice."
+      ],
+      "latestSignalSummary": "The watch surface is useful, but it still lacks repeated evidence showing that the same repair or conflict signal changes operator behavior more than once.",
+      "linkedWatchpointTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "linkedEvidenceGapIds": [
+        "local-first-watchpoint-recurrence-gap"
+      ],
+      "linkedAcquisitionTaskIds": [
+        "local-first-watchpoint-recurrence-capture"
+      ],
+      "linkedChangeIds": [
+        "local-first-software-maintenance-evidence-tightened"
+      ],
+      "linkedQuestionIds": [
+        "conflict-repair-watchpoints"
+      ],
+      "linkedSynthesisIds": [
+        "local-first-maintenance-watchpoints-synthesis"
+      ],
+      "canonicalReviewTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "reviewSurfaceTitles": [
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ],
+      "suggestedContextPackTitles": [
+        "Maintenance Triage",
+        "Provenance And Review"
+      ],
+      "suggestedPageTitles": [
+        "Local-First Software maintenance watchpoints",
+        "Local-First Software current tensions",
+        "Local-First Software open questions",
+        "Note: What should I revisit next for Local-First Software"
+      ],
+      "spawnSessionId": "session-conflict-watchpoints",
+      "nextCheck": "Re-check after the next source addition, audit pass, or review concern that names the same repair signal again.",
+      "recommendedAction": "If the same signal recurs again, run the watchpoint recurrence acquisition task instead of broadening the monitoring surface by feel.",
+      "maturityImpactStages": [
+        "maintained"
+      ],
+      "lastCheckedAt": "2026-04-05T21:30:00.000Z",
+      "triggeredAt": null,
+      "stableSince": null
+    },
+    {
+      "id": "local-first-canonical-boundary-stability-monitor",
+      "title": "Local-First Software canonical boundary stability monitor",
+      "summary": "This monitoring item keeps the durable article boundary explicit so the topic knows when not to rewrite the entry page just because maintenance moved.",
+      "status": "stable",
+      "mode": "passive",
+      "priority": "medium",
+      "triggerAction": "keep-watching",
+      "whyItMatters": "A change-aware system should also preserve stable article boundaries, not only surface new work.",
+      "triggerSignals": [
+        "A new source changes the top-level framing instead of only maintenance sequencing.",
+        "Tensions or watchpoints force a different short durable definition of the topic."
+      ],
+      "latestSignalSummary": "Recent evidence changed maintenance and monitoring posture more than it changed the top-level durable explanation.",
+      "linkedWatchpointTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "linkedEvidenceGapIds": [
+        "local-first-canonical-grounding-gap"
+      ],
+      "linkedAcquisitionTaskIds": [],
+      "linkedChangeIds": [
+        "local-first-software-canonical-boundary-remains-stable"
+      ],
+      "linkedQuestionIds": [
+        "sync-assumptions-durable"
+      ],
+      "linkedSynthesisIds": [
+        "local-first-current-tensions-synthesis"
+      ],
+      "canonicalReviewTitles": [
+        "Local-First Software"
+      ],
+      "reviewSurfaceTitles": [
+        "Local-First Software current tensions",
+        "Local-First Software reading paths"
+      ],
+      "suggestedContextPackTitles": [
+        "Explain Local-First Software"
+      ],
+      "suggestedPageTitles": [
+        "Local-First Software",
+        "Sync engines",
+        "Local-First Software current tensions"
+      ],
+      "spawnSessionId": "session-sync-canonical-boundary",
+      "nextCheck": "Re-check only after a new source changes the core framing rather than the surrounding maintenance logic.",
+      "recommendedAction": "Keep the canonical entry stable and spend the next pass on maintenance and monitoring surfaces unless the top-level story itself moves.",
+      "maturityImpactStages": [],
+      "lastCheckedAt": "2026-04-05T23:00:00.000Z",
+      "triggeredAt": null,
+      "stableSince": "2026-04-05T23:00:00.000Z"
+    }
+  ],
   "evidenceBundles": [
     {
       "id": "local-first-software-canonical-boundary-evidence",

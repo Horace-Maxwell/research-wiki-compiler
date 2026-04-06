@@ -63,10 +63,22 @@ Open the portfolio-wide question workflow:
 /questions
 ```
 
+Open the portfolio-wide acquisition workflow:
+
+```text
+/acquisition
+```
+
+Open the portfolio-wide monitoring workflow:
+
+```text
+/monitoring
+```
+
 ## What belongs where
 
 - `topic.json`
-  The source-controlled starter contract for the topic, including starter research questions that drive the question queue.
+  The source-controlled starter contract for the topic, including research questions, evidence gaps, acquisition tasks, and monitoring items.
 - `source-corpus/`
   The bounded input corpus for the starter topic.
 - `workspace/wiki/`

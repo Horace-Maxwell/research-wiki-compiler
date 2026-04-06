@@ -3,7 +3,7 @@ title: OpenClaw Example Index
 slug: index
 type: index
 created_at: '2026-04-05T19:36:54.425Z'
-updated_at: '2026-04-05T19:36:59.838Z'
+updated_at: '2026-04-05T19:37:00.693Z'
 status: active
 aliases:
   - OpenClaw MOC

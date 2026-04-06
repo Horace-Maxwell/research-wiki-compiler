@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-04-06T04:22:54.051Z",
+  "generatedAt": "2026-04-06T05:05:26.236Z",
   "target": {
     "kind": "example",
     "id": "openclaw",
@@ -444,13 +444,13 @@
       "summary": "Monitoring / Watchpoints is doing its job cleanly.",
       "evidence": [
         "4/4 expected headings matched.",
-        "199 body words.",
-        "11 wiki links.",
-        "15 bullet items and 0 ordered steps.",
+        "869 body words.",
+        "27 wiki links.",
+        "64 bullet items and 0 ordered steps.",
         "3/3 expected headings matched.",
-        "145 body words.",
-        "5 wiki links.",
-        "9 bullet items and 0 ordered steps.",
+        "815 body words.",
+        "27 wiki links.",
+        "58 bullet items and 0 ordered steps.",
         "0/1 expected headings matched.",
         "287 body words.",
         "3 wiki links.",
@@ -473,13 +473,13 @@
       "summary": "Maintenance Rhythm is doing its job cleanly.",
       "evidence": [
         "9/9 expected headings matched.",
-        "2315 body words.",
-        "80 wiki links.",
-        "130 bullet items and 0 ordered steps.",
+        "3410 body words.",
+        "107 wiki links.",
+        "210 bullet items and 0 ordered steps.",
         "7/7 expected headings matched.",
-        "1874 body words.",
-        "51 wiki links.",
-        "112 bullet items and 0 ordered steps."
+        "2969 body words.",
+        "90 wiki links.",
+        "192 bullet items and 0 ordered steps."
       ],
       "issues": []
     },

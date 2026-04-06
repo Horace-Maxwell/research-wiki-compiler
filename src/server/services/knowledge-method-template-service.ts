@@ -1,5 +1,7 @@
+import type { AcquisitionTaskSeed } from "@/lib/contracts/acquisition-task";
 import type { EvidenceBundleSeed, EvidenceChangeSeed } from "@/lib/contracts/evidence-change";
 import type { EvidenceGapSeed } from "@/lib/contracts/evidence-gap";
+import type { MonitoringItemSeed } from "@/lib/contracts/monitoring-item";
 import type { ResearchQuestionSeed, ResearchQuestionStatus } from "@/lib/contracts/research-question";
 import type { ResearchSessionSeed } from "@/lib/contracts/research-session";
 import type { ResearchSynthesisSeed } from "@/lib/contracts/research-synthesis";
@@ -83,6 +85,8 @@ export type KnowledgeMethodTemplateData = {
   researchSessions: ResearchSessionSeed[];
   researchSyntheses: ResearchSynthesisSeed[];
   evidenceGaps: EvidenceGapSeed[];
+  acquisitionTasks: AcquisitionTaskSeed[];
+  monitoringItems: MonitoringItemSeed[];
   evidenceBundles: EvidenceBundleSeed[];
   evidenceChanges: EvidenceChangeSeed[];
   resolutionSignals: string[];
@@ -893,6 +897,400 @@ function buildNextEvidenceSection(
     .trim();
 }
 
+function findEvidenceGap(
+  data: KnowledgeMethodTemplateData,
+  gapId: string,
+) {
+  return data.evidenceGaps.find((gap) => gap.id === gapId) ?? null;
+}
+
+function acquisitionTaskStatusWeight(status: AcquisitionTaskSeed["status"]) {
+  switch (status) {
+    case "active":
+      return 0;
+    case "queued":
+      return 1;
+    case "captured":
+      return 2;
+    case "integrated":
+    default:
+      return 3;
+  }
+}
+
+function acquisitionTaskPriorityWeight(priority: AcquisitionTaskSeed["priority"]) {
+  switch (priority) {
+    case "high":
+      return 0;
+    case "medium":
+      return 1;
+    case "low":
+    default:
+      return 2;
+  }
+}
+
+function sortAcquisitionTasks(tasks: AcquisitionTaskSeed[]) {
+  return [...tasks].sort((left, right) => {
+    const statusDifference =
+      acquisitionTaskStatusWeight(left.status) - acquisitionTaskStatusWeight(right.status);
+
+    if (statusDifference !== 0) {
+      return statusDifference;
+    }
+
+    const maturityDifference =
+      right.maturityBlockerStages.length - left.maturityBlockerStages.length;
+
+    if (maturityDifference !== 0) {
+      return maturityDifference;
+    }
+
+    const priorityDifference =
+      acquisitionTaskPriorityWeight(left.priority) - acquisitionTaskPriorityWeight(right.priority);
+
+    if (priorityDifference !== 0) {
+      return priorityDifference;
+    }
+
+    return left.title.localeCompare(right.title);
+  });
+}
+
+function humanizeAcquisitionTaskStatus(status: AcquisitionTaskSeed["status"]) {
+  return status.replace(/-/g, " ");
+}
+
+function humanizeAcquisitionTaskType(taskType: AcquisitionTaskSeed["taskType"]) {
+  return taskType.replace(/-/g, " ");
+}
+
+function unresolvedAcquisitionTasks(data: KnowledgeMethodTemplateData) {
+  return sortAcquisitionTasks(
+    data.acquisitionTasks.filter((task) => task.status !== "integrated"),
+  );
+}
+
+function recentIntegratedAcquisitionTasks(data: KnowledgeMethodTemplateData) {
+  return sortAcquisitionTasks(
+    data.acquisitionTasks.filter((task) => task.status === "integrated"),
+  ).slice(0, 3);
+}
+
+function buildAcquisitionQueueSection(
+  data: KnowledgeMethodTemplateData,
+  contextPackFormatter: (title: string) => string = wikiLink,
+) {
+  const unresolved = unresolvedAcquisitionTasks(data);
+  const recentIntegrated = recentIntegratedAcquisitionTasks(data);
+  const tasks = unresolved.length > 0 ? unresolved : recentIntegrated;
+
+  if (tasks.length === 0) {
+    return [
+      "## Acquisition queue",
+      "",
+      "- No acquisition tasks are seeded yet.",
+    ].join("\n");
+  }
+
+  return [
+    "## Acquisition queue",
+    "",
+    ...tasks.flatMap((task) => {
+      const session = task.nextSessionId ? findResearchSession(data, task.nextSessionId) : null;
+      const lines = [
+        `### ${task.title}`,
+        "",
+        `- **Status**: ${humanizeAcquisitionTaskStatus(task.status)}`,
+        `- **Task type**: ${humanizeAcquisitionTaskType(task.taskType)}`,
+        `- **Collect**: ${task.evidenceTypeToCollect}`,
+        `- **Why it matters**: ${task.whyItMatters}`,
+      ];
+
+      if (task.linkedEvidenceGapIds.length > 0) {
+        lines.push(
+          `- **Closes gaps**: ${uniqueTitles(
+            task.linkedEvidenceGapIds.map(
+              (gapId) => findEvidenceGap(data, gapId)?.title ?? gapId,
+            ),
+          ).join("; ")}`,
+        );
+      }
+
+      if (task.suggestedSourceTargets.length > 0) {
+        lines.push(`- **Start with sources**: ${task.suggestedSourceTargets.join("; ")}`);
+      }
+
+      if (task.suggestedSourceTypes.length > 0) {
+        lines.push(`- **Source types**: ${task.suggestedSourceTypes.join("; ")}`);
+      }
+
+      if (task.suggestedContextPackTitles.length > 0) {
+        lines.push(
+          `- **Load first**: ${formatContextPackList(
+            task.suggestedContextPackTitles,
+            contextPackFormatter,
+          )}`,
+        );
+      }
+
+      if (task.suggestedPageTitles.length > 0) {
+        lines.push(`- **Inspect pages**: ${formatQuestionWikiLinks(task.suggestedPageTitles)}`);
+      }
+
+      if (session) {
+        lines.push(`- **Session handoff**: ${session.title}`);
+      }
+
+      lines.push(`- **Ingestion step**: ${task.ingestionNextStep}`);
+
+      if (task.linkedQuestionIds.length > 0) {
+        lines.push(
+          `- **Unlocks questions**: ${formatEvidenceGapQuestions(data, task.linkedQuestionIds)}`,
+        );
+      }
+
+      if (task.linkedSynthesisIds.length > 0) {
+        lines.push(
+          `- **Unlocks syntheses**: ${formatEvidenceGapSyntheses(
+            data,
+            task.linkedSynthesisIds,
+          )}`,
+        );
+      }
+
+      if (task.maturityBlockerStages.length > 0) {
+        lines.push(`- **Maturity impact**: blocks ${task.maturityBlockerStages.join("; ")}`);
+      }
+
+      if (task.status === "integrated" && task.resultSummary) {
+        lines.push(`- **Integrated result**: ${task.resultSummary}`);
+      }
+
+      lines.push(`- **Done means**: ${task.successCriteria.join("; ")}`);
+      lines.push("");
+
+      return lines;
+    }),
+  ]
+    .join("\n")
+    .trim();
+}
+
+function findAcquisitionTask(
+  data: KnowledgeMethodTemplateData,
+  taskId: string,
+) {
+  return data.acquisitionTasks.find((task) => task.id === taskId) ?? null;
+}
+
+function monitoringStatusWeight(status: MonitoringItemSeed["status"]) {
+  switch (status) {
+    case "spawned-acquisition":
+      return 0;
+    case "triggered":
+      return 1;
+    case "review-needed":
+      return 2;
+    case "watching":
+      return 3;
+    case "stable":
+    default:
+      return 4;
+  }
+}
+
+function monitoringPriorityWeight(priority: MonitoringItemSeed["priority"]) {
+  switch (priority) {
+    case "high":
+      return 0;
+    case "medium":
+      return 1;
+    case "low":
+    default:
+      return 2;
+  }
+}
+
+function sortMonitoringItems(items: MonitoringItemSeed[]) {
+  return [...items].sort((left, right) => {
+    const statusDifference =
+      monitoringStatusWeight(left.status) - monitoringStatusWeight(right.status);
+
+    if (statusDifference !== 0) {
+      return statusDifference;
+    }
+
+    const priorityDifference =
+      monitoringPriorityWeight(left.priority) - monitoringPriorityWeight(right.priority);
+
+    if (priorityDifference !== 0) {
+      return priorityDifference;
+    }
+
+    return left.title.localeCompare(right.title);
+  });
+}
+
+function humanizeMonitoringStatus(status: MonitoringItemSeed["status"]) {
+  return status.replace(/-/g, " ");
+}
+
+function humanizeMonitoringMode(mode: MonitoringItemSeed["mode"]) {
+  return mode.replace(/-/g, " ");
+}
+
+function humanizeMonitoringTriggerAction(action: MonitoringItemSeed["triggerAction"]) {
+  return action.replace(/-/g, " ");
+}
+
+function buildMonitoringQueueSection(
+  data: KnowledgeMethodTemplateData,
+  contextPackFormatter: (title: string) => string = wikiLink,
+) {
+  const items = sortMonitoringItems(data.monitoringItems);
+
+  if (items.length === 0) {
+    return [
+      "## Monitoring queue",
+      "",
+      "- No monitoring items are seeded yet.",
+    ].join("\n");
+  }
+
+  return [
+    "## Monitoring queue",
+    "",
+    ...items.flatMap((item) => {
+      const session = item.spawnSessionId ? findResearchSession(data, item.spawnSessionId) : null;
+      const lines = [
+        `### ${item.title}`,
+        "",
+        `- **Status**: ${humanizeMonitoringStatus(item.status)}`,
+        `- **Mode**: ${humanizeMonitoringMode(item.mode)}`,
+        `- **Trigger behavior**: ${humanizeMonitoringTriggerAction(item.triggerAction)}`,
+        `- **Latest signal**: ${item.latestSignalSummary}`,
+        `- **Why it matters**: ${item.whyItMatters}`,
+        `- **Next check**: ${item.nextCheck}`,
+      ];
+
+      if (item.suggestedContextPackTitles.length > 0) {
+        lines.push(
+          `- **Load first**: ${formatContextPackList(
+            item.suggestedContextPackTitles,
+            contextPackFormatter,
+          )}`,
+        );
+      }
+
+      if (item.suggestedPageTitles.length > 0) {
+        lines.push(`- **Inspect pages**: ${formatQuestionWikiLinks(item.suggestedPageTitles)}`);
+      }
+
+      if (item.linkedAcquisitionTaskIds.length > 0) {
+        lines.push(
+          `- **Spawn task**: ${uniqueTitles(
+            item.linkedAcquisitionTaskIds.map(
+              (taskId) => findAcquisitionTask(data, taskId)?.title ?? taskId,
+            ),
+          ).join("; ")}`,
+        );
+      }
+
+      if (session) {
+        lines.push(`- **Session handoff**: ${session.title}`);
+      }
+
+      if (item.linkedChangeIds.length > 0) {
+        lines.push(
+          `- **Recent changes**: ${uniqueTitles(
+            item.linkedChangeIds.map(
+              (changeId) =>
+                data.evidenceChanges.find((change) => change.id === changeId)?.title ?? changeId,
+            ),
+          ).join("; ")}`,
+        );
+      }
+
+      if (item.canonicalReviewTitles.length > 0) {
+        lines.push(`- **Review surfaces**: ${formatQuestionWikiLinks(item.canonicalReviewTitles)}`);
+      }
+
+      lines.push(`- **Recommended action**: ${item.recommendedAction}`);
+      lines.push("");
+
+      return lines;
+    }),
+  ]
+    .join("\n")
+    .trim();
+}
+
+function buildMonitoringEscalationSection(data: KnowledgeMethodTemplateData) {
+  const items = sortMonitoringItems(
+    data.monitoringItems.filter(
+      (item) =>
+        item.triggerAction === "spawn-acquisition" || item.triggerAction === "reopen-work",
+    ),
+  );
+
+  if (items.length === 0) {
+    return ["## Escalate into acquisition", "", "- No monitoring item currently escalates into acquisition work."].join("\n");
+  }
+
+  return [
+    "## Escalate into acquisition",
+    "",
+    ...items.flatMap((item) => {
+      const taskTitles = uniqueTitles(
+        item.linkedAcquisitionTaskIds.map(
+          (taskId) => findAcquisitionTask(data, taskId)?.title ?? taskId,
+        ),
+      );
+
+      return [
+        `### ${item.title}`,
+        "",
+        `- **Trigger behavior**: ${humanizeMonitoringTriggerAction(item.triggerAction)}`,
+        `- **Latest signal**: ${item.latestSignalSummary}`,
+        taskTitles.length > 0 ? `- **Spawn task**: ${taskTitles.join("; ")}` : null,
+        `- **Recommended action**: ${item.recommendedAction}`,
+        "",
+      ].filter((line): line is string => Boolean(line));
+    }),
+  ]
+    .join("\n")
+    .trim();
+}
+
+function buildReviewOnlyMonitoringSection(data: KnowledgeMethodTemplateData) {
+  const items = sortMonitoringItems(
+    data.monitoringItems.filter(
+      (item) =>
+        item.triggerAction === "mark-review" || item.triggerAction === "keep-watching",
+    ),
+  );
+
+  if (items.length === 0) {
+    return ["## Review-only signals", "", "- No monitoring item is currently modeled as review-only."].join("\n");
+  }
+
+  return [
+    "## Review-only signals",
+    "",
+    ...items.flatMap((item) => [
+      `### ${item.title}`,
+      "",
+      `- **Status**: ${humanizeMonitoringStatus(item.status)}`,
+      `- **Latest signal**: ${item.latestSignalSummary}`,
+      `- **Recommended action**: ${item.recommendedAction}`,
+      "",
+    ]),
+  ]
+    .join("\n")
+    .trim();
+}
+
 function evidenceChangeStateWeight(state: EvidenceChangeSeed["state"]) {
   switch (state) {
     case "reopened":
@@ -1482,6 +1880,9 @@ function buildWikiMaintenanceWatchpointsPage(data: KnowledgeMethodTemplateData) 
       data.canonicalSurfaces.slice(1, 4).map((surface) => surface.title),
     ),
   ).filter((title) => titleKey(title) !== titleKey(data.maintenanceWatchpointsTitle));
+  const monitoringQueueSection = buildMonitoringQueueSection(data, (title) => `\`${title}\``);
+  const monitoringEscalationSection = buildMonitoringEscalationSection(data);
+  const reviewOnlySection = buildReviewOnlyMonitoringSection(data);
 
   return [
     `# ${data.maintenanceWatchpointsTitle}`,
@@ -1502,6 +1903,12 @@ function buildWikiMaintenanceWatchpointsPage(data: KnowledgeMethodTemplateData) 
     ...data.contextPackRefreshes.map(
       (item) => `- ${item.title}: refresh when ${item.trigger}.`,
     ),
+    "",
+    monitoringQueueSection,
+    "",
+    monitoringEscalationSection,
+    "",
+    reviewOnlySection,
     "",
     "## Action path",
     "",
@@ -1524,6 +1931,8 @@ function buildWikiMaintenanceRhythmPage(data: KnowledgeMethodTemplateData) {
   const sessionQueueSection = buildResearchSessionQueueSection(data, (title) => `\`${title}\``);
   const synthesisDecisionSection = buildSynthesisDecisionSection(data);
   const nextEvidenceSection = buildNextEvidenceSection(data, (title) => `\`${title}\``);
+  const acquisitionQueueSection = buildAcquisitionQueueSection(data, (title) => `\`${title}\``);
+  const monitoringQueueSection = buildMonitoringQueueSection(data, (title) => `\`${title}\``);
   const evidenceChangeSection = buildEvidenceChangeSection(data);
 
   return [
@@ -1555,6 +1964,10 @@ function buildWikiMaintenanceRhythmPage(data: KnowledgeMethodTemplateData) {
     synthesisDecisionSection,
     "",
     nextEvidenceSection,
+    "",
+    acquisitionQueueSection,
+    "",
+    monitoringQueueSection,
     "",
     evidenceChangeSection,
     "",
@@ -1784,6 +2197,10 @@ ${data.synthesisCandidates
 }
 
 function buildObsidianMonitoringNote(data: KnowledgeMethodTemplateData) {
+  const monitoringQueueSection = buildMonitoringQueueSection(data);
+  const monitoringEscalationSection = buildMonitoringEscalationSection(data);
+  const reviewOnlySection = buildReviewOnlyMonitoringSection(data);
+
   return `# Monitoring
 
 ## What to monitor
@@ -1795,6 +2212,12 @@ ${formatSurfaceBullets(data.monitoringSurfaces)}
 ${data.contextPackRefreshes
   .map((item) => `- ${item.title}: refresh when ${item.trigger}.`)
   .join("\n")}
+
+${monitoringQueueSection}
+
+${monitoringEscalationSection}
+
+${reviewOnlySection}
 
 ## Escalation path
 
@@ -1808,6 +2231,8 @@ function buildObsidianMaintenanceRhythmNote(data: KnowledgeMethodTemplateData) {
   const sessionQueueSection = buildResearchSessionQueueSection(data);
   const synthesisDecisionSection = buildSynthesisDecisionSection(data);
   const nextEvidenceSection = buildNextEvidenceSection(data);
+  const acquisitionQueueSection = buildAcquisitionQueueSection(data);
+  const monitoringQueueSection = buildMonitoringQueueSection(data);
   const evidenceChangeSection = buildEvidenceChangeSection(data);
 
   return `# Maintenance Rhythm
@@ -1830,6 +2255,10 @@ ${sessionQueueSection}
 ${synthesisDecisionSection}
 
 ${nextEvidenceSection}
+
+${acquisitionQueueSection}
+
+${monitoringQueueSection}
 
 ${evidenceChangeSection}
 

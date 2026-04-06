@@ -3,11 +3,13 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 
+import type { AcquisitionTaskSeed } from "@/lib/contracts/acquisition-task";
 import type {
   EvidenceBundleSeed,
   EvidenceChangeSeed,
 } from "@/lib/contracts/evidence-change";
 import type { EvidenceGapSeed } from "@/lib/contracts/evidence-gap";
+import type { MonitoringItemSeed } from "@/lib/contracts/monitoring-item";
 import type { WikiFrontmatter, WikiPageType } from "@/lib/contracts/wiki";
 import type { ResearchQuestionSeed } from "@/lib/contracts/research-question";
 import type { ResearchSessionSeed } from "@/lib/contracts/research-session";
@@ -1290,6 +1292,306 @@ function buildDefaultEvidenceChanges(params: {
   ];
 }
 
+function buildDefaultAcquisitionTasks(params: {
+  title: string;
+  titles: ReturnType<typeof buildSurfaceTitleBundle>;
+  researchQuestions: ResearchQuestionSeed[];
+  researchSessions: ResearchSessionSeed[];
+  researchSyntheses: ResearchSynthesisSeed[];
+  evidenceGaps: EvidenceGapSeed[];
+  evidenceChanges: EvidenceChangeSeed[];
+  corpusFiles: TopicBootstrapCorpusFile[];
+  seedTimestamp: string;
+}): AcquisitionTaskSeed[] {
+  const [boundaryQuestion, monitoringQuestion, synthesisQuestion] = params.researchQuestions;
+  const [boundarySession, synthesisSession, watchpointSession] = params.researchSessions;
+  const [tensionsSynthesis, watchpointSynthesis, , secondCandidate] = params.researchSyntheses;
+  const [canonicalGap, watchpointGap, synthesisGap] = params.evidenceGaps;
+  const [maintenanceChange, canonicalStableChange] = params.evidenceChanges;
+  const corpusTitles = params.corpusFiles.map((file) => file.title);
+  const starterCorpus = corpusTitles.length > 0 ? corpusTitles : [`${params.title} starter corpus`];
+
+  return [
+    {
+      id:
+        slugifyTitle(`${params.title}-synthesis-promotion-pass`) ||
+        "synthesis-promotion-pass",
+      title: `${params.title} synthesis promotion pass`,
+      summary:
+        "This acquisition task turns the strongest candidate into a bounded comparison pass instead of letting the next synthesis emerge by intuition.",
+      status: synthesisSession?.status === "completed" ? "captured" : "active",
+      priority: "high",
+      taskType: "comparison-pass",
+      whyItMatters:
+        "A topic matures when one synthesis earns promotion for inspectable reasons rather than because it is merely available.",
+      evidenceTypeToCollect:
+        "A compact comparison proving why one synthesis candidate now outranks the others.",
+      linkedEvidenceGapIds: synthesisGap ? [synthesisGap.id] : [],
+      linkedQuestionIds: synthesisQuestion ? [synthesisQuestion.id] : [],
+      linkedSynthesisIds: secondCandidate ? [secondCandidate.id] : [],
+      canonicalReviewTitles: [params.title],
+      monitoringTitles: [params.titles.maintenanceWatchpoints, params.titles.maintenanceRhythm],
+      suggestedSourceTypes: ["maintenance note", "bounded corpus note", "review artifact"],
+      suggestedSourceTargets: starterCorpus.slice(0, 2),
+      suggestedContextPackTitles: ["Maintenance Triage", `Explain ${params.title}`],
+      suggestedPageTitles: [
+        params.titles.maintenanceRhythm,
+        params.titles.currentTensions,
+        params.titles.openQuestions,
+      ],
+      successCriteria: [
+        "One synthesis candidate clearly outranks the others.",
+        "Maintenance rhythm and open questions can both be updated from the same promotion decision.",
+      ],
+      nextSessionId: synthesisSession?.id ?? null,
+      ingestionSurfaceTitles: [
+        params.titles.maintenanceRhythm,
+        params.titles.openQuestions,
+        params.titles.operationalNote,
+      ],
+      ingestionNextStep:
+        "Update maintenance rhythm, open questions, and the operational handoff in one pass so the promotion is visible everywhere.",
+      resultSourceTitles: [],
+      resultChangeIds: maintenanceChange ? [maintenanceChange.id] : [],
+      resultSummary: null,
+      maturityBlockerStages: ["developing"],
+      integratedAt: null,
+    },
+    {
+      id:
+        slugifyTitle(`${params.title}-watchpoint-recurrence-capture`) ||
+        "watchpoint-recurrence-capture",
+      title: `${params.title} watchpoint recurrence capture`,
+      summary:
+        "This acquisition task keeps monitoring honest by collecting repeated operator-facing evidence before the watch surface hardens into durable guidance.",
+      status: watchpointSession?.status === "active" ? "active" : "queued",
+      priority: "high",
+      taskType: "watchpoint-follow-up",
+      whyItMatters:
+        "A good watch surface should be grounded by repeated signal, not by a single memorable concern.",
+      evidenceTypeToCollect:
+        "A repeated signal showing the same monitoring cue changes revisit order or operator behavior more than once.",
+      linkedEvidenceGapIds: watchpointGap ? [watchpointGap.id] : [],
+      linkedQuestionIds: monitoringQuestion ? [monitoringQuestion.id] : [],
+      linkedSynthesisIds: watchpointSynthesis ? [watchpointSynthesis.id] : [],
+      canonicalReviewTitles: [params.titles.maintenanceWatchpoints],
+      monitoringTitles: [params.titles.maintenanceWatchpoints, params.titles.operationalNote],
+      suggestedSourceTypes: ["new source note", "audit note", "review artifact"],
+      suggestedSourceTargets: starterCorpus.slice(-2),
+      suggestedContextPackTitles: ["Maintenance Triage", "Provenance And Review"],
+      suggestedPageTitles: [
+        params.titles.maintenanceWatchpoints,
+        params.titles.maintenanceRhythm,
+        params.titles.openQuestions,
+        params.titles.operationalNote,
+      ],
+      successCriteria: [
+        "The same watch signal recurs in a later source, audit, or review artifact.",
+        "The maintenance rhythm would change in the same direction because of that repeated signal.",
+      ],
+      nextSessionId: watchpointSession?.id ?? null,
+      ingestionSurfaceTitles: [
+        params.titles.maintenanceWatchpoints,
+        params.titles.maintenanceRhythm,
+        params.titles.openQuestions,
+      ],
+      ingestionNextStep:
+        "If the signal recurs again, rewrite watchpoints and maintenance rhythm together instead of broadening the watch list by feel.",
+      resultSourceTitles: [],
+      resultChangeIds: maintenanceChange ? [maintenanceChange.id] : [],
+      resultSummary: null,
+      maturityBlockerStages: ["maintained"],
+      integratedAt: null,
+    },
+    {
+      id:
+        slugifyTitle(`${params.title}-canonical-grounding-pass`) ||
+        "canonical-grounding-pass",
+      title: `${params.title} canonical grounding pass`,
+      summary:
+        "This integrated acquisition task explains how the canonical entry became durable without pulling every unresolved thread into the article layer.",
+      status: "integrated",
+      priority: "medium",
+      taskType: "provenance-strengthening",
+      whyItMatters:
+        "Starter topics only become trustworthy when the entry page stays compact and grounded while tensions and questions remain visible elsewhere.",
+      evidenceTypeToCollect:
+        "A stable canonical framing that recurs across the bounded corpus without collapsing unresolved work into the entry page.",
+      linkedEvidenceGapIds: canonicalGap ? [canonicalGap.id] : [],
+      linkedQuestionIds: boundaryQuestion ? [boundaryQuestion.id] : [],
+      linkedSynthesisIds: tensionsSynthesis ? [tensionsSynthesis.id] : [],
+      canonicalReviewTitles: [params.title],
+      monitoringTitles: [params.titles.maintenanceWatchpoints],
+      suggestedSourceTypes: ["bounded corpus note", "source summary"],
+      suggestedSourceTargets: starterCorpus.slice(0, 2),
+      suggestedContextPackTitles: [`Explain ${params.title}`, "Provenance And Review"],
+      suggestedPageTitles: [params.title, params.titles.currentTensions, params.titles.openQuestions],
+      successCriteria: [
+        "The canonical entry can stay short and durable.",
+        "Unresolved trade-offs remain in tensions and open questions instead of leaking back into the entry page.",
+      ],
+      nextSessionId: boundarySession?.id ?? null,
+      ingestionSurfaceTitles: [params.title, params.titles.currentTensions, params.titles.openQuestions],
+      ingestionNextStep:
+        "Keep the durable article boundary stable, then route later uncertainty into tensions, open questions, and future syntheses.",
+      resultSourceTitles: starterCorpus.slice(0, 2),
+      resultChangeIds: canonicalStableChange ? [canonicalStableChange.id] : [],
+      resultSummary:
+        "The entry page now holds the shortest durable framing while maintenance and synthesis surfaces carry the live uncertainty.",
+      maturityBlockerStages: [],
+      integratedAt: boundarySession?.sessionDate ?? offsetIsoTimestamp(params.seedTimestamp, 2),
+    },
+  ];
+}
+
+function buildDefaultMonitoringItems(params: {
+  title: string;
+  titles: ReturnType<typeof buildSurfaceTitleBundle>;
+  researchQuestions: ResearchQuestionSeed[];
+  researchSessions: ResearchSessionSeed[];
+  researchSyntheses: ResearchSynthesisSeed[];
+  evidenceGaps: EvidenceGapSeed[];
+  acquisitionTasks: AcquisitionTaskSeed[];
+  evidenceChanges: EvidenceChangeSeed[];
+  seedTimestamp: string;
+}): MonitoringItemSeed[] {
+  const [boundaryQuestion, monitoringQuestion, synthesisQuestion] = params.researchQuestions;
+  const [boundarySession, synthesisSession, watchpointSession] = params.researchSessions;
+  const [tensionsSynthesis, watchpointSynthesis, , secondCandidate] = params.researchSyntheses;
+  const [canonicalGap, watchpointGap] = params.evidenceGaps;
+  const [promotionTask, watchpointTask] = params.acquisitionTasks;
+  const [maintenanceChange, canonicalStableChange] = params.evidenceChanges;
+
+  return [
+    {
+      id:
+        slugifyTitle(`${params.title}-maintenance-trigger-monitor`) ||
+        "maintenance-trigger-monitor",
+      title: `${params.title} maintenance trigger monitor`,
+      summary:
+        "This monitoring item watches for evidence that should immediately sharpen the next synthesis boundary instead of just adding another note to the pile.",
+      status: "spawned-acquisition",
+      mode: "event-triggered",
+      priority: "high",
+      triggerAction: "spawn-acquisition",
+      whyItMatters:
+        "The system should turn meaningful maintenance movement into bounded acquisition work instead of generic review churn.",
+      triggerSignals: [
+        "A new bounded source or audit sharpens which synthesis candidate should be promoted next.",
+        "Maintenance rhythm and open questions start pointing to the same tighter promotion decision.",
+      ],
+      latestSignalSummary:
+        "The latest maintenance evidence already makes the promotion path clearer, so the next bounded comparison pass should be active now.",
+      linkedWatchpointTitles: [params.titles.maintenanceWatchpoints],
+      linkedEvidenceGapIds: [],
+      linkedAcquisitionTaskIds: promotionTask ? [promotionTask.id] : [],
+      linkedChangeIds: maintenanceChange ? [maintenanceChange.id] : [],
+      linkedQuestionIds: synthesisQuestion ? [synthesisQuestion.id] : [],
+      linkedSynthesisIds: secondCandidate ? [secondCandidate.id] : [],
+      canonicalReviewTitles: [params.titles.maintenanceWatchpoints],
+      reviewSurfaceTitles: [params.titles.maintenanceRhythm, params.titles.openQuestions],
+      suggestedContextPackTitles: ["Maintenance Triage", `Explain ${params.title}`],
+      suggestedPageTitles: [
+        params.titles.maintenanceRhythm,
+        params.titles.openQuestions,
+        params.titles.currentTensions,
+      ],
+      spawnSessionId: synthesisSession?.id ?? null,
+      nextCheck:
+        "Re-check after the active synthesis-promotion session or whenever a new bounded evidence pass changes revisit order.",
+      recommendedAction:
+        "Keep the promotion pass bounded, then update maintenance rhythm and open questions from the same decision rather than widening the whole topic.",
+      maturityImpactStages: ["developing"],
+      lastCheckedAt: offsetIsoTimestamp(params.seedTimestamp, 10),
+      triggeredAt: maintenanceChange?.changedAt ?? offsetIsoTimestamp(params.seedTimestamp, 10),
+      stableSince: null,
+    },
+    {
+      id:
+        slugifyTitle(`${params.title}-watchpoint-recurrence-monitor`) ||
+        "watchpoint-recurrence-monitor",
+      title: `${params.title} watchpoint recurrence monitor`,
+      summary:
+        "This monitoring item distinguishes passive watchfulness from the moment repeated evidence should actually spawn new acquisition work.",
+      status: "watching",
+      mode: "periodic-review",
+      priority: "high",
+      triggerAction: "spawn-acquisition",
+      whyItMatters:
+        "Monitoring only becomes useful when it has a clear boundary for when the system should collect more evidence instead of merely keeping an eye on things.",
+      triggerSignals: [
+        "The same operator-facing signal appears in a later source, audit, or review artifact.",
+        "The maintenance rhythm would change for the same reason twice.",
+      ],
+      latestSignalSummary:
+        "The watch surface is useful, but it still lacks repeated evidence showing that the same signal changes operator behavior more than once.",
+      linkedWatchpointTitles: [params.titles.maintenanceWatchpoints],
+      linkedEvidenceGapIds: watchpointGap ? [watchpointGap.id] : [],
+      linkedAcquisitionTaskIds: watchpointTask ? [watchpointTask.id] : [],
+      linkedChangeIds: maintenanceChange ? [maintenanceChange.id] : [],
+      linkedQuestionIds: monitoringQuestion ? [monitoringQuestion.id] : [],
+      linkedSynthesisIds: watchpointSynthesis ? [watchpointSynthesis.id] : [],
+      canonicalReviewTitles: [params.titles.maintenanceWatchpoints],
+      reviewSurfaceTitles: [params.titles.maintenanceRhythm, params.titles.openQuestions],
+      suggestedContextPackTitles: ["Maintenance Triage", "Provenance And Review"],
+      suggestedPageTitles: [
+        params.titles.maintenanceWatchpoints,
+        params.titles.maintenanceRhythm,
+        params.titles.openQuestions,
+        params.titles.operationalNote,
+      ],
+      spawnSessionId: watchpointSession?.id ?? null,
+      nextCheck:
+        "Re-check after the next source addition, audit pass, or review concern that names the same operator signal again.",
+      recommendedAction:
+        "If the same signal recurs again, run the watchpoint recurrence acquisition task instead of broadening the monitoring surface by feel.",
+      maturityImpactStages: ["maintained"],
+      lastCheckedAt: offsetIsoTimestamp(params.seedTimestamp, 9),
+      triggeredAt: null,
+      stableSince: null,
+    },
+    {
+      id:
+        slugifyTitle(`${params.title}-canonical-boundary-stability-monitor`) ||
+        "canonical-boundary-stability-monitor",
+      title: `${params.title} canonical boundary stability monitor`,
+      summary:
+        "This monitoring item keeps the durable article boundary explicit so the topic knows when not to rewrite the entry page just because maintenance moved.",
+      status: "stable",
+      mode: "passive",
+      priority: "medium",
+      triggerAction: "keep-watching",
+      whyItMatters:
+        "A change-aware system should also preserve stable article boundaries, not only surface new work.",
+      triggerSignals: [
+        "A new source changes the top-level framing instead of only maintenance sequencing.",
+        "Tensions or watchpoints force a different short durable definition of the topic.",
+      ],
+      latestSignalSummary:
+        "Recent evidence changed maintenance and monitoring posture more than it changed the top-level durable explanation.",
+      linkedWatchpointTitles: [params.titles.maintenanceWatchpoints],
+      linkedEvidenceGapIds: canonicalGap ? [canonicalGap.id] : [],
+      linkedAcquisitionTaskIds: [],
+      linkedChangeIds: canonicalStableChange ? [canonicalStableChange.id] : [],
+      linkedQuestionIds: boundaryQuestion ? [boundaryQuestion.id] : [],
+      linkedSynthesisIds: tensionsSynthesis ? [tensionsSynthesis.id] : [],
+      canonicalReviewTitles: [params.title],
+      reviewSurfaceTitles: [params.titles.currentTensions, params.titles.readingPaths],
+      suggestedContextPackTitles: [`Explain ${params.title}`],
+      suggestedPageTitles: [params.title, params.titles.currentTensions, params.titles.readingPaths],
+      spawnSessionId: boundarySession?.id ?? null,
+      nextCheck:
+        "Re-check only after a new source changes the core framing rather than the surrounding maintenance logic.",
+      recommendedAction:
+        "Keep the canonical entry stable and spend the next pass on working and monitoring surfaces unless the top-level story itself moves.",
+      maturityImpactStages: [],
+      lastCheckedAt: offsetIsoTimestamp(params.seedTimestamp, 11),
+      triggeredAt: null,
+      stableSince: canonicalStableChange?.changedAt ?? offsetIsoTimestamp(params.seedTimestamp, 11),
+    },
+  ];
+}
+
 function buildSurfaceTitleBundle(title: string) {
   return {
     index: `${title} Index`,
@@ -1359,6 +1661,28 @@ export function createDefaultTopicBootstrapConfig({
     researchSyntheses,
     evidenceBundles,
     corpusFiles,
+    seedTimestamp: generatedAt,
+  });
+  const acquisitionTasks = buildDefaultAcquisitionTasks({
+    title: normalizedTitle,
+    titles: surfaceTitles,
+    researchQuestions,
+    researchSessions,
+    researchSyntheses,
+    evidenceGaps,
+    evidenceChanges,
+    corpusFiles,
+    seedTimestamp: generatedAt,
+  });
+  const monitoringItems = buildDefaultMonitoringItems({
+    title: normalizedTitle,
+    titles: surfaceTitles,
+    researchQuestions,
+    researchSessions,
+    researchSyntheses,
+    evidenceGaps,
+    acquisitionTasks,
+    evidenceChanges,
     seedTimestamp: generatedAt,
   });
   const requiredContextPackTitles = buildRequiredContextPacks(normalizedTitle);
@@ -1587,6 +1911,8 @@ export function createDefaultTopicBootstrapConfig({
     researchSessions,
     researchSyntheses,
     evidenceGaps,
+    acquisitionTasks,
+    monitoringItems,
     evidenceBundles,
     evidenceChanges,
     resolutionSignals: [
@@ -1767,6 +2093,8 @@ function buildKnowledgeMethodData(config: TopicBootstrapConfig): KnowledgeMethod
     researchSessions: config.researchSessions,
     researchSyntheses: config.researchSyntheses,
     evidenceGaps: config.evidenceGaps,
+    acquisitionTasks: config.acquisitionTasks,
+    monitoringItems: config.monitoringItems,
     evidenceBundles: config.evidenceBundles,
     evidenceChanges: config.evidenceChanges,
     resolutionSignals: config.resolutionSignals,
@@ -2513,6 +2841,25 @@ async function validateHeadings(params: {
     {
       path: path.join(
         params.paths.workspaceRoot,
+        getWikiRelativePath(
+          "synthesis",
+          slugifyTitle(params.config.surfaces.maintenanceWatchpoints.title) ||
+            "maintenance-watchpoints",
+        ),
+      ),
+      headings: [
+        "Thesis",
+        "Watchpoints",
+        "Refresh triggers",
+        "Monitoring queue",
+        "Escalate into acquisition",
+        "Review-only signals",
+        "Action path",
+      ],
+    },
+    {
+      path: path.join(
+        params.paths.workspaceRoot,
         getWikiRelativePath("synthesis", slugifyTitle(params.config.surfaces.maintenanceRhythm.title) || "maintenance-rhythm"),
       ),
       headings: [
@@ -2522,6 +2869,8 @@ async function validateHeadings(params: {
         "Session queue",
         "Synthesis decisions",
         "Highest-leverage next evidence",
+        "Acquisition queue",
+        "Monitoring queue",
         "Evidence changes to triage",
         "Context packs to refresh",
         "Synthesis candidates",

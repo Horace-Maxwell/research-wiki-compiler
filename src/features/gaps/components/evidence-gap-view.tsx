@@ -181,6 +181,9 @@ function GapCard({
           <Link href={gap.links.gap.href}>Open gap</Link>
         </Button>
         <Button asChild size="sm" variant="outline">
+          <Link href={`/acquisition?topic=${gap.topicId}`}>Acquisition queue</Link>
+        </Button>
+        <Button asChild size="sm" variant="outline">
           <Link href={gap.links.session.href}>
             {gap.acquisitionSessionStatus === "active" ? "Continue session" : "Acquisition session"}
           </Link>
@@ -377,6 +380,9 @@ export function EvidenceGapView({
                         ? "Continue acquisition session"
                         : "Open acquisition session"}
                     </Link>
+                  </Button>
+                  <Button asChild variant="outline">
+                    <Link href={`/acquisition?topic=${focusGap.topicId}`}>Acquisition queue</Link>
                   </Button>
                   <Button asChild variant="outline">
                     <Link href={focusGap.links.questionQueue.href}>Question queue</Link>

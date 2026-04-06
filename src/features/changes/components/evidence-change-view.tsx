@@ -156,6 +156,9 @@ function ChangeCard({
           <Link href={change.links.change.href}>Open change</Link>
         </Button>
         <Button asChild size="sm" variant="outline">
+          <Link href={`/monitoring?topic=${change.topicId}`}>Monitoring queue</Link>
+        </Button>
+        <Button asChild size="sm" variant="outline">
           <Link href={change.links.maintenance.href}>Maintenance</Link>
         </Button>
         <Button asChild size="sm" variant="ghost">
@@ -316,6 +319,9 @@ export function EvidenceChangeView({
                 <div className="flex flex-wrap gap-2">
                   <Button asChild>
                     <Link href={focusChange.links.maintenance.href}>Open maintenance rhythm</Link>
+                  </Button>
+                  <Button asChild variant="outline">
+                    <Link href={`/monitoring?topic=${focusChange.topicId}`}>Monitoring queue</Link>
                   </Button>
                   <Button asChild variant="outline">
                     <Link href={focusChange.links.questionQueue.href}>Open question queue</Link>

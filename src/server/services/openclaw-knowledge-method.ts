@@ -1108,6 +1108,333 @@ export const openClawKnowledgeMethodData: KnowledgeMethodTemplateData = {
         "The upgrade-monitoring question now has both a durable archived note and a connected watchpoint synthesis behind it.",
     },
   ],
+  acquisitionTasks: [
+    {
+      id: "openclaw-upgrade-trigger-comparison-pass",
+      title: "OpenClaw upgrade trigger comparison pass",
+      summary:
+        "This acquisition task turns the regression-trigger question into a bounded comparison pass instead of leaving the rule set distributed across adjacent maintenance notes.",
+      status: "active",
+      priority: "high",
+      taskType: "comparison-pass",
+      whyItMatters:
+        "A durable regression-trigger synthesis should rest on a clear operator rule set, not on ambient maintenance concern.",
+      evidenceTypeToCollect:
+        "A compact comparison proving which release and changelog signals truly separate light upgrade checks from full regression runs.",
+      linkedEvidenceGapIds: ["openclaw-upgrade-trigger-comparison-gap"],
+      linkedQuestionIds: ["upgrade-regression-triggers"],
+      linkedSynthesisIds: ["openclaw-upgrade-regression-triggers"],
+      canonicalReviewTitles: [
+        "OpenClaw release cadence",
+        "Note: What should I monitor before upgrading OpenClaw",
+      ],
+      monitoringTitles: ["OpenClaw maintenance watchpoints"],
+      suggestedSourceTypes: ["release note", "changelog packaging note", "archived operator note"],
+      suggestedSourceTargets: [
+        "OpenClaw release cadence and test churn (2026-04-02)",
+        "OpenClaw provider risk and changelog signals (2026-04-05)",
+      ],
+      suggestedContextPackTitles: ["Upgrade Watchpoints", "Maintenance Triage"],
+      suggestedPageTitles: [
+        "OpenClaw release cadence",
+        "OpenClaw maintenance watchpoints",
+        "OpenClaw open questions",
+        "Note: What should I monitor before upgrading OpenClaw",
+      ],
+      successCriteria: [
+        "The trigger matrix reads like durable operator guidance instead of a loose note bundle.",
+        "Release cadence, watchpoints, and the archived upgrade note can all reuse the same trigger vocabulary.",
+      ],
+      nextSessionId: "session-upgrade-regression-triggers",
+      ingestionSurfaceTitles: [
+        "OpenClaw release cadence",
+        "OpenClaw maintenance watchpoints",
+        "OpenClaw maintenance rhythm",
+        "OpenClaw open questions",
+        "Note: What should I monitor before upgrading OpenClaw",
+      ],
+      ingestionNextStep:
+        "Update release cadence, watchpoints, maintenance rhythm, and the archived note in the same pass if the trigger matrix hardens.",
+      resultSourceTitles: [],
+      resultChangeIds: ["openclaw-release-packaging-sharpens-regression-rules"],
+      resultSummary: null,
+      maturityBlockerStages: [],
+      integratedAt: null,
+    },
+    {
+      id: "openclaw-provider-consequence-pass",
+      title: "OpenClaw provider consequence pass",
+      summary:
+        "This acquisition task tightens the provider-risk thread until provider-side events map cleanly onto operator decisions instead of lingering as ambient concern.",
+      status: "queued",
+      priority: "medium",
+      taskType: "provenance-strengthening",
+      whyItMatters:
+        "Provider risk should only become durable guidance when it changes adoption or upgrade posture in inspectable ways.",
+      evidenceTypeToCollect:
+        "A cleaner bridge from provider-side signal to concrete adoption or upgrade consequences.",
+      linkedEvidenceGapIds: ["openclaw-provider-consequence-gap"],
+      linkedQuestionIds: ["provider-exposure-map"],
+      linkedSynthesisIds: ["openclaw-provider-exposure-map"],
+      canonicalReviewTitles: ["Provider dependency risk"],
+      monitoringTitles: ["OpenClaw maintenance watchpoints", "OpenClaw current tensions"],
+      suggestedSourceTypes: ["provider policy note", "operator consequence note", "risk digest"],
+      suggestedSourceTargets: [
+        "OpenClaw provider risk and changelog signals (2026-04-05)",
+      ],
+      suggestedContextPackTitles: ["Upgrade Watchpoints", "Maintenance Triage"],
+      suggestedPageTitles: [
+        "Provider dependency risk",
+        "OpenClaw current tensions",
+        "OpenClaw maintenance watchpoints",
+      ],
+      successCriteria: [
+        "Provider-side events clearly change at least one operator decision.",
+        "The provider exposure synthesis can publish without leaning on generic uncertainty framing.",
+      ],
+      nextSessionId: "session-provider-exposure-map",
+      ingestionSurfaceTitles: [
+        "Provider dependency risk",
+        "OpenClaw current tensions",
+        "OpenClaw maintenance watchpoints",
+        "OpenClaw maintenance rhythm",
+        "OpenClaw open questions",
+      ],
+      ingestionNextStep:
+        "Update provider risk, current tensions, watchpoints, and maintenance rhythm together if provider consequences become concrete enough to publish.",
+      resultSourceTitles: [],
+      resultChangeIds: ["openclaw-provider-signal-reopens-instability-framing"],
+      resultSummary: null,
+      maturityBlockerStages: [],
+      integratedAt: null,
+    },
+    {
+      id: "openclaw-plugin-drift-capture",
+      title: "OpenClaw plugin drift capture",
+      summary:
+        "This acquisition task keeps plugin compatibility honest by waiting for stronger longitudinal drift evidence instead of hardening one-off signals into durable guidance.",
+      status: "queued",
+      priority: "high",
+      taskType: "freshness-refresh",
+      whyItMatters:
+        "Plugin compatibility looks important precisely where the corpus is still thinnest, so the system should keep the next evidence pass explicit.",
+      evidenceTypeToCollect:
+        "A later release-to-release comparison naming concrete plugin or SDK breakpoints instead of a single compatibility baseline.",
+      linkedEvidenceGapIds: ["openclaw-plugin-drift-longitudinal-gap"],
+      linkedQuestionIds: ["plugin-sdk-drift"],
+      linkedSynthesisIds: [],
+      canonicalReviewTitles: ["Plugin compatibility"],
+      monitoringTitles: ["OpenClaw maintenance watchpoints", "OpenClaw open questions"],
+      suggestedSourceTypes: ["next release note", "compatibility digest", "review-history comparison"],
+      suggestedSourceTargets: [
+        "OpenClaw plugin SDK baseline and policy fixtures (2026-03-26)",
+        "OpenClaw release and plugin surface update (2026-03-31)",
+      ],
+      suggestedContextPackTitles: ["Upgrade Watchpoints", "Provenance And Review"],
+      suggestedPageTitles: [
+        "Plugin compatibility",
+        "OpenClaw open questions",
+        "Review History",
+        "Summary Atlas",
+      ],
+      successCriteria: [
+        "A later release names concrete compatibility breakpoints or SDK drift.",
+        "Plugin compatibility can cite more than one release-to-release signal before hardening the drift story.",
+      ],
+      nextSessionId: "session-plugin-sdk-drift",
+      ingestionSurfaceTitles: [
+        "Plugin compatibility",
+        "OpenClaw open questions",
+        "OpenClaw maintenance rhythm",
+        "Review History",
+        "Summary Atlas",
+      ],
+      ingestionNextStep:
+        "Compare the new release evidence against compatibility, review history, and summaries before changing any durable plugin guidance.",
+      resultSourceTitles: [],
+      resultChangeIds: ["openclaw-plugin-drift-remains-monitoring-work"],
+      resultSummary: null,
+      maturityBlockerStages: [],
+      integratedAt: null,
+    },
+    {
+      id: "openclaw-upgrade-checklist-grounding-pass",
+      title: "OpenClaw upgrade checklist grounding pass",
+      summary:
+        "This integrated acquisition task explains how the upgrade-monitoring question became a reusable archived answer linked back into the maintenance loop.",
+      status: "integrated",
+      priority: "medium",
+      taskType: "operational-signal",
+      whyItMatters:
+        "A high-value operator question should not stay trapped in transient session notes once the answer is stable enough to archive.",
+      evidenceTypeToCollect:
+        "A grounded, reusable upgrade checklist that could survive as durable knowledge across later maintenance passes.",
+      linkedEvidenceGapIds: ["openclaw-upgrade-checklist-grounding-gap"],
+      linkedQuestionIds: ["monitor-before-upgrade"],
+      linkedSynthesisIds: ["openclaw-maintenance-watchpoints-synthesis"],
+      canonicalReviewTitles: ["Note: What should I monitor before upgrading OpenClaw"],
+      monitoringTitles: ["OpenClaw maintenance watchpoints"],
+      suggestedSourceTypes: ["release note", "provider risk digest", "operator checklist note"],
+      suggestedSourceTargets: [
+        "OpenClaw provider risk and changelog signals (2026-04-05)",
+        "OpenClaw release cadence and test churn (2026-04-02)",
+      ],
+      suggestedContextPackTitles: ["Upgrade Watchpoints", "Maintenance Triage"],
+      suggestedPageTitles: [
+        "OpenClaw maintenance watchpoints",
+        "Note: What should I monitor before upgrading OpenClaw",
+        "Provider dependency risk",
+      ],
+      successCriteria: [
+        "The question has a durable archived answer.",
+        "Watchpoints and the archived note can be reused together on later maintenance passes.",
+      ],
+      nextSessionId: "session-upgrade-monitoring-note",
+      ingestionSurfaceTitles: [
+        "OpenClaw maintenance watchpoints",
+        "OpenClaw open questions",
+        "Note: What should I monitor before upgrading OpenClaw",
+      ],
+      ingestionNextStep:
+        "Keep the archived note short and grounded, then feed recurring changes back into watchpoints and open questions first.",
+      resultSourceTitles: [
+        "OpenClaw provider risk and changelog signals (2026-04-05)",
+        "OpenClaw release cadence and test churn (2026-04-02)",
+      ],
+      resultChangeIds: [],
+      resultSummary:
+        "The upgrade-monitoring question now has a durable archived answer that still points back to watchpoints and reopen triggers.",
+      maturityBlockerStages: [],
+      integratedAt: "2026-04-04T20:00:00.000Z",
+    },
+  ],
+  monitoringItems: [
+    {
+      id: "openclaw-provider-restriction-monitor",
+      title: "OpenClaw provider restriction monitor",
+      summary:
+        "This monitoring item watches for provider-side restrictions that should immediately reopen instability framing and spawn a tighter provider consequence pass.",
+      status: "spawned-acquisition",
+      mode: "event-triggered",
+      priority: "high",
+      triggerAction: "spawn-acquisition",
+      whyItMatters:
+        "Provider-side shifts can invalidate adoption and upgrade assumptions at the same time, so the response should be explicit and bounded.",
+      triggerSignals: [
+        "A provider-side restriction, access-policy change, or outage changes adoption posture.",
+        "The provider signal starts changing upgrade guidance and instability framing at once.",
+      ],
+      latestSignalSummary:
+        "A stronger provider-side signal now affects both the instability story and the upgrade-monitoring guidance, so provider consequence work should be active now.",
+      linkedWatchpointTitles: ["OpenClaw maintenance watchpoints"],
+      linkedEvidenceGapIds: ["openclaw-provider-consequence-gap"],
+      linkedAcquisitionTaskIds: ["openclaw-provider-consequence-pass"],
+      linkedChangeIds: ["openclaw-provider-signal-reopens-instability-framing"],
+      linkedQuestionIds: ["provider-exposure-map", "unstable-surfaces", "monitor-before-upgrade"],
+      linkedSynthesisIds: ["openclaw-provider-exposure-map", "openclaw-current-tensions-synthesis"],
+      canonicalReviewTitles: ["Provider dependency risk", "OpenClaw current tensions"],
+      reviewSurfaceTitles: ["OpenClaw maintenance rhythm", "OpenClaw open questions", "OpenClaw maintenance watchpoints"],
+      suggestedContextPackTitles: ["Upgrade Watchpoints", "Maintenance Triage"],
+      suggestedPageTitles: [
+        "Provider dependency risk",
+        "OpenClaw current tensions",
+        "OpenClaw maintenance watchpoints",
+        "Note: What should I monitor before upgrading OpenClaw",
+      ],
+      spawnSessionId: "session-provider-exposure-map",
+      nextCheck: "Re-check on any new provider-side restriction or policy change that alters operator posture.",
+      recommendedAction:
+        "Run the provider consequence pass and reopen instability framing before editing provider-risk pages or upgrade guidance in isolation.",
+      maturityImpactStages: [],
+      lastCheckedAt: "2026-04-05T19:20:00.000Z",
+      triggeredAt: "2026-04-05T19:20:00.000Z",
+      stableSince: null,
+    },
+    {
+      id: "openclaw-release-packaging-regression-monitor",
+      title: "OpenClaw release packaging regression monitor",
+      summary:
+        "This monitoring item tracks when changelog packaging and release clustering are strong enough to force a bounded review of the regression-depth rule set.",
+      status: "review-needed",
+      mode: "event-triggered",
+      priority: "high",
+      triggerAction: "mark-review",
+      whyItMatters:
+        "The regression-trigger synthesis is only worth publishing if release evidence hardens into durable operator rules rather than a pile of hints.",
+      triggerSignals: [
+        "Changelog packaging starts carrying workflow-facing breakpoints instead of cosmetic churn.",
+        "Tightly spaced releases make regression depth meaningfully harder to judge by feel alone.",
+      ],
+      latestSignalSummary:
+        "Release packaging and tightly spaced releases now look strong enough to affect the durable regression-depth rule set.",
+      linkedWatchpointTitles: ["OpenClaw maintenance watchpoints"],
+      linkedEvidenceGapIds: ["openclaw-upgrade-trigger-comparison-gap"],
+      linkedAcquisitionTaskIds: ["openclaw-upgrade-trigger-comparison-pass"],
+      linkedChangeIds: ["openclaw-release-packaging-sharpens-regression-rules"],
+      linkedQuestionIds: ["upgrade-regression-triggers", "monitor-before-upgrade"],
+      linkedSynthesisIds: ["openclaw-upgrade-regression-triggers", "openclaw-maintenance-watchpoints-synthesis"],
+      canonicalReviewTitles: [
+        "OpenClaw release cadence",
+        "Note: What should I monitor before upgrading OpenClaw",
+      ],
+      reviewSurfaceTitles: ["OpenClaw maintenance rhythm", "OpenClaw maintenance watchpoints"],
+      suggestedContextPackTitles: ["Upgrade Watchpoints", "Maintenance Triage"],
+      suggestedPageTitles: [
+        "OpenClaw release cadence",
+        "OpenClaw maintenance watchpoints",
+        "Note: What should I monitor before upgrading OpenClaw",
+      ],
+      spawnSessionId: "session-upgrade-regression-triggers",
+      nextCheck: "Re-check after each release note or changelog pass that changes regression posture.",
+      recommendedAction:
+        "Review release cadence, watchpoints, and the archived upgrade note together before publishing the regression-trigger synthesis.",
+      maturityImpactStages: [],
+      lastCheckedAt: "2026-04-05T18:50:00.000Z",
+      triggeredAt: "2026-04-05T18:50:00.000Z",
+      stableSince: null,
+    },
+    {
+      id: "openclaw-plugin-drift-stability-monitor",
+      title: "OpenClaw plugin drift stability monitor",
+      summary:
+        "This monitoring item keeps plugin drift visible as monitoring work until a later release makes the compatibility story strong enough to reopen broader durable guidance.",
+      status: "stable",
+      mode: "periodic-review",
+      priority: "medium",
+      triggerAction: "keep-watching",
+      whyItMatters:
+        "A change-aware system should also explain when a concern is still best handled as monitoring rather than as a full reopen event.",
+      triggerSignals: [
+        "A later release names concrete plugin compatibility breakpoints or SDK drift.",
+        "The same compatibility risk starts recurring across more than one release-to-release comparison.",
+      ],
+      latestSignalSummary:
+        "The compatibility evidence is real, but still too thin to justify reopening broader durable guidance across the topic.",
+      linkedWatchpointTitles: ["OpenClaw maintenance watchpoints"],
+      linkedEvidenceGapIds: ["openclaw-plugin-drift-longitudinal-gap"],
+      linkedAcquisitionTaskIds: ["openclaw-plugin-drift-capture"],
+      linkedChangeIds: ["openclaw-plugin-drift-remains-monitoring-work"],
+      linkedQuestionIds: ["plugin-sdk-drift"],
+      linkedSynthesisIds: [],
+      canonicalReviewTitles: ["Plugin compatibility"],
+      reviewSurfaceTitles: ["OpenClaw open questions", "OpenClaw maintenance rhythm"],
+      suggestedContextPackTitles: ["Upgrade Watchpoints", "Provenance And Review"],
+      suggestedPageTitles: [
+        "Plugin compatibility",
+        "OpenClaw open questions",
+        "Review History",
+        "Summary Atlas",
+      ],
+      spawnSessionId: "session-plugin-sdk-drift",
+      nextCheck: "Re-check after the next release or changelog pass that changes plugin or SDK assumptions.",
+      recommendedAction:
+        "Keep plugin drift in the monitoring surface and question queue until a later release names concrete compatibility breakpoints.",
+      maturityImpactStages: [],
+      lastCheckedAt: "2026-04-04T12:00:00.000Z",
+      triggeredAt: null,
+      stableSince: "2026-04-04T12:00:00.000Z",
+    },
+  ],
   evidenceBundles: [
     {
       id: "openclaw-release-trigger-evidence",
