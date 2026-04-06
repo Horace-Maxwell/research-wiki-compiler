@@ -21,9 +21,11 @@ describe("topic evaluation service", () => {
     expect(
       STAGE_ORDER.indexOf(openClaw.maturity.stage),
     ).toBeGreaterThan(STAGE_ORDER.indexOf(localFirst.maturity.stage));
-    expect(localFirst.recommendedNextSteps.some((step) => step.includes("summarize / review / audit"))).toBe(
-      true,
-    );
+    expect(
+      localFirst.recommendedNextSteps.some((step) =>
+        step.includes("Populate the next real workflow layers"),
+      ),
+    ).toBe(true);
   });
 
   it("renders a readable markdown report", async () => {

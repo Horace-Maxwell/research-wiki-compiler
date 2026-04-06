@@ -11,6 +11,7 @@ import {
   DatabaseZap,
   FileStack,
   LayoutDashboard,
+  LibraryBig,
   Settings2,
   Sparkles,
 } from "lucide-react";
@@ -21,6 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 const navIconMap = {
+  "/topics": LibraryBig,
   "/onboarding": Compass,
   "/dashboard": LayoutDashboard,
   "/sources": FileStack,
@@ -33,8 +35,8 @@ const navIconMap = {
 
 const navGroups = [
   {
-    title: "Start",
-    items: ["/dashboard", "/onboarding"],
+    title: "Portfolio",
+    items: ["/topics", "/dashboard", "/onboarding"],
   },
   {
     title: "Knowledge",
@@ -51,6 +53,11 @@ const navGroups = [
 ] as const;
 
 const surfaceCopy = {
+  "/topics": {
+    label: "Topic portfolio",
+    detail:
+      "See every topic workspace, compare maturity, and move from evaluation directly into the next useful upgrade.",
+  },
   "/dashboard": {
     label: "Workspace front door",
     detail: "See what the knowledge base knows, what changed, and what should happen next.",
@@ -86,8 +93,12 @@ const surfaceCopy = {
 } as const;
 
 function normalizeActivePath(pathname: string) {
+  if (pathname.startsWith("/topics/")) {
+    return "/topics";
+  }
+
   if (pathname.startsWith("/examples/")) {
-    return "/wiki";
+    return "/topics";
   }
 
   const match = PRODUCT_SURFACE.find((item) => pathname === item.href);
@@ -98,14 +109,21 @@ function normalizeActivePath(pathname: string) {
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const isExampleRoute = pathname.startsWith("/examples/");
+  const isTopicDetailRoute = pathname.startsWith("/topics/");
   const activePath = normalizeActivePath(pathname);
   const activeItem = PRODUCT_SURFACE.find((item) => item.href === activePath);
   const currentSurface = isExampleRoute
     ? {
-        label: "Rendered example",
+        label: "Rendered topic",
         detail:
-          "A guided showcase route that renders committed wiki markdown through the product experience.",
+          "A guided topic route that renders committed wiki markdown together with maturity and next-action context.",
       }
+    : isTopicDetailRoute
+      ? {
+          label: "Topic workspace",
+          detail:
+            "A rendered knowledge environment that keeps the canonical wiki, maturity guidance, and next upgrades in the same working surface.",
+        }
     : surfaceCopy[activePath];
 
   return (
@@ -119,27 +137,33 @@ export function AppShell({ children }: { children: ReactNode }) {
                   {APP_NAME}
                 </div>
                 <div className="text-xl font-semibold tracking-tight text-foreground">
-                  Research workspace
+                  Knowledge portfolio
                 </div>
                 <p className="text-sm leading-7 text-muted-foreground">
-                  A file-first compiled wiki with visible summaries, reviewable mutation, grounded
-                  answers, and audits.
+                  Topic-based compiled wiki workspaces with visible summaries, reviewable mutation,
+                  grounded answers, audits, and maturity-aware next steps.
                 </p>
               </div>
               <div className="rounded-[20px] border border-border/55 bg-background/58 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.34)]">
                 <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                  Main path
+                  Start here
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <Badge variant="outline">local-first</Badge>
                   <Badge variant="outline">file-first</Badge>
                   <Badge variant="outline">review-first</Badge>
                 </div>
-                <div className="mt-4">
+                <div className="mt-4 space-y-2">
                   <Button asChild className="w-full justify-start" variant="outline">
-                    <Link href="/examples/openclaw">
+                    <Link href="/topics">
+                      <LibraryBig className="size-4" />
+                      Open topic portfolio
+                    </Link>
+                  </Button>
+                  <Button asChild className="w-full justify-start" variant="ghost">
+                    <Link href="/topics/openclaw">
                       <Sparkles className="size-4" />
-                      Open rendered example
+                      Open flagship topic
                     </Link>
                   </Button>
                 </div>
@@ -208,8 +232,8 @@ export function AppShell({ children }: { children: ReactNode }) {
                 Product model
               </div>
               <div className="mt-3 space-y-2 text-sm leading-6 text-muted-foreground">
-                <div>sources -&gt; summaries -&gt; review -&gt; wiki -&gt; ask/archive -&gt; audit</div>
-                <div>Markdown files remain the durable source of truth.</div>
+                <div>topics -&gt; wiki workspaces -&gt; summaries/review -&gt; ask/archive -&gt; audit</div>
+                <div>Evaluation exists to improve knowledge quality, not to gamify it.</div>
               </div>
             </div>
           </div>
@@ -221,7 +245,11 @@ export function AppShell({ children }: { children: ReactNode }) {
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="space-y-1">
                   <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                    {isExampleRoute ? "Rendered example" : activeItem?.label ?? "Workspace"}
+                    {isExampleRoute
+                      ? "Rendered topic"
+                      : isTopicDetailRoute
+                        ? "Topic workspace"
+                        : activeItem?.label ?? "Workspace"}
                   </div>
                   <div className="text-base font-medium text-foreground">
                     {currentSurface?.label ??
@@ -234,12 +262,15 @@ export function AppShell({ children }: { children: ReactNode }) {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <Button asChild size="sm" variant="ghost">
+                    <Link href="/topics">Topics</Link>
+                  </Button>
+                  <Button asChild size="sm" variant="ghost">
                     <Link href="/wiki">Open wiki</Link>
                   </Button>
                   <Button asChild size="sm" variant="outline">
-                    <Link href="/examples/openclaw">
+                    <Link href="/topics/openclaw">
                       <Sparkles className="size-4" />
-                      Example
+                      Flagship
                     </Link>
                   </Button>
                 </div>

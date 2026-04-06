@@ -75,11 +75,12 @@ If you want the fastest path to understanding this project, do not start with th
 
 > Start here / 从这里开始  
 > 1. `npm install && npm run dev`  
-> 2. 打开 `http://localhost:3000/examples/openclaw`  
+> 2. 打开 `http://localhost:3000/topics`  
 > 3. 再回来看 GitHub 里的 Markdown 源文件和中间 artifact
 
 | What to open | Why it matters |
 | --- | --- |
+| Topic portfolio route: `/topics` | 这是新的多主题产品入口，可以比较 topic maturity、查看下一步动作，并切换到具体 topic workspace。<br />This is the new multi-topic product entry point for comparing topic maturity, seeing next actions, and switching into specific topic workspaces. |
 | Rendered example route: `/examples/openclaw` | 这是产品里的渲染视图，能直接看到 wiki 页面、链接关系和示例入口。<br />This is the rendered product view, where the wiki pages, links, and example framing are easiest to understand. |
 | Source-of-truth wiki files: [`examples/openclaw-wiki/workspace/wiki/`](./examples/openclaw-wiki/workspace/wiki/) | 这些 Markdown 文件就是最终 wiki 内容本身。<br />These Markdown files are the wiki content itself. |
 | Obsidian-ready vault: [`examples/openclaw-wiki/obsidian-vault/`](./examples/openclaw-wiki/obsidian-vault/) | 这是额外生成的 Obsidian 投影视图，保留同一份知识内容，但更适合本地阅读、链接和小上下文组装。<br />This is an additive Obsidian projection of the same knowledge, optimized for local reading, linking, and small context packs. |
@@ -174,8 +175,8 @@ npm run demo:reset
 npm run dev
 ```
 
-打开 [http://localhost:3000/dashboard](http://localhost:3000/dashboard)。  
-Open [http://localhost:3000/dashboard](http://localhost:3000/dashboard).
+打开 [http://localhost:3000/topics](http://localhost:3000/topics)。  
+Open [http://localhost:3000/topics](http://localhost:3000/topics).
 
 ### Provider configuration / Provider 配置
 

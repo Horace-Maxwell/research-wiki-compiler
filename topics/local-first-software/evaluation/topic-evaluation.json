@@ -1,5 +1,6 @@
 {
   "schemaVersion": 1,
+  "generatedAt": "2026-04-06T01:52:42.906Z",
   "target": {
     "kind": "topic",
     "id": "local-first-software",
@@ -621,14 +622,75 @@
   ],
   "weakSurfaces": [],
   "missingSurfaces": [],
+  "promotionReadiness": {
+    "targetStage": "developing",
+    "satisfiedCriteria": 4,
+    "totalCriteria": 7,
+    "percent": 57,
+    "summary": "4/7 criteria for developing are already satisfied. The remaining blockers define the highest-leverage upgrade path.",
+    "blockers": [
+      {
+        "label": "At least two downstream workflow layers are populated",
+        "satisfied": false,
+        "details": "0/4 downstream workflow layers are populated."
+      },
+      {
+        "label": "Workflow and provenance are no longer just starter-grade",
+        "satisfied": false,
+        "details": "2.8/5 workflow and provenance score."
+      },
+      {
+        "label": "Canonical pages are grounded in compiled artifacts, not only starter corpus refs",
+        "satisfied": false,
+        "details": "0 canonical pages cite non-corpus workflow artifacts."
+      }
+    ]
+  },
+  "nextActions": [
+    {
+      "id": "workflow-density",
+      "priority": "high",
+      "category": "workflow",
+      "title": "Populate the next real workflow layers",
+      "summary": "Run the first real summarize, review, archive, or audit pass so the topic stops behaving like a polished starter shell.",
+      "whyNow": "Workflow and provenance are the clearest blockers between the current topic state and the next maturity stage.",
+      "targetStage": "developing",
+      "relatedSurfaceIds": [
+        "artifact-map",
+        "llm-context-packs",
+        "canonical-wiki-pages"
+      ],
+      "pathHints": [
+        "obsidian-vault/00 Atlas/Artifact Map.md",
+        "obsidian-vault/20 Sources/Corpus Atlas.md",
+        "obsidian-vault/25 Normalized Sources/Processed Source Atlas.md",
+        "obsidian-vault/30 Summaries/Summary Atlas.md"
+      ]
+    },
+    {
+      "id": "canonical-grounding",
+      "priority": "high",
+      "category": "canonical",
+      "title": "Deepen the canonical layer with grounded synthesis",
+      "summary": "Promote the strongest recurring topic pressure into a better-grounded synthesis or update so important pages cite compiled workflow artifacts, not only starter corpus references.",
+      "whyNow": "Canonical strength should be durable evidence, not just well-written starter pages.",
+      "targetStage": "developing",
+      "relatedSurfaceIds": [
+        "canonical-wiki-pages",
+        "current-tensions",
+        "open-questions"
+      ],
+      "pathHints": [
+        "workspace/wiki/topics/local-first-software.md",
+        "workspace/wiki/concepts/sync-engines.md",
+        "workspace/wiki/concepts/schema-migration-pressure.md",
+        "workspace/wiki/syntheses/local-first-software-reading-paths.md"
+      ]
+    }
+  ],
   "recommendedNextSteps": [
-    "Run a real summarize / review / audit pass so the topic accumulates workflow evidence instead of living only as a starter scaffold.",
-    "Promote the strongest recurring topic pressure into a grounded synthesis that is backed by more than corpus-only references.",
-    "Revisit provenance-facing context packs and artifact notes after real summaries, reviews, and audits exist.",
-    "Run real summarize, review, archive, and audit loops so the topic stops behaving like a static starter scaffold.",
-    "To reach developing, satisfy: At least two downstream workflow layers are populated.",
-    "To reach developing, satisfy: Workflow and provenance are no longer just starter-grade.",
-    "To reach developing, satisfy: Canonical pages are grounded in compiled artifacts, not only starter corpus refs."
+    "Populate the next real workflow layers: Run the first real summarize, review, archive, or audit pass so the topic stops behaving like a polished starter shell.",
+    "Deepen the canonical layer with grounded synthesis: Promote the strongest recurring topic pressure into a better-grounded synthesis or update so important pages cite compiled workflow artifacts, not only starter corpus references."
   ],
   "reportPaths": {
     "json": "evaluation/topic-evaluation.json",

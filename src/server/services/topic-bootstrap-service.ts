@@ -1380,6 +1380,12 @@ npm run topic:validate -- --slug ${config.topic.slug}
 npm run topic:evaluate -- --slug ${config.topic.slug}
 \`\`\`
 
+Rendered topic home:
+
+\`\`\`text
+/topics/${config.topic.slug}
+\`\`\`
+
 ## What to inspect first
 
 - \`workspace/wiki/index.md\`

@@ -41,6 +41,7 @@ export const PROMPT_TEMPLATE_FILES = [
 ] as const;
 
 export const PRODUCT_SURFACE = [
+  { href: "/topics", label: "Topics" },
   { href: "/onboarding", label: "Onboarding" },
   { href: "/dashboard", label: "Dashboard" },
   { href: "/sources", label: "Sources" },

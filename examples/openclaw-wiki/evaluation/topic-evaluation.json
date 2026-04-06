@@ -1,5 +1,6 @@
 {
   "schemaVersion": 1,
+  "generatedAt": "2026-04-06T01:52:51.209Z",
   "target": {
     "kind": "example",
     "id": "openclaw",
@@ -624,10 +625,37 @@
   ],
   "weakSurfaces": [],
   "missingSurfaces": [],
+  "promotionReadiness": {
+    "targetStage": null,
+    "satisfiedCriteria": 0,
+    "totalCriteria": 0,
+    "percent": 100,
+    "summary": "This topic already clears the highest maturity bar currently defined in the system.",
+    "blockers": []
+  },
+  "nextActions": [
+    {
+      "id": "showcase-hardening",
+      "priority": "medium",
+      "category": "showcase",
+      "title": "Broaden showcase-grade maintenance evidence",
+      "summary": "Expand audit variety and long-horizon maintenance signals so flagship quality stays deserved over time.",
+      "whyNow": "Flagship status requires more than strong content. It also needs reproducible product entry points and visible long-horizon maintenance signals.",
+      "targetStage": "flagship",
+      "relatedSurfaceIds": [
+        "artifact-map",
+        "maintenance-rhythm"
+      ],
+      "pathHints": [
+        "obsidian-vault/00 Atlas/Artifact Map.md",
+        "obsidian-vault/20 Sources/Corpus Atlas.md",
+        "obsidian-vault/25 Normalized Sources/Processed Source Atlas.md",
+        "obsidian-vault/30 Summaries/Summary Atlas.md"
+      ]
+    }
+  ],
   "recommendedNextSteps": [
-    "Expand audit variety and long-horizon maintenance signals so flagship quality stays deserved over time.",
-    "Use the evaluator as a regression check whenever the example workflow or wiki experience changes materially.",
-    "Broaden audit coverage beyond a single dominant mode so the flagship example exposes more than one maintenance signal."
+    "Broaden showcase-grade maintenance evidence: Expand audit variety and long-horizon maintenance signals so flagship quality stays deserved over time."
   ],
   "reportPaths": {
     "json": "evaluation/topic-evaluation.json",

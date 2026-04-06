@@ -51,6 +51,12 @@ Evaluate the topic's maturity and next upgrades:
 npm run topic:evaluate -- --slug my-topic
 ```
 
+Open the multi-topic product surface:
+
+```text
+/topics
+```
+
 ## What belongs where
 
 - `topic.json`

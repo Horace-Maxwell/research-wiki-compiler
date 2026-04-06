@@ -112,6 +112,8 @@ Key vault notes:
 
 Start here:
 
+- portfolio route: `/topics`
+- topic home: `/topics/openclaw`
 - rendered route: `/examples/openclaw`
 - [`workspace/wiki/index.md`](workspace/wiki/index.md)
 - [`workspace/wiki/entities/openclaw.md`](workspace/wiki/entities/openclaw.md)

@@ -16,6 +16,7 @@ import {
 import {
   TOPIC_MATURITY_STAGES,
   topicEvaluationReportSchema,
+  type TopicEvaluationAction,
   type TopicDimensionScore,
   type TopicEvaluationCriterion,
   type TopicEvaluationReport,
@@ -1585,79 +1586,251 @@ function buildMaturitySummary(stage: TopicMaturityStage, subject: EvaluationSubj
   }
 }
 
-function buildRecommendedNextSteps(
-  subject: EvaluationSubject,
-  stage: TopicMaturityStage,
+function buildPromotionReadiness(
   stageAssessments: TopicStageAssessment[],
-  dimensions: TopicDimensionScore[],
-  surfaces: TopicSurfaceEvaluation[],
 ) {
   const nextStage = resolveStage(stageAssessments).nextStage;
-  const steps: string[] = [];
 
-  if (stage === "starter") {
-    steps.push(
-      "Run a real summarize / review / audit pass so the topic accumulates workflow evidence instead of living only as a starter scaffold.",
-    );
-    steps.push(
-      "Promote the strongest recurring topic pressure into a grounded synthesis that is backed by more than corpus-only references.",
-    );
-    steps.push(
-      "Revisit provenance-facing context packs and artifact notes after real summaries, reviews, and audits exist.",
-    );
-  } else if (stage === "developing") {
-    steps.push(
-      "Tighten maintenance rhythm and watchpoints until they clearly drive what gets reopened next.",
-    );
-    steps.push(
-      "Increase workflow density: more review history, more audits, or more archived answers should feed back into the canonical layer.",
-    );
-  } else if (stage === "maintained") {
-    steps.push(
-      "Deepen the strongest syntheses and context packs until the topic feels more inevitable and less provisional.",
-    );
-    steps.push(
-      "Trim weak or anticipatory surfaces that still exist mainly as structure without enough backing evidence.",
-    );
-  } else if (stage === "mature") {
-    steps.push(
-      "Decide whether this topic should remain a mature maintained workspace or be promoted into a flagship reproducible example.",
-    );
-    steps.push(
-      "Sharpen the weakest remaining surface so the topic no longer has any obviously underpowered areas.",
-    );
-  } else {
-    steps.push(
-      "Expand audit variety and long-horizon maintenance signals so flagship quality stays deserved over time.",
-    );
-    steps.push(
-      "Use the evaluator as a regression check whenever the example workflow or wiki experience changes materially.",
-    );
+  if (!nextStage) {
+    return {
+      targetStage: null,
+      satisfiedCriteria: 0,
+      totalCriteria: 0,
+      percent: 100,
+      summary: "This topic already clears the highest maturity bar currently defined in the system.",
+      blockers: [],
+    };
   }
 
-  for (const dimension of dimensions.filter((entry) => entry.recommendedAction && entry.score < 4.2)) {
-    steps.push(dimension.recommendedAction!);
+  const targetAssessment = stageAssessments.find((assessment) => assessment.stage === nextStage);
+
+  if (!targetAssessment) {
+    return {
+      targetStage: nextStage,
+      satisfiedCriteria: 0,
+      totalCriteria: 0,
+      percent: 0,
+      summary: `No assessment was available for the next stage (${nextStage}).`,
+      blockers: [],
+    };
   }
 
-  for (const surface of surfaces.filter((entry) => entry.score < 3)) {
-    steps.push(`Tighten ${surface.label.toLowerCase()} because it is still weak relative to the rest of the topic.`);
-  }
+  const satisfiedCriteria = targetAssessment.criteria.filter((criterion) => criterion.satisfied).length;
+  const totalCriteria = targetAssessment.criteria.length;
+  const percent =
+    totalCriteria === 0 ? 0 : Math.round((satisfiedCriteria / totalCriteria) * 100);
+  const blockers = targetAssessment.criteria.filter((criterion) => !criterion.satisfied);
 
+  return {
+    targetStage: nextStage,
+    satisfiedCriteria,
+    totalCriteria,
+    percent,
+    summary:
+      blockers.length === 0
+        ? `This topic is ready to be promoted into ${nextStage}.`
+        : `${satisfiedCriteria}/${totalCriteria} criteria for ${nextStage} are already satisfied. The remaining blockers define the highest-leverage upgrade path.`,
+    blockers,
+  };
+}
+
+function buildActionPathHints(
+  surfaces: TopicSurfaceEvaluation[],
+  surfaceIds: string[],
+  fallbackPaths: string[] = [],
+) {
+  return unique([
+    ...surfaceIds.flatMap((surfaceId) => surfaces.find((surface) => surface.id === surfaceId)?.paths ?? []),
+    ...fallbackPaths,
+  ]).slice(0, 4);
+}
+
+function buildNextActions(params: {
+  subject: EvaluationSubject;
+  stage: TopicMaturityStage;
+  stageAssessments: TopicStageAssessment[];
+  dimensions: TopicDimensionScore[];
+  surfaces: TopicSurfaceEvaluation[];
+}): TopicEvaluationAction[] {
+  const { subject, stage, stageAssessments, dimensions, surfaces } = params;
+  const nextStage = resolveStage(stageAssessments).nextStage;
   const nextStageAssessment = nextStage
     ? stageAssessments.find((assessment) => assessment.stage === nextStage)
     : null;
+  const blockers = nextStageAssessment?.criteria.filter((criterion) => !criterion.satisfied) ?? [];
+  const actions: TopicEvaluationAction[] = [];
+  const dimensionsById = new Map(dimensions.map((dimension) => [dimension.id, dimension]));
 
-  if (nextStageAssessment) {
-    for (const criterion of nextStageAssessment.criteria.filter((item) => !item.satisfied)) {
-      steps.push(`To reach ${nextStage}, satisfy: ${criterion.label}.`);
+  const pushAction = (action: TopicEvaluationAction) => {
+    if (actions.some((existing) => existing.title === action.title)) {
+      return;
     }
+
+    actions.push(action);
+  };
+
+  const hasWorkflowBlocker = blockers.some((criterion) =>
+    [
+      "At least two downstream workflow layers are populated",
+      "Workflow and provenance are no longer just starter-grade",
+      "At least one audit report exists",
+      "Workflow and provenance are strongly integrated",
+    ].includes(criterion.label),
+  );
+
+  if (hasWorkflowBlocker) {
+    pushAction({
+      id: "workflow-density",
+      priority: "high",
+      category: "workflow",
+      title: "Populate the next real workflow layers",
+      summary:
+        stage === "starter"
+          ? "Run the first real summarize, review, archive, or audit pass so the topic stops behaving like a polished starter shell."
+          : "Increase downstream workflow density so the topic is supported by visible summaries, review history, archived answers, or audits instead of relying mostly on structure.",
+      whyNow:
+        "Workflow and provenance are the clearest blockers between the current topic state and the next maturity stage.",
+      targetStage: nextStage ?? stage,
+      relatedSurfaceIds: ["artifact-map", "llm-context-packs", "canonical-wiki-pages"],
+      pathHints: buildActionPathHints(surfaces, ["artifact-map", "maintenance-rhythm"]),
+    });
   }
 
-  if (subject.officialExample && subject.auditModeCount < 2) {
-    steps.push("Broaden audit coverage beyond a single dominant mode so the flagship example exposes more than one maintenance signal.");
+  const hasCanonicalBlocker = blockers.some((criterion) =>
+    [
+      "Canonical pages are grounded in compiled artifacts, not only starter corpus refs",
+      "Canonical depth is strong",
+      "The topic has at least one synthesis",
+    ].includes(criterion.label),
+  );
+
+  if (
+    hasCanonicalBlocker ||
+    (dimensionsById.get("canonical_depth")?.score ?? 0) < 4.2
+  ) {
+    pushAction({
+      id: "canonical-grounding",
+      priority: "high",
+      category: "canonical",
+      title: "Deepen the canonical layer with grounded synthesis",
+      summary:
+        "Promote the strongest recurring topic pressure into a better-grounded synthesis or update so important pages cite compiled workflow artifacts, not only starter corpus references.",
+      whyNow:
+        "Canonical strength should be durable evidence, not just well-written starter pages.",
+      targetStage: nextStage ?? stage,
+      relatedSurfaceIds: ["canonical-wiki-pages", "current-tensions", "open-questions"],
+      pathHints: buildActionPathHints(surfaces, ["canonical-wiki-pages", "current-tensions", "open-questions"]),
+    });
   }
 
-  return unique(steps).slice(0, 8);
+  if (
+    blockers.some((criterion) =>
+      ["Maintenance surfaces are operational", "Developing stage is achieved"].includes(criterion.label),
+    ) ||
+    (dimensionsById.get("maintenance_readiness")?.score ?? 0) < 4.2
+  ) {
+    pushAction({
+      id: "maintenance-operations",
+      priority: "medium",
+      category: "maintenance",
+      title: "Turn maintenance surfaces into repeated operating habits",
+      summary:
+        "Use maintenance rhythm, tensions, open questions, and watchpoints as a genuine revisit loop so the topic is easier to resume without rereading everything.",
+      whyNow:
+        "A topic becomes maintained when these surfaces decide what gets reopened next instead of just documenting possibilities.",
+      targetStage: nextStage ?? stage,
+      relatedSurfaceIds: ["maintenance-rhythm", "current-tensions", "open-questions", "monitoring-watchpoints"],
+      pathHints: buildActionPathHints(surfaces, ["maintenance-rhythm", "current-tensions", "open-questions", "monitoring-watchpoints"]),
+    });
+  }
+
+  if (
+    blockers.some((criterion) =>
+      ["Context packs are high-signal enough for repeated use"].includes(criterion.label),
+    ) ||
+    (dimensionsById.get("context_pack_quality")?.score ?? 0) < 4.2
+  ) {
+    pushAction({
+      id: "context-pack-tightening",
+      priority: "medium",
+      category: "context-pack",
+      title: "Tighten context packs around real work bundles",
+      summary:
+        "Reduce each pack to the smallest bundle that truly helps orientation, maintenance, provenance tracing, or synthesis work.",
+      whyNow:
+        "Context packs should change what a human or model loads first, not just mirror the atlas.",
+      targetStage: nextStage ?? stage,
+      relatedSurfaceIds: ["llm-context-packs", "reading-paths"],
+      pathHints: buildActionPathHints(surfaces, ["llm-context-packs", "reading-paths"]),
+    });
+  }
+
+  if (
+    blockers.some((criterion) => ["Navigation is already useful"].includes(criterion.label)) ||
+    (dimensionsById.get("navigation")?.score ?? 0) < 4.2
+  ) {
+    pushAction({
+      id: "navigation-clarity",
+      priority: "medium",
+      category: "navigation",
+      title: "Sharpen route-setting surfaces",
+      summary:
+        "Make Start Here, Topic Map, Key Pages, and Reading Paths more decisive about what should be opened first, second, and only if needed.",
+      whyNow:
+        "Navigation should compress re-entry time, especially once more sources and syntheses begin to accumulate.",
+      targetStage: nextStage ?? stage,
+      relatedSurfaceIds: ["start-here", "topic-map", "key-pages", "reading-paths"],
+      pathHints: buildActionPathHints(surfaces, ["start-here", "topic-map", "key-pages", "reading-paths"]),
+    });
+  }
+
+  if (
+    blockers.some((criterion) =>
+      [
+        "Reference and live modes are explicit",
+        "The product has a clear showcase entry path",
+      ].includes(criterion.label),
+    ) ||
+    (stage === "flagship" && subject.auditModeCount < 2)
+  ) {
+    pushAction({
+      id: "showcase-hardening",
+      priority: stage === "mature" ? "high" : "medium",
+      category: "showcase",
+      title: "Broaden showcase-grade maintenance evidence",
+      summary:
+        subject.officialExample
+          ? "Expand audit variety and long-horizon maintenance signals so flagship quality stays deserved over time."
+          : "Add the explicit showcase scaffolding that would be required before this topic could be treated as a flagship example.",
+      whyNow:
+        "Flagship status requires more than strong content. It also needs reproducible product entry points and visible long-horizon maintenance signals.",
+      targetStage: nextStage ?? stage,
+      relatedSurfaceIds: ["artifact-map", "maintenance-rhythm"],
+      pathHints: buildActionPathHints(surfaces, ["artifact-map", "maintenance-rhythm"]),
+    });
+  }
+
+  if (actions.length === 0) {
+    pushAction({
+      id: "regression-guard",
+      priority: "low",
+      category: "showcase",
+      title: "Use evaluation as a regression guard",
+      summary:
+        "Re-run the evaluator whenever the topic workflow, wiki structure, or daily-use surfaces change materially.",
+      whyNow:
+        "This topic already clears the current stage bar, so the highest-value move is to keep that quality from slipping.",
+      targetStage: nextStage ?? stage,
+      relatedSurfaceIds: [],
+      pathHints: [],
+    });
+  }
+
+  return actions.slice(0, 5);
+}
+
+function buildRecommendedNextSteps(actions: TopicEvaluationAction[]) {
+  return actions.map((action) => `${action.title}: ${action.summary}`);
 }
 
 function buildStrengths(
@@ -1708,6 +1881,7 @@ function computeOverallScore(dimensions: TopicDimensionScore[]) {
 export async function evaluateTopicQuality(
   args: EvaluationTargetArgs,
 ): Promise<TopicEvaluationReport> {
+  const generatedAt = new Date().toISOString();
   const subject = args.slug
     ? await loadTopicSubject(args.slug)
     : await loadOpenClawSubject();
@@ -1729,8 +1903,17 @@ export async function evaluateTopicQuality(
   const overallScore = computeOverallScore(dimensions);
   const stageAssessments = buildStageAssessments(subject, dimensions, surfaces, overallScore);
   const { stage, nextStage } = resolveStage(stageAssessments);
+  const promotionReadiness = buildPromotionReadiness(stageAssessments);
+  const nextActions = buildNextActions({
+    subject,
+    stage,
+    stageAssessments,
+    dimensions,
+    surfaces,
+  });
   const report = topicEvaluationReportSchema.parse({
     schemaVersion: 1,
+    generatedAt,
     target: {
       kind: subject.kind,
       id: subject.id,
@@ -1756,7 +1939,9 @@ export async function evaluateTopicQuality(
     strengths: buildStrengths(dimensions, surfaces, subject),
     weakSurfaces: buildWeakSurfaceList(surfaces),
     missingSurfaces: buildMissingSurfaceList(surfaces),
-    recommendedNextSteps: buildRecommendedNextSteps(subject, stage, stageAssessments, dimensions, surfaces),
+    promotionReadiness,
+    nextActions,
+    recommendedNextSteps: buildRecommendedNextSteps(nextActions),
     reportPaths: {
       json: path.relative(subject.rootPath, subject.reportPaths.json).split(path.sep).join("/"),
       markdown: path.relative(subject.rootPath, subject.reportPaths.markdown).split(path.sep).join("/"),
@@ -1797,17 +1982,38 @@ export function renderTopicEvaluationMarkdown(report: TopicEvaluationReport) {
         `| ${surface.label} | ${surface.score}/5 | ${surface.status} | ${surface.summary} |`,
     ),
   ].join("\n");
+  const readinessBlock =
+    report.promotionReadiness.targetStage === null
+      ? "- This topic already clears the highest defined stage.\n- Promotion blockers: none."
+      : `- Target stage: **${report.promotionReadiness.targetStage}**
+- Readiness: **${report.promotionReadiness.percent}%** (${report.promotionReadiness.satisfiedCriteria}/${report.promotionReadiness.totalCriteria} criteria)
+- Summary: ${report.promotionReadiness.summary}
+- Blockers:
+${report.promotionReadiness.blockers.map((criterion) => `  - ${criterion.label}: ${criterion.details}`).join("\n") || "  - None"}`;
+  const actionTable = [
+    "| Priority | Category | Action | Why now |",
+    "| --- | --- | --- | --- |",
+    ...report.nextActions.map(
+      (action) =>
+        `| ${action.priority} | ${action.category} | ${action.title} | ${action.whyNow} |`,
+    ),
+  ].join("\n");
 
   return `# Topic Evaluation: ${report.target.title}
 
 ## Overview
 
 - Target: ${report.target.kind} \`${report.target.id}\`
+- Generated: ${report.generatedAt}
 - Maturity stage: **${report.maturity.stage}**
 - Overall score: **${report.overall.score}/5** (${report.overall.percent}%)
 - Next stage: ${report.maturity.nextStage ?? "none"}
 
 ${report.maturity.summary}
+
+## Promotion readiness
+
+${readinessBlock}
 
 ## Dimension scorecard
 
@@ -1828,6 +2034,10 @@ ${report.missingSurfaces.length > 0 ? report.missingSurfaces.map((item) => `- ${
 ## Recommended next improvements
 
 ${report.recommendedNextSteps.map((item) => `1. ${item}`).join("\n")}
+
+## Action queue
+
+${actionTable}
 
 ## Surface evaluation
 

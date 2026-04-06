@@ -3,11 +3,22 @@
 ## Overview
 
 - Target: topic `local-first-software`
+- Generated: 2026-04-06T01:52:42.906Z
 - Maturity stage: **starter**
 - Overall score: **4.3/5** (86%)
 - Next stage: developing
 
 Local-First Software has a credible starter surface set, but it still behaves like a starter because real summarize, review, archive, and audit evidence has not populated enough of the workflow yet.
+
+## Promotion readiness
+
+- Target stage: **developing**
+- Readiness: **57%** (4/7 criteria)
+- Summary: 4/7 criteria for developing are already satisfied. The remaining blockers define the highest-leverage upgrade path.
+- Blockers:
+  - At least two downstream workflow layers are populated: 0/4 downstream workflow layers are populated.
+  - Workflow and provenance are no longer just starter-grade: 2.8/5 workflow and provenance score.
+  - Canonical pages are grounded in compiled artifacts, not only starter corpus refs: 0 canonical pages cite non-corpus workflow artifacts.
 
 ## Dimension scorecard
 
@@ -40,13 +51,15 @@ Local-First Software has a credible starter surface set, but it still behaves li
 
 ## Recommended next improvements
 
-1. Run a real summarize / review / audit pass so the topic accumulates workflow evidence instead of living only as a starter scaffold.
-1. Promote the strongest recurring topic pressure into a grounded synthesis that is backed by more than corpus-only references.
-1. Revisit provenance-facing context packs and artifact notes after real summaries, reviews, and audits exist.
-1. Run real summarize, review, archive, and audit loops so the topic stops behaving like a static starter scaffold.
-1. To reach developing, satisfy: At least two downstream workflow layers are populated.
-1. To reach developing, satisfy: Workflow and provenance are no longer just starter-grade.
-1. To reach developing, satisfy: Canonical pages are grounded in compiled artifacts, not only starter corpus refs.
+1. Populate the next real workflow layers: Run the first real summarize, review, archive, or audit pass so the topic stops behaving like a polished starter shell.
+1. Deepen the canonical layer with grounded synthesis: Promote the strongest recurring topic pressure into a better-grounded synthesis or update so important pages cite compiled workflow artifacts, not only starter corpus references.
+
+## Action queue
+
+| Priority | Category | Action | Why now |
+| --- | --- | --- | --- |
+| high | workflow | Populate the next real workflow layers | Workflow and provenance are the clearest blockers between the current topic state and the next maturity stage. |
+| high | canonical | Deepen the canonical layer with grounded synthesis | Canonical strength should be durable evidence, not just well-written starter pages. |
 
 ## Surface evaluation
 

@@ -26,6 +26,12 @@ npm run topic:validate -- --slug local-first-software
 npm run topic:evaluate -- --slug local-first-software
 ```
 
+Rendered topic home:
+
+```text
+/topics/local-first-software
+```
+
 ## What to inspect first
 
 - `workspace/wiki/index.md`

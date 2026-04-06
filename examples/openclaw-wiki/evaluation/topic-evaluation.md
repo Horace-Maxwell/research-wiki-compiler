@@ -3,11 +3,17 @@
 ## Overview
 
 - Target: example `openclaw`
+- Generated: 2026-04-06T01:52:51.209Z
 - Maturity stage: **flagship**
 - Overall score: **5/5** (100%)
 - Next stage: none
 
 OpenClaw example wiki is operating at flagship quality: strong workflow completeness, strong daily-use surfaces, and a clear showcase path.
+
+## Promotion readiness
+
+- This topic already clears the highest defined stage.
+- Promotion blockers: none.
 
 ## Dimension scorecard
 
@@ -40,9 +46,13 @@ OpenClaw example wiki is operating at flagship quality: strong workflow complete
 
 ## Recommended next improvements
 
-1. Expand audit variety and long-horizon maintenance signals so flagship quality stays deserved over time.
-1. Use the evaluator as a regression check whenever the example workflow or wiki experience changes materially.
-1. Broaden audit coverage beyond a single dominant mode so the flagship example exposes more than one maintenance signal.
+1. Broaden showcase-grade maintenance evidence: Expand audit variety and long-horizon maintenance signals so flagship quality stays deserved over time.
+
+## Action queue
+
+| Priority | Category | Action | Why now |
+| --- | --- | --- | --- |
+| medium | showcase | Broaden showcase-grade maintenance evidence | Flagship status requires more than strong content. It also needs reproducible product entry points and visible long-horizon maintenance signals. |
 
 ## Surface evaluation
 

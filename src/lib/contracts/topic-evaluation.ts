@@ -34,6 +34,22 @@ export const TOPIC_QUALITY_DIMENSIONS = [
 export const topicQualityDimensionSchema = z.enum(TOPIC_QUALITY_DIMENSIONS);
 export type TopicQualityDimension = z.infer<typeof topicQualityDimensionSchema>;
 
+export const TOPIC_ACTION_PRIORITIES = ["high", "medium", "low"] as const;
+export const topicActionPrioritySchema = z.enum(TOPIC_ACTION_PRIORITIES);
+export type TopicActionPriority = z.infer<typeof topicActionPrioritySchema>;
+
+export const TOPIC_ACTION_CATEGORIES = [
+  "workflow",
+  "canonical",
+  "navigation",
+  "maintenance",
+  "context-pack",
+  "projection",
+  "showcase",
+] as const;
+export const topicActionCategorySchema = z.enum(TOPIC_ACTION_CATEGORIES);
+export type TopicActionCategory = z.infer<typeof topicActionCategorySchema>;
+
 export const topicEvaluationTargetSchema = z.object({
   kind: z.enum(["topic", "example"]),
   id: z.string().min(1),
@@ -93,8 +109,32 @@ export const topicSurfaceEvaluationSchema = z.object({
 });
 export type TopicSurfaceEvaluation = z.infer<typeof topicSurfaceEvaluationSchema>;
 
+export const topicEvaluationActionSchema = z.object({
+  id: z.string().min(1),
+  priority: topicActionPrioritySchema,
+  category: topicActionCategorySchema,
+  title: z.string().min(1),
+  summary: z.string().min(1),
+  whyNow: z.string().min(1),
+  targetStage: topicMaturityStageSchema,
+  relatedSurfaceIds: z.array(z.string().min(1)).default([]),
+  pathHints: z.array(z.string().min(1)).default([]),
+});
+export type TopicEvaluationAction = z.infer<typeof topicEvaluationActionSchema>;
+
+export const topicPromotionReadinessSchema = z.object({
+  targetStage: topicMaturityStageSchema.nullable(),
+  satisfiedCriteria: z.number().int().nonnegative(),
+  totalCriteria: z.number().int().nonnegative(),
+  percent: z.number().min(0).max(100),
+  summary: z.string().min(1),
+  blockers: z.array(topicEvaluationCriterionSchema).default([]),
+});
+export type TopicPromotionReadiness = z.infer<typeof topicPromotionReadinessSchema>;
+
 export const topicEvaluationReportSchema = z.object({
   schemaVersion: z.literal(1),
+  generatedAt: z.string().datetime(),
   target: topicEvaluationTargetSchema,
   maturity: z.object({
     stage: topicMaturityStageSchema,
@@ -113,6 +153,8 @@ export const topicEvaluationReportSchema = z.object({
   strengths: z.array(z.string().min(1)),
   weakSurfaces: z.array(z.string().min(1)),
   missingSurfaces: z.array(z.string().min(1)),
+  promotionReadiness: topicPromotionReadinessSchema,
+  nextActions: z.array(topicEvaluationActionSchema).min(1),
   recommendedNextSteps: z.array(z.string().min(1)).min(1),
   reportPaths: z.object({
     json: z.string().min(1),

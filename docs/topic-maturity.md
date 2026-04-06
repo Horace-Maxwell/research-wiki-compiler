@@ -19,6 +19,12 @@ Evaluate the official OpenClaw example:
 npm run example:openclaw:evaluate
 ```
 
+Open the product-level portfolio view:
+
+```text
+/topics
+```
+
 Skip writing committed reports if you only want terminal output:
 
 ```bash
@@ -107,6 +113,17 @@ Typical transitions look like this:
   Deepen syntheses, improve provenance integration, and trim surfaces that are still mostly anticipatory.
 - `mature -> flagship`
   Add showcase discipline: reproducible modes, clear rendered entry paths, and no obviously weak surfaces.
+
+## Product surface
+
+The maturity system now also appears inside the app:
+
+- `/topics`
+  the portfolio view across all known topics
+- `/topics/<slug>`
+  a rendered topic home that combines the canonical wiki, promotion blockers, and next actions
+
+The intent is to make maturity visible where work actually happens, not just in standalone markdown reports.
 
 ## Current intended interpretation
 
