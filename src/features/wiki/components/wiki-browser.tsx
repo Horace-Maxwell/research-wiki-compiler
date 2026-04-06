@@ -188,6 +188,14 @@ function SurfaceHeader({
   );
 }
 
+function LocalizedDateTime({ value }: { value: string }) {
+  return (
+    <time dateTime={value} suppressHydrationWarning>
+      {new Date(value).toLocaleString()}
+    </time>
+  );
+}
+
 function MetaBlock({
   label,
   value,
@@ -1194,7 +1202,7 @@ export function WikiBrowser({
                     </span>
                     <span>
                       <span className="font-medium text-foreground/86">Revised</span>{" "}
-                      {new Date(detail.updatedAt).toLocaleString()}
+                      <LocalizedDateTime value={detail.updatedAt} />
                     </span>
                   </div>
 
@@ -1254,11 +1262,11 @@ export function WikiBrowser({
                     <SummaryFact label="Confidence" value={detail.confidence.toFixed(2)} />
                     <SummaryFact
                       label="Revised"
-                      value={new Date(detail.updatedAt).toLocaleString()}
+                      value={<LocalizedDateTime value={detail.updatedAt} />}
                     />
                     <SummaryFact
                       label="Indexed"
-                      value={new Date(detail.lastIndexedAt).toLocaleString()}
+                      value={<LocalizedDateTime value={detail.lastIndexedAt} />}
                     />
                   </div>
                   <div className="mt-4 space-y-2">
@@ -1303,7 +1311,7 @@ export function WikiBrowser({
                 <div className="space-y-1 border-l border-border/55 pl-3">
                   <div className="text-sm leading-6 text-muted-foreground">
                     {detail.sourceRefs.length} references · {detail.backlinks.length} related pages
-                    · Last revised {new Date(detail.updatedAt).toLocaleString()}
+                    · Last revised <LocalizedDateTime value={detail.updatedAt} />
                   </div>
                 </div>
                 {allowRefreshLinks ? (
@@ -1574,7 +1582,7 @@ export function WikiBrowser({
                         <MetaBlock label="Slug" value={detail.slug} />
                         <MetaBlock
                           label="Last indexed"
-                          value={new Date(detail.lastIndexedAt).toLocaleString()}
+                          value={<LocalizedDateTime value={detail.lastIndexedAt} />}
                         />
                       </div>
                     </section>
@@ -1709,7 +1717,7 @@ export function WikiBrowser({
                 <MetaBlock label="Slug" value={detail.slug} />
                 <MetaBlock
                   label="Last indexed"
-                  value={new Date(detail.lastIndexedAt).toLocaleString()}
+                  value={<LocalizedDateTime value={detail.lastIndexedAt} />}
                 />
               </div>
             </div>

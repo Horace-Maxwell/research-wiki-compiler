@@ -393,13 +393,30 @@ function buildTopicSummary(
 }
 
 function buildBuckets(items: MonitoringItem[]) {
+  const assignedItemIds = new Set<string>();
+  const claimItems = (candidates: MonitoringItem[]) =>
+    sortMonitoringItems(candidates).filter((item) => {
+      if (assignedItemIds.has(item.id)) {
+        return false;
+      }
+
+      assignedItemIds.add(item.id);
+      return true;
+    });
+  const recentlyStable = [...items]
+    .filter((item) => item.status === "stable")
+    .sort(
+      (left, right) =>
+        new Date(right.stableSince ?? 0).getTime() - new Date(left.stableSince ?? 0).getTime(),
+    );
+
   return [
     {
       id: "spawn-acquisition" as const,
       title: "Monitoring that should spawn work",
       description:
         "Watchpoints and signals that should escalate into bounded acquisition or reopen work instead of staying passive.",
-      items: sortMonitoringItems(
+      items: claimItems(
         items.filter(
           (item) =>
             item.triggerAction === "spawn-acquisition" || item.triggerAction === "reopen-work",
@@ -411,7 +428,7 @@ function buildBuckets(items: MonitoringItem[]) {
       title: "Review-needed monitoring",
       description:
         "Signals that should mark bounded review surfaces without necessarily spawning new evidence collection immediately.",
-      items: sortMonitoringItems(
+      items: claimItems(
         items.filter(
           (item) =>
             item.status === "review-needed" || item.triggerAction === "mark-review",
@@ -423,14 +440,14 @@ function buildBuckets(items: MonitoringItem[]) {
       title: "Periodic review monitors",
       description:
         "Monitoring items that should be checked on a cadence because the topic is not yet ready to treat them as stable background assumptions.",
-      items: sortMonitoringItems(items.filter((item) => item.mode === "periodic-review")),
+      items: claimItems(items.filter((item) => item.mode === "periodic-review")),
     },
     {
       id: "keep-watching" as const,
       title: "Keep watching",
       description:
         "Signals worth keeping visible even when they do not yet justify new acquisition or bounded canonical review.",
-      items: sortMonitoringItems(
+      items: claimItems(
         items.filter(
           (item) =>
             item.triggerAction === "keep-watching" || item.status === "watching",
@@ -442,14 +459,9 @@ function buildBuckets(items: MonitoringItem[]) {
       title: "Recently stable",
       description:
         "Monitoring items that help narrow work by showing which surfaces can likely stay stable for now.",
-      items: [...items]
-        .filter((item) => item.status === "stable")
-        .sort(
-          (left, right) =>
-            new Date(right.stableSince ?? 0).getTime() - new Date(left.stableSince ?? 0).getTime(),
-        ),
+      items: claimItems(recentlyStable),
     },
-  ];
+  ].filter((bucket) => bucket.items.length > 0);
 }
 
 export async function getMonitoringOverview(params?: {

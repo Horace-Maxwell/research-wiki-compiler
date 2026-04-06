@@ -33,6 +33,18 @@ describe("monitoring service", () => {
     expect(overview.focusMonitor?.mode).toBe("event-triggered");
   });
 
+  it("does not repeat the same monitor across multiple lower-frequency buckets", async () => {
+    const overview = await getMonitoringOverview({
+      focusTopicId: "openclaw",
+    });
+
+    const bucketItemIds = overview.buckets.flatMap((bucket) => bucket.items.map((item) => item.id));
+    const uniqueBucketItemIds = new Set(bucketItemIds);
+
+    expect(bucketItemIds.length).toBe(uniqueBucketItemIds.size);
+    expect(bucketItemIds).toContain("openclaw-plugin-drift-stability-monitor");
+  });
+
   it("returns topic-level monitoring summaries for rendered topic homes", async () => {
     const localFirst = await getTopicMonitoringSummary("local-first-software");
 
