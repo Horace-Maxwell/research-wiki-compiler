@@ -2,6 +2,13 @@
 
 Describe the change clearly and briefly.
 
+## How To Review
+
+- What should the reviewer read first in the repo?
+- What route or flow should the reviewer open first in the app?
+- What surfaces are primary versus secondary for this change?
+- What should the reviewer avoid over-focusing on?
+
 ## Milestone or Workflow Impact
 
 - Which product loop or area does this affect: compile, review, ask, archive, audit, or platform?

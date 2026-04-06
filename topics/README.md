@@ -57,19 +57,25 @@ Open the multi-topic product surface:
 /topics
 ```
 
-Open the portfolio-wide question workflow:
+Default daily-use path:
+
+```text
+/topics -> /topics/<slug> -> /questions -> /sessions -> /syntheses
+```
+
+Open the portfolio-wide question workflow when you want the next main research lane:
 
 ```text
 /questions
 ```
 
-Open the portfolio-wide acquisition workflow:
+Open the portfolio-wide acquisition workflow only when missing evidence is already the blocker:
 
 ```text
 /acquisition
 ```
 
-Open the portfolio-wide monitoring workflow:
+Open the portfolio-wide monitoring workflow only when a watchpoint needs attention:
 
 ```text
 /monitoring

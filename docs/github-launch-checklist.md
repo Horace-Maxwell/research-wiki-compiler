@@ -1,6 +1,6 @@
 # GitHub Launch Checklist
 
-This checklist is for the first push to a future GitHub repository.
+This checklist now serves as a public-repository hygiene checklist for major merge-prep and release-readiness passes.
 
 ## Summary
 
@@ -25,7 +25,7 @@ Suggested GitHub topics:
 - `llm`
 - `typescript`
 
-## Must Check Before First Push
+## Must Check Before Major Merge or Release Candidate
 
 - Final visibility choice is confirmed.
 - Final repository URL is confirmed.
@@ -44,7 +44,7 @@ Audit result from this local pass:
 - The demo seed uses `demo-seed-key`, which is not a real credential and is cleared from the seeded workspace settings afterward.
 - `.env.example` is retained intentionally and contains no secrets.
 
-Action before first push:
+Action before a major merge or release candidate:
 
 - rerun a secret scan over the final staged tree
 - confirm no populated `.env` files are staged
@@ -59,7 +59,7 @@ Audit result from this local pass:
 - Large files currently observed are inside ignored local build or dependency directories such as `.next/` and `node_modules/`.
 - No real machine-specific user paths remain in tracked docs or repository metadata after this prep pass.
 
-Action before first push:
+Action before a major merge or release candidate:
 
 - confirm the final staged diff contains no `/Users/...` paths
 - confirm `.next/`, `node_modules/`, and local DB artifacts are not staged
@@ -107,7 +107,7 @@ The repository includes a conservative CI workflow that runs:
 - `npm test`
 - `npm run build`
 
-Additional local release-candidate checks expected before the first push:
+Additional local release-candidate checks expected before a major merge or release candidate:
 
 - `npm run demo:reset`
 - `npm run test:e2e`

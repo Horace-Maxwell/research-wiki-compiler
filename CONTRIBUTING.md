@@ -2,7 +2,7 @@
 
 Thanks for your interest in improving Research Wiki Compiler.
 
-This repository is currently private and is being prepared for a future push. Until that launch decision changes, contributions are coordinated by invitation or direct maintainer approval from Horace.
+This repository is public, but the product is still evolving quickly. Small fixes, tests, and doc improvements are welcome. Broader workflow or product-shape changes should start with a clear issue, discussion, or maintainer alignment first.
 
 ## Project Principles
 
@@ -63,7 +63,7 @@ If a UI change materially affects user flows, include screenshots once the repos
 
 ## Pull Request Readiness
 
-Before a future PR is opened:
+Before a PR is opened:
 
 - run `npm run lint`
 - run `npm test`
@@ -71,4 +71,4 @@ Before a future PR is opened:
 - update docs if product behavior changed
 - call out whether prompts, schemas, or artifact contracts changed
 
-See the future PR checklist in [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md).
+See [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md) for the PR checklist and review-path prompts.

@@ -25,6 +25,8 @@
   ·
   <a href="./examples/openclaw-wiki/README.md">OpenClaw Example / OpenClaw 示例</a>
   ·
+  <a href="./docs/merge-review-guide.md">Review Guide / 评审指引</a>
+  ·
   <a href="./docs/topic-bootstrap.md">Topic Bootstrap / 主题启动</a>
   ·
   <a href="./docs/topic-maturity.md">Topic Maturity / 主题成熟度</a>

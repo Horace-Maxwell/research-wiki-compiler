@@ -2,7 +2,7 @@
 
 ## Release Status
 
-This repository is still private and is being prepared locally for a future push. Security review and reporting are handled on a best-effort basis for the current MVP.
+This repository is public. Security review and reporting are still handled on a best-effort basis for the current MVP.
 
 ## Supported Versions
 
@@ -40,13 +40,13 @@ Research Wiki Compiler is a local-first, single-user MVP. High-signal report are
 - prompt or artifact leakage
 - review/apply safety across file-backed mutations
 
-## Pre-Launch Tasks
+## GitHub Hygiene Tasks
 
-Before first public push, enable:
+Keep these enabled for the public repository:
 
 - GitHub secret scanning
 - push protection
 - Dependabot alerts
 - branch protections
 
-See [docs/github-launch-checklist.md](docs/github-launch-checklist.md) for the full launch-prep checklist.
+See [docs/github-launch-checklist.md](docs/github-launch-checklist.md) for the broader public-repo hygiene checklist.

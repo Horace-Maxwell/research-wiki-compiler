@@ -2,7 +2,7 @@
 
 ## Current Status
 
-This repository is still private and is being prepared for a future push. Support is best-effort for now and currently coordinated by Horace.
+This repository is public. Support is still best-effort and currently coordinated by Horace while the product is in active personal-trial refinement.
 
 Current maintainer contact for non-security questions: [maxwelldhx@gmail.com](mailto:maxwelldhx@gmail.com).
 
@@ -16,9 +16,9 @@ Start here:
 - [docs/progress.md](docs/progress.md)
 - [docs/decisions.md](docs/decisions.md)
 
-## When the Repository Is Pushed
+## GitHub Workflow
 
-For the future GitHub-hosted workflow:
+For the current GitHub-hosted workflow:
 
 - reproducible bugs should go to GitHub Issues
 - feature requests should go to GitHub Discussions when enabled, or to the feature request template if Discussions are not enabled yet
