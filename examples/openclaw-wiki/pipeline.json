@@ -180,6 +180,7 @@
           "Revisit next",
           "Session queue",
           "Synthesis decisions",
+          "Evidence changes to triage",
           "Context packs to refresh",
           "Synthesis candidates",
           "Audit to action",
@@ -223,6 +224,7 @@
           "What looks answerable next",
           "Recent session outcomes",
           "Published syntheses",
+          "Reopened by evidence change",
           "Related pages"
         ]
       },

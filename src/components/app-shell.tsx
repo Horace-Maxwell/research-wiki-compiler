@@ -14,6 +14,7 @@ import {
   FlaskConical,
   LayoutDashboard,
   LibraryBig,
+  RefreshCw,
   Settings2,
   Sparkles,
 } from "lucide-react";
@@ -28,6 +29,7 @@ const navIconMap = {
   "/questions": CircleHelp,
   "/sessions": FlaskConical,
   "/syntheses": Sparkles,
+  "/changes": RefreshCw,
   "/onboarding": Compass,
   "/dashboard": LayoutDashboard,
   "/sources": FileStack,
@@ -41,7 +43,7 @@ const navIconMap = {
 const navGroups = [
   {
     title: "Portfolio",
-    items: ["/topics", "/questions", "/sessions", "/syntheses", "/dashboard", "/onboarding"],
+    items: ["/topics", "/questions", "/sessions", "/syntheses", "/changes", "/dashboard", "/onboarding"],
   },
   {
     title: "Knowledge",
@@ -81,6 +83,11 @@ const surfaceCopy = {
   "/dashboard": {
     label: "Workspace front door",
     detail: "See what the knowledge base knows, what changed, and what should happen next.",
+  },
+  "/changes": {
+    label: "Evidence change lane",
+    detail:
+      "Track the evidence shifts that should reopen questions, stale syntheses, or trigger bounded canonical review instead of broad rewrite churn.",
   },
   "/onboarding": {
     label: "Workspace setup",
@@ -131,6 +138,10 @@ function normalizeActivePath(pathname: string) {
 
   if (pathname.startsWith("/syntheses")) {
     return "/syntheses";
+  }
+
+  if (pathname.startsWith("/changes")) {
+    return "/changes";
   }
 
   const match = PRODUCT_SURFACE.find((item) => pathname === item.href);
@@ -208,6 +219,12 @@ export function AppShell({ children }: { children: ReactNode }) {
                     <Link href="/syntheses">
                       <Sparkles className="size-4" />
                       Open synthesis loop
+                    </Link>
+                  </Button>
+                  <Button asChild className="w-full justify-start" variant="ghost">
+                    <Link href="/changes">
+                      <RefreshCw className="size-4" />
+                      Open change lane
                     </Link>
                   </Button>
                   <Button asChild className="w-full justify-start" variant="ghost">

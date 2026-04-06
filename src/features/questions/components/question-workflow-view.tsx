@@ -226,9 +226,14 @@ export function QuestionWorkflowView({
         actions={
           <div className="flex flex-wrap gap-2">
             {focusedTopic ? (
-              <Button asChild variant="outline">
-                <Link href="/questions">Open full question queue</Link>
-              </Button>
+              <>
+                <Button asChild variant="outline">
+                  <Link href="/questions">Open full question queue</Link>
+                </Button>
+                <Button asChild variant="ghost">
+                  <Link href={`/changes?topic=${focusedTopic.id}`}>Open change lane</Link>
+                </Button>
+              </>
             ) : (
               <Button asChild variant="outline">
                 <Link href="/topics">Open topic portfolio</Link>

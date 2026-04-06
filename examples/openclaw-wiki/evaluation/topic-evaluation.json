@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-04-06T02:32:43.232Z",
+  "generatedAt": "2026-04-06T03:51:39.976Z",
   "target": {
     "kind": "example",
     "id": "openclaw",
@@ -390,14 +390,14 @@
       "status": "strong",
       "summary": "Open Questions is doing its job cleanly.",
       "evidence": [
-        "3/3 expected headings matched.",
-        "635 body words.",
-        "30 wiki links.",
-        "48 bullet items and 0 ordered steps.",
-        "3/3 expected headings matched.",
-        "598 body words.",
-        "27 wiki links.",
-        "43 bullet items and 0 ordered steps."
+        "5/5 expected headings matched.",
+        "1468 body words.",
+        "54 wiki links.",
+        "92 bullet items and 0 ordered steps.",
+        "5/5 expected headings matched.",
+        "1431 body words.",
+        "58 wiki links.",
+        "87 bullet items and 0 ordered steps."
       ],
       "issues": []
     },
@@ -472,14 +472,14 @@
       "status": "strong",
       "summary": "Maintenance Rhythm is doing its job cleanly.",
       "evidence": [
+        "8/8 expected headings matched.",
+        "1923 body words.",
+        "80 wiki links.",
+        "110 bullet items and 0 ordered steps.",
         "6/6 expected headings matched.",
-        "648 body words.",
-        "48 wiki links.",
-        "32 bullet items and 0 ordered steps.",
-        "4/4 expected headings matched.",
-        "207 body words.",
-        "7 wiki links.",
-        "14 bullet items and 0 ordered steps."
+        "1482 body words.",
+        "45 wiki links.",
+        "92 bullet items and 0 ordered steps."
       ],
       "issues": []
     },

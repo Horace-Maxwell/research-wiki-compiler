@@ -83,6 +83,45 @@
 - **Update surfaces**: [[Provider dependency risk]], [[OpenClaw maintenance rhythm]], [[OpenClaw open questions]], [[OpenClaw maintenance watchpoints]], [[OpenClaw current tensions]]
 - **Next step**: Run one tighter provider-focused pass and either publish this synthesis or explicitly downgrade it back to a candidate.
 
+## Evidence changes to triage
+
+### Provider-side signal reopens instability framing
+
+- **State**: reopened
+- **Change type**: provider shift
+- **Changed evidence**: OpenClaw provider exposure evidence, OpenClaw upgrade monitoring evidence
+- **Why it matters**: Provider-side shifts affect adoption assumptions and upgrade posture at the same time, so they can invalidate more than one durable surface at once.
+- **Impact**: The instability framing question should reopen, the tensions synthesis needs review, and provider-risk pages plus watchpoints should be rechecked together.
+- **Reopen questions**: Which parts of OpenClaw look most unstable or fast-moving?; What should I monitor before upgrading OpenClaw?
+- **Synthesis now stale**: OpenClaw current tensions
+- **Review pages**: [[Provider dependency risk]], [[OpenClaw current tensions]]
+- **Maintenance surfaces**: [[OpenClaw maintenance rhythm]], [[OpenClaw open questions]]
+- **Likely stable**: [[OpenClaw]], [[Plugin compatibility]]
+- **Recommended action**: Reopen the instability and upgrade-monitoring questions, review current tensions and provider risk together, then decide whether the provider exposure synthesis should publish or whether watchpoints should be rewritten first.
+
+### Release packaging sharpens regression rules
+
+- **State**: review needed
+- **Change type**: release signal
+- **Changed evidence**: OpenClaw release trigger evidence, OpenClaw upgrade monitoring evidence
+- **Why it matters**: The regression-trigger synthesis is only worth publishing if release and changelog evidence now form a durable operator rule set rather than a pile of hints.
+- **Impact**: The ready regression-trigger synthesis likely got stronger, but release cadence, watchpoints, and the archived checklist should be reviewed together before publication.
+- **Review pages**: [[OpenClaw release cadence]], [[Note: What should I monitor before upgrading OpenClaw]]
+- **Maintenance surfaces**: [[OpenClaw maintenance rhythm]]
+- **Likely stable**: [[OpenClaw]], [[OpenClaw current tensions]]
+- **Recommended action**: Finish the regression-trigger synthesis and review release cadence, watchpoints, and the archived upgrade note in the same pass.
+
+### Plugin drift remains monitoring work
+
+- **State**: stabilized
+- **Change type**: summary shift
+- **Changed evidence**: OpenClaw plugin drift evidence
+- **Why it matters**: A change-aware system should also tell you when a concern is still best handled as monitoring rather than as a full reopen event.
+- **Impact**: Plugin compatibility remains a live watch area, but the entity page, tensions synthesis, and release story can likely stay stable until clearer longitudinal drift evidence arrives.
+- **Maintenance surfaces**: [[OpenClaw open questions]]
+- **Likely stable**: [[OpenClaw]], [[OpenClaw current tensions]], [[OpenClaw release cadence]]
+- **Recommended action**: Keep plugin drift in the question queue and monitoring surface, but do not reopen broader syntheses until a later release names concrete compatibility breakpoints.
+
 ## Context packs to refresh
 
 - `Explain OpenClaw`: the core explanation or tension framing changes.

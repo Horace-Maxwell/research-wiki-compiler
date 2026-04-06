@@ -107,6 +107,18 @@
 - **Updated surfaces**: [[OpenClaw]], [[OpenClaw release cadence]], [[OpenClaw maintenance rhythm]], [[OpenClaw open questions]], [[OpenClaw maintenance watchpoints]], [[OpenClaw current tensions]]
 - **Revisit if**: A release note or provider signal changes what looks operationally unstable.
 
+## Reopened by evidence change
+
+### Provider-side signal reopens instability framing
+
+- **Why now**: The instability framing question should reopen, the tensions synthesis needs review, and provider-risk pages plus watchpoints should be rechecked together.
+- **Which parts of OpenClaw look most unstable or fast-moving?**, load [[Maintenance Triage]], then deepen with [[Explain OpenClaw]].
+- **What should I monitor before upgrading OpenClaw?**, load [[Upgrade Watchpoints]], then deepen with [[Maintenance Triage]].
+- **Synthesis to re-check**: OpenClaw current tensions
+- **Review surfaces**: [[Provider dependency risk]], [[OpenClaw current tensions]]
+- **Still likely stable**: [[OpenClaw]], [[Plugin compatibility]]
+- **Recommended action**: Reopen the instability and upgrade-monitoring questions, review current tensions and provider risk together, then decide whether the provider exposure synthesis should publish or whether watchpoints should be rewritten first.
+
 
 
 ## Reopen when the topic changes

@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowRight, FlaskConical, FolderTree, Gauge, Radar, Sparkles } from "lucide-react";
+import { ArrowRight, FlaskConical, FolderTree, Gauge, Radar, RefreshCw, Sparkles } from "lucide-react";
 
+import type { EvidenceChangeTopicSummary } from "@/lib/contracts/evidence-change";
 import type { QuestionWorkflowTopicSummary } from "@/lib/contracts/research-question";
 import type { ResearchSessionTopicSummary } from "@/lib/contracts/research-session";
 import type { ResearchSynthesisTopicSummary } from "@/lib/contracts/research-synthesis";
@@ -91,12 +92,14 @@ function Surface({
 export function TopicWorkspaceIntro({
   topic,
   comparisonSpotlight,
+  evidenceChangeSummary,
   questionWorkflow,
   sessionSummary,
   synthesisSummary,
 }: {
   topic: TopicPortfolioItem;
   comparisonSpotlight: TopicPortfolioComparison | null;
+  evidenceChangeSummary: EvidenceChangeTopicSummary | null;
   questionWorkflow: QuestionWorkflowTopicSummary | null;
   sessionSummary: ResearchSessionTopicSummary | null;
   synthesisSummary: ResearchSynthesisTopicSummary | null;
@@ -436,6 +439,82 @@ export function TopicWorkspaceIntro({
               </Button>
               <Button asChild variant="ghost">
                 <Link href="/syntheses">Open full synthesis portfolio</Link>
+              </Button>
+            </div>
+          </div>
+        </Surface>
+      ) : null}
+
+      {evidenceChangeSummary ? (
+        <Surface
+          title="Evidence changes"
+          description="Evidence shifts should reopen or review this topic selectively. This surface keeps that impact visible instead of letting durable pages drift silently."
+        >
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="outline">{evidenceChangeSummary.changeCount} changes</Badge>
+              <Badge variant="outline">{evidenceChangeSummary.reopenedCount} reopened</Badge>
+              <Badge variant="outline">{evidenceChangeSummary.reviewNeededCount} review needed</Badge>
+              <Badge variant="outline">{evidenceChangeSummary.stabilizedCount} stabilized</Badge>
+              <Badge variant="outline">
+                {evidenceChangeSummary.canonicalReviewCount} canonical review
+              </Badge>
+            </div>
+            <div className="grid gap-3 xl:grid-cols-2">
+              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <RefreshCw className="size-4" />
+                  Latest evidence change
+                </div>
+                <div className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {evidenceChangeSummary.latestChange ? (
+                    <>
+                      <div className="font-medium text-foreground">
+                        {evidenceChangeSummary.latestChange.title}
+                      </div>
+                      <div className="mt-1">
+                        {evidenceChangeSummary.latestChange.impactSummary}
+                      </div>
+                    </>
+                  ) : (
+                    "No evidence change has been explicitly recorded for this topic yet."
+                  )}
+                </div>
+              </div>
+              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Gauge className="size-4" />
+                  Next review action
+                </div>
+                <div className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {evidenceChangeSummary.nextReview ? (
+                    <>
+                      <div className="font-medium text-foreground">
+                        {evidenceChangeSummary.nextReview.title}
+                      </div>
+                      <div className="mt-1">
+                        {evidenceChangeSummary.nextReview.recommendedAction}
+                      </div>
+                    </>
+                  ) : (
+                    "No reopen or review action is currently seeded for this topic."
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild variant="outline">
+                <Link href={`/changes?topic=${topic.id}`}>Open topic change lane</Link>
+              </Button>
+              {evidenceChangeSummary.latestChange ? (
+                <Button asChild variant="ghost">
+                  <Link href={evidenceChangeSummary.latestChange.links.change.href}>
+                    Focus latest change
+                  </Link>
+                </Button>
+              ) : null}
+              <Button asChild variant="ghost">
+                <Link href="/changes">Open full change portfolio</Link>
               </Button>
             </div>
           </div>

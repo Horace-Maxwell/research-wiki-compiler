@@ -3,7 +3,7 @@ title: OpenClaw
 slug: openclaw
 type: entity
 created_at: '2026-04-05T19:36:54.460Z'
-updated_at: '2026-04-05T19:36:56.639Z'
+updated_at: '2026-04-05T19:36:56.765Z'
 status: active
 aliases:
   - open claw

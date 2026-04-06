@@ -867,6 +867,189 @@
       ]
     }
   ],
+  "evidenceBundles": [
+    {
+      "id": "local-first-software-canonical-boundary-evidence",
+      "title": "Local-First Software canonical boundary evidence",
+      "kind": "summary-pattern",
+      "summary": "The bounded corpus evidence that separates durable entry-page framing from still-provisional maintenance and synthesis material.",
+      "sourceTitles": [
+        "Local-first core ideas",
+        "Sync engines"
+      ],
+      "assumptionNotes": [
+        "The entry page should stay compact and durable even when the operational story is still shifting.",
+        "Active trade-offs belong in tensions and maintenance surfaces before they harden into canonical guidance."
+      ],
+      "linkedQuestionIds": [
+        "sync-assumptions-durable"
+      ],
+      "linkedSynthesisIds": [
+        "local-first-current-tensions-synthesis",
+        "local-first-sync-risk-map"
+      ],
+      "canonicalPageTitles": [
+        "Local-First Software"
+      ],
+      "watchpointTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "maintenanceSurfaceTitles": [
+        "Local-First Software current tensions",
+        "Local-First Software open questions"
+      ]
+    },
+    {
+      "id": "local-first-software-maintenance-trigger-evidence",
+      "title": "Local-First Software maintenance trigger evidence",
+      "kind": "maintenance-signal",
+      "summary": "The evidence bundle that explains which recurring signals should actually change revisit order, synthesis priority, or maintenance posture.",
+      "sourceTitles": [
+        "Sync engines",
+        "Maintenance risks"
+      ],
+      "assumptionNotes": [
+        "The next synthesis should emerge from recurring maintenance pressure, not just from a well-written note.",
+        "Context packs and reopen order should change only when the same signal keeps affecting next work."
+      ],
+      "linkedQuestionIds": [
+        "migration-playbook"
+      ],
+      "linkedSynthesisIds": [
+        "local-first-migration-playbook"
+      ],
+      "canonicalPageTitles": [
+        "Local-First Software"
+      ],
+      "watchpointTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "maintenanceSurfaceTitles": [
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ]
+    },
+    {
+      "id": "local-first-software-watchpoint-evidence",
+      "title": "Local-First Software watchpoint evidence",
+      "kind": "audit-signal",
+      "summary": "The evidence bundle that decides whether the monitoring surface is still provisional, should be hardened, or should trigger reopen work.",
+      "sourceTitles": [
+        "Sync engines",
+        "Maintenance risks"
+      ],
+      "assumptionNotes": [
+        "A watch surface is useful before it is fully stable, but its operator guidance should stay easy to revise.",
+        "Audit and source changes should trigger maintenance action only when they materially alter monitoring logic."
+      ],
+      "linkedQuestionIds": [
+        "conflict-repair-watchpoints"
+      ],
+      "linkedSynthesisIds": [
+        "local-first-maintenance-watchpoints-synthesis"
+      ],
+      "canonicalPageTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "watchpointTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "maintenanceSurfaceTitles": [
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ]
+    }
+  ],
+  "evidenceChanges": [
+    {
+      "id": "local-first-software-maintenance-evidence-tightened",
+      "title": "Local-First Software maintenance evidence tightened",
+      "summary": "A new bounded evidence pass made the maintenance trigger logic more specific, so the next synthesis and review targets are clearer.",
+      "state": "review-needed",
+      "priority": "high",
+      "changeType": "new-source",
+      "changedAt": "2026-04-05T22:00:00.000Z",
+      "evidenceBundleIds": [
+        "local-first-software-maintenance-trigger-evidence",
+        "local-first-software-watchpoint-evidence"
+      ],
+      "sourceTitles": [
+        "Maintenance risks"
+      ],
+      "whyItMatters": "Starter topics become durable only when new evidence changes next work in explicit ways instead of dissolving into generic backlog noise.",
+      "impactSummary": "The maintenance rhythm and watch surface should both be reviewed because the latest evidence may justify a tighter synthesis boundary and clearer monitoring logic.",
+      "affectedQuestionIds": [
+        "conflict-repair-watchpoints",
+        "migration-playbook"
+      ],
+      "affectedSynthesisIds": [
+        "local-first-maintenance-watchpoints-synthesis",
+        "local-first-migration-playbook"
+      ],
+      "canonicalReviewTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "triggeredWatchpointTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "maintenanceActionTitles": [
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ],
+      "likelyStableTitles": [
+        "Local-First Software",
+        "Local-First Software current tensions"
+      ],
+      "reopenQuestionIds": [
+        "migration-playbook"
+      ],
+      "staleSynthesisIds": [
+        "local-first-maintenance-watchpoints-synthesis"
+      ],
+      "downgradedDecisionTitles": [
+        "Treat the watchpoint synthesis as a review surface and keep updating it from maintenance passes."
+      ],
+      "recommendedAction": "Review maintenance rhythm first, then decide whether the watch surface should stay provisional or whether the next synthesis is now strong enough to publish."
+    },
+    {
+      "id": "local-first-software-canonical-boundary-remains-stable",
+      "title": "Local-First Software canonical boundary remains stable",
+      "summary": "The latest evidence changes maintenance and monitoring pressure more than it changes the top-level durable explanation.",
+      "state": "stabilized",
+      "priority": "medium",
+      "changeType": "summary-shift",
+      "changedAt": "2026-04-05T23:00:00.000Z",
+      "evidenceBundleIds": [
+        "local-first-software-canonical-boundary-evidence"
+      ],
+      "sourceTitles": [
+        "Local-first core ideas",
+        "Sync engines"
+      ],
+      "whyItMatters": "A change-aware system should also tell you what can probably stay stable, so maintenance work remains selective.",
+      "impactSummary": "The entry-page framing and core tensions can probably stay stable even though maintenance sequencing and watch logic need another pass.",
+      "affectedQuestionIds": [
+        "sync-assumptions-durable"
+      ],
+      "affectedSynthesisIds": [
+        "local-first-sync-risk-map"
+      ],
+      "canonicalReviewTitles": [],
+      "triggeredWatchpointTitles": [],
+      "maintenanceActionTitles": [
+        "Local-First Software maintenance rhythm"
+      ],
+      "likelyStableTitles": [
+        "Local-First Software",
+        "Local-First Software current tensions",
+        "Local-First Software reading paths"
+      ],
+      "reopenQuestionIds": [],
+      "staleSynthesisIds": [],
+      "downgradedDecisionTitles": [],
+      "recommendedAction": "Keep the canonical entry stable, then spend the next pass on maintenance and monitoring surfaces instead of rewriting the article layer."
+    }
+  ],
   "resolutionSignals": [
     "The corpus starts connecting local copies, sync choices, and repair burden in a stable way.",
     "A context pack can answer migration or watchpoint questions without reopening every source note.",

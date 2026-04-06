@@ -117,6 +117,17 @@ These are the highest-leverage questions if you want this starter workspace to b
 - **Updated surfaces**: [[Local-First Software]], [[Sync engines]], [[Local-First Software maintenance rhythm]], [[Local-First Software open questions]], [[Local-First Software maintenance watchpoints]], [[Local-First Software current tensions]]
 - **Revisit if**: A new source changes the basic framing of sync, migration, or maintenance burden.
 
+## Reopened by evidence change
+
+### Local-First Software maintenance evidence tightened
+
+- **Why now**: The maintenance rhythm and watch surface should both be reviewed because the latest evidence may justify a tighter synthesis boundary and clearer monitoring logic.
+- **Which migration concerns deserve their own synthesis instead of staying inside a concept page?**, load `Maintenance Triage`, then deepen with `Explain Local-First Software`.
+- **Synthesis to re-check**: Local-First Software maintenance watchpoints
+- **Review surfaces**: [[Local-First Software maintenance watchpoints]]
+- **Still likely stable**: [[Local-First Software]], [[Local-First Software current tensions]]
+- **Recommended action**: Review maintenance rhythm first, then decide whether the watch surface should stay provisional or whether the next synthesis is now strong enough to publish.
+
 ## Related pages
 
 - [[Local-First Software]]

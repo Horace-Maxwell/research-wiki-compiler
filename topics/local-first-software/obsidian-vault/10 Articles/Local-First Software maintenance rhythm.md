@@ -115,6 +115,33 @@ This page is the maintenance control surface for the Local-First Software bootst
 - **Update surfaces**: [[Local-First Software]], [[Sync engines]], [[Local-First Software maintenance rhythm]], [[Local-First Software open questions]], [[Local-First Software current tensions]]
 - **Next step**: Run one more focused sync-risk pass before promoting this candidate into a published synthesis.
 
+## Evidence changes to triage
+
+### Local-First Software maintenance evidence tightened
+
+- **State**: review needed
+- **Change type**: new source
+- **Changed evidence**: Local-First Software maintenance trigger evidence, Local-First Software watchpoint evidence
+- **Why it matters**: Starter topics become durable only when new evidence changes next work in explicit ways instead of dissolving into generic backlog noise.
+- **Impact**: The maintenance rhythm and watch surface should both be reviewed because the latest evidence may justify a tighter synthesis boundary and clearer monitoring logic.
+- **Reopen questions**: Which migration concerns deserve their own synthesis instead of staying inside a concept page?
+- **Synthesis now stale**: Local-First Software maintenance watchpoints
+- **Review pages**: [[Local-First Software maintenance watchpoints]]
+- **Maintenance surfaces**: [[Local-First Software maintenance rhythm]], [[Local-First Software open questions]]
+- **Likely stable**: [[Local-First Software]], [[Local-First Software current tensions]]
+- **Recommended action**: Review maintenance rhythm first, then decide whether the watch surface should stay provisional or whether the next synthesis is now strong enough to publish.
+
+### Local-First Software canonical boundary remains stable
+
+- **State**: stabilized
+- **Change type**: summary shift
+- **Changed evidence**: Local-First Software canonical boundary evidence
+- **Why it matters**: A change-aware system should also tell you what can probably stay stable, so maintenance work remains selective.
+- **Impact**: The entry-page framing and core tensions can probably stay stable even though maintenance sequencing and watch logic need another pass.
+- **Maintenance surfaces**: [[Local-First Software maintenance rhythm]]
+- **Likely stable**: [[Local-First Software]], [[Local-First Software current tensions]], [[Local-First Software reading paths]]
+- **Recommended action**: Keep the canonical entry stable, then spend the next pass on maintenance and monitoring surfaces instead of rewriting the article layer.
+
 ## Context packs to refresh
 
 - `Explain Local-First Software`: refresh when the canonical entry page or tension framing changes. Reload [[Local-First Software]], [[Local-First Software current tensions]], [[Local-First Software maintenance watchpoints]].

@@ -160,9 +160,14 @@ export function ResearchSynthesisView({
         actions={
           <div className="flex flex-wrap gap-2">
             {focusedTopic ? (
-              <Button asChild variant="outline">
-                <Link href="/syntheses">Open full synthesis portfolio</Link>
-              </Button>
+              <>
+                <Button asChild variant="outline">
+                  <Link href="/syntheses">Open full synthesis portfolio</Link>
+                </Button>
+                <Button asChild variant="ghost">
+                  <Link href={`/changes?topic=${focusedTopic.id}`}>Open change lane</Link>
+                </Button>
+              </>
             ) : (
               <Button asChild variant="outline">
                 <Link href="/topics">Open topic portfolio</Link>

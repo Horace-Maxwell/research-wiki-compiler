@@ -3,6 +3,10 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 
+import type {
+  EvidenceBundleSeed,
+  EvidenceChangeSeed,
+} from "@/lib/contracts/evidence-change";
 import type { WikiFrontmatter, WikiPageType } from "@/lib/contracts/wiki";
 import type { ResearchQuestionSeed } from "@/lib/contracts/research-question";
 import type { ResearchSessionSeed } from "@/lib/contracts/research-session";
@@ -987,6 +991,160 @@ function buildDefaultResearchSyntheses(params: {
   ];
 }
 
+function buildDefaultEvidenceBundles(params: {
+  title: string;
+  titles: ReturnType<typeof buildSurfaceTitleBundle>;
+  researchQuestions: ResearchQuestionSeed[];
+  researchSyntheses: ResearchSynthesisSeed[];
+  corpusFiles: TopicBootstrapCorpusFile[];
+}): EvidenceBundleSeed[] {
+  const [boundaryQuestion, monitoringQuestion, synthesisQuestion] = params.researchQuestions;
+  const [tensionsSynthesis, watchpointSynthesis, firstCandidate, secondCandidate] =
+    params.researchSyntheses;
+  const corpusTitles = params.corpusFiles.map((file) => file.title);
+
+  return [
+    {
+      id: slugifyTitle(`${params.title}-canonical-boundary-evidence`) || "canonical-boundary-evidence",
+      title: `${params.title} canonical boundary evidence`,
+      kind: "summary-pattern",
+      summary:
+        "The bounded corpus evidence that separates durable entry-page framing from still-provisional maintenance and synthesis material.",
+      sourceTitles: corpusTitles.slice(0, 2),
+      assumptionNotes: [
+        "The entry page should stay compact and durable even when the operational story is still shifting.",
+        "Active trade-offs belong in tensions and maintenance surfaces before they harden into canonical guidance.",
+      ],
+      linkedQuestionIds: boundaryQuestion ? [boundaryQuestion.id] : [],
+      linkedSynthesisIds: [tensionsSynthesis?.id, firstCandidate?.id].filter(
+        (value): value is string => Boolean(value),
+      ),
+      canonicalPageTitles: [params.title],
+      watchpointTitles: [params.titles.maintenanceWatchpoints],
+      maintenanceSurfaceTitles: [params.titles.currentTensions, params.titles.openQuestions],
+    },
+    {
+      id: slugifyTitle(`${params.title}-maintenance-trigger-evidence`) || "maintenance-trigger-evidence",
+      title: `${params.title} maintenance trigger evidence`,
+      kind: "maintenance-signal",
+      summary:
+        "The evidence bundle that explains which recurring signals should actually change revisit order, synthesis priority, or maintenance posture.",
+      sourceTitles: corpusTitles.slice(-2),
+      assumptionNotes: [
+        "The next synthesis should emerge from recurring maintenance pressure, not just from a well-written note.",
+        "Context packs and reopen order should change only when the same signal keeps affecting next work.",
+      ],
+      linkedQuestionIds: synthesisQuestion ? [synthesisQuestion.id] : [],
+      linkedSynthesisIds: [secondCandidate?.id].filter((value): value is string => Boolean(value)),
+      canonicalPageTitles: [params.title],
+      watchpointTitles: [params.titles.maintenanceWatchpoints],
+      maintenanceSurfaceTitles: [params.titles.maintenanceRhythm, params.titles.openQuestions],
+    },
+    {
+      id: slugifyTitle(`${params.title}-watchpoint-evidence`) || "watchpoint-evidence",
+      title: `${params.title} watchpoint evidence`,
+      kind: "audit-signal",
+      summary:
+        "The evidence bundle that decides whether the monitoring surface is still provisional, should be hardened, or should trigger reopen work.",
+      sourceTitles: corpusTitles.slice(1, 3),
+      assumptionNotes: [
+        "A watch surface is useful before it is fully stable, but its operator guidance should stay easy to revise.",
+        "Audit and source changes should trigger maintenance action only when they materially alter monitoring logic.",
+      ],
+      linkedQuestionIds: monitoringQuestion ? [monitoringQuestion.id] : [],
+      linkedSynthesisIds: [watchpointSynthesis?.id].filter((value): value is string => Boolean(value)),
+      canonicalPageTitles: [params.titles.maintenanceWatchpoints],
+      watchpointTitles: [params.titles.maintenanceWatchpoints],
+      maintenanceSurfaceTitles: [params.titles.maintenanceRhythm, params.titles.openQuestions],
+    },
+  ];
+}
+
+function buildDefaultEvidenceChanges(params: {
+  title: string;
+  titles: ReturnType<typeof buildSurfaceTitleBundle>;
+  researchQuestions: ResearchQuestionSeed[];
+  researchSyntheses: ResearchSynthesisSeed[];
+  evidenceBundles: EvidenceBundleSeed[];
+  corpusFiles: TopicBootstrapCorpusFile[];
+  seedTimestamp: string;
+}): EvidenceChangeSeed[] {
+  const [boundaryQuestion, monitoringQuestion, synthesisQuestion] = params.researchQuestions;
+  const [, watchpointSynthesis, firstCandidate, secondCandidate] = params.researchSyntheses;
+  const canonicalBoundaryBundle = params.evidenceBundles[0];
+  const maintenanceTriggerBundle = params.evidenceBundles[1];
+  const watchpointBundle = params.evidenceBundles[2];
+  const latestCorpusTitle =
+    params.corpusFiles[params.corpusFiles.length - 1]?.title ?? `${params.title} latest corpus note`;
+
+  return [
+    {
+      id: slugifyTitle(`${params.title}-maintenance-evidence-tightened`) || "maintenance-evidence-tightened",
+      title: `${params.title} maintenance evidence tightened`,
+      summary:
+        "A new bounded evidence pass made the maintenance trigger logic more specific, so the next synthesis and review targets are clearer.",
+      state: "review-needed",
+      priority: "high",
+      changeType: "new-source",
+      changedAt: offsetIsoTimestamp(params.seedTimestamp, 10),
+      evidenceBundleIds: [maintenanceTriggerBundle?.id, watchpointBundle?.id].filter(
+        (value): value is string => Boolean(value),
+      ),
+      sourceTitles: [latestCorpusTitle],
+      whyItMatters:
+        "Starter topics become durable only when new evidence changes next work in explicit ways instead of dissolving into generic backlog noise.",
+      impactSummary:
+        "The maintenance rhythm and watch surface should both be reviewed because the latest evidence may justify a tighter synthesis boundary and clearer monitoring logic.",
+      affectedQuestionIds: [monitoringQuestion?.id, synthesisQuestion?.id].filter(
+        (value): value is string => Boolean(value),
+      ),
+      affectedSynthesisIds: [watchpointSynthesis?.id, secondCandidate?.id].filter(
+        (value): value is string => Boolean(value),
+      ),
+      canonicalReviewTitles: [params.titles.maintenanceWatchpoints],
+      triggeredWatchpointTitles: [params.titles.maintenanceWatchpoints],
+      maintenanceActionTitles: [params.titles.maintenanceRhythm, params.titles.openQuestions],
+      likelyStableTitles: [params.title, params.titles.currentTensions],
+      reopenQuestionIds: synthesisQuestion ? [synthesisQuestion.id] : [],
+      staleSynthesisIds: watchpointSynthesis ? [watchpointSynthesis.id] : [],
+      downgradedDecisionTitles: [
+        "Treat the watchpoint synthesis as a review surface and keep updating it from maintenance passes.",
+      ],
+      recommendedAction:
+        "Review maintenance rhythm first, then decide whether the watch surface should stay provisional or whether the next synthesis is now strong enough to publish.",
+    },
+    {
+      id: slugifyTitle(`${params.title}-canonical-boundary-remains-stable`) || "canonical-boundary-remains-stable",
+      title: `${params.title} canonical boundary remains stable`,
+      summary:
+        "The latest evidence changes maintenance and monitoring pressure more than it changes the top-level durable explanation.",
+      state: "stabilized",
+      priority: "medium",
+      changeType: "summary-shift",
+      changedAt: offsetIsoTimestamp(params.seedTimestamp, 11),
+      evidenceBundleIds: [canonicalBoundaryBundle?.id].filter(
+        (value): value is string => Boolean(value),
+      ),
+      sourceTitles: params.corpusFiles.slice(0, 2).map((file) => file.title),
+      whyItMatters:
+        "A change-aware system should also tell you what can probably stay stable, so maintenance work remains selective.",
+      impactSummary:
+        "The entry-page framing and core tensions can probably stay stable even though maintenance sequencing and watch logic need another pass.",
+      affectedQuestionIds: boundaryQuestion ? [boundaryQuestion.id] : [],
+      affectedSynthesisIds: firstCandidate ? [firstCandidate.id] : [],
+      canonicalReviewTitles: [],
+      triggeredWatchpointTitles: [],
+      maintenanceActionTitles: [params.titles.maintenanceRhythm],
+      likelyStableTitles: [params.title, params.titles.currentTensions, params.titles.readingPaths],
+      reopenQuestionIds: [],
+      staleSynthesisIds: [],
+      downgradedDecisionTitles: [],
+      recommendedAction:
+        "Keep the canonical entry stable, then spend the next pass on maintenance and monitoring surfaces instead of rewriting the article layer.",
+    },
+  ];
+}
+
 function buildSurfaceTitleBundle(title: string) {
   return {
     index: `${title} Index`,
@@ -1031,6 +1189,22 @@ export function createDefaultTopicBootstrapConfig({
     titles: surfaceTitles,
     researchQuestions,
     researchSessions,
+    seedTimestamp: generatedAt,
+  });
+  const evidenceBundles = buildDefaultEvidenceBundles({
+    title: normalizedTitle,
+    titles: surfaceTitles,
+    researchQuestions,
+    researchSyntheses,
+    corpusFiles,
+  });
+  const evidenceChanges = buildDefaultEvidenceChanges({
+    title: normalizedTitle,
+    titles: surfaceTitles,
+    researchQuestions,
+    researchSyntheses,
+    evidenceBundles,
+    corpusFiles,
     seedTimestamp: generatedAt,
   });
   const requiredContextPackTitles = buildRequiredContextPacks(normalizedTitle);
@@ -1258,6 +1432,8 @@ export function createDefaultTopicBootstrapConfig({
     researchQuestions,
     researchSessions,
     researchSyntheses,
+    evidenceBundles,
+    evidenceChanges,
     resolutionSignals: [
       "A claim keeps reappearing across the bounded corpus with compatible framing.",
       "A context pack can answer the same question reliably without reopening the full graph.",
@@ -1435,6 +1611,8 @@ function buildKnowledgeMethodData(config: TopicBootstrapConfig): KnowledgeMethod
     researchQuestions: config.researchQuestions,
     researchSessions: config.researchSessions,
     researchSyntheses: config.researchSyntheses,
+    evidenceBundles: config.evidenceBundles,
+    evidenceChanges: config.evidenceChanges,
     resolutionSignals: config.resolutionSignals,
     revisitQueue: config.revisitQueue,
     contextPackRefreshes: config.contextPackRefreshes,
@@ -2187,6 +2365,7 @@ async function validateHeadings(params: {
         "Revisit next",
         "Session queue",
         "Synthesis decisions",
+        "Evidence changes to triage",
         "Context packs to refresh",
         "Synthesis candidates",
         "Audit to action",
@@ -2204,6 +2383,7 @@ async function validateHeadings(params: {
         "What would resolve them",
         "Recent session outcomes",
         "Published syntheses",
+        "Reopened by evidence change",
       ],
     },
   ];

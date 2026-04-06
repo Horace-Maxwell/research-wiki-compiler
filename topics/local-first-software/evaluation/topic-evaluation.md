@@ -3,7 +3,7 @@
 ## Overview
 
 - Target: topic `local-first-software`
-- Generated: 2026-04-06T02:32:43.229Z
+- Generated: 2026-04-06T03:52:48.549Z
 - Maturity stage: **starter**
 - Overall score: **4.3/5** (86%)
 - Next stage: developing

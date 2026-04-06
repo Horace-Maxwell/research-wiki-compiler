@@ -3,7 +3,7 @@ title: Provider dependency risk
 slug: provider-dependency-risk
 type: concept
 created_at: '2026-04-05T19:36:54.741Z'
-updated_at: '2026-04-05T19:36:58.148Z'
+updated_at: '2026-04-05T19:36:58.445Z'
 status: active
 aliases: []
 tags:
