@@ -186,20 +186,20 @@ export function EvidenceChangeView({
         eyebrow="Evidence changes"
         title={
           focusedTopic
-            ? `${focusedTopic.title} change lane`
-            : "Evidence changes reopen or stabilize knowledge"
+            ? `${focusedTopic.title} evidence shifts`
+            : "Evidence shifts that may reopen work"
         }
         description={
           focusedTopic
-            ? "Use this topic-focused change lane to see which new evidence should reopen questions, stale syntheses, or trigger bounded canonical review before the topic drifts silently."
-            : "Evidence changes are now a first-class operating surface across the portfolio. Use them to decide what truly moved, what should reopen, which canonical pages need review, and what can likely stay stable."
+            ? "Use this supporting lane when new evidence might reopen a question, stale a synthesis, or trigger bounded canonical review."
+            : "This is a supporting lane across the portfolio for meaningful evidence shifts, not a default daily front door."
         }
         badge={`${overview.summary.totalChanges} changes`}
         actions={
           <div className="flex flex-wrap gap-2">
             {focusedTopic ? (
               <Button asChild variant="outline">
-                <Link href="/changes">Open full change lane</Link>
+                <Link href={`/syntheses?topic=${focusedTopic.id}`}>Open syntheses</Link>
               </Button>
             ) : (
               <Button asChild variant="outline">

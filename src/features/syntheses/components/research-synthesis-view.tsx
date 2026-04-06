@@ -153,8 +153,8 @@ export function ResearchSynthesisView({
         }
         description={
           focusedTopic
-            ? "Use this topic-focused synthesis lane to see what is ready to publish, what still belongs in the decision loop, which sessions contributed, and what canonical or maintenance surfaces should change next."
-            : "Syntheses are now a first-class operating surface across the portfolio. Use them to decide when evidence is strong enough to harden, what stays provisional, and what changed in the canonical wiki because a synthesis was published."
+            ? "This is the primary hardening lane after sessions. Use it to see what is ready to publish, what still belongs in the decision loop, and what canonical or maintenance surfaces should change next."
+            : "Syntheses are the third main working lane after topics, questions, and sessions. Use them to decide when evidence is strong enough to harden, what stays provisional, and what changed in the canonical wiki because a synthesis was published."
         }
         badge={`${overview.summary.totalSyntheses} syntheses`}
         actions={
@@ -162,13 +162,10 @@ export function ResearchSynthesisView({
             {focusedTopic ? (
               <>
                 <Button asChild variant="outline">
-                  <Link href="/syntheses">Open full synthesis portfolio</Link>
+                  <Link href={`/sessions?topic=${focusedTopic.id}`}>Open session queue</Link>
                 </Button>
                 <Button asChild variant="ghost">
-                  <Link href={`/gaps?topic=${focusedTopic.id}`}>Open evidence gaps</Link>
-                </Button>
-                <Button asChild variant="ghost">
-                  <Link href={`/changes?topic=${focusedTopic.id}`}>Open change lane</Link>
+                  <Link href={`/questions?topic=${focusedTopic.id}`}>Open question queue</Link>
                 </Button>
               </>
             ) : (

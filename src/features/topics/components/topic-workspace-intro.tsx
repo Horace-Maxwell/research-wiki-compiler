@@ -92,6 +92,29 @@ function Surface({
   );
 }
 
+function FocusCard({
+  label,
+  title,
+  detail,
+  note,
+}: {
+  label: string;
+  title: string;
+  detail: string;
+  note: string;
+}) {
+  return (
+    <div className="rounded-[18px] border border-border/50 bg-background/62 px-4 py-4">
+      <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+        {label}
+      </div>
+      <div className="mt-3 text-sm font-medium text-foreground">{title}</div>
+      <div className="mt-1 text-sm leading-6 text-muted-foreground">{detail}</div>
+      <div className="mt-3 text-sm leading-6 text-foreground">{note}</div>
+    </div>
+  );
+}
+
 export function TopicWorkspaceIntro({
   topic,
   comparisonSpotlight,
@@ -117,6 +140,45 @@ export function TopicWorkspaceIntro({
     comparisonSpotlight &&
     (comparisonSpotlight.leaderId === topic.id ||
       comparisonSpotlight.challengerId === topic.id);
+  const leadQuestion = questionWorkflow?.questions[0] ?? null;
+  const nextSession = sessionSummary?.nextSession ?? null;
+  const nextSynthesis = synthesisSummary?.nextSynthesis ?? null;
+  const mainSignal = evidenceGapSummary?.nextGap
+    ? {
+        label: "Main evidence blocker",
+        title: evidenceGapSummary.nextGap.title,
+        detail: evidenceGapSummary.nextGap.nextEvidenceToAcquire,
+        note: "Open evidence gaps only because this topic now needs a specific evidence move.",
+      }
+    : evidenceChangeSummary?.nextReview
+      ? {
+          label: "Main review trigger",
+          title: evidenceChangeSummary.nextReview.title,
+          detail: evidenceChangeSummary.nextReview.recommendedAction,
+          note: "Changes matter when they reopen or review durable knowledge, not just because they exist.",
+        }
+      : monitoringSummary?.nextAcquisitionTrigger
+        ? {
+            label: "Main watch signal",
+            title: monitoringSummary.nextAcquisitionTrigger.title,
+            detail: monitoringSummary.nextAcquisitionTrigger.recommendedAction,
+            note: "Monitoring stays secondary until a watchpoint justifies real work.",
+          }
+        : monitoringSummary?.nextMonitor
+          ? {
+              label: "Main watch signal",
+              title: monitoringSummary.nextMonitor.title,
+              detail: monitoringSummary.nextMonitor.recommendedAction,
+              note: "Use monitoring as a quiet background lane unless it changes the work.",
+            }
+          : acquisitionSummary?.nextTask
+            ? {
+                label: "Main acquisition move",
+                title: acquisitionSummary.nextTask.title,
+                detail: acquisitionSummary.nextTask.evidenceTypeToCollect,
+                note: "Acquisition should stay bounded and session-ready instead of feeling like a backlog dump.",
+              }
+            : null;
 
   return (
     <div className="space-y-6">
@@ -132,17 +194,83 @@ export function TopicWorkspaceIntro({
           <p className="text-lg font-medium text-foreground">{topic.description}</p>
           <p className="text-sm leading-7 text-muted-foreground">{topic.summary}</p>
         </div>
+        <div className="mt-6 rounded-[22px] border border-border/55 bg-background/58 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.32)]">
+          <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+            Daily working path
+          </div>
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            Start here, then move through question -&gt; session -&gt; synthesis. Pull in gaps,
+            changes, acquisition, and monitoring only when the work actually needs them.
+          </p>
+          <div className="mt-4 grid gap-3 xl:grid-cols-4">
+            <FocusCard
+              label="Start with"
+              title={leadQuestion?.question ?? "No lead question seeded yet"}
+              detail={leadQuestion?.summary ?? "The question queue will surface the next useful research thread here."}
+              note={
+                leadQuestion
+                  ? `Load ${leadQuestion.contextPackTitle} first.`
+                  : "Open the question queue to establish the next bounded research thread."
+              }
+            />
+            <FocusCard
+              label="Continue"
+              title={nextSession?.title ?? "No active session yet"}
+              detail={nextSession?.summary ?? "Session history and the next bounded pass will surface here."}
+              note={
+                nextSession
+                  ? nextSession.recommendedNextStep
+                  : "Use sessions only after the question queue has made the next pass clear."
+              }
+            />
+            <FocusCard
+              label="Harden next"
+              title={nextSynthesis?.title ?? "No synthesis close enough yet"}
+              detail={
+                nextSynthesis?.durableConclusion ??
+                "The next durable synthesis will appear here once a question and session have earned it."
+              }
+              note={
+                nextSynthesis
+                  ? nextSynthesis.recommendedNextStep
+                  : "Syntheses stay later in the path so provisional work does not pretend to be durable too early."
+              }
+            />
+            <FocusCard
+              label={mainSignal?.label ?? "Signals"}
+              title={mainSignal?.title ?? "No signal currently outranks the main path"}
+              detail={
+                mainSignal?.detail ??
+                "This means the topic can stay focused on questions, sessions, and syntheses for now."
+              }
+              note={
+                mainSignal?.note ??
+                "Signals are supporting lanes. Check them when they change the work, not by default."
+              }
+            />
+          </div>
+        </div>
         <div className="mt-5 flex flex-wrap gap-3">
           <Button asChild>
-            <Link href={topic.links.canonical.href}>
-              Open canonical start
+            <Link href={`/questions?topic=${topic.id}`}>
+              Open question queue
               <ArrowRight className="size-4" />
             </Link>
           </Button>
           <Button asChild variant="outline">
-            <Link href={`/gaps?topic=${topic.id}`}>Open evidence gaps</Link>
+            <Link href={nextSession ? `/sessions?topic=${topic.id}` : `/sessions?topic=${topic.id}`}>
+              {nextSession ? "Continue next session" : "Open session queue"}
+            </Link>
           </Button>
           <Button asChild variant="outline">
+            <Link href={`/syntheses?topic=${topic.id}`}>
+              {nextSynthesis ? "Open closest synthesis" : "Open syntheses"}
+            </Link>
+          </Button>
+          <Button asChild variant="ghost">
+            <Link href={topic.links.canonical.href}>Open canonical start</Link>
+          </Button>
+          <Button asChild variant="ghost">
             <Link href={topic.links.maintenance.href}>Open maintenance rhythm</Link>
           </Button>
           <Button asChild variant="ghost">
@@ -151,7 +279,7 @@ export function TopicWorkspaceIntro({
         </div>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-3">
+      <div className="grid gap-4 xl:grid-cols-2">
         <Surface
           title="Promotion readiness"
           description="This is the maturity gap between the current stage and the next one. Treat it as the shortest honest path upward."
@@ -208,40 +336,12 @@ export function TopicWorkspaceIntro({
           </div>
         </Surface>
 
-        <Surface
-          title="Working roots"
-          description="The rendered topic home is a working view over these source-controlled roots. The canonical wiki remains the truth layer."
-        >
-          <div className="space-y-3 text-sm leading-6 text-muted-foreground">
-            <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
-              <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                <FolderTree className="size-4" />
-                Canonical wiki
-              </div>
-              <div className="mt-2 break-all font-mono text-xs">{topic.fileRoots.canonical}</div>
-            </div>
-            <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
-              <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                <Sparkles className="size-4" />
-                Obsidian projection
-              </div>
-              <div className="mt-2 break-all font-mono text-xs">{topic.fileRoots.obsidian}</div>
-            </div>
-            <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
-              <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                <Gauge className="size-4" />
-                Evaluation root
-              </div>
-              <div className="mt-2 break-all font-mono text-xs">{topic.fileRoots.evaluation}</div>
-            </div>
-          </div>
-        </Surface>
       </div>
 
       {questionWorkflow ? (
         <Surface
           title="Question workflow"
-          description="These questions should drive the next pass of reading, synthesis, or evidence gathering for this topic."
+          description="Start here after landing on the topic home. These questions should drive the next pass of reading, evidence gathering, or synthesis for this topic."
         >
           <div className="space-y-4">
             <div className="flex flex-wrap gap-2">
@@ -312,8 +412,140 @@ export function TopicWorkspaceIntro({
               <Button asChild variant="outline">
                 <Link href={`/questions?topic=${topic.id}`}>Open topic question queue</Link>
               </Button>
-              <Button asChild variant="ghost">
-                <Link href="/questions">Open full question portfolio</Link>
+            </div>
+          </div>
+        </Surface>
+      ) : null}
+
+      {sessionSummary ? (
+        <Surface
+          title="Research sessions"
+          description="After the question queue, sessions turn intent into bounded work: what we loaded, what changed, and what should harden next."
+        >
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="outline">{sessionSummary.sessionCount} sessions</Badge>
+              <Badge variant="outline">{sessionSummary.activeCount} active</Badge>
+              <Badge variant="outline">{sessionSummary.queuedCount} queued</Badge>
+              <Badge variant="outline">{sessionSummary.completedCount} completed</Badge>
+            </div>
+            <div className="grid gap-3 xl:grid-cols-2">
+              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <FlaskConical className="size-4" />
+                  Next session
+                </div>
+                <div className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {sessionSummary.nextSession ? (
+                    <>
+                      <div className="font-medium text-foreground">
+                        {sessionSummary.nextSession.title}
+                      </div>
+                      <div className="mt-1">{sessionSummary.nextSession.recommendedNextStep}</div>
+                    </>
+                  ) : (
+                    "No queued or active session is currently seeded for this topic."
+                  )}
+                </div>
+              </div>
+              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Gauge className="size-4" />
+                  Latest outcome
+                </div>
+                <div className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {sessionSummary.recentSession ? (
+                    <>
+                      <div className="font-medium text-foreground">
+                        {sessionSummary.recentSession.title}
+                      </div>
+                      <div className="mt-1">{sessionSummary.recentSession.summary}</div>
+                    </>
+                  ) : (
+                    "No completed session has been recorded yet."
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild variant="outline">
+                <Link href={`/sessions?topic=${topic.id}`}>Open topic session queue</Link>
+              </Button>
+              {sessionSummary.nextSession?.synthesisTitle ? (
+                <Button asChild variant="ghost">
+                  <Link
+                    href={`/syntheses?topic=${topic.id}&title=${encodeURIComponent(
+                      sessionSummary.nextSession.synthesisTitle,
+                    )}`}
+                  >
+                    Synthesis target
+                  </Link>
+                </Button>
+              ) : null}
+            </div>
+          </div>
+        </Surface>
+      ) : null}
+
+      {synthesisSummary ? (
+        <Surface
+          title="Syntheses and decisions"
+          description="After questions and sessions have earned it, syntheses turn repeated work into durable judgment and make the canonical and maintenance consequences explicit."
+        >
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="outline">{synthesisSummary.synthesisCount} syntheses</Badge>
+              <Badge variant="outline">{synthesisSummary.readyCount} ready</Badge>
+              <Badge variant="outline">{synthesisSummary.inProgressCount} in progress</Badge>
+              <Badge variant="outline">{synthesisSummary.publishedCount} published</Badge>
+              <Badge variant="outline">{synthesisSummary.changedCanonicalCount} changed canonical</Badge>
+            </div>
+            <div className="grid gap-3 xl:grid-cols-2">
+              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Sparkles className="size-4" />
+                  Next synthesis
+                </div>
+                <div className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {synthesisSummary.nextSynthesis ? (
+                    <>
+                      <div className="font-medium text-foreground">
+                        {synthesisSummary.nextSynthesis.title}
+                      </div>
+                      <div className="mt-1">
+                        {synthesisSummary.nextSynthesis.recommendedNextStep}
+                      </div>
+                    </>
+                  ) : (
+                    "No active synthesis candidate is currently seeded for this topic."
+                  )}
+                </div>
+              </div>
+              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Gauge className="size-4" />
+                  Latest durable effect
+                </div>
+                <div className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {synthesisSummary.recentPublished ? (
+                    <>
+                      <div className="font-medium text-foreground">
+                        {synthesisSummary.recentPublished.title}
+                      </div>
+                      <div className="mt-1">
+                        {synthesisSummary.recentPublished.changedCanonicalSummary ??
+                          synthesisSummary.recentPublished.durableConclusion}
+                      </div>
+                    </>
+                  ) : (
+                    "No published synthesis has been recorded yet."
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild variant="outline">
+                <Link href={`/syntheses?topic=${topic.id}`}>Open topic syntheses</Link>
               </Button>
             </div>
           </div>
@@ -323,7 +555,7 @@ export function TopicWorkspaceIntro({
       {evidenceGapSummary ? (
         <Surface
           title="Evidence gaps"
-          description="This keeps missing evidence visible as an acquisition surface, so the topic can be blocked by the right thing honestly instead of looking mature only because the pages are tidy."
+          description="Open this when missing evidence is the blocker. It keeps the next required evidence move visible without turning the whole topic into a gap-management exercise."
         >
           <div className="space-y-4">
             <div className="flex flex-wrap gap-2">
@@ -385,9 +617,6 @@ export function TopicWorkspaceIntro({
                   </Link>
                 </Button>
               ) : null}
-              <Button asChild variant="ghost">
-                <Link href="/gaps">Open full gap portfolio</Link>
-              </Button>
             </div>
           </div>
         </Surface>
@@ -396,7 +625,7 @@ export function TopicWorkspaceIntro({
       {acquisitionSummary ? (
         <Surface
           title="Acquisition tasks"
-          description="These are the bounded evidence-collection passes that should move this topic next. They connect missing evidence to concrete sessions and integration work."
+          description="Use this after a gap or watchpoint has already made the collection pass clear. Acquisition should stay bounded, session-ready, and tightly tied to downstream knowledge work."
         >
           <div className="space-y-4">
             <div className="flex flex-wrap gap-2">
@@ -460,146 +689,6 @@ export function TopicWorkspaceIntro({
                   </Link>
                 </Button>
               ) : null}
-              <Button asChild variant="ghost">
-                <Link href="/acquisition">Open full acquisition portfolio</Link>
-              </Button>
-            </div>
-          </div>
-        </Surface>
-      ) : null}
-
-      {sessionSummary ? (
-        <Surface
-          title="Research sessions"
-          description="Sessions turn question state into actual bounded work: what we loaded, what changed, and what should harden next."
-        >
-          <div className="space-y-4">
-            <div className="flex flex-wrap gap-2">
-              <Badge variant="outline">{sessionSummary.sessionCount} sessions</Badge>
-              <Badge variant="outline">{sessionSummary.activeCount} active</Badge>
-              <Badge variant="outline">{sessionSummary.queuedCount} queued</Badge>
-              <Badge variant="outline">{sessionSummary.completedCount} completed</Badge>
-            </div>
-            <div className="grid gap-3 xl:grid-cols-2">
-              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
-                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                  <FlaskConical className="size-4" />
-                  Next session
-                </div>
-                <div className="mt-3 text-sm leading-6 text-muted-foreground">
-                  {sessionSummary.nextSession ? (
-                    <>
-                      <div className="font-medium text-foreground">{sessionSummary.nextSession.title}</div>
-                      <div className="mt-1">{sessionSummary.nextSession.recommendedNextStep}</div>
-                    </>
-                  ) : (
-                    "No queued or active session is currently seeded for this topic."
-                  )}
-                </div>
-              </div>
-              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
-                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                  <Gauge className="size-4" />
-                  Latest outcome
-                </div>
-                <div className="mt-3 text-sm leading-6 text-muted-foreground">
-                  {sessionSummary.recentSession ? (
-                    <>
-                      <div className="font-medium text-foreground">{sessionSummary.recentSession.title}</div>
-                      <div className="mt-1">{sessionSummary.recentSession.summary}</div>
-                    </>
-                  ) : (
-                    "No completed session has been recorded yet."
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button asChild variant="outline">
-                <Link href={`/sessions?topic=${topic.id}`}>Open topic session queue</Link>
-              </Button>
-              {sessionSummary.nextSession?.synthesisTitle ? (
-                <Button asChild variant="ghost">
-                  <Link
-                    href={`/syntheses?topic=${topic.id}&title=${encodeURIComponent(
-                      sessionSummary.nextSession.synthesisTitle,
-                    )}`}
-                  >
-                    Synthesis target
-                  </Link>
-                </Button>
-              ) : null}
-              <Button asChild variant="ghost">
-                <Link href="/sessions">Open full session portfolio</Link>
-              </Button>
-            </div>
-          </div>
-        </Surface>
-      ) : null}
-
-      {synthesisSummary ? (
-        <Surface
-          title="Syntheses and decisions"
-          description="Syntheses turn repeated question and session work into durable judgment, then make canonical and maintenance consequences explicit."
-        >
-          <div className="space-y-4">
-            <div className="flex flex-wrap gap-2">
-              <Badge variant="outline">{synthesisSummary.synthesisCount} syntheses</Badge>
-              <Badge variant="outline">{synthesisSummary.readyCount} ready</Badge>
-              <Badge variant="outline">{synthesisSummary.inProgressCount} in progress</Badge>
-              <Badge variant="outline">{synthesisSummary.publishedCount} published</Badge>
-              <Badge variant="outline">{synthesisSummary.changedCanonicalCount} changed canonical</Badge>
-            </div>
-            <div className="grid gap-3 xl:grid-cols-2">
-              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
-                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                  <Sparkles className="size-4" />
-                  Next synthesis
-                </div>
-                <div className="mt-3 text-sm leading-6 text-muted-foreground">
-                  {synthesisSummary.nextSynthesis ? (
-                    <>
-                      <div className="font-medium text-foreground">
-                        {synthesisSummary.nextSynthesis.title}
-                      </div>
-                      <div className="mt-1">
-                        {synthesisSummary.nextSynthesis.recommendedNextStep}
-                      </div>
-                    </>
-                  ) : (
-                    "No active synthesis candidate is currently seeded for this topic."
-                  )}
-                </div>
-              </div>
-              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
-                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                  <Gauge className="size-4" />
-                  Latest durable effect
-                </div>
-                <div className="mt-3 text-sm leading-6 text-muted-foreground">
-                  {synthesisSummary.recentPublished ? (
-                    <>
-                      <div className="font-medium text-foreground">
-                        {synthesisSummary.recentPublished.title}
-                      </div>
-                      <div className="mt-1">
-                        {synthesisSummary.recentPublished.changedCanonicalSummary ??
-                          synthesisSummary.recentPublished.durableConclusion}
-                      </div>
-                    </>
-                  ) : (
-                    "No published synthesis has been recorded yet."
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button asChild variant="outline">
-                <Link href={`/syntheses?topic=${topic.id}`}>Open topic syntheses</Link>
-              </Button>
-              <Button asChild variant="ghost">
-                <Link href="/syntheses">Open full synthesis portfolio</Link>
-              </Button>
             </div>
           </div>
         </Surface>
@@ -608,7 +697,7 @@ export function TopicWorkspaceIntro({
       {evidenceChangeSummary ? (
         <Surface
           title="Evidence changes"
-          description="Evidence shifts should reopen or review this topic selectively. This surface keeps that impact visible instead of letting durable pages drift silently."
+          description="Check this when new evidence materially affects the topic. It keeps reopen and review pressure visible without making changes the default starting surface."
         >
           <div className="space-y-4">
             <div className="flex flex-wrap gap-2">
@@ -673,9 +762,6 @@ export function TopicWorkspaceIntro({
                   </Link>
                 </Button>
               ) : null}
-              <Button asChild variant="ghost">
-                <Link href="/changes">Open full change portfolio</Link>
-              </Button>
             </div>
           </div>
         </Surface>
@@ -684,7 +770,7 @@ export function TopicWorkspaceIntro({
       {monitoringSummary ? (
         <Surface
           title="Monitoring"
-          description="Monitoring distinguishes what should stay passive, what needs bounded review, and which watchpoints should actually spawn new acquisition work."
+          description="This is a lower-frequency watch lane. Use it to distinguish passive watchfulness from the signals that should actually spawn bounded review or new acquisition work."
         >
           <div className="space-y-4">
             <div className="flex flex-wrap gap-2">
@@ -751,9 +837,6 @@ export function TopicWorkspaceIntro({
                   </Link>
                 </Button>
               ) : null}
-              <Button asChild variant="ghost">
-                <Link href="/monitoring">Open full monitoring portfolio</Link>
-              </Button>
             </div>
           </div>
         </Surface>
@@ -781,10 +864,46 @@ export function TopicWorkspaceIntro({
       ) : null}
 
       <Surface
-        title="Why this page exists"
-        description="A topic home should help you begin well, resume work quickly, and stay grounded in the same wiki that the rest of the product uses."
+        title="Durable roots and working rules"
+        description="The topic home is the main cockpit, but it still sits on explicit source-controlled roots. Use these rules when you need to drop from the rendered view back into the durable layer."
       >
-        <div className="grid gap-4 lg:grid-cols-3">
+        <div className="grid gap-4 xl:grid-cols-3">
+          <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+              <FolderTree className="size-4" />
+              Canonical wiki
+            </div>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+              This remains the source-of-truth knowledge layer.
+            </p>
+            <div className="mt-3 break-all font-mono text-xs text-muted-foreground">
+              {topic.fileRoots.canonical}
+            </div>
+          </div>
+          <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+              <Sparkles className="size-4" />
+              Obsidian projection
+            </div>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+              The projection stays additive and local-useful, not the truth layer.
+            </p>
+            <div className="mt-3 break-all font-mono text-xs text-muted-foreground">
+              {topic.fileRoots.obsidian}
+            </div>
+          </div>
+          <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+              <Gauge className="size-4" />
+              Evaluation root
+            </div>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+              Use evaluation to guide upgrades, not to replace judgment.
+            </p>
+            <div className="mt-3 break-all font-mono text-xs text-muted-foreground">
+              {topic.fileRoots.evaluation}
+            </div>
+          </div>
           <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
             <div className="flex items-center gap-2 text-sm font-medium text-foreground">
               <Radar className="size-4" />

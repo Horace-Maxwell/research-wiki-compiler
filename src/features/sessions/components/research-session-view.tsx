@@ -161,8 +161,8 @@ export function ResearchSessionView({
           focusedQuestion
             ? "Use this focused session lane to reload the right context, see what changed the question last time, and decide whether the next pass should harden into synthesis, archive, or a canonical update."
             : focusedTopic
-              ? "Use this topic-focused queue to pick the next bounded research pass, continue active work, and see which completed session actually changed the topic."
-              : "Research sessions are now first-class operating units across the portfolio. Use them to choose the next bounded pass, load the right context pack, capture the outcome, and decide what should become durable knowledge."
+              ? "This is the next primary lane after questions. Use it to continue the next bounded pass, capture what changed, and keep the topic moving without reopening everything."
+              : "Sessions are the second main working lane after topics and questions. Use them to run the next bounded pass, load the right context pack, capture the outcome, and decide what should become durable knowledge."
         }
         badge={`${overview.summary.totalSessions} sessions`}
         actions={
@@ -174,7 +174,7 @@ export function ResearchSessionView({
             </Button>
             {focusedTopic ? (
               <Button asChild variant="ghost">
-                <Link href={`/gaps?topic=${focusedTopic.id}`}>Open evidence gaps</Link>
+                <Link href={`/syntheses?topic=${focusedTopic.id}`}>Open syntheses</Link>
               </Button>
             ) : null}
             <Button asChild>

@@ -216,13 +216,13 @@ export function EvidenceGapView({
         eyebrow="Evidence gaps"
         title={
           focusedTopic
-            ? `${focusedTopic.title} evidence gap lane`
-            : "Evidence gaps show what to acquire next"
+            ? `${focusedTopic.title} evidence blockers`
+            : "Evidence blockers show what to acquire next"
         }
         description={
           focusedTopic
-            ? "Use this topic-focused gap lane to see what evidence is still missing, which next session should close it, and which question, synthesis, or maturity step would move if that evidence lands."
-            : "Evidence gaps are now a first-class acquisition surface across the portfolio. Use them to see what is missing, why it matters, which session to run next, and which topics are blocked more by evidence quality than by structure."
+            ? "Use this supporting lane only when the topic home, question queue, or synthesis lane makes clear that missing evidence is the blocker."
+            : "This is a supporting lane across the portfolio for moments when missing evidence is what is actually stopping progress."
         }
         badge={`${overview.summary.totalGaps} gaps`}
         actions={
@@ -230,10 +230,10 @@ export function EvidenceGapView({
             {focusedTopic ? (
               <>
                 <Button asChild variant="outline">
-                  <Link href="/gaps">Open full gap lane</Link>
+                  <Link href={`/questions?topic=${focusedTopic.id}`}>Open question queue</Link>
                 </Button>
                 <Button asChild variant="ghost">
-                  <Link href={`/questions?topic=${focusedTopic.id}`}>Open question queue</Link>
+                  <Link href={`/acquisition?topic=${focusedTopic.id}`}>Open acquisition queue</Link>
                 </Button>
               </>
             ) : (

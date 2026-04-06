@@ -224,8 +224,8 @@ export function QuestionWorkflowView({
         title={focusedTopic ? `${focusedTopic.title} question queue` : "Questions drive the research"}
         description={
           focusedTopic
-            ? "Use this topic-focused queue to see which question is closest to synthesis, which one still needs more evidence, and which grounded answers should reopen if the topic shifts."
-            : "Questions are now a first-class operating surface across the portfolio. Use them to decide what to read next, which context pack to load, what still needs sources, and what is finally ready to become durable synthesis."
+            ? "This is the primary lane after topic home. Use it to choose the next question, see which one is closest to synthesis, and only branch into evidence lanes when missing evidence is actually the blocker."
+            : "Questions are the main working lane after topics. Use them to decide what to read next, which context pack to load, what still needs evidence, and what is actually ready to become durable synthesis."
         }
         badge={`${overview.summary.totalQuestions} questions`}
         actions={
@@ -233,13 +233,10 @@ export function QuestionWorkflowView({
             {focusedTopic ? (
               <>
                 <Button asChild variant="outline">
-                  <Link href="/questions">Open full question queue</Link>
+                  <Link href={`/sessions?topic=${focusedTopic.id}`}>Open session queue</Link>
                 </Button>
                 <Button asChild variant="ghost">
-                  <Link href={`/gaps?topic=${focusedTopic.id}`}>Open evidence gaps</Link>
-                </Button>
-                <Button asChild variant="ghost">
-                  <Link href={`/changes?topic=${focusedTopic.id}`}>Open change lane</Link>
+                  <Link href={`/syntheses?topic=${focusedTopic.id}`}>Open syntheses</Link>
                 </Button>
               </>
             ) : (

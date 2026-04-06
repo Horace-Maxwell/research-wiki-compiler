@@ -202,13 +202,13 @@ export function AcquisitionTaskView({
         eyebrow="Acquisition"
         title={
           focusedTopic
-            ? `${focusedTopic.title} acquisition queue`
+            ? `${focusedTopic.title} acquisition operations`
             : "Acquisition turns missing evidence into bounded work"
         }
         description={
           focusedTopic
-            ? "Use this topic-focused acquisition queue to see which evidence-collection pass should become the next session, what to inspect first, and how the result should flow back into syntheses, maintenance, and canonical review."
-            : "Acquisition is now a first-class workflow lane across the portfolio. Use it to turn evidence gaps into bounded collection work with explicit session handoffs, ingestion steps, and maturity consequences."
+            ? "Use this operational lane after a gap or monitor has already defined what to collect, what to inspect first, and what success should unlock."
+            : "This is an operational lane across the portfolio for bounded collection work. Start here less often than in topics, questions, sessions, and syntheses."
         }
         badge={`${overview.summary.totalTasks} tasks`}
         actions={
@@ -216,10 +216,10 @@ export function AcquisitionTaskView({
             {focusedTopic ? (
               <>
                 <Button asChild variant="outline">
-                  <Link href="/acquisition">Open full acquisition portfolio</Link>
+                  <Link href={`/gaps?topic=${focusedTopic.id}`}>Open evidence blockers</Link>
                 </Button>
                 <Button asChild variant="ghost">
-                  <Link href={`/gaps?topic=${focusedTopic.id}`}>Open topic gap lane</Link>
+                  <Link href={`/monitoring?topic=${focusedTopic.id}`}>Open monitoring</Link>
                 </Button>
               </>
             ) : (

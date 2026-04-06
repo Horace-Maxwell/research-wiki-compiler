@@ -47,8 +47,20 @@ const navIconMap = {
 
 const navGroups = [
   {
-    title: "Portfolio",
-    items: ["/topics", "/questions", "/gaps", "/acquisition", "/sessions", "/syntheses", "/changes", "/monitoring", "/dashboard", "/onboarding"],
+    title: "Daily use",
+    items: ["/topics", "/questions", "/sessions", "/syntheses"],
+  },
+  {
+    title: "Signals",
+    items: ["/gaps", "/changes"],
+  },
+  {
+    title: "Operations",
+    items: ["/acquisition", "/monitoring"],
+  },
+  {
+    title: "Workspace",
+    items: ["/dashboard", "/onboarding"],
   },
   {
     title: "Knowledge",
@@ -68,46 +80,46 @@ const surfaceCopy = {
   "/topics": {
     label: "Topic portfolio",
     detail:
-      "See every topic workspace, compare maturity, and move from evaluation directly into the next useful upgrade.",
+      "Start here each day: choose a topic, open its home, and move into questions, sessions, or syntheses from there.",
   },
   "/questions": {
     label: "Research questions",
     detail:
-      "Treat questions as the real engine of research progression: what is open, what is ready, what needs sources, and what should reopen.",
+      "This is the primary work queue after topic home: decide what to work next, what needs evidence, and what is ready to harden.",
   },
   "/gaps": {
-    label: "Evidence gap lane",
+    label: "Evidence blockers",
     detail:
-      "Track what evidence is missing, why it matters, which session should close it next, and which topic is blocked more by evidence quality than by structure.",
+      "A supporting lane for missing evidence when a topic, question, or synthesis tells you evidence is the blocker.",
   },
   "/acquisition": {
-    label: "Acquisition queue",
+    label: "Acquisition operations",
     detail:
-      "Turn evidence gaps into bounded collection work with explicit session handoffs, first source targets, and integration steps back into the knowledge system.",
+      "An operational lane for bounded evidence collection after a gap or monitor has already defined what to collect.",
   },
   "/sessions": {
     label: "Research sessions",
     detail:
-      "Run bounded research passes that load the right context, record what changed, and decide whether the result belongs in synthesis, archive, or the canonical wiki.",
+      "After questions, run the next bounded pass, load the right context, and record what actually changed.",
   },
   "/syntheses": {
     label: "Synthesis loop",
     detail:
-      "See what is ready to publish, what still belongs in the decision loop, and which syntheses changed canonical or maintenance guidance.",
+      "After sessions, harden durable judgment, publish what is ready, and see what changed in the canonical layer.",
   },
   "/dashboard": {
-    label: "Workspace front door",
-    detail: "See what the knowledge base knows, what changed, and what should happen next.",
+    label: "Workspace overview",
+    detail: "A lower-frequency overview for setup, raw workflow status, and recent workspace activity.",
   },
   "/changes": {
-    label: "Evidence change lane",
+    label: "Evidence shifts",
     detail:
-      "Track the evidence shifts that should reopen questions, stale syntheses, or trigger bounded canonical review instead of broad rewrite churn.",
+      "A supporting lane for meaningful evidence shifts that may reopen questions or mark canonical pages for review.",
   },
   "/monitoring": {
-    label: "Monitoring queue",
+    label: "Monitoring operations",
     detail:
-      "See which watchpoints stay passive, which ones only mark review, and which ones should actually spawn new acquisition work.",
+      "A lower-frequency watch lane for signals that stay passive until they justify bounded new work.",
   },
   "/onboarding": {
     label: "Workspace setup",
@@ -187,6 +199,8 @@ export function AppShell({ children }: { children: ReactNode }) {
   const isTopicDetailRoute = pathname.startsWith("/topics/");
   const activePath = normalizeActivePath(pathname);
   const activeItem = PRODUCT_SURFACE.find((item) => item.href === activePath);
+  const primaryPaths = navGroups[0].items;
+  const supportingGroups = navGroups.slice(1, 4);
   const currentSurface = isExampleRoute
     ? {
         label: "Rendered topic",
@@ -197,9 +211,9 @@ export function AppShell({ children }: { children: ReactNode }) {
       ? {
           label: "Topic workspace",
           detail:
-            "A rendered knowledge environment that keeps the canonical wiki, maturity guidance, and next upgrades in the same working surface.",
+            "The main working cockpit for a topic: start here, then move into questions, sessions, syntheses, and only pull in signals when needed.",
         }
-    : surfaceCopy[activePath];
+      : surfaceCopy[activePath];
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,rgba(247,245,240,0.97),rgba(243,241,236,1))]">
@@ -215,42 +229,39 @@ export function AppShell({ children }: { children: ReactNode }) {
                   Knowledge portfolio
                 </div>
                 <p className="text-sm leading-7 text-muted-foreground">
-                  Topic-based compiled wiki workspaces with visible summaries, reviewable mutation,
-                  grounded answers, research questions, audits, and maturity-aware next steps.
+                  Open a topic home first. Questions, sessions, and syntheses are the primary daily
+                  loop; signals and operations stay available, but more contextual.
                 </p>
               </div>
               <div className="rounded-[20px] border border-border/55 bg-background/58 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.34)]">
                 <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                  Start here
+                  Daily path
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <Badge variant="outline">local-first</Badge>
                   <Badge variant="outline">file-first</Badge>
                   <Badge variant="outline">review-first</Badge>
                 </div>
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  Topics -&gt; topic home -&gt; questions -&gt; sessions -&gt; syntheses.
+                </p>
                 <div className="mt-4 space-y-2">
-                  <Button asChild className="w-full justify-start" variant="outline">
+                  <Button asChild className="w-full justify-start">
                     <Link href="/topics">
                       <LibraryBig className="size-4" />
                       Open topic portfolio
+                    </Link>
+                  </Button>
+                  <Button asChild className="w-full justify-start" variant="outline">
+                    <Link href="/topics/openclaw">
+                      <Sparkles className="size-4" />
+                      Open flagship topic
                     </Link>
                   </Button>
                   <Button asChild className="w-full justify-start" variant="ghost">
                     <Link href="/questions">
                       <CircleHelp className="size-4" />
                       Open question queue
-                    </Link>
-                  </Button>
-                  <Button asChild className="w-full justify-start" variant="ghost">
-                    <Link href="/gaps">
-                      <SearchCheck className="size-4" />
-                      Open evidence gaps
-                    </Link>
-                  </Button>
-                  <Button asChild className="w-full justify-start" variant="ghost">
-                    <Link href="/acquisition">
-                      <SearchCheck className="size-4" />
-                      Open acquisition queue
                     </Link>
                   </Button>
                   <Button asChild className="w-full justify-start" variant="ghost">
@@ -262,27 +273,28 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <Button asChild className="w-full justify-start" variant="ghost">
                     <Link href="/syntheses">
                       <Sparkles className="size-4" />
-                      Open synthesis loop
+                      Open synthesis queue
                     </Link>
                   </Button>
-                  <Button asChild className="w-full justify-start" variant="ghost">
-                    <Link href="/changes">
-                      <RefreshCw className="size-4" />
-                      Open change lane
+                </div>
+                <div className="mt-4 rounded-[16px] border border-border/50 bg-background/62 px-3 py-3">
+                  <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                    Signals when needed
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                    <Link className="rounded-full border border-border/60 px-2.5 py-1 hover:text-foreground" href="/gaps">
+                      Gaps
                     </Link>
-                  </Button>
-                  <Button asChild className="w-full justify-start" variant="ghost">
-                    <Link href="/monitoring">
-                      <Radar className="size-4" />
-                      Open monitoring queue
+                    <Link className="rounded-full border border-border/60 px-2.5 py-1 hover:text-foreground" href="/changes">
+                      Changes
                     </Link>
-                  </Button>
-                  <Button asChild className="w-full justify-start" variant="ghost">
-                    <Link href="/topics/openclaw">
-                      <Sparkles className="size-4" />
-                      Open flagship topic
+                    <Link className="rounded-full border border-border/60 px-2.5 py-1 hover:text-foreground" href="/acquisition">
+                      Acquisition
                     </Link>
-                  </Button>
+                    <Link className="rounded-full border border-border/60 px-2.5 py-1 hover:text-foreground" href="/monitoring">
+                      Monitoring
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -346,14 +358,14 @@ export function AppShell({ children }: { children: ReactNode }) {
 
             <div className="mt-6 rounded-[20px] border border-border/55 bg-background/54 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.28)]">
               <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Product model
+                Default path
               </div>
-                <div className="mt-3 space-y-2 text-sm leading-6 text-muted-foreground">
+              <div className="mt-3 space-y-2 text-sm leading-6 text-muted-foreground">
                 <div>
-                  topics -&gt; questions -&gt; evidence gaps -&gt; sessions -&gt; syntheses -&gt;
-                  wiki workspaces -&gt; summaries/review -&gt; ask/archive -&gt; audit
+                  topics -&gt; topic home -&gt; questions -&gt; sessions -&gt; syntheses
                 </div>
-                <div>Evaluation exists to improve knowledge quality, not to gamify it.</div>
+                <div>Signals: gaps + changes. Operations: acquisition + monitoring.</div>
+                <div>The wiki stays durable; evaluation exists to improve work, not to gamify it.</div>
               </div>
             </div>
           </div>
@@ -385,7 +397,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                     <Link href="/topics">Topics</Link>
                   </Button>
                   <Button asChild size="sm" variant="ghost">
-                    <Link href="/wiki">Open wiki</Link>
+                    <Link href="/questions">Questions</Link>
                   </Button>
                   <Button asChild size="sm" variant="outline">
                     <Link href="/topics/openclaw">
@@ -397,7 +409,13 @@ export function AppShell({ children }: { children: ReactNode }) {
               </div>
 
               <nav className="mt-4 flex gap-2 overflow-x-auto pb-1 lg:hidden">
-                {PRODUCT_SURFACE.map((item) => {
+                {primaryPaths.map((href) => {
+                  const item = PRODUCT_SURFACE.find((surface) => surface.href === href);
+
+                  if (!item) {
+                    return null;
+                  }
+
                   const Icon = navIconMap[item.href];
                   const active = activePath === item.href;
 
@@ -413,6 +431,73 @@ export function AppShell({ children }: { children: ReactNode }) {
                       )}
                     >
                       <Icon className="size-4" />
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </nav>
+
+              <div className="mt-3 space-y-2 lg:hidden">
+                {supportingGroups.map((group) => (
+                  <div key={group.title} className="space-y-2">
+                    <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                      {group.title}
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {group.items.map((href) => {
+                        const item = PRODUCT_SURFACE.find((surface) => surface.href === href);
+
+                        if (!item) {
+                          return null;
+                        }
+
+                        const Icon = navIconMap[item.href];
+                        const active = activePath === item.href;
+
+                        return (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className={cn(
+                              "inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-1.5 text-xs transition-colors",
+                              active
+                                ? "border-foreground bg-foreground text-background"
+                                : "border-border bg-background/80 text-muted-foreground hover:text-foreground",
+                            )}
+                          >
+                            <Icon className="size-3.5" />
+                            {item.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <nav className="mt-3 flex flex-wrap gap-2 lg:hidden">
+                {["/wiki", "/sources", "/reviews", "/ask", "/audits", "/settings"].map((href) => {
+                  const item = PRODUCT_SURFACE.find((surface) => surface.href === href);
+
+                  if (!item) {
+                    return null;
+                  }
+
+                  const Icon = navIconMap[item.href];
+                  const active = activePath === item.href;
+
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={cn(
+                        "inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-1.5 text-xs transition-colors",
+                        active
+                          ? "border-foreground bg-foreground text-background"
+                          : "border-border bg-background/80 text-muted-foreground hover:text-foreground",
+                      )}
+                    >
+                      <Icon className="size-3.5" />
                       {item.label}
                     </Link>
                   );

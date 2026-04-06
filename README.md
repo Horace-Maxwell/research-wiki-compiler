@@ -76,13 +76,17 @@ If you want the fastest path to understanding this project, do not start with th
 > Start here / 从这里开始  
 > 1. `npm install && npm run dev`  
 > 2. 打开 `http://localhost:3000/topics`  
-> 3. 再打开 `http://localhost:3000/questions` 看当前研究问题队列  
-> 4. 再回来看 GitHub 里的 Markdown 源文件和中间 artifact
+> 3. 进入一个 topic home，例如 `http://localhost:3000/topics/openclaw`  
+> 4. 再按默认路径看 `questions -> sessions -> syntheses`  
+> 5. 最后再回来看 GitHub 里的 Markdown 源文件和中间 artifact
 
 | What to open | Why it matters |
 | --- | --- |
-| Topic portfolio route: `/topics` | 这是新的多主题产品入口，可以比较 topic maturity、查看下一步动作，并切换到具体 topic workspace。<br />This is the new multi-topic product entry point for comparing topic maturity, seeing next actions, and switching into specific topic workspaces. |
-| Research question route: `/questions` | 这是新的问题驱动工作入口，可以看到哪些问题最接近 synthesis、哪些问题缺证据、哪些已归档答案应该因为 topic 变化而重开。<br />This is the new question-centered work surface for seeing which questions are closest to synthesis, which still need evidence, and which grounded answers should reopen when a topic changes. |
+| Topic portfolio route: `/topics` | 这是新的多主题产品入口，也是默认前门。先从这里选 topic，再进入 topic home。<br />This is the multi-topic front door and the default place to start. Pick a topic here, then enter its topic home. |
+| Topic home route: `/topics/openclaw` | 这是默认工作驾驶舱。它会先告诉你当前 topic 状态、最重要的问题、该继续的 session、最接近的 synthesis，以及哪些 signals 只是次级支持面。<br />This is the default working cockpit. It tells you the current topic state, the most important question, the session to continue, the closest synthesis, and which signals are only supporting surfaces. |
+| Research question route: `/questions` | 这是 topic home 之后的主工作入口，用来决定接下来该研究哪个问题、该先加载哪个 context pack、哪些问题已经接近 synthesis。<br />This is the main working lane after topic home. Use it to decide which question to work next, which context pack to load first, and which questions are close to synthesis. |
+| Session route: `/sessions` | 这是默认路径的下一站，把问题转成有边界的实际工作。<br />This is the next stop in the default path, where questions become bounded research work. |
+| Synthesis route: `/syntheses` | 这是默认路径里把研究工作变成 durable judgment 的地方。<br />This is where the default path hardens research work into durable judgment. |
 | Rendered example route: `/examples/openclaw` | 这是产品里的渲染视图，能直接看到 wiki 页面、链接关系和示例入口。<br />This is the rendered product view, where the wiki pages, links, and example framing are easiest to understand. |
 | Source-of-truth wiki files: [`examples/openclaw-wiki/workspace/wiki/`](./examples/openclaw-wiki/workspace/wiki/) | 这些 Markdown 文件就是最终 wiki 内容本身。<br />These Markdown files are the wiki content itself. |
 | Obsidian-ready vault: [`examples/openclaw-wiki/obsidian-vault/`](./examples/openclaw-wiki/obsidian-vault/) | 这是额外生成的 Obsidian 投影视图，保留同一份知识内容，但更适合本地阅读、链接和小上下文组装。<br />This is an additive Obsidian projection of the same knowledge, optimized for local reading, linking, and small context packs. |
@@ -180,6 +184,9 @@ npm run dev
 打开 [http://localhost:3000/topics](http://localhost:3000/topics)。  
 Open [http://localhost:3000/topics](http://localhost:3000/topics).
 
+默认日常路径 / Default daily path:  
+`/topics -> /topics/[slug] -> /questions -> /sessions -> /syntheses`
+
 ### Provider configuration / Provider 配置
 
 如果你想运行真实的 summarize、plan patches 或 ask 流程，请在 Settings 页面配置 OpenAI 或 Anthropic key。演示 workspace 在 seed 后会清空 provider credentials。  
@@ -201,20 +208,20 @@ For a fuller browser smoke pass, see [MANUAL_QA.md](./MANUAL_QA.md).
 
 1. 打开 `/topics`，确认 topic portfolio、maturity 和 topic-level next actions。  
    Open `/topics` and inspect the topic portfolio, maturity, and topic-level next actions.
-2. 打开 `/questions`，查看哪些研究问题最该先做、哪些问题最接近 synthesis、哪些还缺 source evidence。  
-   Open `/questions` and inspect which research questions should be worked next, which are closest to synthesis, and which still need source evidence.
-3. 打开 `/dashboard`，确认 workspace 状态、最近活动与主循环入口。  
-   Open `/dashboard` and inspect workspace state, recent activity, and the main loops.
-4. 打开 `/sources`，查看 source import、normalized text、summary artifact 和 metadata。  
-   Open `/sources` and inspect source import, normalized text, summary artifacts, and metadata.
-5. 打开 `/reviews`，查看 proposal rationale、risk 和 patch diff。  
-   Open `/reviews` and inspect proposal rationale, risk, and patch diffs.
-6. 打开 `/wiki`，确认最终结果是文件驱动的 compiled wiki，而不是对话记录。  
+2. 打开一个 topic home，例如 `/topics/openclaw`，把它当成主要工作驾驶舱。  
+   Open a topic home such as `/topics/openclaw` and treat it as the main working cockpit.
+3. 打开 `/questions?topic=openclaw`，确认当前最该先做的问题、该先加载哪个 context pack。  
+   Open `/questions?topic=openclaw` and confirm which question should be worked first and which context pack should load first.
+4. 打开 `/sessions?topic=openclaw`，确认该继续哪个 bounded research pass。  
+   Open `/sessions?topic=openclaw` and confirm which bounded research pass should be continued.
+5. 打开 `/syntheses?topic=openclaw`，确认什么已经接近 durable synthesis。  
+   Open `/syntheses?topic=openclaw` and confirm what is close to durable synthesis.
+6. 只在 topic home 或主路径提示你需要时，再看 `/gaps`、`/changes`、`/acquisition`、`/monitoring`。  
+   Only when topic home or the main path tells you it is necessary, inspect `/gaps`, `/changes`, `/acquisition`, or `/monitoring`.
+7. 打开 `/wiki`，确认最终结果是文件驱动的 compiled wiki，而不是对话记录。  
    Open `/wiki` and confirm the result is a file-driven compiled wiki, not a transcript.
-7. 打开 `/ask`，查看 grounded answer，再把高价值答案 archive 回 wiki。  
-   Open `/ask`, inspect a grounded answer, and archive a valuable answer back into the wiki.
-8. 打开 `/audits`，运行一次 audit 并查看可读报告。  
-   Open `/audits`, run an audit, and inspect the readable report.
+8. 再打开 `/sources`、`/reviews`、`/ask`、`/audits`，查看底层 compile / review / answer / audit 闭环。  
+   Then open `/sources`, `/reviews`, `/ask`, and `/audits` to inspect the underlying compile / review / answer / audit loop.
 
 ## 附带示例 / Included Example
 

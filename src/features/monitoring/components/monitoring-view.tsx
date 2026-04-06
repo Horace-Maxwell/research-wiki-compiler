@@ -189,13 +189,13 @@ export function MonitoringView({
         eyebrow="Monitoring"
         title={
           focusedTopic
-            ? `${focusedTopic.title} monitoring queue`
-            : "Monitoring decides when watchpoints become work"
+            ? `${focusedTopic.title} monitoring signals`
+            : "Monitoring keeps signals quiet until they matter"
         }
         description={
           focusedTopic
-            ? "Use this topic-focused monitoring queue to see which signals stay passive, which ones only mark review, and which ones should spawn new acquisition or reopen work."
-            : "Monitoring is now a first-class workflow lane across the portfolio. Use it to distinguish passive watchfulness from the events that should trigger bounded review, new acquisition, or research reopen actions."
+            ? "Use this lower-frequency lane after topic home, changes, or acquisition work points you to a watch surface."
+            : "This is a lower-frequency lane across the portfolio for watchpoints that may mark review or spawn acquisition, not a default daily front door."
         }
         badge={`${overview.summary.totalItems} monitors`}
         actions={
@@ -203,10 +203,10 @@ export function MonitoringView({
             {focusedTopic ? (
               <>
                 <Button asChild variant="outline">
-                  <Link href="/monitoring">Open full monitoring portfolio</Link>
+                  <Link href={`/acquisition?topic=${focusedTopic.id}`}>Open acquisition queue</Link>
                 </Button>
                 <Button asChild variant="ghost">
-                  <Link href={`/acquisition?topic=${focusedTopic.id}`}>Open acquisition queue</Link>
+                  <Link href={`/changes?topic=${focusedTopic.id}`}>Open evidence shifts</Link>
                 </Button>
               </>
             ) : (

@@ -129,7 +129,7 @@ function TopicRow({
             <Link href={topic.links.home.href}>Open topic home</Link>
           </Button>
           <Button asChild variant="ghost">
-            <Link href={topic.links.maintenance.href}>Maintenance</Link>
+            <Link href={`/questions?topic=${topic.id}`}>Question queue</Link>
           </Button>
           <Button asChild variant="ghost">
             <Link href={topic.links.evaluation.href}>Evaluation</Link>
@@ -149,8 +149,8 @@ export function TopicPortfolioView({
     <div className="space-y-8">
       <PageHeader
         eyebrow="Topic portfolio"
-        title="Navigate the knowledge environments"
-        description="Treat each topic as a real knowledge workspace, not a loose folder. Compare maturity, see what is strong or missing, and move directly from evaluation into the next useful upgrade."
+        title="Choose a topic, then work from its home"
+        description="The portfolio is the front door, not the whole workspace. Open a topic home first, then move into questions, sessions, and syntheses from there. Evidence gaps, changes, acquisition, and monitoring stay available, but they should usually appear because the topic asks for them."
         badge={`${portfolio.summary.totalTopics} topics`}
         actions={
           <div className="flex flex-wrap gap-2">
@@ -205,7 +205,7 @@ export function TopicPortfolioView({
                 Portfolio comparison
               </div>
               <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                Why the topics are not at the same level
+                Why the topics do not need the same next move
               </h2>
             </div>
             <Scale className="size-5 text-muted-foreground" />
@@ -237,7 +237,7 @@ export function TopicPortfolioView({
                 Action queue
               </div>
               <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                What to do next across the portfolio
+                What deserves attention next across the portfolio
               </h2>
             </div>
             <Radar className="size-5 text-muted-foreground" />
