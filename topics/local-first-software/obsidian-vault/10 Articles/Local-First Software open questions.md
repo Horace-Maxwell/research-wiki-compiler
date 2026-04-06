@@ -92,6 +92,18 @@ These are the highest-leverage questions if you want this starter workspace to b
 - **Local-first sync risk map** looks closest if you load [[Local-First Software]], [[Sync engines]], [[Local-First Software current tensions]], [[Local-First Software maintenance watchpoints]].
 - **Local-first migration playbook** looks closest if you load [[Schema migration pressure]], [[Local-First Software maintenance rhythm]], [[Local-First Software open questions]], [[Note: What should I revisit next for Local-First Software]].
 
+## Recent session outcomes
+
+### Ground the durable sync assumptions
+
+- **Question**: Which sync-engine assumptions are durable enough to keep in canonical pages instead of working notes?
+- **Outcome**: updated canonical
+- **Worked with**: `Explain Local-First Software`
+- **What changed**: The starter corpus now supports an active canonical-boundary question instead of a vague bootstrap uncertainty.
+- **Durable result**: [[Sync engines]]
+- **Still unresolved**: The topic still needs a stronger synthesis about migration and repair burden before the canonical story should get more specific.
+- **Resume next**: Keep the canonical sync framing stable, then use the maintenance rhythm to decide whether migration pressure should become the next synthesis.
+
 ## Related pages
 
 - [[Local-First Software]]

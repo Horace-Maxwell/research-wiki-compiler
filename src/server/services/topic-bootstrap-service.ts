@@ -5,6 +5,7 @@ import path from "node:path";
 
 import type { WikiFrontmatter, WikiPageType } from "@/lib/contracts/wiki";
 import type { ResearchQuestionSeed } from "@/lib/contracts/research-question";
+import type { ResearchSessionSeed } from "@/lib/contracts/research-session";
 import {
   TOPIC_BOOTSTRAP_QUALITY_FLAGS,
   topicBootstrapBaselineSchema,
@@ -159,6 +160,12 @@ function corpusSourceRef(fileName: string) {
 
 function ensureIsoTimestamp(value: string) {
   return new Date(value).toISOString();
+}
+
+function offsetIsoTimestamp(base: string, hours: number) {
+  const date = new Date(base);
+  date.setUTCHours(date.getUTCHours() + hours);
+  return date.toISOString();
 }
 
 function titleFromStem(stem: string) {
@@ -595,6 +602,142 @@ function buildDefaultResearchQuestions(
   ];
 }
 
+function buildDefaultResearchSessions(params: {
+  title: string;
+  titles: ReturnType<typeof buildSurfaceTitleBundle>;
+  researchQuestions: ResearchQuestionSeed[];
+  corpusFiles: TopicBootstrapCorpusFile[];
+  seedTimestamp: string;
+}): ResearchSessionSeed[] {
+  const [boundaryQuestion, monitoringQuestion, synthesisQuestion] = params.researchQuestions;
+  const sourceTitles = params.corpusFiles.map((file) => file.title);
+
+  return [
+    {
+      id: slugifyTitle(`${params.title}-boundary-session`) || "boundary-session",
+      questionId: boundaryQuestion?.id ?? "canonical-boundary",
+      title: `Ground the canonical boundary for ${params.title}`,
+      goal: "Decide which starter claims are stable enough to sit in the canonical layer without hiding live uncertainty.",
+      summary:
+        "This completed orientation pass tightened the durable story, linked it back to the tension surface, and left the still-provisional claims in the working layer instead of the entry page.",
+      status: "completed",
+      priority: boundaryQuestion?.priority ?? "high",
+      sessionDate: offsetIsoTimestamp(params.seedTimestamp, 1),
+      loadedContextPackTitles: [`Explain ${params.title}`],
+      supportingContextPackTitles: ["Provenance And Review"],
+      relevantPages: [
+        params.title,
+        params.titles.currentTensions,
+        params.titles.openQuestions,
+        params.titles.readingPaths,
+      ],
+      relevantSources: sourceTitles.slice(0, 2),
+      draftConclusion:
+        "The canonical entry can safely hold the shortest stable framing, but the uncertainty about operating pressure still belongs in the current-tensions and open-questions surfaces.",
+      evidenceGained: [
+        "The same durable framing already shows up across the starter corpus without direct conflict.",
+        "The tension surface provides a cleaner place for unresolved trade-offs than the canonical entry page.",
+      ],
+      remainingUncertainty: [
+        "The topic still needs a stronger scope-and-boundary synthesis before the first canonical page can become more specific.",
+      ],
+      recommendedNextStep:
+        "Keep the canonical entry compact, then use the maintenance rhythm to decide which synthesis candidate should harden the next layer.",
+      outcome: "updated-canonical",
+      synthesisTitle: null,
+      archiveTitle: null,
+      canonicalUpdateTitle: params.title,
+      maintenanceUpdateTitles: [params.titles.openQuestions, params.titles.maintenanceRhythm],
+      questionStatusChange: boundaryQuestion
+        ? {
+            from: "open",
+            to: boundaryQuestion.status,
+            reason:
+              "The first bounded pass produced a stable enough canonical framing to move this question from generic starter uncertainty into active canonical maintenance.",
+          }
+        : null,
+      resumeNotes: [
+        "If new source intake weakens the canonical boundary, reopen this question before editing the entry page directly.",
+      ],
+    },
+    {
+      id: slugifyTitle(`${params.title}-next-synthesis-session`) || "next-synthesis-session",
+      questionId: synthesisQuestion?.id ?? "next-synthesis",
+      title: `Promote the next synthesis for ${params.title}`,
+      goal: "Use the smallest useful bundle to decide which unresolved thread is actually ready to become durable synthesis.",
+      summary:
+        "This active session keeps the next synthesis candidate narrow so the topic can advance without reopening the full graph every time.",
+      status: "active",
+      priority: synthesisQuestion?.priority ?? "medium",
+      sessionDate: offsetIsoTimestamp(params.seedTimestamp, 5),
+      loadedContextPackTitles: ["Maintenance Triage"],
+      supportingContextPackTitles: [`Explain ${params.title}`],
+      relevantPages: [
+        params.titles.maintenanceRhythm,
+        params.titles.currentTensions,
+        params.titles.openQuestions,
+      ],
+      relevantSources: sourceTitles.slice(0, 1),
+      draftConclusion:
+        "The most likely next durable move is still a synthesis, but the pass should stay focused on the single highest-leverage candidate rather than broadening scope.",
+      evidenceGained: [
+        "The maintenance rhythm and open-question surfaces already converge on a small set of promotion candidates.",
+      ],
+      remainingUncertainty: [
+        "The topic still needs one cleaner decision about which candidate should harden first.",
+      ],
+      recommendedNextStep:
+        "Finish this pass by choosing one synthesis candidate, then update the maintenance rhythm and open-question note together.",
+      outcome: null,
+      synthesisTitle: synthesisQuestion?.synthesizeInto ?? null,
+      archiveTitle: null,
+      canonicalUpdateTitle: null,
+      maintenanceUpdateTitles: [params.titles.maintenanceRhythm, params.titles.openQuestions],
+      questionStatusChange: null,
+      resumeNotes: [
+        "Reload Maintenance Triage before reopening provenance.",
+        "If the candidate still feels fuzzy after this pass, downgrade it instead of forcing synthesis prematurely.",
+      ],
+    },
+    {
+      id: slugifyTitle(`${params.title}-watchpoint-session`) || "watchpoint-session",
+      questionId: monitoringQuestion?.id ?? "monitoring-signals",
+      title: `Collect repeat watch signals for ${params.title}`,
+      goal: "Decide whether repeated operational concerns deserve durable watchpoint treatment or should remain provisional.",
+      summary:
+        "This queued session keeps the monitoring question honest by waiting for repeated evidence instead of promoting every starter concern into a watchpoint too early.",
+      status: "queued",
+      priority: monitoringQuestion?.priority ?? "medium",
+      sessionDate: offsetIsoTimestamp(params.seedTimestamp, 9),
+      loadedContextPackTitles: ["Maintenance Triage"],
+      supportingContextPackTitles: ["Provenance And Review"],
+      relevantPages: [
+        params.titles.maintenanceWatchpoints,
+        params.titles.operationalNote,
+        params.titles.maintenanceRhythm,
+      ],
+      relevantSources: sourceTitles.slice(1, 3),
+      draftConclusion:
+        "The topic should not yet promote scattered starter concerns into durable watchpoints without more repeated operating evidence.",
+      evidenceGained: [],
+      remainingUncertainty: [
+        "The starter corpus is still too small to prove that the same signal changes operator behavior more than once.",
+      ],
+      recommendedNextStep:
+        "Wait for another source, review, or audit pass, then revisit whether the same monitoring signal keeps reshaping next work.",
+      outcome: null,
+      synthesisTitle: null,
+      archiveTitle: null,
+      canonicalUpdateTitle: null,
+      maintenanceUpdateTitles: [params.titles.maintenanceRhythm],
+      questionStatusChange: null,
+      resumeNotes: [
+        "Do not promote this into a durable watchpoint until the same signal recurs across more than one pass.",
+      ],
+    },
+  ];
+}
+
 function buildSurfaceTitleBundle(title: string) {
   return {
     index: `${title} Index`,
@@ -625,9 +768,16 @@ export function createDefaultTopicBootstrapConfig({
   const surfaceTitles = buildSurfaceTitleBundle(normalizedTitle);
   const sourceFileNames = corpusFiles.map((file) => file.fileName);
   const contextPacks = buildDefaultConfigContextPacks(normalizedTitle, surfaceTitles);
-  const researchQuestions = buildDefaultResearchQuestions(normalizedTitle, surfaceTitles);
-  const requiredContextPackTitles = buildRequiredContextPacks(normalizedTitle);
   const generatedAt = ensureIsoTimestamp(seedTimestamp ?? new Date().toISOString());
+  const researchQuestions = buildDefaultResearchQuestions(normalizedTitle, surfaceTitles);
+  const researchSessions = buildDefaultResearchSessions({
+    title: normalizedTitle,
+    titles: surfaceTitles,
+    researchQuestions,
+    corpusFiles,
+    seedTimestamp: generatedAt,
+  });
+  const requiredContextPackTitles = buildRequiredContextPacks(normalizedTitle);
 
   return topicBootstrapConfigSchema.parse({
     schemaVersion: 1,
@@ -850,6 +1000,7 @@ export function createDefaultTopicBootstrapConfig({
       "Which monitoring signals deserve promotion into a stronger synthesis next?",
     ],
     researchQuestions,
+    researchSessions,
     resolutionSignals: [
       "A claim keeps reappearing across the bounded corpus with compatible framing.",
       "A context pack can answer the same question reliably without reopening the full graph.",
@@ -1025,6 +1176,7 @@ function buildKnowledgeMethodData(config: TopicBootstrapConfig): KnowledgeMethod
     openQuestionsSummary: config.openQuestionsSummary,
     openQuestions: config.openQuestions,
     researchQuestions: config.researchQuestions,
+    researchSessions: config.researchSessions,
     resolutionSignals: config.resolutionSignals,
     revisitQueue: config.revisitQueue,
     contextPackRefreshes: config.contextPackRefreshes,
@@ -1775,6 +1927,7 @@ async function validateHeadings(params: {
         "Summary",
         "Review cadence",
         "Revisit next",
+        "Session queue",
         "Context packs to refresh",
         "Synthesis candidates",
         "Audit to action",
@@ -1786,7 +1939,7 @@ async function validateHeadings(params: {
         params.paths.workspaceRoot,
         getWikiRelativePath("note", slugifyTitle(params.config.surfaces.openQuestions.title) || "open-questions"),
       ),
-      headings: ["Summary", "Questions", "What would resolve them"],
+      headings: ["Summary", "Questions", "What would resolve them", "Recent session outcomes"],
     },
   ];
 

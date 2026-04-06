@@ -2,8 +2,8 @@
 title: OpenClaw maintenance rhythm
 slug: openclaw-maintenance-rhythm
 type: synthesis
-created_at: '2026-04-05T19:36:55.517Z'
-updated_at: '2026-04-05T19:36:55.594Z'
+created_at: '2026-04-05T19:36:55.525Z'
+updated_at: '2026-04-05T19:36:55.606Z'
 status: active
 aliases: []
 tags:
@@ -68,6 +68,7 @@ refresh_triggers:
 - [Summary](#summary)
 - [Review cadence](#review-cadence)
 - [Revisit next](#revisit-next)
+- [Session queue](#session-queue)
 - [Context packs to refresh](#context-packs-to-refresh)
 - [Synthesis candidates](#synthesis-candidates)
 - [Audit to action](#audit-to-action)
@@ -101,6 +102,43 @@ This page is the maintenance control surface for the OpenClaw example. It turns 
 - [[OpenClaw maintenance watchpoints]]: This is the operational checklist that most directly affects upgrade behavior. Trigger: Before upgrading or after any evidence that changes risk posture.
 - [[OpenClaw open questions]]: This is where unresolved work should stay visible instead of dissolving into backlog noise. Trigger: After every new source batch, audit run, or rejected proposal with recurring rationale.
 - [[OpenClaw reading paths]]: This is where the smallest useful note bundle stays current. Trigger: When the recommended order for readers or models changes.
+
+## Session queue
+
+### Promote upgrade regression triggers into synthesis
+
+- **Question**: Which release-note or changelog signals should trigger a full regression run instead of a light upgrade check?
+- **Status**: active
+- **Load first**: `Upgrade Watchpoints`
+- **Goal**: Decide which release-note and changelog signals justify a full regression run instead of a light upgrade check.
+- **Deepen with**: `Maintenance Triage`
+- **Likely durable target**: [[OpenClaw upgrade regression triggers]]
+- **Update next**: [[OpenClaw maintenance rhythm]], [[OpenClaw open questions]]
+- **Resume cue**: Start from Upgrade Watchpoints, not the whole article graph.
+- **Next step**: Finish the trigger matrix, then update the question queue and maintenance rhythm together so the promotion is visible everywhere.
+
+### Collect plugin and SDK drift evidence
+
+- **Question**: Which plugin or SDK assumptions are most likely to drift between releases?
+- **Status**: queued
+- **Load first**: `Upgrade Watchpoints`
+- **Goal**: Decide whether the plugin-compatibility boundary has enough release-to-release evidence to harden into a stronger answer.
+- **Deepen with**: `Provenance And Review`
+- **Update next**: [[OpenClaw open questions]]
+- **Resume cue**: Use Provenance And Review before writing any new durable answer here.
+- **Next step**: Wait for another release or changelog pass, then compare the new evidence against the existing compatibility and review-history notes.
+
+### Tighten the provider exposure map
+
+- **Question**: Which provider-side changes would change adoption or upgrade decisions the fastest?
+- **Status**: queued
+- **Load first**: `Upgrade Watchpoints`
+- **Goal**: Decide whether provider-side changes now have enough operational evidence to become a standalone synthesis.
+- **Deepen with**: `Maintenance Triage`
+- **Likely durable target**: [[OpenClaw provider exposure map]]
+- **Update next**: [[OpenClaw maintenance rhythm]], [[OpenClaw open questions]]
+- **Resume cue**: Keep this queued until the evidence reads like operator guidance, not just community signal.
+- **Next step**: Run one focused provider-risk pass, then either promote the exposure map or downgrade the question until better evidence arrives.
 
 ## Context packs to refresh
 

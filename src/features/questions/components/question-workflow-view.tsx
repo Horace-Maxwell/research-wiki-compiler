@@ -156,8 +156,25 @@ function QuestionCard({
             {question.reopenTriggers.join("; ")}
           </div>
         ) : null}
+        {question.sessionCount > 0 ? (
+          <div>
+            <span className="font-medium text-foreground">Session lane:</span>{" "}
+            {question.nextSessionTitle ?? question.latestSessionTitle ?? "Session history available"}
+          </div>
+        ) : null}
+        {question.latestStatusChangeReason ? (
+          <div>
+            <span className="font-medium text-foreground">Last state change:</span>{" "}
+            {question.latestStatusChangeReason}
+          </div>
+        ) : null}
       </div>
       <div className="mt-4 flex flex-wrap gap-2">
+        <Button asChild size="sm">
+          <Link href={question.links.sessionWorkspace.href}>
+            {question.hasActiveSession ? "Continue session" : "Open session"}
+          </Link>
+        </Button>
         <Button asChild size="sm" variant="outline">
           <Link href={question.links.openQuestions.href}>Open question note</Link>
         </Button>

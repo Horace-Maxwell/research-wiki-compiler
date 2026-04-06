@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { researchQuestionSeedSchema } from "@/lib/contracts/research-question";
+import { researchSessionSeedSchema } from "@/lib/contracts/research-session";
 import { wikiPageTypeSchema } from "@/lib/contracts/wiki";
 
 export const TOPIC_BOOTSTRAP_QUALITY_FLAGS = [
@@ -165,6 +166,7 @@ export const topicBootstrapConfigSchema = z.object({
   openQuestionsSummary: z.string().min(1),
   openQuestions: z.array(z.string().min(1)).min(1),
   researchQuestions: z.array(researchQuestionSeedSchema).default([]),
+  researchSessions: z.array(researchSessionSeedSchema).default([]),
   resolutionSignals: z.array(z.string().min(1)).min(1),
   revisitQueue: z.array(topicBootstrapRevisitItemSchema).min(1),
   contextPackRefreshes: z.array(topicBootstrapContextRefreshItemSchema).min(1),

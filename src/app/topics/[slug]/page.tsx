@@ -5,6 +5,7 @@ import { WikiBrowser } from "@/features/wiki/components/wiki-browser";
 import type { WikiPageDetail, WikiPageSummary } from "@/lib/contracts/wiki";
 import { getOpenClawExampleManifest, ensureOpenClawRenderedWorkspace } from "@/server/services/openclaw-example-service";
 import { getTopicQuestionWorkflow } from "@/server/services/question-workflow-service";
+import { getTopicResearchSessionSummary } from "@/server/services/research-session-service";
 import { getTopicPortfolioOverview } from "@/server/services/topic-portfolio-service";
 import { ensureRenderedTopicWorkspace } from "@/server/services/rendered-topic-service";
 import { getWikiPageDetail, listWikiPages } from "@/server/services/wiki-page-service";
@@ -44,7 +45,10 @@ export default async function TopicWorkspacePage({
   const requestedPageId = readParam(routeParams.pageId);
   const requestedPagePath = readParam(routeParams.pagePath);
   const workspaceRoot = await resolveWorkspaceRoot(slug);
-  const questionWorkflow = await getTopicQuestionWorkflow(slug);
+  const [questionWorkflow, sessionSummary] = await Promise.all([
+    getTopicQuestionWorkflow(slug),
+    getTopicResearchSessionSummary(slug),
+  ]);
   const initialPages: WikiPageSummary[] = await listWikiPages(workspaceRoot);
   const initialPage =
     initialPages.find((page) => page.id === requestedPageId) ??
@@ -84,6 +88,7 @@ export default async function TopicWorkspacePage({
         <TopicWorkspaceIntro
           comparisonSpotlight={portfolio.comparisonSpotlight}
           questionWorkflow={questionWorkflow}
+          sessionSummary={sessionSummary}
           topic={topic}
         />
       }

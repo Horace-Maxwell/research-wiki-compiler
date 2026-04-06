@@ -426,6 +426,253 @@ export const openClawKnowledgeMethodData: KnowledgeMethodTemplateData = {
       ],
     },
   ],
+  researchSessions: [
+    {
+      id: "session-openclaw-identity",
+      questionId: "define-openclaw-in-corpus",
+      title: "Ground the OpenClaw entity page",
+      goal: "Turn the core identity question into a durable canonical page instead of leaving it as a floating working note.",
+      summary:
+        "This completed grounding pass tightened the main OpenClaw entry, linked it to the tensions and release-cadence pages, and moved the identity question into the synthesized state.",
+      status: "completed",
+      priority: "high",
+      sessionDate: "2026-04-01T16:00:00.000Z",
+      loadedContextPackTitles: ["Explain OpenClaw"],
+      supportingContextPackTitles: ["Provenance And Review"],
+      relevantPages: ["OpenClaw", "OpenClaw current tensions", "OpenClaw release cadence"],
+      relevantSources: [
+        "2026-03-31 release and plugin surface digest",
+        "2026-03-26 plugin SDK and policy digest",
+      ],
+      draftConclusion:
+        "The corpus supports a stable top-level entity page for OpenClaw as long as faster-moving risk and upgrade detail stay in the working and monitoring surfaces.",
+      evidenceGained: [
+        "The bounded corpus repeats the same core story about OpenClaw's release motion and integration surface.",
+        "The tensions page carries the uncertainty better than the entity page would.",
+      ],
+      remainingUncertainty: [
+        "The identity story should reopen if provider risk or upgrade posture changes the main framing materially.",
+      ],
+      recommendedNextStep:
+        "Keep the entity page stable, then use monitoring and tensions to decide when the identity framing actually needs to change.",
+      outcome: "updated-canonical",
+      synthesisTitle: null,
+      archiveTitle: null,
+      canonicalUpdateTitle: "OpenClaw",
+      maintenanceUpdateTitles: ["OpenClaw open questions", "OpenClaw maintenance rhythm"],
+      questionStatusChange: {
+        from: "active",
+        to: "synthesized",
+        reason:
+          "The canonical entity page now carries the strongest durable answer, so the identity question should drive reopen logic rather than stay in the active queue.",
+      },
+      resumeNotes: [
+        "Reopen this grounding pass only if new corpus material changes the top-level description of the project.",
+      ],
+    },
+    {
+      id: "session-unstable-surfaces",
+      questionId: "unstable-surfaces",
+      title: "Map the unstable surfaces",
+      goal: "Decide which fast-moving parts of OpenClaw deserve durable tension and watchpoint treatment.",
+      summary:
+        "This completed session compiled the release, provider, and plugin drift story into the tensions and maintenance-watchpoints syntheses, making the instability question resumable without reopening all artifacts.",
+      status: "completed",
+      priority: "medium",
+      sessionDate: "2026-04-03T18:00:00.000Z",
+      loadedContextPackTitles: ["Maintenance Triage"],
+      supportingContextPackTitles: ["Explain OpenClaw"],
+      relevantPages: [
+        "OpenClaw current tensions",
+        "OpenClaw maintenance watchpoints",
+        "OpenClaw release cadence",
+      ],
+      relevantSources: [
+        "2026-04-02 release cadence and test churn digest",
+        "2026-04-05 provider risk and changelog digest",
+      ],
+      draftConclusion:
+        "The instability story is durable enough to live in tensions and maintenance watchpoints, with release cadence, plugin compatibility, and provider exposure acting as the main operator-facing risk surfaces.",
+      evidenceGained: [
+        "Release cadence and compatibility drift recur across more than one source.",
+        "Provider-side signals change the maintenance story rather than staying as background chatter.",
+      ],
+      remainingUncertainty: [
+        "The provider exposure thread still wants a cleaner standalone synthesis when more direct evidence arrives.",
+      ],
+      recommendedNextStep:
+        "Use the watchpoints page as the compact operator view, then decide whether provider exposure should become its own synthesis next.",
+      outcome: "updated-working-note",
+      synthesisTitle: "OpenClaw current tensions",
+      archiveTitle: null,
+      canonicalUpdateTitle: "OpenClaw maintenance watchpoints",
+      maintenanceUpdateTitles: ["OpenClaw current tensions", "OpenClaw maintenance rhythm"],
+      questionStatusChange: {
+        from: "active",
+        to: "synthesized",
+        reason:
+          "The instability answer now lives durably in the tensions and monitoring syntheses, so the question should reopen only if those operating surfaces change.",
+      },
+      resumeNotes: [
+        "If release notes or provider events shift the operating story, reopen this question before changing the watchpoints synthesis.",
+      ],
+    },
+    {
+      id: "session-upgrade-monitoring-note",
+      questionId: "monitor-before-upgrade",
+      title: "Archive the upgrade monitoring answer",
+      goal: "Turn the most reusable operational question into a grounded archived note linked back into maintenance.",
+      summary:
+        "This completed session bridged Ask, archive, and maintenance by turning the upgrade-monitoring question into a durable note that still points back to watchpoints and reopen triggers.",
+      status: "completed",
+      priority: "high",
+      sessionDate: "2026-04-04T20:00:00.000Z",
+      loadedContextPackTitles: ["Upgrade Watchpoints"],
+      supportingContextPackTitles: ["Maintenance Triage"],
+      relevantPages: [
+        "OpenClaw maintenance watchpoints",
+        "Note: What should I monitor before upgrading OpenClaw",
+        "Provider dependency risk",
+      ],
+      relevantSources: [
+        "2026-04-05 provider risk and changelog digest",
+        "2026-04-02 release cadence and test churn digest",
+      ],
+      draftConclusion:
+        "The upgrade question is best carried as a grounded archived note plus the watchpoints synthesis, with clear triggers for reopening when posture changes.",
+      evidenceGained: [
+        "The operator-facing checklist is already stable enough to survive as a durable note.",
+        "The same monitoring logic can be reused across later upgrade passes.",
+      ],
+      remainingUncertainty: [
+        "The archived note should reopen if provider or compatibility drift changes the checklist materially.",
+      ],
+      recommendedNextStep:
+        "Keep the archived note short and grounded, then feed any recurring changes back into maintenance watchpoints first.",
+      outcome: "archived-answer",
+      synthesisTitle: null,
+      archiveTitle: "Note: What should I monitor before upgrading OpenClaw",
+      canonicalUpdateTitle: null,
+      maintenanceUpdateTitles: ["OpenClaw maintenance watchpoints", "OpenClaw open questions"],
+      questionStatusChange: {
+        from: "ready-for-synthesis",
+        to: "synthesized",
+        reason:
+          "The answer now has a durable archived form and should only re-enter the active queue when upgrade posture changes.",
+      },
+      resumeNotes: [
+        "If the archived checklist and maintenance watchpoints start diverging, reopen this question before editing the note in isolation.",
+      ],
+    },
+    {
+      id: "session-upgrade-regression-triggers",
+      questionId: "upgrade-regression-triggers",
+      title: "Promote upgrade regression triggers into synthesis",
+      goal: "Decide which release-note and changelog signals justify a full regression run instead of a light upgrade check.",
+      summary:
+        "This active session is the current highest-leverage synthesis pass because the release page, watchpoints, archived note, and open-question page already contain most of the rule set.",
+      status: "active",
+      priority: "high",
+      sessionDate: "2026-04-05T19:10:00.000Z",
+      loadedContextPackTitles: ["Upgrade Watchpoints"],
+      supportingContextPackTitles: ["Maintenance Triage"],
+      relevantPages: [
+        "OpenClaw release cadence",
+        "OpenClaw maintenance watchpoints",
+        "OpenClaw open questions",
+        "Note: What should I monitor before upgrading OpenClaw",
+      ],
+      relevantSources: ["2026-04-02 release cadence and test churn digest"],
+      draftConclusion:
+        "The strongest next durable page is likely a trigger map that separates light upgrade checks from full regression runs based on release and changelog signals.",
+      evidenceGained: [
+        "The current wiki already names the same upgrade triggers across more than one working surface.",
+      ],
+      remainingUncertainty: [
+        "The rule set still needs one tighter pass so it reads as durable operator guidance rather than a bundle of adjacent notes.",
+      ],
+      recommendedNextStep:
+        "Finish the trigger matrix, then update the question queue and maintenance rhythm together so the promotion is visible everywhere.",
+      outcome: null,
+      synthesisTitle: "OpenClaw upgrade regression triggers",
+      archiveTitle: null,
+      canonicalUpdateTitle: null,
+      maintenanceUpdateTitles: ["OpenClaw maintenance rhythm", "OpenClaw open questions"],
+      questionStatusChange: null,
+      resumeNotes: [
+        "Start from Upgrade Watchpoints, not the whole article graph.",
+        "If the rule set still feels fuzzy, keep this as an active session instead of forcing synthesis.",
+      ],
+    },
+    {
+      id: "session-provider-exposure-map",
+      questionId: "provider-exposure-map",
+      title: "Tighten the provider exposure map",
+      goal: "Decide whether provider-side changes now have enough operational evidence to become a standalone synthesis.",
+      summary:
+        "This queued session is close to synthesis, but it still wants one cleaner pass that ties provider events directly to adoption and upgrade decisions.",
+      status: "queued",
+      priority: "medium",
+      sessionDate: "2026-04-06T16:00:00.000Z",
+      loadedContextPackTitles: ["Upgrade Watchpoints"],
+      supportingContextPackTitles: ["Maintenance Triage"],
+      relevantPages: [
+        "Provider dependency risk",
+        "OpenClaw current tensions",
+        "OpenClaw maintenance watchpoints",
+      ],
+      relevantSources: ["2026-04-05 provider risk and changelog digest"],
+      draftConclusion:
+        "Provider exposure looks synthesis-worthy, but it still needs a cleaner bridge from external signal to operator decision.",
+      evidenceGained: [],
+      remainingUncertainty: [
+        "The corpus still has only a thin direct link between provider events and real operator posture changes.",
+      ],
+      recommendedNextStep:
+        "Run one focused provider-risk pass, then either promote the exposure map or downgrade the question until better evidence arrives.",
+      outcome: null,
+      synthesisTitle: "OpenClaw provider exposure map",
+      archiveTitle: null,
+      canonicalUpdateTitle: null,
+      maintenanceUpdateTitles: ["OpenClaw maintenance rhythm", "OpenClaw open questions"],
+      questionStatusChange: null,
+      resumeNotes: [
+        "Keep this queued until the evidence reads like operator guidance, not just community signal.",
+      ],
+    },
+    {
+      id: "session-plugin-sdk-drift",
+      questionId: "plugin-sdk-drift",
+      title: "Collect plugin and SDK drift evidence",
+      goal: "Decide whether the plugin-compatibility boundary has enough release-to-release evidence to harden into a stronger answer.",
+      summary:
+        "This queued evidence-gathering session keeps the thinnest high-value question visible without pretending the current corpus can answer it durably yet.",
+      status: "queued",
+      priority: "high",
+      sessionDate: "2026-04-07T16:00:00.000Z",
+      loadedContextPackTitles: ["Upgrade Watchpoints"],
+      supportingContextPackTitles: ["Provenance And Review"],
+      relevantPages: ["Plugin compatibility", "OpenClaw open questions", "Review History", "Summary Atlas"],
+      relevantSources: ["2026-03-26 plugin SDK and policy digest"],
+      draftConclusion:
+        "The plugin drift story is clearly important, but the corpus still lacks enough longitudinal evidence to promote it beyond a visible open question.",
+      evidenceGained: [],
+      remainingUncertainty: [
+        "The topic still needs concrete release-to-release proof of drift instead of one-off signals.",
+      ],
+      recommendedNextStep:
+        "Wait for another release or changelog pass, then compare the new evidence against the existing compatibility and review-history notes.",
+      outcome: null,
+      synthesisTitle: null,
+      archiveTitle: null,
+      canonicalUpdateTitle: null,
+      maintenanceUpdateTitles: ["OpenClaw open questions"],
+      questionStatusChange: null,
+      resumeNotes: [
+        "Use Provenance And Review before writing any new durable answer here.",
+      ],
+    },
+  ],
   resolutionSignals: [
     "More explicit release notes that connect shipped fixes to workflow-facing breakpoints.",
     "Additional source excerpts that show how plugin API or SDK boundaries evolve over multiple releases.",

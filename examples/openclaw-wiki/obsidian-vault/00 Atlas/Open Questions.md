@@ -51,6 +51,38 @@
 - **OpenClaw upgrade regression triggers**: Release cadence, monitoring, and open-question surfaces already suggest this synthesis, but the rule set is not yet durable enough to stand alone.
 - **OpenClaw provider exposure map**: Provider risk is visible, but the practical workflow consequences are still split across a concept page, a tension page, and an operational note.
 
+## Recent session outcomes
+
+### Archive the upgrade monitoring answer
+
+- **Question**: What should I monitor before upgrading OpenClaw?
+- **Outcome**: archived answer
+- **Worked with**: [[Upgrade Watchpoints]]
+- **What changed**: The answer now has a durable archived form and should only re-enter the active queue when upgrade posture changes.
+- **Durable result**: [[Note: What should I monitor before upgrading OpenClaw]]
+- **Still unresolved**: The archived note should reopen if provider or compatibility drift changes the checklist materially.
+- **Resume next**: Keep the archived note short and grounded, then feed any recurring changes back into maintenance watchpoints first.
+
+### Map the unstable surfaces
+
+- **Question**: Which parts of OpenClaw look most unstable or fast-moving?
+- **Outcome**: updated working note
+- **Worked with**: [[Maintenance Triage]]
+- **What changed**: The instability answer now lives durably in the tensions and monitoring syntheses, so the question should reopen only if those operating surfaces change.
+- **Durable result**: [[OpenClaw current tensions]], [[OpenClaw maintenance watchpoints]]
+- **Still unresolved**: The provider exposure thread still wants a cleaner standalone synthesis when more direct evidence arrives.
+- **Resume next**: Use the watchpoints page as the compact operator view, then decide whether provider exposure should become its own synthesis next.
+
+### Ground the OpenClaw entity page
+
+- **Question**: What is OpenClaw in this corpus?
+- **Outcome**: updated canonical
+- **Worked with**: [[Explain OpenClaw]]
+- **What changed**: The canonical entity page now carries the strongest durable answer, so the identity question should drive reopen logic rather than stay in the active queue.
+- **Durable result**: [[OpenClaw]]
+- **Still unresolved**: The identity story should reopen if provider risk or upgrade posture changes the main framing materially.
+- **Resume next**: Keep the entity page stable, then use monitoring and tensions to decide when the identity framing actually needs to change.
+
 
 
 ## Reopen when the topic changes

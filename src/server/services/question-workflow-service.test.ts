@@ -28,5 +28,9 @@ describe("question workflow service", () => {
       true,
     );
     expect(localFirst?.questionCount).toBeGreaterThan(0);
+    expect(localFirst?.questions.some((question) => question.sessionCount > 0)).toBe(true);
+    expect(localFirst?.questions.some((question) => question.links.sessionWorkspace.href.includes("/sessions"))).toBe(
+      true,
+    );
   });
 });

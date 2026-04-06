@@ -11,6 +11,7 @@ import {
   Compass,
   DatabaseZap,
   FileStack,
+  FlaskConical,
   LayoutDashboard,
   LibraryBig,
   Settings2,
@@ -25,6 +26,7 @@ import { Button } from "@/components/ui/button";
 const navIconMap = {
   "/topics": LibraryBig,
   "/questions": CircleHelp,
+  "/sessions": FlaskConical,
   "/onboarding": Compass,
   "/dashboard": LayoutDashboard,
   "/sources": FileStack,
@@ -38,7 +40,7 @@ const navIconMap = {
 const navGroups = [
   {
     title: "Portfolio",
-    items: ["/topics", "/questions", "/dashboard", "/onboarding"],
+    items: ["/topics", "/questions", "/sessions", "/dashboard", "/onboarding"],
   },
   {
     title: "Knowledge",
@@ -64,6 +66,11 @@ const surfaceCopy = {
     label: "Research questions",
     detail:
       "Treat questions as the real engine of research progression: what is open, what is ready, what needs sources, and what should reopen.",
+  },
+  "/sessions": {
+    label: "Research sessions",
+    detail:
+      "Run bounded research passes that load the right context, record what changed, and decide whether the result belongs in synthesis, archive, or the canonical wiki.",
   },
   "/dashboard": {
     label: "Workspace front door",
@@ -110,6 +117,10 @@ function normalizeActivePath(pathname: string) {
 
   if (pathname.startsWith("/questions")) {
     return "/questions";
+  }
+
+  if (pathname.startsWith("/sessions")) {
+    return "/sessions";
   }
 
   const match = PRODUCT_SURFACE.find((item) => pathname === item.href);
@@ -175,6 +186,12 @@ export function AppShell({ children }: { children: ReactNode }) {
                     <Link href="/questions">
                       <CircleHelp className="size-4" />
                       Open question queue
+                    </Link>
+                  </Button>
+                  <Button asChild className="w-full justify-start" variant="ghost">
+                    <Link href="/sessions">
+                      <FlaskConical className="size-4" />
+                      Open session queue
                     </Link>
                   </Button>
                   <Button asChild className="w-full justify-start" variant="ghost">
@@ -250,8 +267,8 @@ export function AppShell({ children }: { children: ReactNode }) {
               </div>
               <div className="mt-3 space-y-2 text-sm leading-6 text-muted-foreground">
                 <div>
-                  topics -&gt; questions -&gt; wiki workspaces -&gt; summaries/review -&gt; ask/archive
-                  -&gt; audit
+                  topics -&gt; questions -&gt; sessions -&gt; wiki workspaces -&gt; summaries/review
+                  -&gt; ask/archive -&gt; audit
                 </div>
                 <div>Evaluation exists to improve knowledge quality, not to gamify it.</div>
               </div>

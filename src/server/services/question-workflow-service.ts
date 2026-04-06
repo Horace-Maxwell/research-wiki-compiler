@@ -10,6 +10,7 @@ import {
   type ResearchQuestionSeed,
   type ResearchQuestionStatus,
 } from "@/lib/contracts/research-question";
+import type { ResearchSessionItem } from "@/lib/contracts/research-session";
 import {
   openClawExampleManifestSchema,
   type OpenClawExampleManifest,
@@ -22,6 +23,7 @@ import {
 } from "@/lib/contracts/topic-bootstrap";
 import { OPENCLAW_EXAMPLE_ROOT, TOPICS_ROOT } from "@/server/lib/repo-paths";
 import { openClawKnowledgeMethodData } from "@/server/services/openclaw-knowledge-method";
+import { getResearchSessionOverview } from "@/server/services/research-session-service";
 import { getTopicPortfolioOverview } from "@/server/services/topic-portfolio-service";
 
 type TopicPortfolioEntry = Awaited<
@@ -121,6 +123,19 @@ function computeReadiness(question: ResearchQuestionSeed) {
 
 function sortQuestions(questions: QuestionWorkflowItem[]) {
   return [...questions].sort((left, right) => {
+    const activeSessionDifference = Number(right.hasActiveSession) - Number(left.hasActiveSession);
+
+    if (activeSessionDifference !== 0) {
+      return activeSessionDifference;
+    }
+
+    const queuedSessionDifference =
+      Number(right.nextSessionStatus === "queued") - Number(left.nextSessionStatus === "queued");
+
+    if (queuedSessionDifference !== 0) {
+      return queuedSessionDifference;
+    }
+
     const statusDifference = statusWeight(left.status) - statusWeight(right.status);
 
     if (statusDifference !== 0) {
@@ -154,7 +169,11 @@ function findPagePath(source: QuestionSource, title: string | null) {
   return source.pagePathByTitle.get(normalizeTitle(title)) ?? null;
 }
 
-function buildQuestionItem(source: QuestionSource, question: ResearchQuestionSeed): QuestionWorkflowItem {
+function buildQuestionItem(
+  source: QuestionSource,
+  question: ResearchQuestionSeed,
+  sessionHistory: ResearchSessionItem[],
+): QuestionWorkflowItem {
   const openQuestionsPath = findPagePath(source, source.openQuestionsTitle);
   const maintenancePath = findPagePath(source, source.maintenanceTitle);
   const canonicalTargetPath =
@@ -179,6 +198,16 @@ function buildQuestionItem(source: QuestionSource, question: ResearchQuestionSee
   const watchForReopen =
     question.status === "stale" ||
     (question.status === "synthesized" && question.reopenTriggers.length > 0);
+  const byDate = [...sessionHistory].sort(
+    (left, right) => new Date(right.sessionDate).getTime() - new Date(left.sessionDate).getTime(),
+  );
+  const nextSession =
+    sessionHistory.find((session) => session.status === "active") ??
+    sessionHistory.find((session) => session.status === "queued") ??
+    null;
+  const latestSession = byDate[0] ?? null;
+  const latestStatusChangeReason =
+    byDate.find((session) => session.questionStatusChange)?.questionStatusChange?.reason ?? null;
 
   return {
     id: question.id,
@@ -206,6 +235,19 @@ function buildQuestionItem(source: QuestionSource, question: ResearchQuestionSee
     needsSources,
     readyForSynthesis,
     watchForReopen,
+    sessionCount: sessionHistory.length,
+    hasActiveSession: sessionHistory.some((session) => session.status === "active"),
+    nextSessionTitle: nextSession?.title ?? null,
+    nextSessionGoal: nextSession?.goal ?? null,
+    nextSessionStatus:
+      nextSession?.status === "active" || nextSession?.status === "queued"
+        ? nextSession.status
+        : null,
+    latestSessionTitle: latestSession?.title ?? null,
+    latestSessionSummary: latestSession?.summary ?? null,
+    latestSessionOutcome: latestSession?.outcome ?? null,
+    latestStatusChangeReason,
+    lastWorkedAt: latestSession?.sessionDate ?? null,
     links: {
       topicHome: {
         label: "Open topic home",
@@ -222,6 +264,10 @@ function buildQuestionItem(source: QuestionSource, question: ResearchQuestionSee
       canonicalTarget: {
         label: question.canonicalTargetTitle ? "Open grounded page" : "Open canonical start",
         href: canonicalTargetHref,
+      },
+      sessionWorkspace: {
+        label: nextSession?.status === "active" ? "Continue session" : "Open session workspace",
+        href: `/sessions?topic=${source.topic.id}&question=${question.id}`,
       },
     },
   };
@@ -364,14 +410,33 @@ function buildBuckets(questions: QuestionWorkflowItem[]) {
 export async function getQuestionWorkflowOverview(
   focusTopicId?: string | null,
 ): Promise<QuestionWorkflowOverview> {
-  const portfolio = await getTopicPortfolioOverview();
+  const [portfolio, sessionOverview] = await Promise.all([
+    getTopicPortfolioOverview(),
+    getResearchSessionOverview({ focusTopicId: focusTopicId ?? null }),
+  ]);
   const selectedTopics =
     focusTopicId && portfolio.topics.some((topic) => topic.id === focusTopicId)
       ? portfolio.topics.filter((topic) => topic.id === focusTopicId)
       : portfolio.topics;
   const sources = await Promise.all(selectedTopics.map(loadQuestionSource));
+  const sessionMap = new Map<string, ResearchSessionItem[]>();
+
+  for (const topic of sessionOverview.topics) {
+    for (const session of topic.sessions) {
+      const key = `${session.topicId}:${session.questionId}`;
+      const bucket = sessionMap.get(key) ?? [];
+      bucket.push(session);
+      sessionMap.set(key, bucket);
+    }
+  }
+
   const topicSummaries = sources.map((source) =>
-    buildTopicSummary(source, source.questions.map((question) => buildQuestionItem(source, question))),
+    buildTopicSummary(
+      source,
+      source.questions.map((question) =>
+        buildQuestionItem(source, question, sessionMap.get(`${source.topic.id}:${question.id}`) ?? []),
+      ),
+    ),
   );
   const allQuestions = sortQuestions(topicSummaries.flatMap((topic) => topic.questions));
   const focusQueue = allQuestions

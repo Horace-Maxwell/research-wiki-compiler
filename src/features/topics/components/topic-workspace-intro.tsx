@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowRight, FolderTree, Gauge, Radar, Sparkles } from "lucide-react";
+import { ArrowRight, FlaskConical, FolderTree, Gauge, Radar, Sparkles } from "lucide-react";
 
 import type { QuestionWorkflowTopicSummary } from "@/lib/contracts/research-question";
+import type { ResearchSessionTopicSummary } from "@/lib/contracts/research-session";
 import type { TopicPortfolioComparison, TopicPortfolioItem } from "@/lib/contracts/topic-portfolio";
 import type { TopicMaturityStage } from "@/lib/contracts/topic-evaluation";
 import { Badge } from "@/components/ui/badge";
@@ -90,10 +91,12 @@ export function TopicWorkspaceIntro({
   topic,
   comparisonSpotlight,
   questionWorkflow,
+  sessionSummary,
 }: {
   topic: TopicPortfolioItem;
   comparisonSpotlight: TopicPortfolioComparison | null;
   questionWorkflow: QuestionWorkflowTopicSummary | null;
+  sessionSummary: ResearchSessionTopicSummary | null;
 }) {
   const isComparedTopic =
     comparisonSpotlight &&
@@ -254,6 +257,23 @@ export function TopicWorkspaceIntro({
                       Missing evidence: {question.sourceGaps.join("; ")}
                     </div>
                   ) : null}
+                  {question.nextSessionTitle || question.latestSessionTitle ? (
+                    <div className="mt-1 text-sm leading-6 text-muted-foreground">
+                      Session lane: {question.nextSessionTitle ?? question.latestSessionTitle}
+                    </div>
+                  ) : null}
+                  {question.latestStatusChangeReason ? (
+                    <div className="mt-1 text-sm leading-6 text-muted-foreground">
+                      Last state change: {question.latestStatusChangeReason}
+                    </div>
+                  ) : null}
+                  <div className="mt-3">
+                    <Button asChild size="sm" variant="outline">
+                      <Link href={question.links.sessionWorkspace.href}>
+                        {question.hasActiveSession ? "Continue session" : "Open session"}
+                      </Link>
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -263,6 +283,64 @@ export function TopicWorkspaceIntro({
               </Button>
               <Button asChild variant="ghost">
                 <Link href="/questions">Open full question portfolio</Link>
+              </Button>
+            </div>
+          </div>
+        </Surface>
+      ) : null}
+
+      {sessionSummary ? (
+        <Surface
+          title="Research sessions"
+          description="Sessions turn question state into actual bounded work: what we loaded, what changed, and what should harden next."
+        >
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="outline">{sessionSummary.sessionCount} sessions</Badge>
+              <Badge variant="outline">{sessionSummary.activeCount} active</Badge>
+              <Badge variant="outline">{sessionSummary.queuedCount} queued</Badge>
+              <Badge variant="outline">{sessionSummary.completedCount} completed</Badge>
+            </div>
+            <div className="grid gap-3 xl:grid-cols-2">
+              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <FlaskConical className="size-4" />
+                  Next session
+                </div>
+                <div className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {sessionSummary.nextSession ? (
+                    <>
+                      <div className="font-medium text-foreground">{sessionSummary.nextSession.title}</div>
+                      <div className="mt-1">{sessionSummary.nextSession.recommendedNextStep}</div>
+                    </>
+                  ) : (
+                    "No queued or active session is currently seeded for this topic."
+                  )}
+                </div>
+              </div>
+              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Gauge className="size-4" />
+                  Latest outcome
+                </div>
+                <div className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {sessionSummary.recentSession ? (
+                    <>
+                      <div className="font-medium text-foreground">{sessionSummary.recentSession.title}</div>
+                      <div className="mt-1">{sessionSummary.recentSession.summary}</div>
+                    </>
+                  ) : (
+                    "No completed session has been recorded yet."
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild variant="outline">
+                <Link href={`/sessions?topic=${topic.id}`}>Open topic session queue</Link>
+              </Button>
+              <Button asChild variant="ghost">
+                <Link href="/sessions">Open full session portfolio</Link>
               </Button>
             </div>
           </div>

@@ -72,11 +72,32 @@ export const questionWorkflowItemSchema = z.object({
   needsSources: z.boolean(),
   readyForSynthesis: z.boolean(),
   watchForReopen: z.boolean(),
+  sessionCount: z.number().int().nonnegative(),
+  hasActiveSession: z.boolean(),
+  nextSessionTitle: z.string().nullable(),
+  nextSessionGoal: z.string().nullable(),
+  nextSessionStatus: z.enum(["queued", "active"]).nullable(),
+  latestSessionTitle: z.string().nullable(),
+  latestSessionSummary: z.string().nullable(),
+  latestSessionOutcome: z
+    .enum([
+      "question-advanced",
+      "needs-more-sources",
+      "ready-for-synthesis",
+      "synthesized",
+      "updated-working-note",
+      "updated-canonical",
+      "archived-answer",
+    ])
+    .nullable(),
+  latestStatusChangeReason: z.string().nullable(),
+  lastWorkedAt: z.string().datetime().nullable(),
   links: z.object({
     topicHome: questionWorkflowLinkSchema,
     openQuestions: questionWorkflowLinkSchema,
     maintenance: questionWorkflowLinkSchema,
     canonicalTarget: questionWorkflowLinkSchema,
+    sessionWorkspace: questionWorkflowLinkSchema,
   }),
 });
 export type QuestionWorkflowItem = z.infer<typeof questionWorkflowItemSchema>;

@@ -480,6 +480,148 @@
       ]
     }
   ],
+  "researchSessions": [
+    {
+      "id": "session-sync-canonical-boundary",
+      "questionId": "sync-assumptions-durable",
+      "title": "Ground the durable sync assumptions",
+      "goal": "Decide which sync-engine claims are stable enough to move from starter notes into the canonical topic layer.",
+      "summary": "This completed boundary pass sharpened the canonical story around sync cost and left the still-provisional repair assumptions in working surfaces.",
+      "status": "completed",
+      "priority": "high",
+      "sessionDate": "2026-04-05T13:00:00.000Z",
+      "loadedContextPackTitles": [
+        "Explain Local-First Software"
+      ],
+      "supportingContextPackTitles": [
+        "Maintenance Triage"
+      ],
+      "relevantPages": [
+        "Local-First Software",
+        "Sync engines",
+        "Local-First Software current tensions",
+        "Local-First Software open questions"
+      ],
+      "relevantSources": [
+        "Local-first core ideas",
+        "Sync engines"
+      ],
+      "draftConclusion": "The starter corpus already supports a durable canonical story about sync engines as the operational heart of local-first software, but the repair burden still belongs in working notes and watchpoints.",
+      "evidenceGained": [
+        "The corpus repeatedly ties local copies to sync-engine choices and long-term maintenance cost.",
+        "The sync-engine concept page can carry more durable weight than a generic starter note."
+      ],
+      "remainingUncertainty": [
+        "The topic still needs a stronger synthesis about migration and repair burden before the canonical story should get more specific."
+      ],
+      "recommendedNextStep": "Keep the canonical sync framing stable, then use the maintenance rhythm to decide whether migration pressure should become the next synthesis.",
+      "outcome": "updated-canonical",
+      "synthesisTitle": null,
+      "archiveTitle": null,
+      "canonicalUpdateTitle": "Sync engines",
+      "maintenanceUpdateTitles": [
+        "Local-First Software open questions",
+        "Local-First Software maintenance rhythm"
+      ],
+      "questionStatusChange": {
+        "from": "open",
+        "to": "active",
+        "reason": "The starter corpus now supports an active canonical-boundary question instead of a vague bootstrap uncertainty."
+      },
+      "resumeNotes": [
+        "Reopen this pass if a new source changes the framing of sync cost or conflict policy."
+      ]
+    },
+    {
+      "id": "session-migration-playbook",
+      "questionId": "migration-playbook",
+      "title": "Promote the migration playbook",
+      "goal": "Turn the migration-pressure thread into the first real synthesis instead of leaving it split across concept and maintenance notes.",
+      "summary": "This active session is the clearest path from starter topic to a more mature workspace because migration pressure already changes how the topic should be maintained.",
+      "status": "active",
+      "priority": "high",
+      "sessionDate": "2026-04-05T16:00:00.000Z",
+      "loadedContextPackTitles": [
+        "Maintenance Triage"
+      ],
+      "supportingContextPackTitles": [
+        "Explain Local-First Software"
+      ],
+      "relevantPages": [
+        "Schema migration pressure",
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions",
+        "Note: What should I revisit next for Local-First Software"
+      ],
+      "relevantSources": [
+        "Sync engines",
+        "Maintenance risks"
+      ],
+      "draftConclusion": "The next durable surface should likely be a migration playbook that explains when schema change, repair burden, and watchpoints become operationally significant.",
+      "evidenceGained": [
+        "Migration pressure already influences maintenance order more than most other starter concerns."
+      ],
+      "remainingUncertainty": [
+        "The topic still needs one tighter pass on when migration pressure becomes a playbook rather than a concept-page warning."
+      ],
+      "recommendedNextStep": "Use this session to decide whether the migration playbook can be promoted now, then update the maintenance rhythm and open-questions note together.",
+      "outcome": null,
+      "synthesisTitle": "Local-first migration playbook",
+      "archiveTitle": null,
+      "canonicalUpdateTitle": null,
+      "maintenanceUpdateTitles": [
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ],
+      "questionStatusChange": null,
+      "resumeNotes": [
+        "Start from Maintenance Triage before reopening the whole graph.",
+        "If the pass still feels thin, keep it active rather than forcing synthesis."
+      ]
+    },
+    {
+      "id": "session-conflict-watchpoints",
+      "questionId": "conflict-repair-watchpoints",
+      "title": "Collect repeat repair and conflict signals",
+      "goal": "Decide whether repair burden has enough repeated evidence to justify explicit watchpoints.",
+      "summary": "This queued session keeps the watchpoint question honest by waiting for repeated operator-facing evidence instead of promoting every starter concern into monitoring logic.",
+      "status": "queued",
+      "priority": "medium",
+      "sessionDate": "2026-04-06T17:00:00.000Z",
+      "loadedContextPackTitles": [
+        "Maintenance Triage"
+      ],
+      "supportingContextPackTitles": [
+        "Provenance And Review"
+      ],
+      "relevantPages": [
+        "Local-First Software maintenance watchpoints",
+        "Local-First Software current tensions",
+        "Local-First Software open questions",
+        "Note: What should I revisit next for Local-First Software"
+      ],
+      "relevantSources": [
+        "Maintenance risks"
+      ],
+      "draftConclusion": "The current starter corpus names real repair pressure, but it still does not prove that the same signal changes operator behavior often enough to harden into a watchpoint list.",
+      "evidenceGained": [],
+      "remainingUncertainty": [
+        "The topic still needs repeated evidence of the same repair or conflict signal recurring across more than one pass."
+      ],
+      "recommendedNextStep": "Wait for another source or audit pass, then compare whether the same repair signal still changes maintenance order.",
+      "outcome": null,
+      "synthesisTitle": null,
+      "archiveTitle": null,
+      "canonicalUpdateTitle": null,
+      "maintenanceUpdateTitles": [
+        "Local-First Software maintenance rhythm"
+      ],
+      "questionStatusChange": null,
+      "resumeNotes": [
+        "Do not turn this into a durable watchpoint until the same repair signal recurs in a clearly operational way."
+      ]
+    }
+  ],
   "resolutionSignals": [
     "The corpus starts connecting local copies, sync choices, and repair burden in a stable way.",
     "A context pack can answer migration or watchpoint questions without reopening every source note.",

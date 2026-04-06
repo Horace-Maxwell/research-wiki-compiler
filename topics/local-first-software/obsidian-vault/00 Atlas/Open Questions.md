@@ -51,4 +51,16 @@
 - **Local-first sync risk map**: The corpus already hints that sync policy is the real durability boundary, but the practical risk story is still split across the entry page, a concept page, and the maintenance surfaces.
 - **Local-first migration playbook**: Migration pressure is already visible as a durable concern, but the corpus is not yet rich enough to turn it into a fully stable operational synthesis.
 
+## Recent session outcomes
+
+### Ground the durable sync assumptions
+
+- **Question**: Which sync-engine assumptions are durable enough to keep in canonical pages instead of working notes?
+- **Outcome**: updated canonical
+- **Worked with**: [[Explain Local-First Software]]
+- **What changed**: The starter corpus now supports an active canonical-boundary question instead of a vague bootstrap uncertainty.
+- **Durable result**: [[Sync engines]]
+- **Still unresolved**: The topic still needs a stronger synthesis about migration and repair burden before the canonical story should get more specific.
+- **Resume next**: Keep the canonical sync framing stable, then use the maintenance rhythm to decide whether migration pressure should become the next synthesis.
+
 

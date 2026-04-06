@@ -178,6 +178,7 @@
           "Summary",
           "Review cadence",
           "Revisit next",
+          "Session queue",
           "Context packs to refresh",
           "Synthesis candidates",
           "Audit to action",
@@ -219,6 +220,7 @@
           "Questions",
           "What would resolve them",
           "What looks answerable next",
+          "Recent session outcomes",
           "Related pages"
         ]
       },

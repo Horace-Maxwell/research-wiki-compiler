@@ -1,4 +1,5 @@
 import type { ResearchQuestionSeed, ResearchQuestionStatus } from "@/lib/contracts/research-question";
+import type { ResearchSessionSeed } from "@/lib/contracts/research-session";
 
 export type KnowledgeSurfaceKind =
   | "canonical"
@@ -76,6 +77,7 @@ export type KnowledgeMethodTemplateData = {
   openQuestionsSummary: string;
   openQuestions: string[];
   researchQuestions: ResearchQuestionSeed[];
+  researchSessions: ResearchSessionSeed[];
   resolutionSignals: string[];
   revisitQueue: KnowledgeRevisitItem[];
   contextPackRefreshes: KnowledgeContextRefreshItem[];
@@ -127,6 +129,57 @@ function humanizeQuestionStatus(status: ResearchQuestionStatus) {
     default:
       return status.replace(/-/g, " ");
   }
+}
+
+function humanizeSessionStatus(status: ResearchSessionSeed["status"]) {
+  return status.replace(/-/g, " ");
+}
+
+function humanizeSessionOutcome(outcome: ResearchSessionSeed["outcome"]) {
+  return outcome ? outcome.replace(/-/g, " ") : "in progress";
+}
+
+function sessionStatusWeight(status: ResearchSessionSeed["status"]) {
+  switch (status) {
+    case "active":
+      return 0;
+    case "queued":
+      return 1;
+    case "completed":
+    default:
+      return 2;
+  }
+}
+
+function sortResearchSessions(sessions: ResearchSessionSeed[]) {
+  return [...sessions].sort((left, right) => {
+    const statusDifference = sessionStatusWeight(left.status) - sessionStatusWeight(right.status);
+
+    if (statusDifference !== 0) {
+      return statusDifference;
+    }
+
+    return new Date(right.sessionDate).getTime() - new Date(left.sessionDate).getTime();
+  });
+}
+
+function findResearchQuestion(
+  data: KnowledgeMethodTemplateData,
+  questionId: string,
+) {
+  return data.researchQuestions.find((question) => question.id === questionId) ?? null;
+}
+
+function queuedResearchSessions(data: KnowledgeMethodTemplateData) {
+  return sortResearchSessions(
+    data.researchSessions.filter((session) => session.status === "active" || session.status === "queued"),
+  );
+}
+
+function recentCompletedResearchSessions(data: KnowledgeMethodTemplateData) {
+  return sortResearchSessions(
+    data.researchSessions.filter((session) => session.status === "completed"),
+  ).slice(0, 4);
 }
 
 function openQuestionItems(data: KnowledgeMethodTemplateData) {
@@ -245,6 +298,122 @@ function buildQuestionReopenSection(
       `- **Reopen if**: ${question.reopenTriggers.join("; ")}`,
       "",
     ]),
+  ]
+    .join("\n")
+    .trim();
+}
+
+function buildResearchSessionQueueSection(
+  data: KnowledgeMethodTemplateData,
+  contextPackFormatter: (title: string) => string = wikiLink,
+) {
+  const sessions = queuedResearchSessions(data);
+
+  if (sessions.length === 0) {
+    return [
+      "## Session queue",
+      "",
+      "- No active or queued research sessions are seeded yet.",
+    ].join("\n");
+  }
+
+  return [
+    "## Session queue",
+    "",
+    ...sessions.flatMap((session) => {
+      const question = findResearchQuestion(data, session.questionId);
+      const durableTargets = uniqueTitles(
+        [session.synthesisTitle, session.archiveTitle, session.canonicalUpdateTitle].filter(
+          (value): value is string => Boolean(value),
+        ),
+      );
+
+      const lines = [
+        `### ${session.title}`,
+        "",
+        `- **Question**: ${question?.question ?? session.questionId}`,
+        `- **Status**: ${humanizeSessionStatus(session.status)}`,
+        `- **Load first**: ${formatContextPackList(session.loadedContextPackTitles, contextPackFormatter)}`,
+        `- **Goal**: ${session.goal}`,
+      ];
+
+      if (session.supportingContextPackTitles.length > 0) {
+        lines.push(
+          `- **Deepen with**: ${formatContextPackList(
+            session.supportingContextPackTitles,
+            contextPackFormatter,
+          )}`,
+        );
+      }
+
+      if (durableTargets.length > 0) {
+        lines.push(`- **Likely durable target**: ${formatQuestionWikiLinks(durableTargets)}`);
+      }
+
+      if (session.maintenanceUpdateTitles.length > 0) {
+        lines.push(`- **Update next**: ${formatQuestionWikiLinks(session.maintenanceUpdateTitles)}`);
+      }
+
+      if (session.resumeNotes.length > 0) {
+        lines.push(`- **Resume cue**: ${session.resumeNotes[0]}`);
+      }
+
+      lines.push(`- **Next step**: ${session.recommendedNextStep}`);
+      lines.push("");
+
+      return lines;
+    }),
+  ]
+    .join("\n")
+    .trim();
+}
+
+function buildResearchSessionOutcomeSection(
+  data: KnowledgeMethodTemplateData,
+  contextPackFormatter: (title: string) => string = wikiLink,
+) {
+  const sessions = recentCompletedResearchSessions(data);
+
+  if (sessions.length === 0) {
+    return [
+      "## Recent session outcomes",
+      "",
+      "- No completed research sessions are seeded yet.",
+    ].join("\n");
+  }
+
+  return [
+    "## Recent session outcomes",
+    "",
+    ...sessions.flatMap((session) => {
+      const question = findResearchQuestion(data, session.questionId);
+      const durableTargets = uniqueTitles(
+        [session.synthesisTitle, session.archiveTitle, session.canonicalUpdateTitle].filter(
+          (value): value is string => Boolean(value),
+        ),
+      );
+      const lines = [
+        `### ${session.title}`,
+        "",
+        `- **Question**: ${question?.question ?? session.questionId}`,
+        `- **Outcome**: ${humanizeSessionOutcome(session.outcome)}`,
+        `- **Worked with**: ${formatContextPackList(session.loadedContextPackTitles, contextPackFormatter)}`,
+        `- **What changed**: ${session.questionStatusChange?.reason ?? session.summary}`,
+      ];
+
+      if (durableTargets.length > 0) {
+        lines.push(`- **Durable result**: ${formatQuestionWikiLinks(durableTargets)}`);
+      }
+
+      if (session.remainingUncertainty.length > 0) {
+        lines.push(`- **Still unresolved**: ${session.remainingUncertainty.join("; ")}`);
+      }
+
+      lines.push(`- **Resume next**: ${session.recommendedNextStep}`);
+      lines.push("");
+
+      return lines;
+    }),
   ]
     .join("\n")
     .trim();
@@ -562,6 +731,7 @@ function buildWikiCurrentTensionsPage(data: KnowledgeMethodTemplateData) {
 function buildWikiOpenQuestionsPage(data: KnowledgeMethodTemplateData) {
   const formatContextPack = (title: string) => `\`${title}\``;
   const reopenSection = buildQuestionReopenSection(data, formatContextPack);
+  const sessionOutcomeSection = buildResearchSessionOutcomeSection(data, formatContextPack);
 
   return [
     `# ${data.openQuestionsTitle}`,
@@ -586,6 +756,8 @@ function buildWikiOpenQuestionsPage(data: KnowledgeMethodTemplateData) {
           .map((title) => wikiLink(title))
           .join(", ")}.`,
     ),
+    "",
+    sessionOutcomeSection,
     "",
     "## Related pages",
     "",
@@ -646,6 +818,8 @@ function buildWikiMaintenanceWatchpointsPage(data: KnowledgeMethodTemplateData) 
 }
 
 function buildWikiMaintenanceRhythmPage(data: KnowledgeMethodTemplateData) {
+  const sessionQueueSection = buildResearchSessionQueueSection(data, (title) => `\`${title}\``);
+
   return [
     `# ${data.maintenanceRhythmTitle}`,
     "",
@@ -669,6 +843,8 @@ function buildWikiMaintenanceRhythmPage(data: KnowledgeMethodTemplateData) {
           item.trigger,
         )}.`,
     ),
+    "",
+    sessionQueueSection,
     "",
     buildContextPackRefreshSection(data),
     "",
@@ -836,6 +1012,7 @@ function buildObsidianReadingPathsNote(data: KnowledgeMethodTemplateData) {
 
 function buildObsidianOpenQuestionsNote(data: KnowledgeMethodTemplateData) {
   const reopenSection = buildQuestionReopenSection(data);
+  const sessionOutcomeSection = buildResearchSessionOutcomeSection(data);
 
   return `# Open Questions
 
@@ -852,6 +1029,8 @@ ${data.resolutionSignals.map((signal) => `- ${signal}`).join("\n")}
 ${data.synthesisCandidates
   .map((candidate) => `- **${candidate.title}**: ${candidate.whyNow}`)
   .join("\n")}
+
+${sessionOutcomeSection}
 
 ${reopenSection ? `\n\n${reopenSection}` : ""}
 `;
@@ -905,6 +1084,8 @@ ${data.contextPackRefreshes
 }
 
 function buildObsidianMaintenanceRhythmNote(data: KnowledgeMethodTemplateData) {
+  const sessionQueueSection = buildResearchSessionQueueSection(data);
+
   return `# Maintenance Rhythm
 
 ## Start a pass here
@@ -919,6 +1100,8 @@ function buildObsidianMaintenanceRhythmNote(data: KnowledgeMethodTemplateData) {
 ${data.revisitQueue
   .map((item) => `- ${wikiLink(item.title)}: ${item.why}`)
   .join("\n")}
+
+${sessionQueueSection}
 
 ## Context packs to refresh
 
