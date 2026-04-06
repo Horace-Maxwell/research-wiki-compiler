@@ -27,6 +27,8 @@
   ·
   <a href="./docs/topic-bootstrap.md">Topic Bootstrap / 主题启动</a>
   ·
+  <a href="./docs/topic-maturity.md">Topic Maturity / 主题成熟度</a>
+  ·
   <a href="./docs/architecture.md">Architecture / 架构</a>
   ·
   <a href="./docs/product-spec.md">Product Spec / 产品规格</a>
@@ -273,6 +275,7 @@ Official commands:
 npm run topic:init -- --slug my-topic --title "My Topic"
 npm run topic:build -- --slug my-topic
 npm run topic:validate -- --slug my-topic
+npm run topic:evaluate -- --slug my-topic
 ```
 
 如果你已经有一个小型 starter corpus，可以直接复制进去：  
@@ -289,6 +292,7 @@ npm run topic:init -- \
 Entry docs:
 
 - [docs/topic-bootstrap.md](./docs/topic-bootstrap.md)
+- [docs/topic-maturity.md](./docs/topic-maturity.md)
 - [topics/README.md](./topics/README.md)
 - [topics/local-first-software/README.md](./topics/local-first-software/README.md)
 
@@ -323,6 +327,8 @@ The repository now also extracts the successful pattern into a reusable method l
 
 - [docs/knowledge-work-method.md](./docs/knowledge-work-method.md)：如何把 canonical wiki、Obsidian projection、context pack、tensions、questions、watchpoints 和 syntheses 组织成长期可维护的知识系统。  
   [docs/knowledge-work-method.md](./docs/knowledge-work-method.md): the playbook for turning canonical wiki pages, Obsidian projection, context packs, tensions, questions, watchpoints, and syntheses into a durable knowledge system.
+- [docs/topic-maturity.md](./docs/topic-maturity.md)：如何判断一个 topic 仍然只是 starter，还是已经进入 maintained / mature / flagship 阶段。  
+  [docs/topic-maturity.md](./docs/topic-maturity.md): how to judge whether a topic is still a starter or has progressed into maintained, mature, or flagship territory.
 - [templates/knowledge-work/README.md](./templates/knowledge-work/README.md)：从 OpenClaw 抽取出来的复用模板与命名约定。  
   [templates/knowledge-work/README.md](./templates/knowledge-work/README.md): the reusable template pack and naming conventions extracted from OpenClaw.
 

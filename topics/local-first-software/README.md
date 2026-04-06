@@ -10,6 +10,7 @@ This directory is a deterministic starter knowledge workspace for Local-First So
 - `obsidian-vault/`: an additive working projection for Obsidian usage.
 - `manifest.json`: the generated manifest for the starter bootstrap.
 - `starter-baseline.json`: the deterministic baseline used by validation.
+- `evaluation/`: heuristic maturity and quality reports written by `topic:evaluate`.
 
 ## Layer model
 
@@ -22,6 +23,7 @@ This directory is a deterministic starter knowledge workspace for Local-First So
 ```bash
 npm run topic:build -- --slug local-first-software
 npm run topic:validate -- --slug local-first-software
+npm run topic:evaluate -- --slug local-first-software
 ```
 
 ## What to inspect first
@@ -39,3 +41,13 @@ npm run topic:validate -- --slug local-first-software
 2. Add or refine starter pages in `topic.json` instead of editing managed files directly.
 3. Use the maintenance surfaces to decide what should become durable synthesis next.
 4. Once the topic matures, run the broader compile / review / ask / audit loops against the same canonical workspace model.
+
+## Evaluation expectation
+
+This bootstrap is meant to begin as a strong `starter` topic, not to pretend it is already mature.
+
+Use `npm run topic:evaluate -- --slug local-first-software` to verify:
+
+- the starter surfaces are structurally useful
+- the topic has not been over-promoted beyond its real workflow evidence
+- the next upgrades are clear before deeper summarize / review / archive / audit work begins

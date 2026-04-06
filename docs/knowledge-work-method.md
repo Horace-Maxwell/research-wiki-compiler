@@ -208,3 +208,22 @@ The practical path for a new topic is now:
 
 OpenClaw remains the flagship full workflow example.
 The topic bootstrap system makes it possible to start new topics with the same layer model, starter quality bar, and validation path instead of inventing a fresh structure every time.
+
+## 11. Maturity and judgment
+
+A good starter topic is not automatically a mature topic.
+
+This repository now makes that distinction explicit with:
+
+- `npm run topic:evaluate -- --slug my-topic`
+- `npm run example:openclaw:evaluate`
+- [`docs/topic-maturity.md`](./topic-maturity.md)
+
+Use the evaluator when you want to know:
+
+- whether the topic is still mostly starter scaffolding
+- which surfaces are genuinely helping
+- what is missing before the topic deserves to be called maintained, mature, or flagship
+
+OpenClaw is meant to score like a flagship-quality example.
+`local-first-software` is meant to remain a strong starter dry-run until real summarize/review/archive/audit evidence exists.

@@ -1,0 +1,636 @@
+{
+  "schemaVersion": 1,
+  "target": {
+    "kind": "example",
+    "id": "openclaw",
+    "title": "OpenClaw example wiki",
+    "rootPath": "/Users/horace/Desktop/Researcher Wiki Compiler/examples/openclaw-wiki",
+    "workspaceRoot": "/Users/horace/Desktop/Researcher Wiki Compiler/examples/openclaw-wiki/workspace",
+    "obsidianVaultRoot": "/Users/horace/Desktop/Researcher Wiki Compiler/examples/openclaw-wiki/obsidian-vault"
+  },
+  "maturity": {
+    "stage": "flagship",
+    "nextStage": null,
+    "summary": "OpenClaw example wiki is operating at flagship quality: strong workflow completeness, strong daily-use surfaces, and a clear showcase path.",
+    "stageAssessments": [
+      {
+        "stage": "starter",
+        "achieved": true,
+        "criteria": [
+          {
+            "label": "Required starter surfaces exist",
+            "satisfied": true,
+            "details": "5/5 surface completeness."
+          },
+          {
+            "label": "At least one context pack exists",
+            "satisfied": true,
+            "details": "4 context packs found."
+          },
+          {
+            "label": "A deterministic validation artifact exists",
+            "satisfied": true,
+            "details": "Manifest and baseline are present."
+          },
+          {
+            "label": "The corpus is explicit",
+            "satisfied": true,
+            "details": "4 corpus files found."
+          }
+        ]
+      },
+      {
+        "stage": "developing",
+        "achieved": true,
+        "criteria": [
+          {
+            "label": "Starter stage is achieved",
+            "satisfied": true,
+            "details": "Starter requirements are satisfied."
+          },
+          {
+            "label": "At least two downstream workflow layers are populated",
+            "satisfied": true,
+            "details": "4/4 downstream workflow layers are populated."
+          },
+          {
+            "label": "Workflow and provenance are no longer just starter-grade",
+            "satisfied": true,
+            "details": "5/5 workflow and provenance score."
+          },
+          {
+            "label": "Canonical pages are grounded in compiled artifacts, not only starter corpus refs",
+            "satisfied": true,
+            "details": "11 canonical pages cite non-corpus workflow artifacts."
+          },
+          {
+            "label": "The canonical layer extends beyond the bare starter minimum",
+            "satisfied": true,
+            "details": "10 non-index pages found."
+          },
+          {
+            "label": "The topic has at least one synthesis",
+            "satisfied": true,
+            "details": "4 syntheses found."
+          },
+          {
+            "label": "Navigation is already useful",
+            "satisfied": true,
+            "details": "5/5 navigation score."
+          }
+        ]
+      },
+      {
+        "stage": "maintained",
+        "achieved": true,
+        "criteria": [
+          {
+            "label": "Developing stage is achieved",
+            "satisfied": true,
+            "details": "Developing requirements are satisfied."
+          },
+          {
+            "label": "Maintenance surfaces are operational",
+            "satisfied": true,
+            "details": "4.9/5 maintenance readiness score."
+          },
+          {
+            "label": "Context packs are high-signal enough for repeated use",
+            "satisfied": true,
+            "details": "4.9/5 context-pack score."
+          },
+          {
+            "label": "At least one audit report exists",
+            "satisfied": true,
+            "details": "1 audit reports found."
+          },
+          {
+            "label": "A stable validation path exists",
+            "satisfied": true,
+            "details": "Validation artifact is present."
+          }
+        ]
+      },
+      {
+        "stage": "mature",
+        "achieved": true,
+        "criteria": [
+          {
+            "label": "Maintained stage is achieved",
+            "satisfied": true,
+            "details": "Maintained requirements are satisfied."
+          },
+          {
+            "label": "Overall quality is consistently high",
+            "satisfied": true,
+            "details": "5/5 overall score."
+          },
+          {
+            "label": "Canonical depth is strong",
+            "satisfied": true,
+            "details": "5/5 canonical depth score."
+          },
+          {
+            "label": "Workflow and provenance are strongly integrated",
+            "satisfied": true,
+            "details": "5/5 workflow and provenance score."
+          },
+          {
+            "label": "Projection utility is strong",
+            "satisfied": true,
+            "details": "4.9/5 projection utility score."
+          }
+        ]
+      },
+      {
+        "stage": "flagship",
+        "achieved": true,
+        "criteria": [
+          {
+            "label": "Mature stage is achieved",
+            "satisfied": true,
+            "details": "Mature requirements are satisfied."
+          },
+          {
+            "label": "This topic is an official showcase or reference example",
+            "satisfied": true,
+            "details": "The topic is a designated official example."
+          },
+          {
+            "label": "Reference and live modes are explicit",
+            "satisfied": true,
+            "details": "Reference and live workflow modes are both present."
+          },
+          {
+            "label": "The product has a clear showcase entry path",
+            "satisfied": true,
+            "details": "Rendered route: /examples/openclaw."
+          },
+          {
+            "label": "The topic no longer has obvious weak surfaces",
+            "satisfied": true,
+            "details": "No weak surfaces were detected."
+          },
+          {
+            "label": "Overall quality clears the flagship bar",
+            "satisfied": true,
+            "details": "5/5 overall score."
+          }
+        ]
+      }
+    ]
+  },
+  "overall": {
+    "score": 5,
+    "maxScore": 5,
+    "percent": 100,
+    "status": "strong"
+  },
+  "dimensions": [
+    {
+      "id": "surface_completeness",
+      "label": "Surface completeness",
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "The expected surfaces are present and the topic is structurally complete.",
+      "evidence": [
+        "15/15 required structural checks passed.",
+        "4 context packs are available."
+      ],
+      "recommendedAction": null
+    },
+    {
+      "id": "navigation",
+      "label": "Navigation and wayfinding",
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "The navigation layer is calm, high-signal, and immediately usable.",
+      "evidence": [
+        "Start Here scored 5/5.",
+        "Topic Map scored 5/5.",
+        "Reading Paths scored 5/5."
+      ],
+      "recommendedAction": null
+    },
+    {
+      "id": "canonical_depth",
+      "label": "Canonical depth",
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "The canonical wiki has enough durable depth to act like a serious knowledge layer.",
+      "evidence": [
+        "10 non-index pages are present.",
+        "4 synthesis pages are present."
+      ],
+      "recommendedAction": null
+    },
+    {
+      "id": "maintenance_readiness",
+      "label": "Maintenance readiness",
+      "score": 4.9,
+      "maxScore": 5,
+      "percent": 98,
+      "status": "strong",
+      "summary": "The maintenance loop is explicit and actionable.",
+      "evidence": [
+        "Current Tensions scored 4.9/5.",
+        "Maintenance Rhythm scored 5/5.",
+        "1 audit reports are currently present."
+      ],
+      "recommendedAction": null
+    },
+    {
+      "id": "context_pack_quality",
+      "label": "Context-pack quality",
+      "score": 4.9,
+      "maxScore": 5,
+      "percent": 98,
+      "status": "strong",
+      "summary": "Context packs are compact, purposeful, and ready for daily use.",
+      "evidence": [
+        "4 context packs are available.",
+        "The hub note scored 4.9/5."
+      ],
+      "recommendedAction": null
+    },
+    {
+      "id": "workflow_provenance",
+      "label": "Workflow and provenance",
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "The topic shows a real knowledge workflow: bounded inputs, visible artifacts, review history, and maintenance evidence.",
+      "evidence": [
+        "4 corpus files are explicit.",
+        "4 summary notes, 10 review notes, 1 audit notes, 1 archived answers.",
+        "4/4 downstream workflow layers are populated."
+      ],
+      "recommendedAction": null
+    },
+    {
+      "id": "projection_utility",
+      "label": "Projection utility",
+      "score": 4.9,
+      "maxScore": 5,
+      "percent": 98,
+      "status": "strong",
+      "summary": "The Obsidian projection is useful as a real daily working layer.",
+      "evidence": [
+        "10 atlas notes and 11 article projections are present.",
+        "Artifact Map scored 5/5."
+      ],
+      "recommendedAction": null
+    }
+  ],
+  "surfaces": [
+    {
+      "id": "start-here",
+      "label": "Start Here",
+      "kind": "navigation",
+      "paths": [
+        "obsidian-vault/00 Atlas/Start Here.md"
+      ],
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "Start Here is doing its job cleanly.",
+      "evidence": [
+        "4/4 expected headings matched.",
+        "170 body words.",
+        "17 wiki links.",
+        "20 bullet items and 0 ordered steps."
+      ],
+      "issues": []
+    },
+    {
+      "id": "topic-map",
+      "label": "Topic Map",
+      "kind": "navigation",
+      "paths": [
+        "obsidian-vault/00 Atlas/Topic Map.md"
+      ],
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "Topic Map is doing its job cleanly.",
+      "evidence": [
+        "4/4 expected headings matched.",
+        "56 body words.",
+        "16 wiki links.",
+        "16 bullet items and 0 ordered steps."
+      ],
+      "issues": []
+    },
+    {
+      "id": "key-pages",
+      "label": "Key Pages",
+      "kind": "navigation",
+      "paths": [
+        "obsidian-vault/00 Atlas/Key Pages.md"
+      ],
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "Key Pages is doing its job cleanly.",
+      "evidence": [
+        "3/3 expected headings matched.",
+        "298 body words.",
+        "13 wiki links.",
+        "13 bullet items and 0 ordered steps."
+      ],
+      "issues": []
+    },
+    {
+      "id": "reading-paths",
+      "label": "Reading Paths",
+      "kind": "navigation",
+      "paths": [
+        "workspace/wiki/syntheses/openclaw-reading-paths.md",
+        "obsidian-vault/00 Atlas/Reading Paths.md"
+      ],
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "Reading Paths is doing its job cleanly.",
+      "evidence": [
+        "3/3 expected headings matched.",
+        "227 body words.",
+        "23 wiki links.",
+        "7 bullet items and 17 ordered steps.",
+        "0/1 expected headings matched.",
+        "133 body words.",
+        "17 wiki links.",
+        "0 bullet items and 17 ordered steps."
+      ],
+      "issues": []
+    },
+    {
+      "id": "open-questions",
+      "label": "Open Questions",
+      "kind": "maintenance",
+      "paths": [
+        "workspace/wiki/notes/openclaw-open-questions.md",
+        "obsidian-vault/00 Atlas/Open Questions.md"
+      ],
+      "score": 4.5,
+      "maxScore": 5,
+      "percent": 90,
+      "status": "strong",
+      "summary": "Open Questions is usable, but it still has room to tighten.",
+      "evidence": [
+        "3/3 expected headings matched.",
+        "194 body words.",
+        "12 wiki links.",
+        "13 bullet items and 0 ordered steps.",
+        "3/3 expected headings matched.",
+        "157 body words.",
+        "0 wiki links.",
+        "8 bullet items and 0 ordered steps."
+      ],
+      "issues": [
+        "Surface links fewer than 3 other notes/pages."
+      ]
+    },
+    {
+      "id": "current-tensions",
+      "label": "Current Tensions",
+      "kind": "maintenance",
+      "paths": [
+        "workspace/wiki/syntheses/openclaw-current-tensions.md",
+        "obsidian-vault/00 Atlas/Current Tensions.md"
+      ],
+      "score": 4.9,
+      "maxScore": 5,
+      "percent": 98,
+      "status": "strong",
+      "summary": "Current Tensions is usable, but it still has room to tighten.",
+      "evidence": [
+        "4/4 expected headings matched.",
+        "194 body words.",
+        "4 wiki links.",
+        "12 bullet items and 0 ordered steps.",
+        "3/3 expected headings matched.",
+        "50 body words.",
+        "4 wiki links.",
+        "9 bullet items and 0 ordered steps."
+      ],
+      "issues": [
+        "Surface is thinner than the expected minimum of 70 words."
+      ]
+    },
+    {
+      "id": "monitoring-watchpoints",
+      "label": "Monitoring / Watchpoints",
+      "kind": "maintenance",
+      "paths": [
+        "workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md",
+        "obsidian-vault/00 Atlas/Monitoring.md",
+        "workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md"
+      ],
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "Monitoring / Watchpoints is doing its job cleanly.",
+      "evidence": [
+        "4/4 expected headings matched.",
+        "199 body words.",
+        "11 wiki links.",
+        "15 bullet items and 0 ordered steps.",
+        "3/3 expected headings matched.",
+        "145 body words.",
+        "5 wiki links.",
+        "9 bullet items and 0 ordered steps.",
+        "0/1 expected headings matched.",
+        "287 body words.",
+        "3 wiki links.",
+        "12 bullet items and 3 ordered steps."
+      ],
+      "issues": []
+    },
+    {
+      "id": "maintenance-rhythm",
+      "label": "Maintenance Rhythm",
+      "kind": "maintenance",
+      "paths": [
+        "workspace/wiki/syntheses/openclaw-maintenance-rhythm.md",
+        "obsidian-vault/00 Atlas/Maintenance Rhythm.md"
+      ],
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "Maintenance Rhythm is doing its job cleanly.",
+      "evidence": [
+        "6/6 expected headings matched.",
+        "648 body words.",
+        "48 wiki links.",
+        "32 bullet items and 0 ordered steps.",
+        "4/4 expected headings matched.",
+        "207 body words.",
+        "7 wiki links.",
+        "14 bullet items and 0 ordered steps."
+      ],
+      "issues": []
+    },
+    {
+      "id": "llm-context-packs",
+      "label": "LLM Context Packs",
+      "kind": "context-pack",
+      "paths": [
+        "obsidian-vault/00 Atlas/LLM Context Pack.md",
+        "obsidian-vault/05 Context Packs/Explain OpenClaw.md",
+        "obsidian-vault/05 Context Packs/Upgrade Watchpoints.md",
+        "obsidian-vault/05 Context Packs/Provenance And Review.md",
+        "obsidian-vault/05 Context Packs/Maintenance Triage.md"
+      ],
+      "score": 4.9,
+      "maxScore": 5,
+      "percent": 98,
+      "status": "strong",
+      "summary": "LLM Context Packs is usable, but it still has room to tighten.",
+      "evidence": [
+        "3/3 expected headings matched.",
+        "108 body words.",
+        "5 wiki links.",
+        "9 bullet items and 0 ordered steps.",
+        "4 context packs are available.",
+        "Average individual pack score: 4.9/5."
+      ],
+      "issues": [
+        "Surface is thinner than the expected minimum of 60 words.",
+        "Surface may be too broad for quick use at 10 links."
+      ]
+    },
+    {
+      "id": "artifact-map",
+      "label": "Artifact Map",
+      "kind": "artifact",
+      "paths": [
+        "obsidian-vault/00 Atlas/Artifact Map.md",
+        "obsidian-vault/20 Sources/Corpus Atlas.md",
+        "obsidian-vault/25 Normalized Sources/Processed Source Atlas.md",
+        "obsidian-vault/30 Summaries/Summary Atlas.md",
+        "obsidian-vault/40 Reviews/Review History.md",
+        "obsidian-vault/50 Audits/Audit Atlas.md"
+      ],
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "Artifact Map is usable, but it still has room to tighten.",
+      "evidence": [
+        "3/3 expected headings matched.",
+        "83 body words.",
+        "12 wiki links.",
+        "13 bullet items and 0 ordered steps.",
+        "5/5 artifact bridge notes are present.",
+        "3/3 downstream artifact layers are populated."
+      ],
+      "issues": [
+        "Missing expected headings: What this layer is for.",
+        "Missing expected headings: What this layer is for.",
+        "Missing expected headings: What this layer is for.",
+        "Missing expected headings: What this layer is for.",
+        "Missing expected headings: What this layer is for."
+      ]
+    },
+    {
+      "id": "canonical-wiki-pages",
+      "label": "Canonical wiki pages",
+      "kind": "canonical",
+      "paths": [
+        "workspace/wiki/concepts/plugin-compatibility.md",
+        "workspace/wiki/concepts/provider-dependency-risk.md",
+        "workspace/wiki/entities/openclaw.md",
+        "workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md",
+        "workspace/wiki/notes/openclaw-open-questions.md",
+        "workspace/wiki/syntheses/openclaw-current-tensions.md",
+        "workspace/wiki/syntheses/openclaw-maintenance-rhythm.md",
+        "workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md",
+        "workspace/wiki/syntheses/openclaw-reading-paths.md",
+        "workspace/wiki/topics/openclaw-release-cadence.md"
+      ],
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "Canonical wiki pages is doing its job cleanly.",
+      "evidence": [
+        "10 non-index canonical pages are present.",
+        "4 article-like pages and 4 syntheses are present.",
+        "Average non-index page quality score: 5.1/5."
+      ],
+      "issues": []
+    },
+    {
+      "id": "obsidian-projection",
+      "label": "Obsidian projection",
+      "kind": "projection",
+      "paths": [
+        "obsidian-vault/00 Atlas/Artifact Map.md",
+        "obsidian-vault/00 Atlas/Current Tensions.md",
+        "obsidian-vault/00 Atlas/Key Pages.md",
+        "obsidian-vault/00 Atlas/LLM Context Pack.md",
+        "obsidian-vault/00 Atlas/Maintenance Rhythm.md",
+        "obsidian-vault/00 Atlas/Monitoring.md",
+        "obsidian-vault/00 Atlas/Open Questions.md",
+        "obsidian-vault/00 Atlas/Reading Paths.md",
+        "obsidian-vault/00 Atlas/Start Here.md",
+        "obsidian-vault/00 Atlas/Topic Map.md",
+        "obsidian-vault/10 Articles/Note - What should I monitor before upgrading OpenClaw.md",
+        "obsidian-vault/10 Articles/OpenClaw current tensions.md",
+        "obsidian-vault/10 Articles/OpenClaw Example Index.md",
+        "obsidian-vault/10 Articles/OpenClaw maintenance rhythm.md",
+        "obsidian-vault/10 Articles/OpenClaw maintenance watchpoints.md",
+        "obsidian-vault/10 Articles/OpenClaw open questions.md",
+        "obsidian-vault/10 Articles/OpenClaw reading paths.md",
+        "obsidian-vault/10 Articles/OpenClaw release cadence.md",
+        "obsidian-vault/10 Articles/OpenClaw.md",
+        "obsidian-vault/10 Articles/Plugin compatibility.md",
+        "obsidian-vault/10 Articles/Provider dependency risk.md"
+      ],
+      "score": 4.9,
+      "maxScore": 5,
+      "percent": 98,
+      "status": "strong",
+      "summary": "Obsidian projection is doing its job cleanly.",
+      "evidence": [
+        "10 atlas notes are present.",
+        "11 projected article notes are present.",
+        "Average atlas note score: 4.9/5."
+      ],
+      "issues": []
+    }
+  ],
+  "strengths": [
+    "Surface completeness is strong: The expected surfaces are present and the topic is structurally complete.",
+    "Navigation and wayfinding is strong: The navigation layer is calm, high-signal, and immediately usable.",
+    "Canonical depth is strong: The canonical wiki has enough durable depth to act like a serious knowledge layer.",
+    "Maintenance readiness is strong: The maintenance loop is explicit and actionable.",
+    "Context-pack quality is strong: Context packs are compact, purposeful, and ready for daily use.",
+    "Workflow and provenance is strong: The topic shows a real knowledge workflow: bounded inputs, visible artifacts, review history, and maintenance evidence."
+  ],
+  "weakSurfaces": [],
+  "missingSurfaces": [],
+  "recommendedNextSteps": [
+    "Expand audit variety and long-horizon maintenance signals so flagship quality stays deserved over time.",
+    "Use the evaluator as a regression check whenever the example workflow or wiki experience changes materially.",
+    "Broaden audit coverage beyond a single dominant mode so the flagship example exposes more than one maintenance signal."
+  ],
+  "reportPaths": {
+    "json": "evaluation/topic-evaluation.json",
+    "markdown": "evaluation/topic-evaluation.md"
+  }
+}

@@ -12,6 +12,7 @@ topics/<slug>/
   obsidian-vault/
   manifest.json
   starter-baseline.json
+  evaluation/
   README.md
 ```
 
@@ -44,6 +45,12 @@ Validate the starter workspace:
 npm run topic:validate -- --slug my-topic
 ```
 
+Evaluate the topic's maturity and next upgrades:
+
+```bash
+npm run topic:evaluate -- --slug my-topic
+```
+
 ## What belongs where
 
 - `topic.json`
@@ -62,4 +69,4 @@ npm run topic:validate -- --slug my-topic
 - `local-first-software/`
   A lightweight dry-run topic that proves the bootstrap framework is reusable beyond OpenClaw.
 
-For the full method and quality bar, see [`../docs/topic-bootstrap.md`](../docs/topic-bootstrap.md).
+For the full method and quality bar, see [`../docs/topic-bootstrap.md`](../docs/topic-bootstrap.md) and [`../docs/topic-maturity.md`](../docs/topic-maturity.md).

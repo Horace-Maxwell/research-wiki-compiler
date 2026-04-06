@@ -34,6 +34,12 @@ Validate the committed starter workspace:
 npm run topic:validate -- --slug my-topic
 ```
 
+Evaluate how mature or starter-grade the topic still is:
+
+```bash
+npm run topic:evaluate -- --slug my-topic
+```
+
 ## What `topic:init` creates
 
 `topic:init` creates:
@@ -118,6 +124,23 @@ The contract and validation path encode this explicitly.
 
 Validation only tracks the managed starter surfaces.
 That means a topic can grow beyond the bootstrap without the starter validator pretending those extra files are invalid.
+
+## How maturity evaluation differs from starter validation
+
+`topic:validate` answers:
+
+- did the deterministic starter build stay intact?
+- are the required starter surfaces still present?
+
+`topic:evaluate` answers:
+
+- is this topic still just a starter?
+- which surfaces are genuinely useful?
+- what is missing before the topic behaves more like OpenClaw?
+- what should improve next?
+
+This distinction matters.
+A polished starter topic should not be mistaken for a mature knowledge workspace just because its starter surfaces are well designed.
 
 ## How to evolve a starter topic
 

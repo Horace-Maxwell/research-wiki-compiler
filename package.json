@@ -41,6 +41,8 @@
     "topic:init": "tsx scripts/init-topic-bootstrap.ts",
     "topic:build": "tsx scripts/build-topic-bootstrap.ts",
     "topic:validate": "tsx scripts/validate-topic-bootstrap.ts",
+    "topic:evaluate": "tsx scripts/evaluate-topic-quality.ts",
+    "example:openclaw:evaluate": "tsx scripts/evaluate-topic-quality.ts --example openclaw",
     "db:generate": "drizzle-kit generate",
     "db:check": "drizzle-kit check"
   },

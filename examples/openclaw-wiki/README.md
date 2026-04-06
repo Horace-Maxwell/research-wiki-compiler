@@ -10,6 +10,7 @@ This directory is the official end-to-end example workflow for the Research Wiki
 - `manifest.json`: the canonical reference manifest for the committed example.
 - `pipeline.json`: the source-controlled pipeline spec for corpus order, modes, and validation targets.
 - `reference-baseline.json`: the canonical hash baseline used by `npm run example:openclaw:validate`.
+- `evaluation/`: topic-maturity and topic-quality reports written by `npm run example:openclaw:evaluate`.
 
 ## Two execution modes
 
@@ -41,6 +42,7 @@ npm install
 npm run example:openclaw:reset
 npm run example:openclaw:build
 npm run example:openclaw:validate
+npm run example:openclaw:evaluate
 ```
 
 Additional commands:
@@ -55,6 +57,7 @@ What each command does:
 - `example:openclaw:reset`: removes the temporary reference, live, and rendered-example runtime directories.
 - `example:openclaw:build`: runs the official reference pipeline into `tmp/openclaw-workspace-build` and generates the matching Obsidian vault projection in `tmp/openclaw-obsidian-vault-build`.
 - `example:openclaw:validate`: rebuilds the reference example, compares it to the canonical baseline, verifies the Obsidian vault projection, and checks that the rendered example workspace can be restored.
+- `example:openclaw:evaluate`: evaluates the example as a topic-quality workspace and writes `evaluation/topic-evaluation.{json,md}`.
 - `example:openclaw:live`: runs the same workflow with a live OpenAI provider.
 - `example:openclaw:sync`: maintainer-only command that regenerates the canonical committed snapshot, manifest, Obsidian vault projection, and hash baseline from reference mode.
 
@@ -137,6 +140,7 @@ Then inspect the visible intermediate layer:
 Method and reuse docs:
 
 - [`../../docs/knowledge-work-method.md`](../../docs/knowledge-work-method.md)
+- [`../../docs/topic-maturity.md`](../../docs/topic-maturity.md)
 - [`../../templates/knowledge-work/README.md`](../../templates/knowledge-work/README.md)
 
 ## Maintainer note

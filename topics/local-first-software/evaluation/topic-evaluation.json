@@ -1,0 +1,637 @@
+{
+  "schemaVersion": 1,
+  "target": {
+    "kind": "topic",
+    "id": "local-first-software",
+    "title": "Local-First Software",
+    "rootPath": "/Users/horace/Desktop/Researcher Wiki Compiler/topics/local-first-software",
+    "workspaceRoot": "/Users/horace/Desktop/Researcher Wiki Compiler/topics/local-first-software/workspace",
+    "obsidianVaultRoot": "/Users/horace/Desktop/Researcher Wiki Compiler/topics/local-first-software/obsidian-vault"
+  },
+  "maturity": {
+    "stage": "starter",
+    "nextStage": "developing",
+    "summary": "Local-First Software has a credible starter surface set, but it still behaves like a starter because real summarize, review, archive, and audit evidence has not populated enough of the workflow yet.",
+    "stageAssessments": [
+      {
+        "stage": "starter",
+        "achieved": true,
+        "criteria": [
+          {
+            "label": "Required starter surfaces exist",
+            "satisfied": true,
+            "details": "5/5 surface completeness."
+          },
+          {
+            "label": "At least one context pack exists",
+            "satisfied": true,
+            "details": "3 context packs found."
+          },
+          {
+            "label": "A deterministic validation artifact exists",
+            "satisfied": true,
+            "details": "Manifest and baseline are present."
+          },
+          {
+            "label": "The corpus is explicit",
+            "satisfied": true,
+            "details": "3 corpus files found."
+          }
+        ]
+      },
+      {
+        "stage": "developing",
+        "achieved": false,
+        "criteria": [
+          {
+            "label": "Starter stage is achieved",
+            "satisfied": true,
+            "details": "Starter requirements are satisfied."
+          },
+          {
+            "label": "At least two downstream workflow layers are populated",
+            "satisfied": false,
+            "details": "0/4 downstream workflow layers are populated."
+          },
+          {
+            "label": "Workflow and provenance are no longer just starter-grade",
+            "satisfied": false,
+            "details": "2.8/5 workflow and provenance score."
+          },
+          {
+            "label": "Canonical pages are grounded in compiled artifacts, not only starter corpus refs",
+            "satisfied": false,
+            "details": "0 canonical pages cite non-corpus workflow artifacts."
+          },
+          {
+            "label": "The canonical layer extends beyond the bare starter minimum",
+            "satisfied": true,
+            "details": "9 non-index pages found."
+          },
+          {
+            "label": "The topic has at least one synthesis",
+            "satisfied": true,
+            "details": "4 syntheses found."
+          },
+          {
+            "label": "Navigation is already useful",
+            "satisfied": true,
+            "details": "5/5 navigation score."
+          }
+        ]
+      },
+      {
+        "stage": "maintained",
+        "achieved": false,
+        "criteria": [
+          {
+            "label": "Developing stage is achieved",
+            "satisfied": false,
+            "details": "Developing requirements are still incomplete."
+          },
+          {
+            "label": "Maintenance surfaces are operational",
+            "satisfied": true,
+            "details": "4.9/5 maintenance readiness score."
+          },
+          {
+            "label": "Context packs are high-signal enough for repeated use",
+            "satisfied": true,
+            "details": "4.6/5 context-pack score."
+          },
+          {
+            "label": "At least one audit report exists",
+            "satisfied": false,
+            "details": "0 audit reports found."
+          },
+          {
+            "label": "A stable validation path exists",
+            "satisfied": true,
+            "details": "Validation artifact is present."
+          }
+        ]
+      },
+      {
+        "stage": "mature",
+        "achieved": false,
+        "criteria": [
+          {
+            "label": "Maintained stage is achieved",
+            "satisfied": false,
+            "details": "Maintained requirements are still incomplete."
+          },
+          {
+            "label": "Overall quality is consistently high",
+            "satisfied": true,
+            "details": "4.3/5 overall score."
+          },
+          {
+            "label": "Canonical depth is strong",
+            "satisfied": true,
+            "details": "4.6/5 canonical depth score."
+          },
+          {
+            "label": "Workflow and provenance are strongly integrated",
+            "satisfied": false,
+            "details": "2.8/5 workflow and provenance score."
+          },
+          {
+            "label": "Projection utility is strong",
+            "satisfied": true,
+            "details": "4.9/5 projection utility score."
+          }
+        ]
+      },
+      {
+        "stage": "flagship",
+        "achieved": false,
+        "criteria": [
+          {
+            "label": "Mature stage is achieved",
+            "satisfied": false,
+            "details": "Mature requirements are still incomplete."
+          },
+          {
+            "label": "This topic is an official showcase or reference example",
+            "satisfied": false,
+            "details": "The topic is not designated as an official example."
+          },
+          {
+            "label": "Reference and live modes are explicit",
+            "satisfied": false,
+            "details": "One or both showcase workflow modes are missing."
+          },
+          {
+            "label": "The product has a clear showcase entry path",
+            "satisfied": false,
+            "details": "No rendered showcase route is defined."
+          },
+          {
+            "label": "The topic no longer has obvious weak surfaces",
+            "satisfied": true,
+            "details": "No weak surfaces were detected."
+          },
+          {
+            "label": "Overall quality clears the flagship bar",
+            "satisfied": false,
+            "details": "4.3/5 overall score."
+          }
+        ]
+      }
+    ]
+  },
+  "overall": {
+    "score": 4.3,
+    "maxScore": 5,
+    "percent": 86,
+    "status": "strong"
+  },
+  "dimensions": [
+    {
+      "id": "surface_completeness",
+      "label": "Surface completeness",
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "The expected surfaces are present and the topic is structurally complete.",
+      "evidence": [
+        "15/15 required structural checks passed.",
+        "3 context packs are available."
+      ],
+      "recommendedAction": null
+    },
+    {
+      "id": "navigation",
+      "label": "Navigation and wayfinding",
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "The navigation layer is calm, high-signal, and immediately usable.",
+      "evidence": [
+        "Start Here scored 5/5.",
+        "Topic Map scored 5/5.",
+        "Reading Paths scored 5/5."
+      ],
+      "recommendedAction": null
+    },
+    {
+      "id": "canonical_depth",
+      "label": "Canonical depth",
+      "score": 4.6,
+      "maxScore": 5,
+      "percent": 92,
+      "status": "strong",
+      "summary": "The canonical wiki has enough durable depth to act like a serious knowledge layer.",
+      "evidence": [
+        "9 non-index pages are present.",
+        "4 synthesis pages are present."
+      ],
+      "recommendedAction": null
+    },
+    {
+      "id": "maintenance_readiness",
+      "label": "Maintenance readiness",
+      "score": 4.9,
+      "maxScore": 5,
+      "percent": 98,
+      "status": "strong",
+      "summary": "The maintenance loop is explicit and actionable.",
+      "evidence": [
+        "Current Tensions scored 5/5.",
+        "Maintenance Rhythm scored 5/5.",
+        "0 audit reports are currently present."
+      ],
+      "recommendedAction": null
+    },
+    {
+      "id": "context_pack_quality",
+      "label": "Context-pack quality",
+      "score": 4.6,
+      "maxScore": 5,
+      "percent": 92,
+      "status": "strong",
+      "summary": "Context packs are compact, purposeful, and ready for daily use.",
+      "evidence": [
+        "3 context packs are available.",
+        "The hub note scored 4.6/5."
+      ],
+      "recommendedAction": null
+    },
+    {
+      "id": "workflow_provenance",
+      "label": "Workflow and provenance",
+      "score": 2.8,
+      "maxScore": 5,
+      "percent": 56,
+      "status": "weak",
+      "summary": "The topic still lacks enough populated workflow layers to feel fully matured.",
+      "evidence": [
+        "3 corpus files are explicit.",
+        "0 summary notes, 0 review notes, 0 audit notes, 0 archived answers.",
+        "0/4 downstream workflow layers are populated."
+      ],
+      "recommendedAction": "Run real summarize, review, archive, and audit loops so the topic stops behaving like a static starter scaffold."
+    },
+    {
+      "id": "projection_utility",
+      "label": "Projection utility",
+      "score": 4.9,
+      "maxScore": 5,
+      "percent": 98,
+      "status": "strong",
+      "summary": "The Obsidian projection is useful as a real daily working layer.",
+      "evidence": [
+        "10 atlas notes and 10 article projections are present.",
+        "Artifact Map scored 3.9/5."
+      ],
+      "recommendedAction": null
+    }
+  ],
+  "surfaces": [
+    {
+      "id": "start-here",
+      "label": "Start Here",
+      "kind": "navigation",
+      "paths": [
+        "obsidian-vault/00 Atlas/Start Here.md"
+      ],
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "Start Here is doing its job cleanly.",
+      "evidence": [
+        "4/4 expected headings matched.",
+        "184 body words.",
+        "16 wiki links.",
+        "19 bullet items and 0 ordered steps."
+      ],
+      "issues": []
+    },
+    {
+      "id": "topic-map",
+      "label": "Topic Map",
+      "kind": "navigation",
+      "paths": [
+        "obsidian-vault/00 Atlas/Topic Map.md"
+      ],
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "Topic Map is doing its job cleanly.",
+      "evidence": [
+        "4/4 expected headings matched.",
+        "69 body words.",
+        "15 wiki links.",
+        "15 bullet items and 0 ordered steps."
+      ],
+      "issues": []
+    },
+    {
+      "id": "key-pages",
+      "label": "Key Pages",
+      "kind": "navigation",
+      "paths": [
+        "obsidian-vault/00 Atlas/Key Pages.md"
+      ],
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "Key Pages is doing its job cleanly.",
+      "evidence": [
+        "3/3 expected headings matched.",
+        "270 body words.",
+        "13 wiki links.",
+        "13 bullet items and 0 ordered steps."
+      ],
+      "issues": []
+    },
+    {
+      "id": "reading-paths",
+      "label": "Reading Paths",
+      "kind": "navigation",
+      "paths": [
+        "workspace/wiki/syntheses/local-first-software-reading-paths.md",
+        "obsidian-vault/00 Atlas/Reading Paths.md"
+      ],
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "Reading Paths is doing its job cleanly.",
+      "evidence": [
+        "3/3 expected headings matched.",
+        "236 body words.",
+        "19 wiki links.",
+        "7 bullet items and 13 ordered steps.",
+        "0/1 expected headings matched.",
+        "128 body words.",
+        "13 wiki links.",
+        "0 bullet items and 13 ordered steps."
+      ],
+      "issues": []
+    },
+    {
+      "id": "open-questions",
+      "label": "Open Questions",
+      "kind": "maintenance",
+      "paths": [
+        "workspace/wiki/notes/local-first-software-open-questions.md",
+        "obsidian-vault/00 Atlas/Open Questions.md"
+      ],
+      "score": 4.5,
+      "maxScore": 5,
+      "percent": 90,
+      "status": "strong",
+      "summary": "Open Questions is usable, but it still has room to tighten.",
+      "evidence": [
+        "3/3 expected headings matched.",
+        "215 body words.",
+        "13 wiki links.",
+        "13 bullet items and 0 ordered steps.",
+        "3/3 expected headings matched.",
+        "164 body words.",
+        "0 wiki links.",
+        "8 bullet items and 0 ordered steps."
+      ],
+      "issues": [
+        "Surface links fewer than 3 other notes/pages."
+      ]
+    },
+    {
+      "id": "current-tensions",
+      "label": "Current Tensions",
+      "kind": "maintenance",
+      "paths": [
+        "workspace/wiki/syntheses/local-first-software-current-tensions.md",
+        "obsidian-vault/00 Atlas/Current Tensions.md"
+      ],
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "Current Tensions is usable, but it still has room to tighten.",
+      "evidence": [
+        "4/4 expected headings matched.",
+        "223 body words.",
+        "4 wiki links.",
+        "12 bullet items and 0 ordered steps.",
+        "3/3 expected headings matched.",
+        "63 body words.",
+        "4 wiki links.",
+        "9 bullet items and 0 ordered steps."
+      ],
+      "issues": [
+        "Surface is thinner than the expected minimum of 70 words."
+      ]
+    },
+    {
+      "id": "monitoring-watchpoints",
+      "label": "Monitoring / Watchpoints",
+      "kind": "maintenance",
+      "paths": [
+        "workspace/wiki/syntheses/local-first-software-maintenance-watchpoints.md",
+        "obsidian-vault/00 Atlas/Monitoring.md",
+        "workspace/wiki/notes/note-what-should-i-revisit-next-for-local-first-software.md"
+      ],
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "Monitoring / Watchpoints is doing its job cleanly.",
+      "evidence": [
+        "4/4 expected headings matched.",
+        "205 body words.",
+        "10 wiki links.",
+        "13 bullet items and 0 ordered steps.",
+        "3/3 expected headings matched.",
+        "141 body words.",
+        "5 wiki links.",
+        "8 bullet items and 0 ordered steps.",
+        "0/1 expected headings matched.",
+        "123 body words.",
+        "5 wiki links.",
+        "5 bullet items and 0 ordered steps."
+      ],
+      "issues": []
+    },
+    {
+      "id": "maintenance-rhythm",
+      "label": "Maintenance Rhythm",
+      "kind": "maintenance",
+      "paths": [
+        "workspace/wiki/syntheses/local-first-software-maintenance-rhythm.md",
+        "obsidian-vault/00 Atlas/Maintenance Rhythm.md"
+      ],
+      "score": 5,
+      "maxScore": 5,
+      "percent": 100,
+      "status": "strong",
+      "summary": "Maintenance Rhythm is doing its job cleanly.",
+      "evidence": [
+        "6/6 expected headings matched.",
+        "652 body words.",
+        "44 wiki links.",
+        "29 bullet items and 0 ordered steps.",
+        "4/4 expected headings matched.",
+        "205 body words.",
+        "6 wiki links.",
+        "12 bullet items and 0 ordered steps."
+      ],
+      "issues": []
+    },
+    {
+      "id": "llm-context-packs",
+      "label": "LLM Context Packs",
+      "kind": "context-pack",
+      "paths": [
+        "obsidian-vault/00 Atlas/LLM Context Pack.md",
+        "obsidian-vault/05 Context Packs/Explain Local-First Software.md",
+        "obsidian-vault/05 Context Packs/Provenance And Review.md",
+        "obsidian-vault/05 Context Packs/Maintenance Triage.md"
+      ],
+      "score": 4.6,
+      "maxScore": 5,
+      "percent": 92,
+      "status": "strong",
+      "summary": "LLM Context Packs is usable, but it still has room to tighten.",
+      "evidence": [
+        "3/3 expected headings matched.",
+        "108 body words.",
+        "4 wiki links.",
+        "8 bullet items and 0 ordered steps.",
+        "3 context packs are available.",
+        "Average individual pack score: 4.6/5."
+      ],
+      "issues": [
+        "Surface is thinner than the expected minimum of 60 words.",
+        "Surface may be too broad for quick use at 10 links.",
+        "This pack points at workflow layers that are still mostly empty."
+      ]
+    },
+    {
+      "id": "artifact-map",
+      "label": "Artifact Map",
+      "kind": "artifact",
+      "paths": [
+        "obsidian-vault/00 Atlas/Artifact Map.md",
+        "obsidian-vault/20 Sources/Corpus Atlas.md",
+        "obsidian-vault/25 Normalized Sources/Processed Source Atlas.md",
+        "obsidian-vault/30 Summaries/Summary Atlas.md",
+        "obsidian-vault/40 Reviews/Review History.md",
+        "obsidian-vault/50 Audits/Audit Atlas.md"
+      ],
+      "score": 3.9,
+      "maxScore": 5,
+      "percent": 78,
+      "status": "adequate",
+      "summary": "Artifact Map is usable, but it still has room to tighten.",
+      "evidence": [
+        "3/3 expected headings matched.",
+        "93 body words.",
+        "12 wiki links.",
+        "13 bullet items and 0 ordered steps.",
+        "5/5 artifact bridge notes are present.",
+        "0/3 downstream artifact layers are populated."
+      ],
+      "issues": [
+        "Missing expected headings: What this layer is for.",
+        "One or more downstream artifact layers are still empty, so this surface is partly anticipatory."
+      ]
+    },
+    {
+      "id": "canonical-wiki-pages",
+      "label": "Canonical wiki pages",
+      "kind": "canonical",
+      "paths": [
+        "workspace/wiki/topics/local-first-software.md",
+        "workspace/wiki/concepts/sync-engines.md",
+        "workspace/wiki/concepts/schema-migration-pressure.md",
+        "workspace/wiki/syntheses/local-first-software-reading-paths.md",
+        "workspace/wiki/syntheses/local-first-software-current-tensions.md",
+        "workspace/wiki/notes/local-first-software-open-questions.md",
+        "workspace/wiki/syntheses/local-first-software-maintenance-watchpoints.md",
+        "workspace/wiki/syntheses/local-first-software-maintenance-rhythm.md",
+        "workspace/wiki/notes/note-what-should-i-revisit-next-for-local-first-software.md"
+      ],
+      "score": 4.6,
+      "maxScore": 5,
+      "percent": 92,
+      "status": "strong",
+      "summary": "Canonical wiki pages is usable, but it still has room to tighten.",
+      "evidence": [
+        "9 non-index canonical pages are present.",
+        "3 article-like pages and 4 syntheses are present.",
+        "Average non-index page quality score: 5.3/5."
+      ],
+      "issues": [
+        "Canonical pages are still grounded only in starter corpus references, not richer compiled workflow artifacts."
+      ]
+    },
+    {
+      "id": "obsidian-projection",
+      "label": "Obsidian projection",
+      "kind": "projection",
+      "paths": [
+        "obsidian-vault/00 Atlas/Artifact Map.md",
+        "obsidian-vault/00 Atlas/Current Tensions.md",
+        "obsidian-vault/00 Atlas/Key Pages.md",
+        "obsidian-vault/00 Atlas/LLM Context Pack.md",
+        "obsidian-vault/00 Atlas/Maintenance Rhythm.md",
+        "obsidian-vault/00 Atlas/Monitoring.md",
+        "obsidian-vault/00 Atlas/Open Questions.md",
+        "obsidian-vault/00 Atlas/Reading Paths.md",
+        "obsidian-vault/00 Atlas/Start Here.md",
+        "obsidian-vault/00 Atlas/Topic Map.md",
+        "obsidian-vault/10 Articles/Local-First Software current tensions.md",
+        "obsidian-vault/10 Articles/Local-First Software Index.md",
+        "obsidian-vault/10 Articles/Local-First Software maintenance rhythm.md",
+        "obsidian-vault/10 Articles/Local-First Software maintenance watchpoints.md",
+        "obsidian-vault/10 Articles/Local-First Software open questions.md",
+        "obsidian-vault/10 Articles/Local-First Software reading paths.md",
+        "obsidian-vault/10 Articles/Local-First Software.md",
+        "obsidian-vault/10 Articles/Note - What should I revisit next for Local-First Software.md",
+        "obsidian-vault/10 Articles/Schema migration pressure.md",
+        "obsidian-vault/10 Articles/Sync engines.md"
+      ],
+      "score": 4.9,
+      "maxScore": 5,
+      "percent": 98,
+      "status": "strong",
+      "summary": "Obsidian projection is doing its job cleanly.",
+      "evidence": [
+        "10 atlas notes are present.",
+        "10 projected article notes are present.",
+        "Average atlas note score: 4.9/5."
+      ],
+      "issues": []
+    }
+  ],
+  "strengths": [
+    "Surface completeness is strong: The expected surfaces are present and the topic is structurally complete.",
+    "Navigation and wayfinding is strong: The navigation layer is calm, high-signal, and immediately usable.",
+    "Canonical depth is strong: The canonical wiki has enough durable depth to act like a serious knowledge layer.",
+    "Maintenance readiness is strong: The maintenance loop is explicit and actionable.",
+    "Context-pack quality is strong: Context packs are compact, purposeful, and ready for daily use.",
+    "Projection utility is strong: The Obsidian projection is useful as a real daily working layer."
+  ],
+  "weakSurfaces": [],
+  "missingSurfaces": [],
+  "recommendedNextSteps": [
+    "Run a real summarize / review / audit pass so the topic accumulates workflow evidence instead of living only as a starter scaffold.",
+    "Promote the strongest recurring topic pressure into a grounded synthesis that is backed by more than corpus-only references.",
+    "Revisit provenance-facing context packs and artifact notes after real summaries, reviews, and audits exist.",
+    "Run real summarize, review, archive, and audit loops so the topic stops behaving like a static starter scaffold.",
+    "To reach developing, satisfy: At least two downstream workflow layers are populated.",
+    "To reach developing, satisfy: Workflow and provenance are no longer just starter-grade.",
+    "To reach developing, satisfy: Canonical pages are grounded in compiled artifacts, not only starter corpus refs."
+  ],
+  "reportPaths": {
+    "json": "evaluation/topic-evaluation.json",
+    "markdown": "evaluation/topic-evaluation.md"
+  }
+}
