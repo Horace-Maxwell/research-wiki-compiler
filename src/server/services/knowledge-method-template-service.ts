@@ -1,5 +1,6 @@
 import type { ResearchQuestionSeed, ResearchQuestionStatus } from "@/lib/contracts/research-question";
 import type { ResearchSessionSeed } from "@/lib/contracts/research-session";
+import type { ResearchSynthesisSeed } from "@/lib/contracts/research-synthesis";
 
 export type KnowledgeSurfaceKind =
   | "canonical"
@@ -78,6 +79,7 @@ export type KnowledgeMethodTemplateData = {
   openQuestions: string[];
   researchQuestions: ResearchQuestionSeed[];
   researchSessions: ResearchSessionSeed[];
+  researchSyntheses: ResearchSynthesisSeed[];
   resolutionSignals: string[];
   revisitQueue: KnowledgeRevisitItem[];
   contextPackRefreshes: KnowledgeContextRefreshItem[];
@@ -180,6 +182,240 @@ function recentCompletedResearchSessions(data: KnowledgeMethodTemplateData) {
   return sortResearchSessions(
     data.researchSessions.filter((session) => session.status === "completed"),
   ).slice(0, 4);
+}
+
+function humanizeSynthesisStatus(status: ResearchSynthesisSeed["status"]) {
+  return status.replace(/-/g, " ");
+}
+
+function synthesisStatusWeight(status: ResearchSynthesisSeed["status"]) {
+  switch (status) {
+    case "ready":
+      return 0;
+    case "in-progress":
+      return 1;
+    case "candidate":
+      return 2;
+    case "stale":
+      return 3;
+    case "published":
+    default:
+      return 4;
+  }
+}
+
+function sortResearchSyntheses(syntheses: ResearchSynthesisSeed[]) {
+  return [...syntheses].sort((left, right) => {
+    const statusDifference = synthesisStatusWeight(left.status) - synthesisStatusWeight(right.status);
+
+    if (statusDifference !== 0) {
+      return statusDifference;
+    }
+
+    if (left.confidencePercent !== right.confidencePercent) {
+      return right.confidencePercent - left.confidencePercent;
+    }
+
+    return new Date(right.updatedAt).getTime() - new Date(left.updatedAt).getTime();
+  });
+}
+
+function recentPublishedResearchSyntheses(data: KnowledgeMethodTemplateData) {
+  return [...data.researchSyntheses]
+    .filter((synthesis) => synthesis.status === "published")
+    .sort((left, right) => new Date(right.updatedAt).getTime() - new Date(left.updatedAt).getTime())
+    .slice(0, 4);
+}
+
+function actionableResearchSyntheses(data: KnowledgeMethodTemplateData) {
+  return sortResearchSyntheses(
+    data.researchSyntheses.filter(
+      (synthesis) =>
+        synthesis.status === "candidate" ||
+        synthesis.status === "in-progress" ||
+        synthesis.status === "ready",
+    ),
+  );
+}
+
+function findResearchSession(
+  data: KnowledgeMethodTemplateData,
+  sessionId: string,
+) {
+  return data.researchSessions.find((session) => session.id === sessionId) ?? null;
+}
+
+function humanizeSynthesisDecisionType(type: ResearchSynthesisSeed["decisions"][number]["type"]) {
+  switch (type) {
+    case "not-enough-evidence":
+      return "not enough evidence";
+    default:
+      return type.replace(/-/g, " ");
+  }
+}
+
+function humanizeQuestionEffect(effect: ResearchSynthesisSeed["questionImpacts"][number]["effect"]) {
+  return effect.replace(/-/g, " ");
+}
+
+function formatSynthesisSourceQuestions(
+  data: KnowledgeMethodTemplateData,
+  questionIds: string[],
+) {
+  return uniqueTitles(
+    questionIds.map((questionId) => findResearchQuestion(data, questionId)?.question ?? questionId),
+  ).join("; ");
+}
+
+function formatSynthesisSourceSessions(
+  data: KnowledgeMethodTemplateData,
+  sessionIds: string[],
+) {
+  return uniqueTitles(
+    sessionIds.map((sessionId) => findResearchSession(data, sessionId)?.title ?? sessionId),
+  ).join("; ");
+}
+
+function formatSynthesisUpdateTargets(synthesis: ResearchSynthesisSeed) {
+  const titles = uniqueTitles([
+    ...synthesis.canonicalUpdateTitles,
+    ...synthesis.maintenanceUpdateTitles,
+    ...synthesis.watchpointUpdateTitles,
+    ...synthesis.tensionUpdateTitles,
+    ...synthesis.archiveTitles,
+  ]);
+
+  return titles.length > 0 ? formatQuestionWikiLinks(titles) : "";
+}
+
+function buildSynthesisDecisionSection(data: KnowledgeMethodTemplateData) {
+  const syntheses = actionableResearchSyntheses(data);
+
+  if (syntheses.length === 0) {
+    return [
+      "## Synthesis decisions",
+      "",
+      "- No actionable synthesis candidates are seeded yet.",
+    ].join("\n");
+  }
+
+  return [
+    "## Synthesis decisions",
+    "",
+    ...syntheses.flatMap((synthesis) => {
+      const sourceQuestions = formatSynthesisSourceQuestions(data, synthesis.sourceQuestionIds);
+      const sourceSessions = formatSynthesisSourceSessions(data, synthesis.sourceSessionIds);
+      const updateTargets = formatSynthesisUpdateTargets(synthesis);
+      const questionImpacts = synthesis.questionImpacts
+        .map((impact) => {
+          const question = findResearchQuestion(data, impact.questionId);
+          return `${question?.question ?? impact.questionId} (${humanizeQuestionEffect(impact.effect)}): ${impact.note}`;
+        })
+        .join(" ");
+
+      const lines = [
+        `### ${synthesis.title}`,
+        "",
+        `- **Status**: ${humanizeSynthesisStatus(synthesis.status)}`,
+        `- **Confidence**: ${synthesis.confidencePercent}%`,
+        `- **Source questions**: ${sourceQuestions}`,
+        `- **Durable conclusion**: ${synthesis.durableConclusion}`,
+      ];
+
+      if (sourceSessions) {
+        lines.push(`- **Source sessions**: ${sourceSessions}`);
+      }
+
+      if (synthesis.provisionalBoundary) {
+        lines.push(`- **Keep provisional**: ${synthesis.provisionalBoundary}`);
+      }
+
+      for (const decision of synthesis.decisions) {
+        lines.push(
+          `- **Decision (${humanizeSynthesisDecisionType(decision.type)})**: ${decision.title}. ${decision.summary} ${decision.action}`,
+        );
+      }
+
+      if (questionImpacts) {
+        lines.push(`- **Question effects**: ${questionImpacts}`);
+      }
+
+      if (synthesis.changedCanonicalSummary) {
+        lines.push(`- **Canonical effect**: ${synthesis.changedCanonicalSummary}`);
+      }
+
+      if (updateTargets) {
+        lines.push(`- **Update surfaces**: ${updateTargets}`);
+      }
+
+      lines.push(`- **Next step**: ${synthesis.recommendedNextStep}`);
+      lines.push("");
+
+      return lines;
+    }),
+  ]
+    .join("\n")
+    .trim();
+}
+
+function buildPublishedSynthesisSection(data: KnowledgeMethodTemplateData) {
+  const syntheses = recentPublishedResearchSyntheses(data);
+
+  if (syntheses.length === 0) {
+    return [
+      "## Published syntheses",
+      "",
+      "- No published syntheses are seeded yet.",
+    ].join("\n");
+  }
+
+  return [
+    "## Published syntheses",
+    "",
+    ...syntheses.flatMap((synthesis) => {
+      const sourceQuestions = formatSynthesisSourceQuestions(data, synthesis.sourceQuestionIds);
+      const sourceSessions = formatSynthesisSourceSessions(data, synthesis.sourceSessionIds);
+      const questionImpacts = synthesis.questionImpacts
+        .map((impact) => {
+          const question = findResearchQuestion(data, impact.questionId);
+          return `${question?.question ?? impact.questionId} (${humanizeQuestionEffect(impact.effect)}): ${impact.note}`;
+        })
+        .join(" ");
+      const updateTargets = formatSynthesisUpdateTargets(synthesis);
+      const lines = [
+        `### ${synthesis.title}`,
+        "",
+        `- **Published surface**: ${wikiLink(synthesis.publishedPageTitle ?? synthesis.title)}`,
+        `- **Source questions**: ${sourceQuestions}`,
+        `- **Durable conclusion**: ${synthesis.durableConclusion}`,
+      ];
+
+      if (sourceSessions) {
+        lines.push(`- **Source sessions**: ${sourceSessions}`);
+      }
+
+      if (synthesis.changedCanonicalSummary) {
+        lines.push(`- **What changed**: ${synthesis.changedCanonicalSummary}`);
+      }
+
+      if (questionImpacts) {
+        lines.push(`- **Question effects**: ${questionImpacts}`);
+      }
+
+      if (updateTargets) {
+        lines.push(`- **Updated surfaces**: ${updateTargets}`);
+      }
+
+      if (synthesis.revisitTriggers.length > 0) {
+        lines.push(`- **Revisit if**: ${synthesis.revisitTriggers.join("; ")}`);
+      }
+
+      lines.push("");
+      return lines;
+    }),
+  ]
+    .join("\n")
+    .trim();
 }
 
 function openQuestionItems(data: KnowledgeMethodTemplateData) {
@@ -732,6 +968,7 @@ function buildWikiOpenQuestionsPage(data: KnowledgeMethodTemplateData) {
   const formatContextPack = (title: string) => `\`${title}\``;
   const reopenSection = buildQuestionReopenSection(data, formatContextPack);
   const sessionOutcomeSection = buildResearchSessionOutcomeSection(data, formatContextPack);
+  const publishedSynthesisSection = buildPublishedSynthesisSection(data);
 
   return [
     `# ${data.openQuestionsTitle}`,
@@ -758,6 +995,8 @@ function buildWikiOpenQuestionsPage(data: KnowledgeMethodTemplateData) {
     ),
     "",
     sessionOutcomeSection,
+    "",
+    publishedSynthesisSection,
     "",
     "## Related pages",
     "",
@@ -819,6 +1058,7 @@ function buildWikiMaintenanceWatchpointsPage(data: KnowledgeMethodTemplateData) 
 
 function buildWikiMaintenanceRhythmPage(data: KnowledgeMethodTemplateData) {
   const sessionQueueSection = buildResearchSessionQueueSection(data, (title) => `\`${title}\``);
+  const synthesisDecisionSection = buildSynthesisDecisionSection(data);
 
   return [
     `# ${data.maintenanceRhythmTitle}`,
@@ -845,6 +1085,8 @@ function buildWikiMaintenanceRhythmPage(data: KnowledgeMethodTemplateData) {
     ),
     "",
     sessionQueueSection,
+    "",
+    synthesisDecisionSection,
     "",
     buildContextPackRefreshSection(data),
     "",
@@ -1013,6 +1255,7 @@ function buildObsidianReadingPathsNote(data: KnowledgeMethodTemplateData) {
 function buildObsidianOpenQuestionsNote(data: KnowledgeMethodTemplateData) {
   const reopenSection = buildQuestionReopenSection(data);
   const sessionOutcomeSection = buildResearchSessionOutcomeSection(data);
+  const publishedSynthesisSection = buildPublishedSynthesisSection(data);
 
   return `# Open Questions
 
@@ -1031,6 +1274,8 @@ ${data.synthesisCandidates
   .join("\n")}
 
 ${sessionOutcomeSection}
+
+${publishedSynthesisSection}
 
 ${reopenSection ? `\n\n${reopenSection}` : ""}
 `;
@@ -1085,6 +1330,7 @@ ${data.contextPackRefreshes
 
 function buildObsidianMaintenanceRhythmNote(data: KnowledgeMethodTemplateData) {
   const sessionQueueSection = buildResearchSessionQueueSection(data);
+  const synthesisDecisionSection = buildSynthesisDecisionSection(data);
 
   return `# Maintenance Rhythm
 
@@ -1102,6 +1348,8 @@ ${data.revisitQueue
   .join("\n")}
 
 ${sessionQueueSection}
+
+${synthesisDecisionSection}
 
 ## Context packs to refresh
 

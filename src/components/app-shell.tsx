@@ -27,6 +27,7 @@ const navIconMap = {
   "/topics": LibraryBig,
   "/questions": CircleHelp,
   "/sessions": FlaskConical,
+  "/syntheses": Sparkles,
   "/onboarding": Compass,
   "/dashboard": LayoutDashboard,
   "/sources": FileStack,
@@ -40,7 +41,7 @@ const navIconMap = {
 const navGroups = [
   {
     title: "Portfolio",
-    items: ["/topics", "/questions", "/sessions", "/dashboard", "/onboarding"],
+    items: ["/topics", "/questions", "/sessions", "/syntheses", "/dashboard", "/onboarding"],
   },
   {
     title: "Knowledge",
@@ -71,6 +72,11 @@ const surfaceCopy = {
     label: "Research sessions",
     detail:
       "Run bounded research passes that load the right context, record what changed, and decide whether the result belongs in synthesis, archive, or the canonical wiki.",
+  },
+  "/syntheses": {
+    label: "Synthesis loop",
+    detail:
+      "See what is ready to publish, what still belongs in the decision loop, and which syntheses changed canonical or maintenance guidance.",
   },
   "/dashboard": {
     label: "Workspace front door",
@@ -121,6 +127,10 @@ function normalizeActivePath(pathname: string) {
 
   if (pathname.startsWith("/sessions")) {
     return "/sessions";
+  }
+
+  if (pathname.startsWith("/syntheses")) {
+    return "/syntheses";
   }
 
   const match = PRODUCT_SURFACE.find((item) => pathname === item.href);
@@ -192,6 +202,12 @@ export function AppShell({ children }: { children: ReactNode }) {
                     <Link href="/sessions">
                       <FlaskConical className="size-4" />
                       Open session queue
+                    </Link>
+                  </Button>
+                  <Button asChild className="w-full justify-start" variant="ghost">
+                    <Link href="/syntheses">
+                      <Sparkles className="size-4" />
+                      Open synthesis loop
                     </Link>
                   </Button>
                   <Button asChild className="w-full justify-start" variant="ghost">

@@ -69,6 +69,7 @@ refresh_triggers:
 - [What would resolve them](#what-would-resolve-them)
 - [What looks answerable next](#what-looks-answerable-next)
 - [Recent session outcomes](#recent-session-outcomes)
+- [Published syntheses](#published-syntheses)
 - [Related pages](#related-pages)
 - [Reopen when the topic changes](#reopen-when-the-topic-changes)
 
@@ -169,6 +170,30 @@ These are the highest-leverage unresolved questions if you want to keep the Open
 - **Durable result**: [[OpenClaw]]
 - **Still unresolved**: The identity story should reopen if provider risk or upgrade posture changes the main framing materially.
 - **Resume next**: Keep the entity page stable, then use monitoring and tensions to decide when the identity framing actually needs to change.
+
+## Published syntheses
+
+### OpenClaw maintenance watchpoints
+
+- **Published surface**: [[OpenClaw maintenance watchpoints]]
+- **Source questions**: What should I monitor before upgrading OpenClaw?; Which parts of OpenClaw look most unstable or fast-moving?
+- **Durable conclusion**: Upgrade posture in OpenClaw should be driven by a compact monitoring synthesis rather than by rereading every surrounding page from scratch.
+- **Source sessions**: Archive the upgrade monitoring answer; Map the unstable surfaces
+- **What changed**: OpenClaw's canonical risk and release pages now feed a shared watchpoint surface, which makes the maintenance story more operational and less diffuse.
+- **Question effects**: What should I monitor before upgrading OpenClaw? (resolved): The upgrade-monitoring question now has both a durable archived answer and a monitoring synthesis behind it. Which release-note or changelog signals should trigger a full regression run instead of a light upgrade check? (advanced): The watchpoint synthesis narrowed the remaining work into a specific regression-trigger synthesis instead of a broad monitoring question.
+- **Updated surfaces**: [[OpenClaw release cadence]], [[Plugin compatibility]], [[Provider dependency risk]], [[OpenClaw maintenance rhythm]], [[OpenClaw open questions]], [[OpenClaw maintenance watchpoints]], [[OpenClaw current tensions]], [[Note: What should I monitor before upgrading OpenClaw]]
+- **Revisit if**: Release notes begin signaling a different regression depth.; Provider-side restrictions or compatibility drift make the current watch logic incomplete.
+
+### OpenClaw current tensions
+
+- **Published surface**: [[OpenClaw current tensions]]
+- **Source questions**: Which parts of OpenClaw look most unstable or fast-moving?
+- **Durable conclusion**: OpenClaw is most useful where it is still moving, so the durable reading of the topic has to keep instability explicit instead of treating it as incidental noise.
+- **Source sessions**: Map the unstable surfaces
+- **What changed**: The flagship example now treats release cadence, compatibility drift, and provider exposure as the three durable lenses around OpenClaw's instability story.
+- **Question effects**: Which parts of OpenClaw look most unstable or fast-moving? (resolved): The instability question now has a durable synthesis and should only reopen when the operating story changes materially. Which provider-side changes would change adoption or upgrade decisions the fastest? (advanced): The tension synthesis narrowed the remaining provider-risk work into a more specific synthesis candidate.
+- **Updated surfaces**: [[OpenClaw]], [[OpenClaw release cadence]], [[OpenClaw maintenance rhythm]], [[OpenClaw open questions]], [[OpenClaw maintenance watchpoints]], [[OpenClaw current tensions]]
+- **Revisit if**: A release note or provider signal changes what looks operationally unstable.
 
 ## Related pages
 

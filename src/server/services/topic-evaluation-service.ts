@@ -767,7 +767,12 @@ function evaluateOpenQuestions(subject: EvaluationSubject) {
   const atlasDoc = getAtlasNote(subject, "Open Questions");
   const wikiScore = buildDocScore({
     doc: wikiDoc,
-    expectedHeadings: ["Summary", "Questions", "What would resolve them"],
+    expectedHeadings: [
+      "Summary",
+      "Questions",
+      "What would resolve them",
+      "Published syntheses",
+    ],
     minWordCount: 140,
     minLinkCount: 5,
     minBulletCount: 5,
@@ -778,6 +783,7 @@ function evaluateOpenQuestions(subject: EvaluationSubject) {
       "Highest-leverage open questions",
       "What would reduce uncertainty",
       "What might become a synthesis next",
+      "Published syntheses",
     ],
     minWordCount: 70,
     minLinkCount: 3,
@@ -870,6 +876,7 @@ function evaluateMaintenanceRhythm(subject: EvaluationSubject) {
       "Summary",
       "Review cadence",
       "Revisit next",
+      "Synthesis decisions",
       "Context packs to refresh",
       "Synthesis candidates",
       "Audit to action",
@@ -883,6 +890,7 @@ function evaluateMaintenanceRhythm(subject: EvaluationSubject) {
     expectedHeadings: [
       "Start a pass here",
       "Revisit next",
+      "Synthesis decisions",
       "Context packs to refresh",
       "Synthesis candidates",
     ],

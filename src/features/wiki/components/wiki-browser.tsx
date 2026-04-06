@@ -459,6 +459,8 @@ function buildWorkingCueSections(detail: WikiPageDetail, pages: WikiPageSummary[
       title: "Synthesis candidates",
       headings: [
         "Synthesis candidates",
+        "Synthesis decisions",
+        "Published syntheses",
         "What should become synthesis next",
         "What might become synthesis next",
       ],

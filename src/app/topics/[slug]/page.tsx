@@ -6,6 +6,7 @@ import type { WikiPageDetail, WikiPageSummary } from "@/lib/contracts/wiki";
 import { getOpenClawExampleManifest, ensureOpenClawRenderedWorkspace } from "@/server/services/openclaw-example-service";
 import { getTopicQuestionWorkflow } from "@/server/services/question-workflow-service";
 import { getTopicResearchSessionSummary } from "@/server/services/research-session-service";
+import { getTopicResearchSynthesisSummary } from "@/server/services/research-synthesis-service";
 import { getTopicPortfolioOverview } from "@/server/services/topic-portfolio-service";
 import { ensureRenderedTopicWorkspace } from "@/server/services/rendered-topic-service";
 import { getWikiPageDetail, listWikiPages } from "@/server/services/wiki-page-service";
@@ -45,9 +46,10 @@ export default async function TopicWorkspacePage({
   const requestedPageId = readParam(routeParams.pageId);
   const requestedPagePath = readParam(routeParams.pagePath);
   const workspaceRoot = await resolveWorkspaceRoot(slug);
-  const [questionWorkflow, sessionSummary] = await Promise.all([
+  const [questionWorkflow, sessionSummary, synthesisSummary] = await Promise.all([
     getTopicQuestionWorkflow(slug),
     getTopicResearchSessionSummary(slug),
+    getTopicResearchSynthesisSummary(slug),
   ]);
   const initialPages: WikiPageSummary[] = await listWikiPages(workspaceRoot);
   const initialPage =
@@ -89,6 +91,7 @@ export default async function TopicWorkspacePage({
           comparisonSpotlight={portfolio.comparisonSpotlight}
           questionWorkflow={questionWorkflow}
           sessionSummary={sessionSummary}
+          synthesisSummary={synthesisSummary}
           topic={topic}
         />
       }

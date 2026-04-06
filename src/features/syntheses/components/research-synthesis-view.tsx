@@ -2,16 +2,18 @@ import Link from "next/link";
 import {
   ArrowRight,
   ArrowUpRight,
-  Clock3,
-  FlaskConical,
+  FileSymlink,
   GitBranchPlus,
-  History,
+  Lightbulb,
+  Radar,
+  Scale,
 } from "lucide-react";
 
 import type {
-  ResearchSessionItem,
-  ResearchSessionOverview,
-} from "@/lib/contracts/research-session";
+  ResearchSynthesisDecisionType,
+  ResearchSynthesisItem,
+  ResearchSynthesisOverview,
+} from "@/lib/contracts/research-synthesis";
 import type { TopicMaturityStage } from "@/lib/contracts/topic-evaluation";
 import { PageHeader } from "@/components/page-header";
 import { Badge } from "@/components/ui/badge";
@@ -53,68 +55,60 @@ function stageVariant(stage: TopicMaturityStage) {
   }
 }
 
-function statusVariant(status: ResearchSessionItem["status"]) {
+function statusVariant(status: ResearchSynthesisItem["status"]) {
   switch (status) {
-    case "active":
-      return "default";
-    case "completed":
+    case "published":
       return "success";
-    case "queued":
-    default:
-      return "outline";
-  }
-}
-
-function priorityVariant(priority: ResearchSessionItem["priority"]) {
-  switch (priority) {
-    case "high":
+    case "ready":
       return "default";
-    case "medium":
+    case "in-progress":
       return "warning";
-    case "low":
+    case "stale":
+      return "warning";
+    case "candidate":
     default:
       return "outline";
   }
 }
 
-function outcomeVariant(outcome: ResearchSessionItem["outcome"]) {
-  switch (outcome) {
-    case "ready-for-synthesis":
-    case "synthesized":
-    case "updated-canonical":
-    case "archived-answer":
+function decisionVariant(type: ResearchSynthesisDecisionType) {
+  switch (type) {
+    case "recommendation":
       return "success";
-    case "question-advanced":
-    case "updated-working-note":
+    case "comparison":
       return "default";
-    case "needs-more-sources":
+    case "caution":
       return "warning";
-    case null:
+    case "watch":
+    case "not-enough-evidence":
     default:
       return "outline";
   }
 }
 
-function humanizeStatus(status: ResearchSessionItem["status"]) {
+function humanizeStatus(status: ResearchSynthesisItem["status"]) {
   return status.replace(/-/g, " ");
 }
 
-function humanizeOutcome(outcome: ResearchSessionItem["outcome"]) {
-  return outcome ? outcome.replace(/-/g, " ") : "in progress";
+function humanizeDecisionType(type: ResearchSynthesisDecisionType) {
+  switch (type) {
+    case "not-enough-evidence":
+      return "not enough evidence";
+    default:
+      return type.replace(/-/g, " ");
+  }
 }
 
-function formatSessionDate(value: string) {
+function humanizeQuestionEffect(effect: ResearchSynthesisItem["questionImpacts"][number]["effect"]) {
+  return effect.replace(/-/g, " ");
+}
+
+function formatDate(value: string) {
   return new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
   }).format(new Date(value));
-}
-
-function buildSynthesisHref(session: ResearchSessionItem) {
-  return session.synthesisTitle
-    ? `/syntheses?topic=${session.topicId}&title=${encodeURIComponent(session.synthesisTitle)}`
-    : null;
 }
 
 function Metric({
@@ -137,41 +131,43 @@ function Metric({
   );
 }
 
-export function ResearchSessionView({
+export function ResearchSynthesisView({
   overview,
 }: {
-  overview: ResearchSessionOverview;
+  overview: ResearchSynthesisOverview;
 }) {
   const focusedTopic = overview.focusedTopic;
-  const focusedQuestion = overview.focusedQuestion;
-  const focusSynthesisHref = overview.focusSession ? buildSynthesisHref(overview.focusSession) : null;
+  const focusSynthesis = overview.focusSynthesis;
+  const decisionLoopCount = overview.summary.candidate + overview.summary.inProgress;
 
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow="Research sessions"
+        eyebrow="Research syntheses"
         title={
-          focusedQuestion
-            ? `${focusedQuestion.question} session lane`
-            : focusedTopic
-              ? `${focusedTopic.title} session queue`
-              : "Sessions turn questions into durable work"
+          focusSynthesis
+            ? focusedTopic
+              ? `${focusedTopic.title} synthesis loop`
+              : "Syntheses turn research into durable judgment"
+            : "Syntheses turn research into durable judgment"
         }
         description={
-          focusedQuestion
-            ? "Use this focused session lane to reload the right context, see what changed the question last time, and decide whether the next pass should harden into synthesis, archive, or a canonical update."
-            : focusedTopic
-              ? "Use this topic-focused queue to pick the next bounded research pass, continue active work, and see which completed session actually changed the topic."
-              : "Research sessions are now first-class operating units across the portfolio. Use them to choose the next bounded pass, load the right context pack, capture the outcome, and decide what should become durable knowledge."
+          focusedTopic
+            ? "Use this topic-focused synthesis lane to see what is ready to publish, what still belongs in the decision loop, which sessions contributed, and what canonical or maintenance surfaces should change next."
+            : "Syntheses are now a first-class operating surface across the portfolio. Use them to decide when evidence is strong enough to harden, what stays provisional, and what changed in the canonical wiki because a synthesis was published."
         }
-        badge={`${overview.summary.totalSessions} sessions`}
+        badge={`${overview.summary.totalSyntheses} syntheses`}
         actions={
           <div className="flex flex-wrap gap-2">
-            <Button asChild variant="outline">
-              <Link href={focusedTopic ? `/questions?topic=${focusedTopic.id}` : "/questions"}>
-                Open question queue
-              </Link>
-            </Button>
+            {focusedTopic ? (
+              <Button asChild variant="outline">
+                <Link href="/syntheses">Open full synthesis portfolio</Link>
+              </Button>
+            ) : (
+              <Button asChild variant="outline">
+                <Link href="/topics">Open topic portfolio</Link>
+              </Button>
+            )}
             <Button asChild>
               <Link href={focusedTopic ? `/topics/${focusedTopic.id}` : "/topics/openclaw"}>
                 {focusedTopic ? "Open topic home" : "Open flagship topic"}
@@ -183,41 +179,36 @@ export function ResearchSessionView({
       />
 
       <Surface className="px-5 py-5">
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-7">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-6">
           <Metric
-            label="Sessions"
-            value={String(overview.summary.totalSessions)}
-            detail="Bounded research passes currently modeled in the selected workspace scope."
+            label="Syntheses"
+            value={String(overview.summary.totalSyntheses)}
+            detail="Explicit synthesis objects currently modeled in the selected workspace scope."
           />
           <Metric
-            label="Queued"
-            value={String(overview.summary.queued)}
-            detail="Sessions that are staged but not yet actively in progress."
+            label="Ready"
+            value={String(overview.summary.ready)}
+            detail="Syntheses that should plausibly publish on the next bounded pass."
           />
           <Metric
-            label="Active"
-            value={String(overview.summary.active)}
-            detail="Sessions that should be continued before starting broader new work."
+            label="Decision loop"
+            value={String(decisionLoopCount)}
+            detail="Candidates and in-progress syntheses still converting session evidence into durable judgment."
           />
           <Metric
-            label="Done"
-            value={String(overview.summary.completed)}
-            detail="Completed sessions that already recorded an explicit research outcome."
+            label="Published"
+            value={String(overview.summary.published)}
+            detail="Durable syntheses already shaping the canonical and maintenance layers."
           />
           <Metric
-            label="State changes"
-            value={String(overview.summary.changedQuestionState)}
-            detail="Sessions that explicitly moved a question forward, closed it, or reopened it."
+            label="Changed canon"
+            value={String(overview.summary.changedCanonical)}
+            detail="Syntheses that already changed a canonical page or visibly narrowed durable guidance."
           />
           <Metric
-            label="Durable"
-            value={String(overview.summary.producedDurableUpdate)}
-            detail="Sessions that produced a canonical update, archived note, or other durable result."
-          />
-          <Metric
-            label="Near synthesis"
-            value={String(overview.summary.readyForSynthesis)}
-            detail="Sessions that look close enough to harden into synthesis on the next pass."
+            label="Watch impact"
+            value={String(overview.summary.introducedWatchpoints)}
+            detail="Syntheses that introduced or sharpened monitoring and watchpoint logic."
           />
         </div>
       </Surface>
@@ -227,79 +218,110 @@ export function ResearchSessionView({
           <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
             <div className="space-y-2">
               <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Focus session
+                Focus synthesis
               </div>
               <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                What should this session do?
+                What is this synthesis changing?
               </h2>
             </div>
-            <FlaskConical className="size-5 text-muted-foreground" />
+            <Lightbulb className="size-5 text-muted-foreground" />
           </div>
           <div className="px-5 py-5">
-            {overview.focusSession ? (
+            {focusSynthesis ? (
               <div className="space-y-4 rounded-[22px] border border-border/50 bg-background/62 px-5 py-5">
                 <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant={statusVariant(overview.focusSession.status)}>
-                    {humanizeStatus(overview.focusSession.status)}
+                  <Badge variant={statusVariant(focusSynthesis.status)}>
+                    {humanizeStatus(focusSynthesis.status)}
                   </Badge>
-                  <Badge variant={priorityVariant(overview.focusSession.priority)}>
-                    {overview.focusSession.priority}
+                  <Badge variant="outline">{focusSynthesis.confidencePercent}% confidence</Badge>
+                  <Badge variant={stageVariant(focusSynthesis.topicMaturityStage)}>
+                    {focusSynthesis.topicTitle}
                   </Badge>
-                  <Badge variant={outcomeVariant(overview.focusSession.outcome)}>
-                    {humanizeOutcome(overview.focusSession.outcome)}
-                  </Badge>
-                  <Badge variant="outline">{formatSessionDate(overview.focusSession.sessionDate)}</Badge>
+                  <Badge variant="outline">{formatDate(focusSynthesis.updatedAt)}</Badge>
                 </div>
                 <div>
                   <div className="text-lg font-semibold tracking-tight text-foreground">
-                    {overview.focusSession.title}
+                    {focusSynthesis.title}
                   </div>
                   <div className="mt-1 text-sm leading-6 text-muted-foreground">
-                    {overview.focusSession.summary}
+                    {focusSynthesis.goal}
                   </div>
                 </div>
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
-                    <div className="text-sm font-medium text-foreground">Question</div>
+                    <div className="text-sm font-medium text-foreground">Source questions</div>
                     <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                      {overview.focusSession.question}
+                      {focusSynthesis.sourceQuestions.join("; ")}
                     </p>
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-foreground">Goal</div>
+                    <div className="text-sm font-medium text-foreground">Source sessions</div>
                     <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                      {overview.focusSession.goal}
-                    </p>
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium text-foreground">Load first</div>
-                    <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                      {overview.focusSession.loadedContextPackTitles.join(", ")}
-                    </p>
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium text-foreground">Recommended next step</div>
-                    <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                      {overview.focusSession.recommendedNextStep}
+                      {focusSynthesis.sourceSessions.length > 0
+                        ? focusSynthesis.sourceSessions.join("; ")
+                        : "No source sessions are explicitly linked yet."}
                     </p>
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm font-medium text-foreground">Draft conclusion</div>
+                  <div className="text-sm font-medium text-foreground">Durable conclusion</div>
                   <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                    {overview.focusSession.draftConclusion}
+                    {focusSynthesis.durableConclusion}
                   </p>
                 </div>
-                {overview.focusSession.resumeNotes.length > 0 ? (
+                {focusSynthesis.provisionalBoundary ? (
                   <div>
-                    <div className="text-sm font-medium text-foreground">Resume cues</div>
-                    <div className="mt-2 space-y-2">
-                      {overview.focusSession.resumeNotes.map((note) => (
+                    <div className="text-sm font-medium text-foreground">Still provisional</div>
+                    <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                      {focusSynthesis.provisionalBoundary}
+                    </p>
+                  </div>
+                ) : null}
+                {focusSynthesis.changedCanonicalSummary ? (
+                  <div>
+                    <div className="text-sm font-medium text-foreground">Canonical change</div>
+                    <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                      {focusSynthesis.changedCanonicalSummary}
+                    </p>
+                  </div>
+                ) : null}
+                <div>
+                  <div className="text-sm font-medium text-foreground">Decision layer</div>
+                  <div className="mt-3 grid gap-3 md:grid-cols-2">
+                    {focusSynthesis.decisions.map((decision) => (
+                      <div
+                        key={`${focusSynthesis.id}-${decision.title}`}
+                        className="rounded-[18px] border border-border/50 bg-background/75 px-4 py-4"
+                      >
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Badge variant={decisionVariant(decision.type)}>
+                            {humanizeDecisionType(decision.type)}
+                          </Badge>
+                        </div>
+                        <div className="mt-3 text-sm font-medium text-foreground">
+                          {decision.title}
+                        </div>
+                        <div className="mt-1 text-sm leading-6 text-muted-foreground">
+                          {decision.summary}
+                        </div>
+                        <div className="mt-2 text-sm leading-6 text-foreground">{decision.action}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {focusSynthesis.questionImpacts.length > 0 ? (
+                  <div>
+                    <div className="text-sm font-medium text-foreground">Question effects</div>
+                    <div className="mt-3 space-y-2">
+                      {focusSynthesis.questionImpacts.map((impact) => (
                         <div
-                          key={note}
+                          key={`${focusSynthesis.id}-${impact.questionId}-${impact.effect}`}
                           className="rounded-[16px] border border-border/50 bg-background/75 px-3 py-3 text-sm leading-6 text-muted-foreground"
                         >
-                          {note}
+                          <span className="font-medium text-foreground">
+                            {humanizeQuestionEffect(impact.effect)}:
+                          </span>{" "}
+                          {impact.note}
                         </div>
                       ))}
                     </div>
@@ -307,30 +329,31 @@ export function ResearchSessionView({
                 ) : null}
                 <div className="flex flex-wrap gap-2">
                   <Button asChild>
-                    <Link href={overview.focusSession.links.questionQueue.href}>Question queue</Link>
+                    <Link href={focusSynthesis.links.questionQueue.href}>Question queue</Link>
                   </Button>
                   <Button asChild variant="outline">
-                    <Link href={overview.focusSession.links.questionNote.href}>Question note</Link>
+                    <Link href={focusSynthesis.links.sessionWorkspace.href}>Source sessions</Link>
                   </Button>
                   <Button asChild variant="ghost">
-                    <Link href={overview.focusSession.links.maintenance.href}>Maintenance rhythm</Link>
+                    <Link href={focusSynthesis.links.maintenance.href}>Maintenance rhythm</Link>
                   </Button>
-                  {focusSynthesisHref ? (
-                    <Button asChild variant="ghost">
-                      <Link href={focusSynthesisHref}>Synthesis target</Link>
-                    </Button>
-                  ) : null}
                   <Button asChild variant="ghost">
-                    <Link href={overview.focusSession.links.canonicalTarget.href}>
-                      Target context
+                    <Link href={focusSynthesis.links.publishedPage.href}>
+                      {focusSynthesis.hasPublishedPage ? "Published page" : "Synthesis target"}
                       <ArrowUpRight className="size-4" />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="ghost">
+                    <Link href={focusSynthesis.links.canonicalTarget.href}>
+                      Canonical target
+                      <FileSymlink className="size-4" />
                     </Link>
                   </Button>
                 </div>
               </div>
             ) : (
               <div className="rounded-[18px] bg-background/65 px-4 py-5 text-sm leading-6 text-muted-foreground">
-                No research sessions are currently queued.
+                No syntheses are currently seeded.
               </div>
             )}
           </div>
@@ -340,42 +363,44 @@ export function ResearchSessionView({
           <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
             <div className="space-y-2">
               <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Session lenses
+                Research lenses
               </div>
               <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                Read sessions by workflow need
+                Read syntheses by workflow need
               </h2>
             </div>
-            <Clock3 className="size-5 text-muted-foreground" />
+            <Radar className="size-5 text-muted-foreground" />
           </div>
           <div className="space-y-4 px-5 py-5">
             {overview.buckets.map((bucket) => (
               <div key={bucket.id} className="rounded-[20px] border border-border/50 bg-background/62 px-4 py-4">
                 <div className="flex items-center gap-2">
-                  <Badge variant="outline">{bucket.sessions.length}</Badge>
+                  <Badge variant="outline">{bucket.syntheses.length}</Badge>
                   <div className="text-sm font-medium text-foreground">{bucket.title}</div>
                 </div>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">{bucket.description}</p>
                 <div className="mt-3 space-y-2">
-                  {bucket.sessions.slice(0, 3).map((session) => (
+                  {bucket.syntheses.slice(0, 3).map((synthesis) => (
                     <Link
-                      key={`${bucket.id}-${session.topicId}-${session.id}`}
-                      href={buildSynthesisHref(session) ?? session.links.session.href}
+                      key={`${bucket.id}-${synthesis.topicId}-${synthesis.id}`}
+                      href={synthesis.links.synthesis.href}
                       className="block rounded-[16px] border border-border/50 bg-background/75 px-3 py-3 transition-colors hover:bg-background"
                     >
                       <div className="flex flex-wrap items-center gap-2">
-                        <Badge variant={statusVariant(session.status)}>{humanizeStatus(session.status)}</Badge>
-                        <Badge variant={outcomeVariant(session.outcome)}>
-                          {humanizeOutcome(session.outcome)}
+                        <Badge variant={statusVariant(synthesis.status)}>
+                          {humanizeStatus(synthesis.status)}
                         </Badge>
+                        {focusedTopic ? null : (
+                          <span className="text-xs text-muted-foreground">{synthesis.topicTitle}</span>
+                        )}
                       </div>
-                      <div className="mt-2 text-sm font-medium text-foreground">{session.title}</div>
+                      <div className="mt-2 text-sm font-medium text-foreground">{synthesis.title}</div>
                       <div className="mt-1 text-sm leading-6 text-muted-foreground">
-                        {session.question}
+                        {synthesis.durableConclusion}
                       </div>
                     </Link>
                   ))}
-                  {bucket.sessions.length === 0 ? (
+                  {bucket.syntheses.length === 0 ? (
                     <div className="text-sm leading-6 text-muted-foreground">Nothing currently in this lane.</div>
                   ) : null}
                 </div>
@@ -389,10 +414,10 @@ export function ResearchSessionView({
         <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
           <div className="space-y-2">
             <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-              Topic sessions
+              Topic syntheses
             </div>
             <h2 className="text-xl font-semibold tracking-tight text-foreground">
-              How session depth differs by topic
+              How durable synthesis depth differs by topic
             </h2>
           </div>
           <GitBranchPlus className="size-5 text-muted-foreground" />
@@ -404,7 +429,7 @@ export function ResearchSessionView({
                 <div className="min-w-0 flex-1 space-y-3">
                   <div className="flex flex-wrap items-center gap-2">
                     <Link
-                      href={`/sessions?topic=${topic.topicId}`}
+                      href={`/syntheses?topic=${topic.topicId}`}
                       className="text-lg font-semibold tracking-tight text-foreground"
                     >
                       {topic.topicTitle}
@@ -412,59 +437,50 @@ export function ResearchSessionView({
                     <Badge variant={stageVariant(topic.topicMaturityStage)}>
                       {topic.topicMaturityStage}
                     </Badge>
-                    <Badge variant="outline">{topic.sessionCount} sessions</Badge>
+                    <Badge variant="outline">{topic.synthesisCount} syntheses</Badge>
                   </div>
                   <p className="max-w-[75ch] text-sm leading-7 text-muted-foreground">{topic.summary}</p>
                   <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
-                    <span>{topic.activeCount} active</span>
-                    <span>{topic.queuedCount} queued</span>
-                    <span>{topic.completedCount} completed</span>
-                    <span>{topic.changedQuestionStateCount} changed question state</span>
+                    <span>{topic.readyCount} ready</span>
+                    <span>{topic.inProgressCount} in progress</span>
+                    <span>{topic.publishedCount} published</span>
+                    <span>{topic.changedCanonicalCount} changed canonical</span>
                   </div>
-                  {topic.nextSession ? (
+                  <div className="grid gap-3 xl:grid-cols-2">
                     <div className="rounded-[18px] bg-background/65 px-4 py-3 ring-1 ring-border/50">
                       <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                        Next session
+                        Next synthesis
                       </div>
                       <div className="mt-2 text-sm font-medium text-foreground">
-                        {topic.nextSession.title}
+                        {topic.nextSynthesis?.title ?? "No active synthesis candidate is currently seeded."}
                       </div>
                       <div className="mt-1 text-sm leading-6 text-muted-foreground">
-                        {topic.nextSession.recommendedNextStep}
+                        {topic.nextSynthesis?.recommendedNextStep ??
+                          "The next durable synthesis will appear here once the topic accumulates one."}
                       </div>
                     </div>
-                  ) : topic.recentSession ? (
                     <div className="rounded-[18px] bg-background/65 px-4 py-3 ring-1 ring-border/50">
                       <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                        Latest completed session
+                        Recent durable synthesis
                       </div>
                       <div className="mt-2 text-sm font-medium text-foreground">
-                        {topic.recentSession.title}
+                        {topic.recentPublished?.title ?? "No published synthesis yet."}
                       </div>
                       <div className="mt-1 text-sm leading-6 text-muted-foreground">
-                        {topic.recentSession.summary}
+                        {topic.recentPublished?.changedCanonicalSummary ??
+                          topic.recentPublished?.durableConclusion ??
+                          "Once a synthesis publishes, its canonical effect will surface here."}
                       </div>
                     </div>
-                  ) : null}
+                  </div>
                 </div>
                 <div className="flex shrink-0 flex-wrap gap-2">
                   <Button asChild variant="outline">
-                    <Link href={`/sessions?topic=${topic.topicId}`}>Topic sessions</Link>
+                    <Link href={`/syntheses?topic=${topic.topicId}`}>Topic syntheses</Link>
                   </Button>
                   <Button asChild variant="ghost">
                     <Link href={`/topics/${topic.topicId}`}>Topic home</Link>
                   </Button>
-                  {topic.nextSession?.synthesisTitle ? (
-                    <Button asChild variant="ghost">
-                      <Link
-                        href={`/syntheses?topic=${topic.topicId}&title=${encodeURIComponent(
-                          topic.nextSession.synthesisTitle,
-                        )}`}
-                      >
-                        Synthesis target
-                      </Link>
-                    </Button>
-                  ) : null}
                 </div>
               </div>
             </div>
@@ -476,29 +492,29 @@ export function ResearchSessionView({
         <div className="grid gap-4 lg:grid-cols-3">
           <div className="rounded-[20px] border border-border/50 bg-background/60 px-4 py-4">
             <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <FlaskConical className="size-4" />
-              Bound the pass
+              <Scale className="size-4" />
+              Publish honestly
             </div>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              A session loads only the context packs and pages needed for the current question instead of reopening the full topic graph by default.
+              Ready and in-progress syntheses now stay separate from published pages, so provisional judgment does not quietly masquerade as durable knowledge.
             </p>
           </div>
           <div className="rounded-[20px] border border-border/50 bg-background/60 px-4 py-4">
             <div className="flex items-center gap-2 text-sm font-medium text-foreground">
               <ArrowUpRight className="size-4" />
-              Land the result
+              Show canonical effects
             </div>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Every completed session records whether it changed question state, produced a durable update, or still needs more evidence before hardening.
+              Each synthesis now makes its canonical targets, maintenance updates, and watchpoint consequences explicit instead of leaving them implicit in prose.
             </p>
           </div>
           <div className="rounded-[20px] border border-border/50 bg-background/60 px-4 py-4">
             <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <History className="size-4" />
-              Resume honestly
+              <FileSymlink className="size-4" />
+              Keep decisions resumable
             </div>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Session summaries and resume cues now preserve what changed last time so a question can be continued without rereading everything.
+              Decision cards, question effects, and source-session links make it much clearer why a synthesis advanced and what should happen next.
             </p>
           </div>
         </div>

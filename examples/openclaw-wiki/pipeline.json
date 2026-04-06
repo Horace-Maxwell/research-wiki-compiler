@@ -179,6 +179,7 @@
           "Review cadence",
           "Revisit next",
           "Session queue",
+          "Synthesis decisions",
           "Context packs to refresh",
           "Synthesis candidates",
           "Audit to action",
@@ -221,6 +222,7 @@
           "What would resolve them",
           "What looks answerable next",
           "Recent session outcomes",
+          "Published syntheses",
           "Related pages"
         ]
       },
@@ -331,7 +333,8 @@
         "requiredHeadings": [
           "Highest-leverage open questions",
           "What would reduce uncertainty",
-          "What might become a synthesis next"
+          "What might become a synthesis next",
+          "Published syntheses"
         ]
       },
       {
@@ -349,6 +352,7 @@
         "requiredHeadings": [
           "Start a pass here",
           "Revisit next",
+          "Synthesis decisions",
           "Context packs to refresh",
           "Synthesis candidates"
         ]
@@ -476,7 +480,8 @@
           "Article map",
           "Connected notes",
           "Summary",
-          "Revisit next"
+          "Revisit next",
+          "Synthesis decisions"
         ]
       },
       {
@@ -524,7 +529,8 @@
           "Connected notes",
           "Summary",
           "Questions",
-          "What looks answerable next"
+          "What looks answerable next",
+          "Published syntheses"
         ]
       },
       {

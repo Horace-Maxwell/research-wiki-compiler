@@ -622,6 +622,251 @@
       ]
     }
   ],
+  "researchSyntheses": [
+    {
+      "id": "local-first-current-tensions-synthesis",
+      "title": "Local-First Software current tensions",
+      "summary": "This published synthesis keeps the core trade-offs visible so the starter topic can feel honest and durable at the same time.",
+      "goal": "Give the topic a durable place to hold its active trade-offs instead of mixing them into the canonical entry page.",
+      "status": "published",
+      "confidencePercent": 71,
+      "updatedAt": "2026-04-05T13:30:00.000Z",
+      "sourceQuestionIds": [
+        "sync-assumptions-durable"
+      ],
+      "sourceSessionIds": [
+        "session-sync-canonical-boundary"
+      ],
+      "evidenceSummary": [
+        "The starter corpus already repeats the same sync-cost and maintenance-burden trade-offs.",
+        "The topic reads more durably when uncertainty is held in a synthesis instead of the entry page."
+      ],
+      "durableConclusion": "The topic already supports a durable tensions synthesis even though many of its strongest operational answers still belong in future syntheses.",
+      "provisionalBoundary": "This synthesis should hold the trade-offs, but the most decision-relevant consequences still need stronger dedicated syntheses.",
+      "publishedPageTitle": "Local-First Software current tensions",
+      "canonicalUpdateTitles": [
+        "Local-First Software",
+        "Sync engines"
+      ],
+      "maintenanceUpdateTitles": [
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ],
+      "watchpointUpdateTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "tensionUpdateTitles": [
+        "Local-First Software current tensions"
+      ],
+      "archiveTitles": [],
+      "questionImpacts": [
+        {
+          "questionId": "sync-assumptions-durable",
+          "effect": "advanced",
+          "note": "The canonical-boundary question can now stay narrower because the main uncertainty lives durably in the tensions synthesis."
+        }
+      ],
+      "decisions": [
+        {
+          "type": "caution",
+          "title": "Keep live trade-offs explicit",
+          "summary": "The topic should show sync complexity, migration burden, and repair cost as live tensions instead of hiding them behind a clean article narrative.",
+          "action": "Use the tensions synthesis as the durable uncertainty layer before expanding the canonical entry."
+        },
+        {
+          "type": "watch",
+          "title": "Escalate recurring tensions into maintenance logic",
+          "summary": "If the same tension keeps changing revisit order, it should reshape watchpoints and maintenance rhythm rather than stay descriptive.",
+          "action": "Feed repeated tensions into the maintenance rhythm and watchpoint synthesis."
+        }
+      ],
+      "changedCanonicalSummary": "The canonical starter pages now rely on a dedicated tensions synthesis to hold uncertainty instead of overloading the article layer with mixed stable and provisional claims.",
+      "recommendedNextStep": "Use this synthesis as the stable uncertainty layer, then decide which named tension deserves the next stronger operational synthesis.",
+      "revisitTriggers": [
+        "A new source changes the basic framing of sync, migration, or maintenance burden."
+      ]
+    },
+    {
+      "id": "local-first-maintenance-watchpoints-synthesis",
+      "title": "Local-First Software maintenance watchpoints",
+      "summary": "This monitoring synthesis exists, but in a starter workspace it should still be treated as provisional until repeated evidence sharpens its watch logic.",
+      "goal": "Expose the watch surface early enough to organize maintenance without pretending the starter corpus has fully proven the monitoring logic.",
+      "status": "stale",
+      "confidencePercent": 59,
+      "updatedAt": "2026-04-05T14:00:00.000Z",
+      "sourceQuestionIds": [
+        "conflict-repair-watchpoints"
+      ],
+      "sourceSessionIds": [
+        "session-conflict-watchpoints"
+      ],
+      "evidenceSummary": [
+        "The topic clearly needs a monitoring surface, but the current watchpoints still reflect a thin starter corpus."
+      ],
+      "durableConclusion": "A starter topic benefits from an explicit watch surface, but the specific watchpoints should remain easy to revise until more repeated evidence exists.",
+      "provisionalBoundary": "The current watchpoints should not yet be treated as stable operator guidance.",
+      "publishedPageTitle": "Local-First Software maintenance watchpoints",
+      "canonicalUpdateTitles": [],
+      "maintenanceUpdateTitles": [
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ],
+      "watchpointUpdateTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "tensionUpdateTitles": [],
+      "archiveTitles": [],
+      "questionImpacts": [
+        {
+          "questionId": "conflict-repair-watchpoints",
+          "effect": "reframed",
+          "note": "The watchpoint question is now about hardening or revising the monitoring synthesis rather than whether a watch surface should exist at all."
+        }
+      ],
+      "decisions": [
+        {
+          "type": "watch",
+          "title": "Keep the watch surface provisional",
+          "summary": "The monitoring page is useful, but its specific signals still need repeated evidence before they should be trusted as durable guidance.",
+          "action": "Treat the watchpoint synthesis as a review surface and keep updating it from maintenance passes."
+        },
+        {
+          "type": "not-enough-evidence",
+          "title": "Wait for repeated repair evidence",
+          "summary": "The starter corpus still lacks enough recurring repair evidence to freeze the watch list confidently.",
+          "action": "Use the queued watchpoint session to collect repeated repair and conflict evidence before hardening the monitoring logic."
+        }
+      ],
+      "changedCanonicalSummary": null,
+      "recommendedNextStep": "Revisit the watch surface after the next source or audit pass and decide which watchpoints deserve promotion versus removal.",
+      "revisitTriggers": [
+        "A new audit or source pass changes the watch logic materially."
+      ]
+    },
+    {
+      "id": "local-first-sync-risk-map",
+      "title": "Local-first sync risk map",
+      "summary": "This candidate synthesis would turn the sync-boundary work into a reusable map of where local-first systems really get expensive.",
+      "goal": "Convert the canonical sync-boundary work into a stronger synthesis instead of leaving it as starter framing spread across article and note surfaces.",
+      "status": "candidate",
+      "confidencePercent": 63,
+      "updatedAt": "2026-04-05T15:00:00.000Z",
+      "sourceQuestionIds": [
+        "sync-assumptions-durable"
+      ],
+      "sourceSessionIds": [
+        "session-sync-canonical-boundary"
+      ],
+      "evidenceSummary": [
+        "The first bounded pass already separated durable sync framing from still-provisional repair assumptions."
+      ],
+      "durableConclusion": "The topic is close to supporting a stronger sync-risk synthesis, but it still wants one tighter pass before it becomes durable guidance.",
+      "provisionalBoundary": "This synthesis should not publish until the sync-cost boundary reads as durable guidance rather than starter scaffolding.",
+      "publishedPageTitle": null,
+      "canonicalUpdateTitles": [
+        "Local-First Software",
+        "Sync engines"
+      ],
+      "maintenanceUpdateTitles": [
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ],
+      "watchpointUpdateTitles": [],
+      "tensionUpdateTitles": [
+        "Local-First Software current tensions"
+      ],
+      "archiveTitles": [],
+      "questionImpacts": [
+        {
+          "questionId": "sync-assumptions-durable",
+          "effect": "advanced",
+          "note": "Publishing this synthesis would narrow the sync-boundary question and make future canonical updates more explicit."
+        }
+      ],
+      "decisions": [
+        {
+          "type": "comparison",
+          "title": "Separate durable sync risk from working repair detail",
+          "summary": "The synthesis should show which sync-system claims are ready for the durable layer versus which ones still belong in working and maintenance surfaces.",
+          "action": "Use the canonical entry, Sync engines page, and tensions synthesis together when drafting the risk map."
+        }
+      ],
+      "changedCanonicalSummary": "If published, this synthesis would tighten the canonical sync story and make later maintenance work much easier to resume.",
+      "recommendedNextStep": "Run one more focused sync-risk pass before promoting this candidate into a published synthesis.",
+      "revisitTriggers": [
+        "The canonical framing of sync cost or repair burden changes."
+      ]
+    },
+    {
+      "id": "local-first-migration-playbook",
+      "title": "Local-first migration playbook",
+      "summary": "This ready synthesis is the highest-leverage next durable move because it can convert migration pressure into reusable operating guidance.",
+      "goal": "Turn the migration-pressure thread into the first strong operational synthesis instead of leaving it split across concept and maintenance notes.",
+      "status": "ready",
+      "confidencePercent": 77,
+      "updatedAt": "2026-04-05T16:00:00.000Z",
+      "sourceQuestionIds": [
+        "migration-playbook"
+      ],
+      "sourceSessionIds": [
+        "session-migration-playbook"
+      ],
+      "evidenceSummary": [
+        "Migration pressure already changes maintenance order more than most other starter concerns.",
+        "The active session is already focused on converting that pressure into a reusable synthesis."
+      ],
+      "durableConclusion": "The topic is ready for a migration-playbook synthesis that explains when schema change, repair burden, and watchpoints become operationally significant.",
+      "provisionalBoundary": "The published version should stay focused on migration triggers and maintenance consequences, not a broad restatement of the whole topic.",
+      "publishedPageTitle": null,
+      "canonicalUpdateTitles": [
+        "Schema migration pressure"
+      ],
+      "maintenanceUpdateTitles": [
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ],
+      "watchpointUpdateTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "tensionUpdateTitles": [
+        "Local-First Software current tensions"
+      ],
+      "archiveTitles": [
+        "Note: What should I revisit next for Local-First Software"
+      ],
+      "questionImpacts": [
+        {
+          "questionId": "migration-playbook",
+          "effect": "resolved",
+          "note": "Publishing this synthesis would resolve the clearest ready-for-synthesis question in the starter topic."
+        },
+        {
+          "questionId": "conflict-repair-watchpoints",
+          "effect": "advanced",
+          "note": "A migration playbook would give the watchpoint question a clearer operational boundary."
+        }
+      ],
+      "decisions": [
+        {
+          "type": "recommendation",
+          "title": "Publish the migration playbook next",
+          "summary": "This is the clearest path from a well-structured starter topic into a more durable and decision-relevant workspace.",
+          "action": "Complete the active migration session, then update maintenance rhythm, open questions, and the watchpoint surface together."
+        },
+        {
+          "type": "watch",
+          "title": "Use the playbook to tighten watchpoints",
+          "summary": "A published migration playbook should clarify which signals belong in watchpoints versus generic revisit notes.",
+          "action": "After publication, rewrite the watchpoint synthesis using the same migration-trigger vocabulary."
+        }
+      ],
+      "changedCanonicalSummary": "Publishing this synthesis would make the topic's migration story more durable and would narrow what still belongs in the open-question queue.",
+      "recommendedNextStep": "Complete the active synthesis session, publish the migration playbook, then update maintenance rhythm, watchpoints, and the operational note together.",
+      "revisitTriggers": [
+        "A new source changes whether migration pressure still looks like the main maintenance boundary."
+      ]
+    }
+  ],
   "resolutionSignals": [
     "The corpus starts connecting local copies, sync choices, and repair burden in a stable way.",
     "A context pack can answer migration or watchpoint questions without reopening every source note.",

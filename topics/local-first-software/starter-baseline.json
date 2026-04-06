@@ -30,7 +30,7 @@
     },
     {
       "logicalPath": "obsidian-vault/00 Atlas/Maintenance Rhythm.md",
-      "sha256": "2640c53bd11ac661e3fede8f1ef3c3cbd360f964b08a48e8466577f9a00ab529"
+      "sha256": "3c8d34e5e1c7bece0f18601237d84e9bb6dcc999b66458e6efb6e784eb7ed1d2"
     },
     {
       "logicalPath": "obsidian-vault/00 Atlas/Monitoring.md",
@@ -38,7 +38,7 @@
     },
     {
       "logicalPath": "obsidian-vault/00 Atlas/Open Questions.md",
-      "sha256": "40bed44ba12cb0f8f3d8aae85e80181e39b95304786bca570c3e85cae834bba1"
+      "sha256": "22b907c2267ec1daab54a4a4056cccafd5eea52b7d8cfa45a1e0eb9650639797"
     },
     {
       "logicalPath": "obsidian-vault/00 Atlas/Reading Paths.md",
@@ -74,7 +74,7 @@
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/Local-First Software maintenance rhythm.md",
-      "sha256": "32ee0c7eb8868a3ecc7a5f0fceb3d4f9b2a3ae17562def78db921ee2f18d43cb"
+      "sha256": "62ecffbc4f5050ac966fe97f59041b9ed266f9975f3a5329c1a8fcd02f1665f4"
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/Local-First Software maintenance watchpoints.md",
@@ -82,7 +82,7 @@
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/Local-First Software open questions.md",
-      "sha256": "89a93c000eaa6065b623df2f0e6f55ab3339db7edea53f1e527d9a6b4d4d7211"
+      "sha256": "36a11667e649a7d8f1790fe22f24c0624118ba0182a0a88fab1311351d562b7c"
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/Local-First Software reading paths.md",
@@ -134,7 +134,7 @@
     },
     {
       "logicalPath": "topic.json",
-      "sha256": "c2b190b716c531381547cd794bd3a52576e7f75aab1a744bd6e5bb10b4e81ffc"
+      "sha256": "012abba68b077d40754727d732e9469526efc2743fc0ebf61efe75f4c50833c4"
     },
     {
       "logicalPath": "workspace/audits/.gitkeep",
@@ -178,7 +178,7 @@
     },
     {
       "logicalPath": "workspace/wiki/notes/local-first-software-open-questions.md",
-      "sha256": "89a93c000eaa6065b623df2f0e6f55ab3339db7edea53f1e527d9a6b4d4d7211"
+      "sha256": "36a11667e649a7d8f1790fe22f24c0624118ba0182a0a88fab1311351d562b7c"
     },
     {
       "logicalPath": "workspace/wiki/notes/note-what-should-i-revisit-next-for-local-first-software.md",
@@ -190,7 +190,7 @@
     },
     {
       "logicalPath": "workspace/wiki/syntheses/local-first-software-maintenance-rhythm.md",
-      "sha256": "32ee0c7eb8868a3ecc7a5f0fceb3d4f9b2a3ae17562def78db921ee2f18d43cb"
+      "sha256": "62ecffbc4f5050ac966fe97f59041b9ed266f9975f3a5329c1a8fcd02f1665f4"
     },
     {
       "logicalPath": "workspace/wiki/syntheses/local-first-software-maintenance-watchpoints.md",

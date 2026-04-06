@@ -6,6 +6,7 @@ import path from "node:path";
 import type { WikiFrontmatter, WikiPageType } from "@/lib/contracts/wiki";
 import type { ResearchQuestionSeed } from "@/lib/contracts/research-question";
 import type { ResearchSessionSeed } from "@/lib/contracts/research-session";
+import type { ResearchSynthesisSeed } from "@/lib/contracts/research-synthesis";
 import {
   TOPIC_BOOTSTRAP_QUALITY_FLAGS,
   topicBootstrapBaselineSchema,
@@ -738,6 +739,254 @@ function buildDefaultResearchSessions(params: {
   ];
 }
 
+function buildDefaultResearchSyntheses(params: {
+  title: string;
+  titles: ReturnType<typeof buildSurfaceTitleBundle>;
+  researchQuestions: ResearchQuestionSeed[];
+  researchSessions: ResearchSessionSeed[];
+  seedTimestamp: string;
+}): ResearchSynthesisSeed[] {
+  const [boundaryQuestion, monitoringQuestion, synthesisQuestion] = params.researchQuestions;
+  const [boundarySession, synthesisSession, watchpointSession] = params.researchSessions;
+  const firstCandidate = `${params.title} scope and boundary map`;
+  const secondCandidate = `${params.title} maintenance triggers`;
+
+  return [
+    {
+      id: slugifyTitle(`${params.title}-current-tensions-synthesis`) || "current-tensions-synthesis",
+      title: params.titles.currentTensions,
+      summary:
+        "This published synthesis keeps the active trade-offs visible so the canonical starter pages stay durable instead of absorbing unresolved uncertainty.",
+      goal: "Give the topic a durable cross-page account of its live tensions without pretending every starter claim has already stabilized.",
+      status: "published",
+      confidencePercent: 70,
+      updatedAt: offsetIsoTimestamp(params.seedTimestamp, 3),
+      sourceQuestionIds: [boundaryQuestion?.id ?? "canonical-boundary"],
+      sourceSessionIds: boundarySession ? [boundarySession.id] : [],
+      evidenceSummary: [
+        "The starter corpus already repeats the same broad durability-versus-uncertainty trade-offs.",
+        "The canonical entry is stronger when live tensions stay in a dedicated synthesis surface.",
+      ],
+      durableConclusion:
+        "The topic already supports a durable tensions synthesis even though many of the final operational answers remain provisional.",
+      provisionalBoundary:
+        "The specific operational consequences of these tensions still need stronger syntheses before they should become stable guidance.",
+      publishedPageTitle: params.titles.currentTensions,
+      canonicalUpdateTitles: [params.title],
+      maintenanceUpdateTitles: [params.titles.maintenanceRhythm, params.titles.openQuestions],
+      watchpointUpdateTitles: [params.titles.maintenanceWatchpoints],
+      tensionUpdateTitles: [params.titles.currentTensions],
+      archiveTitles: [],
+      questionImpacts: [
+        {
+          questionId: boundaryQuestion?.id ?? "canonical-boundary",
+          effect: "advanced",
+          note:
+            "The canonical-boundary question can now stay narrower because the main uncertainty lives durably in the tensions synthesis.",
+        },
+      ],
+      decisions: [
+        {
+          type: "caution",
+          title: "Keep uncertainty out of the entry page",
+          summary:
+            "The starter topic should surface active trade-offs in a dedicated synthesis rather than burying them inside the canonical article.",
+          action:
+            "Use the tensions synthesis as the durable uncertainty layer before expanding the canonical entry.",
+        },
+        {
+          type: "watch",
+          title: "Promote recurring tensions into maintenance logic",
+          summary:
+            "If the same tension repeatedly changes what gets revisited next, it should reshape the maintenance rhythm rather than remain descriptive prose.",
+          action:
+            "Feed recurring tensions into maintenance watchpoints and the revisit queue.",
+        },
+      ],
+      changedCanonicalSummary:
+        "The canonical starter pages now rely on a dedicated tensions synthesis to hold uncertainty instead of overloading the entry page with mixed durable and provisional claims.",
+      recommendedNextStep:
+        "Use this synthesis as the stable uncertainty layer, then decide which named tension deserves the next stronger operational synthesis.",
+      revisitTriggers: [
+        "A new source changes the basic framing of sync, migration, or maintenance burden.",
+      ],
+    },
+    {
+      id:
+        slugifyTitle(`${params.title}-maintenance-watchpoints-synthesis`) ||
+        "maintenance-watchpoints-synthesis",
+      title: params.titles.maintenanceWatchpoints,
+      summary:
+        "This monitoring synthesis exists, but in a starter workspace it should still be treated as low-confidence operating guidance until repeated evidence sharpens it.",
+      goal: "Expose the watch surface early enough to organize maintenance without pretending the starter corpus has fully proven the monitoring logic.",
+      status: "stale",
+      confidencePercent: 58,
+      updatedAt: offsetIsoTimestamp(params.seedTimestamp, 6),
+      sourceQuestionIds: [monitoringQuestion?.id ?? "monitoring-signals"],
+      sourceSessionIds: watchpointSession ? [watchpointSession.id] : [],
+      evidenceSummary: [
+        "The topic clearly needs a monitoring surface even though the recurring signals are still thin.",
+      ],
+      durableConclusion:
+        "A starter topic benefits from an explicit watch surface, but the specific watchpoints should remain easy to revise until more repeated evidence exists.",
+      provisionalBoundary:
+        "The current watchpoints should not yet be treated as stable operator guidance.",
+      publishedPageTitle: params.titles.maintenanceWatchpoints,
+      canonicalUpdateTitles: [],
+      maintenanceUpdateTitles: [params.titles.maintenanceRhythm, params.titles.openQuestions],
+      watchpointUpdateTitles: [params.titles.maintenanceWatchpoints],
+      tensionUpdateTitles: [],
+      archiveTitles: [],
+      questionImpacts: [
+        {
+          questionId: monitoringQuestion?.id ?? "monitoring-signals",
+          effect: "reframed",
+          note:
+            "The watchpoint question now asks whether the current monitoring synthesis should be hardened or revised, not whether a watch surface should exist at all.",
+        },
+      ],
+      decisions: [
+        {
+          type: "watch",
+          title: "Keep the monitoring surface provisional",
+          summary:
+            "The watch surface is useful, but its specific signals still need repeated evidence before they should become trusted operating guidance.",
+          action:
+            "Treat the monitoring synthesis as a review surface and keep updating it from maintenance passes.",
+        },
+        {
+          type: "not-enough-evidence",
+          title: "Wait for repeated repair evidence",
+          summary:
+            "The starter corpus still lacks enough recurring operator-facing signals to freeze the watch list confidently.",
+          action:
+            "Use the queued watchpoint session to collect repeated repair and conflict evidence before hardening the monitoring logic.",
+        },
+      ],
+      changedCanonicalSummary: null,
+      recommendedNextStep:
+        "Revisit the watch surface after the next source or audit pass and decide which watchpoints deserve promotion versus removal.",
+      revisitTriggers: [
+        "A new audit or source pass changes the watch logic materially.",
+      ],
+    },
+    {
+      id: slugifyTitle(firstCandidate) || "scope-boundary-map",
+      title: firstCandidate,
+      summary:
+        "This candidate synthesis would turn the starter boundary question into a reusable map of what belongs inside the durable story and what should remain provisional.",
+      goal: "Convert the canonical-boundary work into a reusable synthesis instead of leaving it as scattered starter heuristics.",
+      status: "candidate",
+      confidencePercent: 61,
+      updatedAt: offsetIsoTimestamp(params.seedTimestamp, 7),
+      sourceQuestionIds: [boundaryQuestion?.id ?? "canonical-boundary"],
+      sourceSessionIds: boundarySession ? [boundarySession.id] : [],
+      evidenceSummary: [
+        "The first bounded pass already separated durable framing from still-working assumptions.",
+      ],
+      durableConclusion:
+        "The topic is close to supporting a stronger scope-and-boundary synthesis, but the framing still wants one more pass before it becomes a durable reference surface.",
+      provisionalBoundary:
+        "This synthesis should not publish until the main scope boundary reads as durable guidance rather than starter scaffolding.",
+      publishedPageTitle: null,
+      canonicalUpdateTitles: [params.title],
+      maintenanceUpdateTitles: [params.titles.maintenanceRhythm, params.titles.openQuestions],
+      watchpointUpdateTitles: [],
+      tensionUpdateTitles: [params.titles.currentTensions],
+      archiveTitles: [],
+      questionImpacts: [
+        {
+          questionId: boundaryQuestion?.id ?? "canonical-boundary",
+          effect: "advanced",
+          note:
+            "Publishing this synthesis would narrow the canonical-boundary question and make future updates more explicit.",
+        },
+      ],
+      decisions: [
+        {
+          type: "comparison",
+          title: "Separate durable scope from working uncertainty",
+          summary:
+            "The synthesis should show which claims are ready for the article layer versus which ones still belong in working and maintenance surfaces.",
+          action:
+            "Use the canonical entry, tensions page, and open-question note together when drafting the boundary map.",
+        },
+      ],
+      changedCanonicalSummary:
+        "If published, this synthesis would tighten the canonical entry page and give later maintenance work a clearer boundary for what belongs in durable pages.",
+      recommendedNextStep:
+        "Run one more focused pass on scope and boundary before promoting this candidate into a published synthesis.",
+      revisitTriggers: [
+        "The canonical framing changes or the tension surface starts carrying different uncertainties.",
+      ],
+    },
+    {
+      id: slugifyTitle(secondCandidate) || "maintenance-triggers",
+      title: secondCandidate,
+      summary:
+        "This ready synthesis is the highest-leverage next durable move because it can turn maintenance sequencing into reusable operating guidance.",
+      goal: "Convert the strongest maintenance-oriented question into a synthesis that updates the topic's canonical and maintenance layers together.",
+      status: "ready",
+      confidencePercent: 76,
+      updatedAt: offsetIsoTimestamp(params.seedTimestamp, 8),
+      sourceQuestionIds: [synthesisQuestion?.id ?? "next-synthesis"],
+      sourceSessionIds: synthesisSession ? [synthesisSession.id] : [],
+      evidenceSummary: [
+        "The maintenance rhythm, open questions, and active session already converge on the same next synthesis target.",
+      ],
+      durableConclusion:
+        "The topic is ready for a maintenance-trigger synthesis that explains which recurring signals should change what gets revisited or promoted next.",
+      provisionalBoundary:
+        "The published version should stay focused on actionable maintenance triggers, not a broad restatement of the whole topic.",
+      publishedPageTitle: null,
+      canonicalUpdateTitles: [params.title],
+      maintenanceUpdateTitles: [params.titles.maintenanceRhythm, params.titles.openQuestions],
+      watchpointUpdateTitles: [params.titles.maintenanceWatchpoints],
+      tensionUpdateTitles: [],
+      archiveTitles: [params.titles.operationalNote],
+      questionImpacts: [
+        {
+          questionId: synthesisQuestion?.id ?? "next-synthesis",
+          effect: "resolved",
+          note:
+            "Publishing this synthesis would resolve the current 'what should become synthesis next' question.",
+        },
+        {
+          questionId: monitoringQuestion?.id ?? "monitoring-signals",
+          effect: "advanced",
+          note:
+            "A maintenance-trigger synthesis would give the monitoring question a clearer operating boundary.",
+        },
+      ],
+      decisions: [
+        {
+          type: "recommendation",
+          title: "Promote the maintenance-trigger synthesis next",
+          summary:
+            "This is the clearest path from starter organization into a more durable and decision-relevant workspace.",
+          action:
+            "Publish the maintenance-trigger synthesis, then update the maintenance rhythm and open-question note in the same pass.",
+        },
+        {
+          type: "watch",
+          title: "Use the synthesis to tighten watchpoints",
+          summary:
+            "A published trigger map should clarify which signals belong in watchpoints versus generic revisit notes.",
+          action:
+            "After publication, rewrite the watchpoint synthesis using the same trigger vocabulary.",
+        },
+      ],
+      changedCanonicalSummary:
+        "Publishing this synthesis would make the topic's maintenance logic more durable and would narrow what still belongs in the open-question queue.",
+      recommendedNextStep:
+        "Complete the active synthesis session, publish the trigger map, then update maintenance rhythm, watchpoints, and the operational note together.",
+      revisitTriggers: [
+        "A new source changes which maintenance signal looks highest leverage.",
+      ],
+    },
+  ];
+}
+
 function buildSurfaceTitleBundle(title: string) {
   return {
     index: `${title} Index`,
@@ -775,6 +1024,13 @@ export function createDefaultTopicBootstrapConfig({
     titles: surfaceTitles,
     researchQuestions,
     corpusFiles,
+    seedTimestamp: generatedAt,
+  });
+  const researchSyntheses = buildDefaultResearchSyntheses({
+    title: normalizedTitle,
+    titles: surfaceTitles,
+    researchQuestions,
+    researchSessions,
     seedTimestamp: generatedAt,
   });
   const requiredContextPackTitles = buildRequiredContextPacks(normalizedTitle);
@@ -1001,6 +1257,7 @@ export function createDefaultTopicBootstrapConfig({
     ],
     researchQuestions,
     researchSessions,
+    researchSyntheses,
     resolutionSignals: [
       "A claim keeps reappearing across the bounded corpus with compatible framing.",
       "A context pack can answer the same question reliably without reopening the full graph.",
@@ -1177,6 +1434,7 @@ function buildKnowledgeMethodData(config: TopicBootstrapConfig): KnowledgeMethod
     openQuestions: config.openQuestions,
     researchQuestions: config.researchQuestions,
     researchSessions: config.researchSessions,
+    researchSyntheses: config.researchSyntheses,
     resolutionSignals: config.resolutionSignals,
     revisitQueue: config.revisitQueue,
     contextPackRefreshes: config.contextPackRefreshes,
@@ -1928,6 +2186,7 @@ async function validateHeadings(params: {
         "Review cadence",
         "Revisit next",
         "Session queue",
+        "Synthesis decisions",
         "Context packs to refresh",
         "Synthesis candidates",
         "Audit to action",
@@ -1939,7 +2198,13 @@ async function validateHeadings(params: {
         params.paths.workspaceRoot,
         getWikiRelativePath("note", slugifyTitle(params.config.surfaces.openQuestions.title) || "open-questions"),
       ),
-      headings: ["Summary", "Questions", "What would resolve them", "Recent session outcomes"],
+      headings: [
+        "Summary",
+        "Questions",
+        "What would resolve them",
+        "Recent session outcomes",
+        "Published syntheses",
+      ],
     },
   ];
 

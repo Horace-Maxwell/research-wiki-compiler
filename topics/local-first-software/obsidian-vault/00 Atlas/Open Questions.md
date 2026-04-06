@@ -63,4 +63,17 @@
 - **Still unresolved**: The topic still needs a stronger synthesis about migration and repair burden before the canonical story should get more specific.
 - **Resume next**: Keep the canonical sync framing stable, then use the maintenance rhythm to decide whether migration pressure should become the next synthesis.
 
+## Published syntheses
+
+### Local-First Software current tensions
+
+- **Published surface**: [[Local-First Software current tensions]]
+- **Source questions**: Which sync-engine assumptions are durable enough to keep in canonical pages instead of working notes?
+- **Durable conclusion**: The topic already supports a durable tensions synthesis even though many of its strongest operational answers still belong in future syntheses.
+- **Source sessions**: Ground the durable sync assumptions
+- **What changed**: The canonical starter pages now rely on a dedicated tensions synthesis to hold uncertainty instead of overloading the article layer with mixed stable and provisional claims.
+- **Question effects**: Which sync-engine assumptions are durable enough to keep in canonical pages instead of working notes? (advanced): The canonical-boundary question can now stay narrower because the main uncertainty lives durably in the tensions synthesis.
+- **Updated surfaces**: [[Local-First Software]], [[Sync engines]], [[Local-First Software maintenance rhythm]], [[Local-First Software open questions]], [[Local-First Software maintenance watchpoints]], [[Local-First Software current tensions]]
+- **Revisit if**: A new source changes the basic framing of sync, migration, or maintenance burden.
+
 

@@ -3,6 +3,7 @@ import { ArrowRight, FlaskConical, FolderTree, Gauge, Radar, Sparkles } from "lu
 
 import type { QuestionWorkflowTopicSummary } from "@/lib/contracts/research-question";
 import type { ResearchSessionTopicSummary } from "@/lib/contracts/research-session";
+import type { ResearchSynthesisTopicSummary } from "@/lib/contracts/research-synthesis";
 import type { TopicPortfolioComparison, TopicPortfolioItem } from "@/lib/contracts/topic-portfolio";
 import type { TopicMaturityStage } from "@/lib/contracts/topic-evaluation";
 import { Badge } from "@/components/ui/badge";
@@ -92,11 +93,13 @@ export function TopicWorkspaceIntro({
   comparisonSpotlight,
   questionWorkflow,
   sessionSummary,
+  synthesisSummary,
 }: {
   topic: TopicPortfolioItem;
   comparisonSpotlight: TopicPortfolioComparison | null;
   questionWorkflow: QuestionWorkflowTopicSummary | null;
   sessionSummary: ResearchSessionTopicSummary | null;
+  synthesisSummary: ResearchSynthesisTopicSummary | null;
 }) {
   const isComparedTopic =
     comparisonSpotlight &&
@@ -268,11 +271,24 @@ export function TopicWorkspaceIntro({
                     </div>
                   ) : null}
                   <div className="mt-3">
-                    <Button asChild size="sm" variant="outline">
-                      <Link href={question.links.sessionWorkspace.href}>
-                        {question.hasActiveSession ? "Continue session" : "Open session"}
-                      </Link>
-                    </Button>
+                    <div className="flex flex-wrap gap-2">
+                      <Button asChild size="sm" variant="outline">
+                        <Link href={question.links.sessionWorkspace.href}>
+                          {question.hasActiveSession ? "Continue session" : "Open session"}
+                        </Link>
+                      </Button>
+                      {question.synthesizeInto ? (
+                        <Button asChild size="sm" variant="ghost">
+                          <Link
+                            href={`/syntheses?topic=${topic.id}&title=${encodeURIComponent(
+                              question.synthesizeInto,
+                            )}`}
+                          >
+                            Synthesis target
+                          </Link>
+                        </Button>
+                      ) : null}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -339,8 +355,87 @@ export function TopicWorkspaceIntro({
               <Button asChild variant="outline">
                 <Link href={`/sessions?topic=${topic.id}`}>Open topic session queue</Link>
               </Button>
+              {sessionSummary.nextSession?.synthesisTitle ? (
+                <Button asChild variant="ghost">
+                  <Link
+                    href={`/syntheses?topic=${topic.id}&title=${encodeURIComponent(
+                      sessionSummary.nextSession.synthesisTitle,
+                    )}`}
+                  >
+                    Synthesis target
+                  </Link>
+                </Button>
+              ) : null}
               <Button asChild variant="ghost">
                 <Link href="/sessions">Open full session portfolio</Link>
+              </Button>
+            </div>
+          </div>
+        </Surface>
+      ) : null}
+
+      {synthesisSummary ? (
+        <Surface
+          title="Syntheses and decisions"
+          description="Syntheses turn repeated question and session work into durable judgment, then make canonical and maintenance consequences explicit."
+        >
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="outline">{synthesisSummary.synthesisCount} syntheses</Badge>
+              <Badge variant="outline">{synthesisSummary.readyCount} ready</Badge>
+              <Badge variant="outline">{synthesisSummary.inProgressCount} in progress</Badge>
+              <Badge variant="outline">{synthesisSummary.publishedCount} published</Badge>
+              <Badge variant="outline">{synthesisSummary.changedCanonicalCount} changed canonical</Badge>
+            </div>
+            <div className="grid gap-3 xl:grid-cols-2">
+              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Sparkles className="size-4" />
+                  Next synthesis
+                </div>
+                <div className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {synthesisSummary.nextSynthesis ? (
+                    <>
+                      <div className="font-medium text-foreground">
+                        {synthesisSummary.nextSynthesis.title}
+                      </div>
+                      <div className="mt-1">
+                        {synthesisSummary.nextSynthesis.recommendedNextStep}
+                      </div>
+                    </>
+                  ) : (
+                    "No active synthesis candidate is currently seeded for this topic."
+                  )}
+                </div>
+              </div>
+              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Gauge className="size-4" />
+                  Latest durable effect
+                </div>
+                <div className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {synthesisSummary.recentPublished ? (
+                    <>
+                      <div className="font-medium text-foreground">
+                        {synthesisSummary.recentPublished.title}
+                      </div>
+                      <div className="mt-1">
+                        {synthesisSummary.recentPublished.changedCanonicalSummary ??
+                          synthesisSummary.recentPublished.durableConclusion}
+                      </div>
+                    </>
+                  ) : (
+                    "No published synthesis has been recorded yet."
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild variant="outline">
+                <Link href={`/syntheses?topic=${topic.id}`}>Open topic syntheses</Link>
+              </Button>
+              <Button asChild variant="ghost">
+                <Link href="/syntheses">Open full synthesis portfolio</Link>
               </Button>
             </div>
           </div>

@@ -673,6 +673,255 @@ export const openClawKnowledgeMethodData: KnowledgeMethodTemplateData = {
       ],
     },
   ],
+  researchSyntheses: [
+    {
+      id: "openclaw-current-tensions-synthesis",
+      title: "OpenClaw current tensions",
+      summary:
+        "This published synthesis is the durable home for the flagship example's active trade-offs, so readers can see instability clearly without overloading the entity page.",
+      goal: "Keep the fast-moving release, compatibility, and provider trade-offs visible in one durable synthesis.",
+      status: "published",
+      confidencePercent: 84,
+      updatedAt: "2026-04-03T18:15:00.000Z",
+      sourceQuestionIds: ["unstable-surfaces"],
+      sourceSessionIds: ["session-unstable-surfaces"],
+      evidenceSummary: [
+        "Release cadence, plugin drift, and provider exposure recur across the bounded corpus.",
+        "The instability story is already stable enough to live durably outside the canonical entity page.",
+      ],
+      durableConclusion:
+        "OpenClaw is most useful where it is still moving, so the durable reading of the topic has to keep instability explicit instead of treating it as incidental noise.",
+      provisionalBoundary:
+        "The provider-exposure thread still wants a cleaner standalone synthesis before every practical consequence should be treated as settled guidance.",
+      publishedPageTitle: "OpenClaw current tensions",
+      canonicalUpdateTitles: ["OpenClaw", "OpenClaw release cadence"],
+      maintenanceUpdateTitles: ["OpenClaw maintenance rhythm", "OpenClaw open questions"],
+      watchpointUpdateTitles: ["OpenClaw maintenance watchpoints"],
+      tensionUpdateTitles: ["OpenClaw current tensions"],
+      archiveTitles: [],
+      questionImpacts: [
+        {
+          questionId: "unstable-surfaces",
+          effect: "resolved",
+          note:
+            "The instability question now has a durable synthesis and should only reopen when the operating story changes materially.",
+        },
+        {
+          questionId: "provider-exposure-map",
+          effect: "advanced",
+          note:
+            "The tension synthesis narrowed the remaining provider-risk work into a more specific synthesis candidate.",
+        },
+      ],
+      decisions: [
+        {
+          type: "caution",
+          title: "Treat release speed as an operating condition",
+          summary:
+            "The same motion that makes OpenClaw interesting also makes upgrade posture and regression depth important.",
+          action:
+            "Read release cadence together with monitoring surfaces before treating a new release as routine.",
+        },
+        {
+          type: "watch",
+          title: "Keep compatibility and provider drift visible",
+          summary:
+            "Plugin-surface drift and provider-side changes are not peripheral; they materially shape how stable the topic feels in practice.",
+          action:
+            "Reopen monitoring and the provider/compatibility surfaces whenever those boundaries shift.",
+        },
+      ],
+      changedCanonicalSummary:
+        "The flagship example now treats release cadence, compatibility drift, and provider exposure as the three durable lenses around OpenClaw's instability story.",
+      recommendedNextStep:
+        "Use this synthesis as the durable uncertainty layer, then decide which remaining tension deserves a more operational synthesis next.",
+      revisitTriggers: [
+        "A release note or provider signal changes what looks operationally unstable.",
+      ],
+    },
+    {
+      id: "openclaw-maintenance-watchpoints-synthesis",
+      title: "OpenClaw maintenance watchpoints",
+      summary:
+        "This published monitoring synthesis turns the flagship example's research into operator-facing watch logic instead of leaving it scattered across release, risk, and note surfaces.",
+      goal: "Convert the strongest upgrade-facing research into a durable monitoring synthesis that can actually guide action.",
+      status: "published",
+      confidencePercent: 88,
+      updatedAt: "2026-04-04T20:15:00.000Z",
+      sourceQuestionIds: ["monitor-before-upgrade", "unstable-surfaces"],
+      sourceSessionIds: ["session-upgrade-monitoring-note", "session-unstable-surfaces"],
+      evidenceSummary: [
+        "The same upgrade-facing signals are already repeated across the archived note, risk page, and release cadence page.",
+        "The watchpoints synthesis centralizes those signals into a reusable operating surface.",
+      ],
+      durableConclusion:
+        "Upgrade posture in OpenClaw should be driven by a compact monitoring synthesis rather than by rereading every surrounding page from scratch.",
+      provisionalBoundary:
+        "Specific watch triggers should still reopen when provider or compatibility signals change the maintenance posture materially.",
+      publishedPageTitle: "OpenClaw maintenance watchpoints",
+      canonicalUpdateTitles: ["OpenClaw release cadence", "Plugin compatibility", "Provider dependency risk"],
+      maintenanceUpdateTitles: ["OpenClaw maintenance rhythm", "OpenClaw open questions"],
+      watchpointUpdateTitles: ["OpenClaw maintenance watchpoints"],
+      tensionUpdateTitles: ["OpenClaw current tensions"],
+      archiveTitles: ["Note: What should I monitor before upgrading OpenClaw"],
+      questionImpacts: [
+        {
+          questionId: "monitor-before-upgrade",
+          effect: "resolved",
+          note:
+            "The upgrade-monitoring question now has both a durable archived answer and a monitoring synthesis behind it.",
+        },
+        {
+          questionId: "upgrade-regression-triggers",
+          effect: "advanced",
+          note:
+            "The watchpoint synthesis narrowed the remaining work into a specific regression-trigger synthesis instead of a broad monitoring question.",
+        },
+      ],
+      decisions: [
+        {
+          type: "recommendation",
+          title: "Use watchpoints before upgrading",
+          summary:
+            "The highest-value upgrade behavior is to consult the monitoring synthesis before treating a release as routine.",
+          action:
+            "Read the watchpoints synthesis and archived note together before upgrade decisions.",
+        },
+        {
+          type: "watch",
+          title: "Watch provider and compatibility shifts closely",
+          summary:
+            "Provider-side restrictions and compatibility drift are the fastest paths to an outdated upgrade checklist.",
+          action:
+            "Rewrite the watchpoint synthesis first when those signals move, then update the archived note if the grounded answer changed.",
+        },
+      ],
+      changedCanonicalSummary:
+        "OpenClaw's canonical risk and release pages now feed a shared watchpoint surface, which makes the maintenance story more operational and less diffuse.",
+      recommendedNextStep:
+        "Use the watchpoints synthesis as the default operator view, then publish the regression-trigger synthesis to make the upgrade rule set more durable.",
+      revisitTriggers: [
+        "Release notes begin signaling a different regression depth.",
+        "Provider-side restrictions or compatibility drift make the current watch logic incomplete.",
+      ],
+    },
+    {
+      id: "openclaw-upgrade-regression-triggers",
+      title: "OpenClaw upgrade regression triggers",
+      summary:
+        "This ready synthesis is the highest-leverage next durable output because the release, monitoring, and archived-answer surfaces already contain most of the rule set.",
+      goal: "Turn repeated upgrade-reading work into a durable synthesis that distinguishes light checks from full regression runs.",
+      status: "ready",
+      confidencePercent: 79,
+      updatedAt: "2026-04-05T19:10:00.000Z",
+      sourceQuestionIds: ["upgrade-regression-triggers"],
+      sourceSessionIds: ["session-upgrade-regression-triggers"],
+      evidenceSummary: [
+        "Release cadence, watchpoints, and the archived monitoring note already converge on the same trigger logic.",
+      ],
+      durableConclusion:
+        "OpenClaw is ready for a synthesis that turns repeated release and changelog cues into a durable regression-depth rule set.",
+      provisionalBoundary:
+        "The synthesis should stay narrow: upgrade triggers and regression depth, not a generic retelling of all maintenance concerns.",
+      publishedPageTitle: null,
+      canonicalUpdateTitles: ["OpenClaw release cadence"],
+      maintenanceUpdateTitles: ["OpenClaw maintenance rhythm", "OpenClaw open questions"],
+      watchpointUpdateTitles: ["OpenClaw maintenance watchpoints"],
+      tensionUpdateTitles: [],
+      archiveTitles: ["Note: What should I monitor before upgrading OpenClaw"],
+      questionImpacts: [
+        {
+          questionId: "upgrade-regression-triggers",
+          effect: "resolved",
+          note:
+            "Publishing this synthesis would close the highest-leverage remaining upgrade question in the flagship example.",
+        },
+      ],
+      decisions: [
+        {
+          type: "recommendation",
+          title: "Publish the regression-trigger synthesis next",
+          summary:
+            "This is the clearest next conversion of session work into durable operator guidance.",
+          action:
+            "Complete the active synthesis session, then update release cadence, watchpoints, and maintenance rhythm together.",
+        },
+        {
+          type: "watch",
+          title: "Keep changelog packaging in the decision loop",
+          summary:
+            "The synthesis should make changelog and release packaging part of the durable trigger logic, not an incidental detail.",
+          action:
+            "Include changelog packaging signals explicitly when publishing the synthesis.",
+        },
+      ],
+      changedCanonicalSummary:
+        "Publishing this synthesis would move upgrade-regression logic out of scattered notes and into the canonical release/maintenance bridge.",
+      recommendedNextStep:
+        "Finish the active synthesis session and publish the trigger map with coordinated updates to release cadence, watchpoints, and the open-question queue.",
+      revisitTriggers: [
+        "Release packaging changes invalidate the current trigger logic.",
+      ],
+    },
+    {
+      id: "openclaw-provider-exposure-map",
+      title: "OpenClaw provider exposure map",
+      summary:
+        "This in-progress synthesis is close enough to matter, but it still needs one cleaner pass that ties provider events directly to operator decisions.",
+      goal: "Turn scattered provider-risk observations into a durable map of what provider-side changes actually matter for adoption and upgrades.",
+      status: "in-progress",
+      confidencePercent: 64,
+      updatedAt: "2026-04-06T16:00:00.000Z",
+      sourceQuestionIds: ["provider-exposure-map"],
+      sourceSessionIds: ["session-provider-exposure-map"],
+      evidenceSummary: [
+        "Provider risk is visible across the concept page, tensions synthesis, and monitoring note, but still wants a cleaner operator-facing bridge.",
+      ],
+      durableConclusion:
+        "The system is close to supporting a provider-exposure synthesis, but the current evidence still reads more like a strong working map than a final durable judgment.",
+      provisionalBoundary:
+        "The synthesis should not publish until it can show direct operator consequences rather than general provider concern.",
+      publishedPageTitle: null,
+      canonicalUpdateTitles: ["Provider dependency risk"],
+      maintenanceUpdateTitles: ["OpenClaw maintenance rhythm", "OpenClaw open questions"],
+      watchpointUpdateTitles: ["OpenClaw maintenance watchpoints"],
+      tensionUpdateTitles: ["OpenClaw current tensions"],
+      archiveTitles: [],
+      questionImpacts: [
+        {
+          questionId: "provider-exposure-map",
+          effect: "advanced",
+          note:
+            "The question has moved from broad concern to a near-synthesis workflow target, but it is not yet durably resolved.",
+        },
+      ],
+      decisions: [
+        {
+          type: "caution",
+          title: "Do not publish on ambient concern alone",
+          summary:
+            "Provider exposure should only harden when the synthesis can connect provider events to concrete operator decisions.",
+          action:
+            "Keep the synthesis in progress until the operator consequences are explicit enough to survive as durable guidance.",
+        },
+        {
+          type: "watch",
+          title: "Track provider restrictions as reopen triggers",
+          summary:
+            "Provider-side restrictions are still the fastest way for this synthesis to become much more concrete.",
+          action:
+            "Use provider restrictions or access-policy changes as the main trigger for the next focused pass.",
+        },
+      ],
+      changedCanonicalSummary:
+        "If published, this synthesis would sharpen the provider-risk concept page and make its operator consequences much clearer.",
+      recommendedNextStep:
+        "Run one tighter provider-focused pass and either publish this synthesis or explicitly downgrade it back to a candidate.",
+      revisitTriggers: [
+        "A provider-side restriction or policy shift changes adoption assumptions materially.",
+      ],
+    },
+  ],
   resolutionSignals: [
     "More explicit release notes that connect shipped fixes to workflow-facing breakpoints.",
     "Additional source excerpts that show how plugin API or SDK boundaries evolve over multiple releases.",

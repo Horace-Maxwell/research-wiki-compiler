@@ -95,6 +95,12 @@ function humanizeStatus(status: QuestionWorkflowItem["status"]) {
   }
 }
 
+function buildSynthesisHref(question: QuestionWorkflowItem) {
+  return question.synthesizeInto
+    ? `/syntheses?topic=${question.topicId}&title=${encodeURIComponent(question.synthesizeInto)}`
+    : null;
+}
+
 function Metric({
   label,
   value,
@@ -122,6 +128,8 @@ function QuestionCard({
   question: QuestionWorkflowItem;
   showTopic?: boolean;
 }) {
+  const synthesisHref = buildSynthesisHref(question);
+
   return (
     <div className="rounded-[22px] border border-border/50 bg-background/62 px-4 py-4">
       <div className="flex flex-wrap items-center gap-2">
@@ -181,6 +189,11 @@ function QuestionCard({
         <Button asChild size="sm" variant="ghost">
           <Link href={question.links.maintenance.href}>Maintenance</Link>
         </Button>
+        {synthesisHref ? (
+          <Button asChild size="sm" variant="ghost">
+            <Link href={synthesisHref}>Synthesis target</Link>
+          </Button>
+        ) : null}
         <Button asChild size="sm" variant="ghost">
           <Link href={question.links.canonicalTarget.href}>
             Grounding
@@ -320,7 +333,7 @@ export function QuestionWorkflowView({
                   {bucket.questions.slice(0, 3).map((question) => (
                     <Link
                       key={`${bucket.id}-${question.topicId}-${question.id}`}
-                      href={question.links.openQuestions.href}
+                      href={buildSynthesisHref(question) ?? question.links.openQuestions.href}
                       className="block rounded-[16px] border border-border/50 bg-background/75 px-3 py-3 transition-colors hover:bg-background"
                     >
                       <div className="flex flex-wrap items-center gap-2">
@@ -398,6 +411,17 @@ export function QuestionWorkflowView({
                   <Button asChild variant="ghost">
                     <Link href={`/topics/${topic.topicId}`}>Topic home</Link>
                   </Button>
+                  {topic.topQuestion?.synthesizeInto ? (
+                    <Button asChild variant="ghost">
+                      <Link
+                        href={`/syntheses?topic=${topic.topicId}&title=${encodeURIComponent(
+                          topic.topQuestion.synthesizeInto,
+                        )}`}
+                      >
+                        Synthesis target
+                      </Link>
+                    </Button>
+                  ) : null}
                 </div>
               </div>
             </div>

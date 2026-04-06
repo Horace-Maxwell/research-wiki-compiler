@@ -44,6 +44,7 @@ export const PRODUCT_SURFACE = [
   { href: "/topics", label: "Topics" },
   { href: "/questions", label: "Questions" },
   { href: "/sessions", label: "Sessions" },
+  { href: "/syntheses", label: "Syntheses" },
   { href: "/onboarding", label: "Onboarding" },
   { href: "/dashboard", label: "Dashboard" },
   { href: "/sources", label: "Sources" },
