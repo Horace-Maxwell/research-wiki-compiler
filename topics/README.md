@@ -57,10 +57,16 @@ Open the multi-topic product surface:
 /topics
 ```
 
+Open the portfolio-wide question workflow:
+
+```text
+/questions
+```
+
 ## What belongs where
 
 - `topic.json`
-  The source-controlled starter contract for the topic.
+  The source-controlled starter contract for the topic, including starter research questions that drive the question queue.
 - `source-corpus/`
   The bounded input corpus for the starter topic.
 - `workspace/wiki/`

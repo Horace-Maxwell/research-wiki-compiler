@@ -3,7 +3,7 @@ title: Plugin compatibility
 slug: plugin-compatibility
 type: concept
 created_at: '2026-04-05T19:36:54.530Z'
-updated_at: '2026-04-05T19:36:56.871Z'
+updated_at: '2026-04-05T19:36:57.141Z'
 status: active
 aliases: []
 tags:

@@ -3,7 +3,7 @@
 ## Overview
 
 - Target: topic `local-first-software`
-- Generated: 2026-04-06T01:52:42.906Z
+- Generated: 2026-04-06T02:32:43.229Z
 - Maturity stage: **starter**
 - Overall score: **4.3/5** (86%)
 - Next stage: developing
@@ -27,10 +27,10 @@ Local-First Software has a credible starter surface set, but it still behaves li
 | Surface completeness | 5/5 | strong | The expected surfaces are present and the topic is structurally complete. |
 | Navigation and wayfinding | 5/5 | strong | The navigation layer is calm, high-signal, and immediately usable. |
 | Canonical depth | 4.6/5 | strong | The canonical wiki has enough durable depth to act like a serious knowledge layer. |
-| Maintenance readiness | 4.9/5 | strong | The maintenance loop is explicit and actionable. |
+| Maintenance readiness | 5/5 | strong | The maintenance loop is explicit and actionable. |
 | Context-pack quality | 4.6/5 | strong | Context packs are compact, purposeful, and ready for daily use. |
 | Workflow and provenance | 2.8/5 | weak | The topic still lacks enough populated workflow layers to feel fully matured. |
-| Projection utility | 4.9/5 | strong | The Obsidian projection is useful as a real daily working layer. |
+| Projection utility | 5/5 | strong | The Obsidian projection is useful as a real daily working layer. |
 
 ## Strongest signals
 
@@ -69,14 +69,14 @@ Local-First Software has a credible starter surface set, but it still behaves li
 | Topic Map | 5/5 | strong | Topic Map is doing its job cleanly. |
 | Key Pages | 5/5 | strong | Key Pages is doing its job cleanly. |
 | Reading Paths | 5/5 | strong | Reading Paths is doing its job cleanly. |
-| Open Questions | 4.5/5 | strong | Open Questions is usable, but it still has room to tighten. |
+| Open Questions | 5/5 | strong | Open Questions is doing its job cleanly. |
 | Current Tensions | 5/5 | strong | Current Tensions is usable, but it still has room to tighten. |
 | Monitoring / Watchpoints | 5/5 | strong | Monitoring / Watchpoints is doing its job cleanly. |
 | Maintenance Rhythm | 5/5 | strong | Maintenance Rhythm is doing its job cleanly. |
 | LLM Context Packs | 4.6/5 | strong | LLM Context Packs is usable, but it still has room to tighten. |
 | Artifact Map | 3.9/5 | adequate | Artifact Map is usable, but it still has room to tighten. |
 | Canonical wiki pages | 4.6/5 | strong | Canonical wiki pages is usable, but it still has room to tighten. |
-| Obsidian projection | 4.9/5 | strong | Obsidian projection is doing its job cleanly. |
+| Obsidian projection | 5/5 | strong | Obsidian projection is doing its job cleanly. |
 
 ## Maturity ladder
 
@@ -103,7 +103,7 @@ Local-First Software has a credible starter surface set, but it still behaves li
 
 - Status: Not yet
 - [ ] Developing stage is achieved: Developing requirements are still incomplete.
-- [x] Maintenance surfaces are operational: 4.9/5 maintenance readiness score.
+- [x] Maintenance surfaces are operational: 5/5 maintenance readiness score.
 - [x] Context packs are high-signal enough for repeated use: 4.6/5 context-pack score.
 - [ ] At least one audit report exists: 0 audit reports found.
 - [x] A stable validation path exists: Validation artifact is present.
@@ -115,7 +115,7 @@ Local-First Software has a credible starter surface set, but it still behaves li
 - [x] Overall quality is consistently high: 4.3/5 overall score.
 - [x] Canonical depth is strong: 4.6/5 canonical depth score.
 - [ ] Workflow and provenance are strongly integrated: 2.8/5 workflow and provenance score.
-- [x] Projection utility is strong: 4.9/5 projection utility score.
+- [x] Projection utility is strong: 5/5 projection utility score.
 
 ## flagship
 

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   BookText,
   BotMessageSquare,
+  CircleHelp,
   ClipboardCheck,
   Compass,
   DatabaseZap,
@@ -23,6 +24,7 @@ import { Button } from "@/components/ui/button";
 
 const navIconMap = {
   "/topics": LibraryBig,
+  "/questions": CircleHelp,
   "/onboarding": Compass,
   "/dashboard": LayoutDashboard,
   "/sources": FileStack,
@@ -36,7 +38,7 @@ const navIconMap = {
 const navGroups = [
   {
     title: "Portfolio",
-    items: ["/topics", "/dashboard", "/onboarding"],
+    items: ["/topics", "/questions", "/dashboard", "/onboarding"],
   },
   {
     title: "Knowledge",
@@ -57,6 +59,11 @@ const surfaceCopy = {
     label: "Topic portfolio",
     detail:
       "See every topic workspace, compare maturity, and move from evaluation directly into the next useful upgrade.",
+  },
+  "/questions": {
+    label: "Research questions",
+    detail:
+      "Treat questions as the real engine of research progression: what is open, what is ready, what needs sources, and what should reopen.",
   },
   "/dashboard": {
     label: "Workspace front door",
@@ -101,6 +108,10 @@ function normalizeActivePath(pathname: string) {
     return "/topics";
   }
 
+  if (pathname.startsWith("/questions")) {
+    return "/questions";
+  }
+
   const match = PRODUCT_SURFACE.find((item) => pathname === item.href);
 
   return match?.href ?? "/dashboard";
@@ -141,7 +152,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 </div>
                 <p className="text-sm leading-7 text-muted-foreground">
                   Topic-based compiled wiki workspaces with visible summaries, reviewable mutation,
-                  grounded answers, audits, and maturity-aware next steps.
+                  grounded answers, research questions, audits, and maturity-aware next steps.
                 </p>
               </div>
               <div className="rounded-[20px] border border-border/55 bg-background/58 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.34)]">
@@ -158,6 +169,12 @@ export function AppShell({ children }: { children: ReactNode }) {
                     <Link href="/topics">
                       <LibraryBig className="size-4" />
                       Open topic portfolio
+                    </Link>
+                  </Button>
+                  <Button asChild className="w-full justify-start" variant="ghost">
+                    <Link href="/questions">
+                      <CircleHelp className="size-4" />
+                      Open question queue
                     </Link>
                   </Button>
                   <Button asChild className="w-full justify-start" variant="ghost">
@@ -232,7 +249,10 @@ export function AppShell({ children }: { children: ReactNode }) {
                 Product model
               </div>
               <div className="mt-3 space-y-2 text-sm leading-6 text-muted-foreground">
-                <div>topics -&gt; wiki workspaces -&gt; summaries/review -&gt; ask/archive -&gt; audit</div>
+                <div>
+                  topics -&gt; questions -&gt; wiki workspaces -&gt; summaries/review -&gt; ask/archive
+                  -&gt; audit
+                </div>
                 <div>Evaluation exists to improve knowledge quality, not to gamify it.</div>
               </div>
             </div>

@@ -368,6 +368,118 @@
     "Which conflict or repair signals should become explicit watchpoints?",
     "Which migration concerns deserve their own synthesis instead of staying inside a concept page?"
   ],
+  "researchQuestions": [
+    {
+      "id": "sync-assumptions-durable",
+      "question": "Which sync-engine assumptions are durable enough to keep in canonical pages instead of working notes?",
+      "summary": "This question determines whether the topic can move beyond a good starter sketch into durable knowledge about where local-first systems really get expensive.",
+      "status": "active",
+      "priority": "high",
+      "whyNow": "The topic cannot mature honestly until it knows which sync claims belong in canonical pages and which still need working-note caution.",
+      "contextPackTitle": "Explain Local-First Software",
+      "supportingContextPackTitles": [
+        "Maintenance Triage"
+      ],
+      "relatedPages": [
+        "Local-First Software",
+        "Sync engines",
+        "Local-First Software current tensions",
+        "Local-First Software open questions"
+      ],
+      "relatedTensions": [
+        "Offline-first confidence versus sync-system complexity."
+      ],
+      "relatedWatchpoints": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "evidenceToAdvance": [
+        "The corpus starts connecting local copies, sync choices, and repair burden in a stable way."
+      ],
+      "sourceGaps": [],
+      "synthesizeInto": "Local-first sync risk map",
+      "canonicalTargetTitle": null,
+      "reopenTriggers": [
+        "A new source changes the current framing of sync cost or conflict policy."
+      ],
+      "provenanceNotes": [
+        "Start from the canonical entry and Sync engines page, then use Maintenance Triage to check whether the claim set is really stable."
+      ]
+    },
+    {
+      "id": "conflict-repair-watchpoints",
+      "question": "Which conflict or repair signals should become explicit watchpoints?",
+      "summary": "This question is still evidence-hungry because the starter corpus names repair burden, but it does not yet show enough repeated operational signals to harden a watch list.",
+      "status": "waiting-for-sources",
+      "priority": "medium",
+      "whyNow": "Without explicit watchpoints, local-first maintenance risk stays visible only as a theme instead of an operating surface.",
+      "contextPackTitle": "Maintenance Triage",
+      "supportingContextPackTitles": [
+        "Provenance And Review"
+      ],
+      "relatedPages": [
+        "Local-First Software current tensions",
+        "Local-First Software maintenance watchpoints",
+        "Local-First Software open questions",
+        "Note: What should I revisit next for Local-First Software"
+      ],
+      "relatedTensions": [
+        "Elegant collaboration promises versus conflict-resolution reality."
+      ],
+      "relatedWatchpoints": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "evidenceToAdvance": [
+        "A context pack can answer migration or watchpoint questions without reopening every source note."
+      ],
+      "sourceGaps": [
+        "The starter corpus still needs repeated evidence that the same repair or conflict signal changes operator behavior more than once."
+      ],
+      "synthesizeInto": null,
+      "canonicalTargetTitle": null,
+      "reopenTriggers": [
+        "A coverage audit or new corpus note starts naming recurring repair events directly."
+      ],
+      "provenanceNotes": [
+        "Use Maintenance Triage first, then inspect Provenance And Review if the watchpoint logic still feels under-grounded."
+      ]
+    },
+    {
+      "id": "migration-playbook",
+      "question": "Which migration concerns deserve their own synthesis instead of staying inside a concept page?",
+      "summary": "Migration pressure is already a durable concern in the topic, and it is the clearest question that can graduate into a stronger synthesis next.",
+      "status": "ready-for-synthesis",
+      "priority": "high",
+      "whyNow": "Promoting this question would give the topic its first real migration-oriented synthesis instead of leaving the issue split between a concept page and maintenance notes.",
+      "contextPackTitle": "Maintenance Triage",
+      "supportingContextPackTitles": [
+        "Explain Local-First Software"
+      ],
+      "relatedPages": [
+        "Schema migration pressure",
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions",
+        "Note: What should I revisit next for Local-First Software"
+      ],
+      "relatedTensions": [
+        "Fast product iteration versus schema migration and repair cost."
+      ],
+      "relatedWatchpoints": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "evidenceToAdvance": [
+        "The same watchpoint keeps changing maintenance order and deserves durable synthesis treatment."
+      ],
+      "sourceGaps": [],
+      "synthesizeInto": "Local-first migration playbook",
+      "canonicalTargetTitle": null,
+      "reopenTriggers": [
+        "A new source changes whether migration pressure still looks like the main maintenance boundary."
+      ],
+      "provenanceNotes": [
+        "Use Schema migration pressure with Maintenance Triage to decide whether this question is ready for its first standalone synthesis."
+      ]
+    }
+  ],
   "resolutionSignals": [
     "The corpus starts connecting local copies, sync choices, and repair burden in a stable way.",
     "A context pack can answer migration or watchpoint questions without reopening every source note.",

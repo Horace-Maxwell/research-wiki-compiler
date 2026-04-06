@@ -4,6 +4,7 @@ import os from "node:os";
 import path from "node:path";
 
 import type { WikiFrontmatter, WikiPageType } from "@/lib/contracts/wiki";
+import type { ResearchQuestionSeed } from "@/lib/contracts/research-question";
 import {
   TOPIC_BOOTSTRAP_QUALITY_FLAGS,
   topicBootstrapBaselineSchema,
@@ -495,6 +496,105 @@ function buildDefaultConfigContextPacks(title: string, titles: ReturnType<typeof
   return [explainPack, provenancePack, maintenancePack];
 }
 
+function buildDefaultResearchQuestions(
+  title: string,
+  titles: ReturnType<typeof buildSurfaceTitleBundle>,
+): ResearchQuestionSeed[] {
+  return [
+    {
+      id: slugifyTitle(`${title}-canonical-boundary`) || "canonical-boundary",
+      question: `Which claims are already stable enough to keep in ${title}'s canonical pages instead of working notes?`,
+      summary:
+        "This question decides what can leave the working layer and become durable knowledge without overclaiming too early.",
+      status: "active",
+      priority: "high",
+      whyNow:
+        "It is the shortest path from starter scaffolding to a topic that actually carries stable knowledge.",
+      contextPackTitle: `Explain ${title}`,
+      supportingContextPackTitles: ["Provenance And Review"],
+      relatedPages: [title, titles.currentTensions, titles.openQuestions, titles.readingPaths],
+      relatedTensions: [
+        "Fast orientation versus premature certainty.",
+        "Durable canonical pages versus still-working assumptions.",
+      ],
+      relatedWatchpoints: [titles.maintenanceWatchpoints],
+      evidenceToAdvance: [
+        "A claim keeps reappearing across the bounded corpus with compatible framing.",
+      ],
+      sourceGaps: [],
+      synthesizeInto: `${title} scope and boundary map`,
+      canonicalTargetTitle: null,
+      reopenTriggers: [
+        "New source intake weakens the current canonical framing.",
+      ],
+      provenanceNotes: [
+        "Start from the canonical entry page, then reopen Provenance And Review if the claim set still feels thin.",
+      ],
+    },
+    {
+      id: slugifyTitle(`${title}-monitoring-signals`) || "monitoring-signals",
+      question: "Which monitoring signals should graduate from scattered concern into explicit watchpoints?",
+      summary:
+        "This question keeps the maintenance surface honest by forcing repeated operational concerns into visible watch logic.",
+      status: "waiting-for-sources",
+      priority: "medium",
+      whyNow:
+        "A topic becomes resumable only when monitoring signals stop living as vague anxiety inside prose.",
+      contextPackTitle: "Maintenance Triage",
+      supportingContextPackTitles: ["Provenance And Review"],
+      relatedPages: [
+        titles.maintenanceWatchpoints,
+        titles.openQuestions,
+        titles.maintenanceRhythm,
+        titles.operationalNote,
+      ],
+      relatedTensions: ["Durable canonical pages versus still-working assumptions."],
+      relatedWatchpoints: [titles.maintenanceWatchpoints],
+      evidenceToAdvance: [
+        "The same watchpoint keeps changing maintenance order and deserves durable synthesis treatment.",
+      ],
+      sourceGaps: [
+        "The topic still needs repeated evidence that the same signal changes operator behavior more than once.",
+      ],
+      synthesizeInto: null,
+      canonicalTargetTitle: null,
+      reopenTriggers: [
+        "A new audit or review pass changes what the topic should monitor next.",
+      ],
+      provenanceNotes: [
+        "Use Maintenance Triage to see which signals keep returning before they become durable watchpoints.",
+      ],
+    },
+    {
+      id: slugifyTitle(`${title}-next-synthesis`) || "next-synthesis",
+      question: "Which open question is closest to becoming a durable synthesis next?",
+      summary:
+        "This question keeps the topic moving by tying context packs, tensions, and watchpoints to the next real synthesis candidate.",
+      status: "ready-for-synthesis",
+      priority: "medium",
+      whyNow:
+        "Without an explicit promotion question, starter topics stay organized but fail to graduate into stronger knowledge objects.",
+      contextPackTitle: "Maintenance Triage",
+      supportingContextPackTitles: [`Explain ${title}`],
+      relatedPages: [titles.maintenanceRhythm, titles.currentTensions, titles.openQuestions],
+      relatedTensions: ["Compact context packs versus full provenance inspection."],
+      relatedWatchpoints: [titles.maintenanceWatchpoints],
+      evidenceToAdvance: [
+        "A context pack can answer the same question reliably without reopening the full graph.",
+      ],
+      sourceGaps: [],
+      synthesizeInto: `${title} maintenance triggers`,
+      canonicalTargetTitle: null,
+      reopenTriggers: [
+        "Maintenance order changes enough that a different synthesis candidate becomes the best next move.",
+      ],
+      provenanceNotes: [
+        "Use Maintenance Triage and the open-question page together to decide which synthesis candidate is really ready.",
+      ],
+    },
+  ];
+}
+
 function buildSurfaceTitleBundle(title: string) {
   return {
     index: `${title} Index`,
@@ -525,6 +625,7 @@ export function createDefaultTopicBootstrapConfig({
   const surfaceTitles = buildSurfaceTitleBundle(normalizedTitle);
   const sourceFileNames = corpusFiles.map((file) => file.fileName);
   const contextPacks = buildDefaultConfigContextPacks(normalizedTitle, surfaceTitles);
+  const researchQuestions = buildDefaultResearchQuestions(normalizedTitle, surfaceTitles);
   const requiredContextPackTitles = buildRequiredContextPacks(normalizedTitle);
   const generatedAt = ensureIsoTimestamp(seedTimestamp ?? new Date().toISOString());
 
@@ -748,6 +849,7 @@ export function createDefaultTopicBootstrapConfig({
       "Which bounded note bundle would reduce rereading the most?",
       "Which monitoring signals deserve promotion into a stronger synthesis next?",
     ],
+    researchQuestions,
     resolutionSignals: [
       "A claim keeps reappearing across the bounded corpus with compatible framing.",
       "A context pack can answer the same question reliably without reopening the full graph.",
@@ -922,6 +1024,7 @@ function buildKnowledgeMethodData(config: TopicBootstrapConfig): KnowledgeMethod
     tensionImportance: config.tensionImportance,
     openQuestionsSummary: config.openQuestionsSummary,
     openQuestions: config.openQuestions,
+    researchQuestions: config.researchQuestions,
     resolutionSignals: config.resolutionSignals,
     revisitQueue: config.revisitQueue,
     contextPackRefreshes: config.contextPackRefreshes,

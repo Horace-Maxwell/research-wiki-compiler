@@ -38,7 +38,7 @@
     },
     {
       "logicalPath": "obsidian-vault/00 Atlas/Open Questions.md",
-      "sha256": "52fed82db2b81923091952700e06e5b248d1b65c1fcdae67e94b396a2c6c652c"
+      "sha256": "098ea59505d362640b37b7794fed2b898dfbbdde5e3b20264a4e2c5deb32c47a"
     },
     {
       "logicalPath": "obsidian-vault/00 Atlas/Reading Paths.md",
@@ -82,7 +82,7 @@
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/Local-First Software open questions.md",
-      "sha256": "2eb53707ef07a37c7673df6d432de6800ce79263071d969418006e78b1817795"
+      "sha256": "2b7297734d970da7fb558a53a2652798dcec7aa3e3ecd4f69eac426abbe3bc7e"
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/Local-First Software reading paths.md",
@@ -134,7 +134,7 @@
     },
     {
       "logicalPath": "topic.json",
-      "sha256": "7ac947964749698e5a00e14ee18698e00cc70490671cc5bcc266415a98278dd6"
+      "sha256": "220e277775ed03487570b401ac567ff1e89116fc8908f740938a65332d20028b"
     },
     {
       "logicalPath": "workspace/audits/.gitkeep",
@@ -178,7 +178,7 @@
     },
     {
       "logicalPath": "workspace/wiki/notes/local-first-software-open-questions.md",
-      "sha256": "2eb53707ef07a37c7673df6d432de6800ce79263071d969418006e78b1817795"
+      "sha256": "2b7297734d970da7fb558a53a2652798dcec7aa3e3ecd4f69eac426abbe3bc7e"
     },
     {
       "logicalPath": "workspace/wiki/notes/note-what-should-i-revisit-next-for-local-first-software.md",

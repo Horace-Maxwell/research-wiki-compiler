@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, FolderTree, Gauge, Radar, Sparkles } from "lucide-react";
 
+import type { QuestionWorkflowTopicSummary } from "@/lib/contracts/research-question";
 import type { TopicPortfolioComparison, TopicPortfolioItem } from "@/lib/contracts/topic-portfolio";
 import type { TopicMaturityStage } from "@/lib/contracts/topic-evaluation";
 import { Badge } from "@/components/ui/badge";
@@ -34,6 +35,35 @@ function priorityVariant(priority: "high" | "medium" | "low") {
   }
 }
 
+function statusVariant(status: string) {
+  switch (status) {
+    case "ready-for-synthesis":
+    case "synthesized":
+      return "success";
+    case "active":
+      return "default";
+    case "stale":
+      return "warning";
+    case "waiting-for-sources":
+    case "blocked":
+      return "outline";
+    case "open":
+    default:
+      return "outline";
+  }
+}
+
+function humanizeStatus(status: string) {
+  switch (status) {
+    case "ready-for-synthesis":
+      return "ready for synthesis";
+    case "waiting-for-sources":
+      return "waiting for sources";
+    default:
+      return status.replace(/-/g, " ");
+  }
+}
+
 function Surface({
   title,
   description,
@@ -59,9 +89,11 @@ function Surface({
 export function TopicWorkspaceIntro({
   topic,
   comparisonSpotlight,
+  questionWorkflow,
 }: {
   topic: TopicPortfolioItem;
   comparisonSpotlight: TopicPortfolioComparison | null;
+  questionWorkflow: QuestionWorkflowTopicSummary | null;
 }) {
   const isComparedTopic =
     comparisonSpotlight &&
@@ -184,6 +216,58 @@ export function TopicWorkspaceIntro({
           </div>
         </Surface>
       </div>
+
+      {questionWorkflow ? (
+        <Surface
+          title="Question workflow"
+          description="These questions should drive the next pass of reading, synthesis, or evidence gathering for this topic."
+        >
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="outline">{questionWorkflow.questionCount} questions</Badge>
+              <Badge variant="outline">{questionWorkflow.readyForSynthesisCount} ready</Badge>
+              <Badge variant="outline">{questionWorkflow.needsSourcesCount} need sources</Badge>
+              <Badge variant="outline">{questionWorkflow.watchForReopenCount} watch for reopen</Badge>
+            </div>
+            <div className="grid gap-3 xl:grid-cols-3">
+              {questionWorkflow.questions.slice(0, 3).map((question) => (
+                <div
+                  key={question.id}
+                  className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4"
+                >
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant={statusVariant(question.status)}>{humanizeStatus(question.status)}</Badge>
+                    <Badge variant={priorityVariant(question.priority)}>{question.priority}</Badge>
+                  </div>
+                  <div className="mt-3 text-sm font-medium text-foreground">{question.question}</div>
+                  <div className="mt-1 text-sm leading-6 text-muted-foreground">{question.summary}</div>
+                  <div className="mt-3 text-sm leading-6 text-foreground">
+                    Load <span className="font-medium">{question.contextPackTitle}</span> first.
+                  </div>
+                  {question.synthesizeInto ? (
+                    <div className="mt-1 text-sm leading-6 text-muted-foreground">
+                      Promote into {question.synthesizeInto}.
+                    </div>
+                  ) : null}
+                  {question.sourceGaps.length > 0 ? (
+                    <div className="mt-1 text-sm leading-6 text-muted-foreground">
+                      Missing evidence: {question.sourceGaps.join("; ")}
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild variant="outline">
+                <Link href={`/questions?topic=${topic.id}`}>Open topic question queue</Link>
+              </Button>
+              <Button asChild variant="ghost">
+                <Link href="/questions">Open full question portfolio</Link>
+              </Button>
+            </div>
+          </div>
+        </Surface>
+      ) : null}
 
       {isComparedTopic ? (
         <Surface

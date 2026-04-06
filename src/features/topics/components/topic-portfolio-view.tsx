@@ -155,7 +155,7 @@ export function TopicPortfolioView({
         actions={
           <div className="flex flex-wrap gap-2">
             <Button asChild variant="outline">
-              <Link href="/dashboard">Open workspace dashboard</Link>
+              <Link href="/questions">Open research questions</Link>
             </Button>
             <Button asChild>
               <Link href="/topics/openclaw">

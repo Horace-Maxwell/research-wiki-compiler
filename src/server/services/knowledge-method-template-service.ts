@@ -1,3 +1,5 @@
+import type { ResearchQuestionSeed, ResearchQuestionStatus } from "@/lib/contracts/research-question";
+
 export type KnowledgeSurfaceKind =
   | "canonical"
   | "working"
@@ -73,6 +75,7 @@ export type KnowledgeMethodTemplateData = {
   tensionImportance: string[];
   openQuestionsSummary: string;
   openQuestions: string[];
+  researchQuestions: ResearchQuestionSeed[];
   resolutionSignals: string[];
   revisitQueue: KnowledgeRevisitItem[];
   contextPackRefreshes: KnowledgeContextRefreshItem[];
@@ -113,6 +116,138 @@ function uniqueTitles(values: string[]) {
 
 function cleanSentenceFragment(value: string) {
   return value.trim().replace(/[.。]+$/g, "");
+}
+
+function humanizeQuestionStatus(status: ResearchQuestionStatus) {
+  switch (status) {
+    case "ready-for-synthesis":
+      return "ready for synthesis";
+    case "waiting-for-sources":
+      return "waiting for sources";
+    default:
+      return status.replace(/-/g, " ");
+  }
+}
+
+function openQuestionItems(data: KnowledgeMethodTemplateData) {
+  if (data.researchQuestions.length > 0) {
+    const openQuestionTexts = new Set(data.openQuestions.map((question) => question.trim().toLowerCase()));
+
+    return data.researchQuestions.filter((question) => {
+      if (question.status === "synthesized") {
+        return false;
+      }
+
+      return openQuestionTexts.size === 0
+        ? true
+        : openQuestionTexts.has(question.question.trim().toLowerCase());
+    });
+  }
+
+  return [];
+}
+
+function watchForReopenQuestions(data: KnowledgeMethodTemplateData) {
+  return data.researchQuestions.filter(
+    (question) => question.status === "synthesized" && question.reopenTriggers.length > 0,
+  );
+}
+
+function formatQuestionWikiLinks(titles: string[]) {
+  return uniqueTitles(titles)
+    .map((title) => wikiLink(title))
+    .join(", ");
+}
+
+function formatContextPackList(titles: string[], formatter: (title: string) => string) {
+  return uniqueTitles(titles)
+    .map((title) => formatter(title))
+    .join(", ");
+}
+
+function buildQuestionWorkflowBlocks(
+  data: KnowledgeMethodTemplateData,
+  contextPackFormatter: (title: string) => string = wikiLink,
+) {
+  const questions = openQuestionItems(data);
+
+  if (questions.length === 0) {
+    return data.openQuestions.map((question) => `- ${question}`).join("\n");
+  }
+
+  return questions
+    .map((question, index) => {
+      const lines = [
+        `### ${index + 1}. ${question.question}`,
+        "",
+        `- **Status**: ${humanizeQuestionStatus(question.status)}`,
+        `- **Priority**: ${question.priority}`,
+        `- **Load first**: ${contextPackFormatter(question.contextPackTitle)}`,
+        `- **Why now**: ${question.whyNow}`,
+      ];
+
+      if (question.supportingContextPackTitles.length > 0) {
+        lines.push(
+          `- **Deepen with**: ${formatContextPackList(
+            question.supportingContextPackTitles,
+            contextPackFormatter,
+          )}`,
+        );
+      }
+
+      if (question.synthesizeInto) {
+        lines.push(`- **Promote into**: ${question.synthesizeInto}`);
+      }
+
+      if (question.relatedPages.length > 0) {
+        lines.push(`- **Related pages**: ${formatQuestionWikiLinks(question.relatedPages)}`);
+      }
+
+      if (question.relatedTensions.length > 0) {
+        lines.push(`- **Linked tensions**: ${question.relatedTensions.join("; ")}`);
+      }
+
+      if (question.relatedWatchpoints.length > 0) {
+        lines.push(`- **Watchpoints**: ${formatQuestionWikiLinks(question.relatedWatchpoints)}`);
+      }
+
+      if (question.sourceGaps.length > 0) {
+        lines.push(`- **Missing evidence**: ${question.sourceGaps.join("; ")}`);
+      } else if (question.evidenceToAdvance.length > 0) {
+        lines.push(`- **Advance when**: ${question.evidenceToAdvance.join("; ")}`);
+      }
+
+      return lines.join("\n");
+    })
+    .join("\n\n");
+}
+
+function buildQuestionReopenSection(
+  data: KnowledgeMethodTemplateData,
+  contextPackFormatter: (title: string) => string = wikiLink,
+) {
+  const questions = watchForReopenQuestions(data);
+
+  if (questions.length === 0) {
+    return "";
+  }
+
+  return [
+    "## Reopen when the topic changes",
+    "",
+    ...questions.flatMap((question) => [
+      `### ${question.question}`,
+      "",
+      `- **Currently grounded in**: ${
+        question.canonicalTargetTitle ? wikiLink(question.canonicalTargetTitle) : "a prior synthesis"
+      }`,
+      `- **Watch first**: ${contextPackFormatter(question.contextPackTitle)}`,
+      `- **Reopen if**: ${question.reopenTriggers.join("; ")}`,
+      "",
+    ]),
+  ]
+    .join("\n")
+    .trim();
 }
 
 function formatLinkedList(titles: string[], ordered = false) {
@@ -425,6 +560,9 @@ function buildWikiCurrentTensionsPage(data: KnowledgeMethodTemplateData) {
 }
 
 function buildWikiOpenQuestionsPage(data: KnowledgeMethodTemplateData) {
+  const formatContextPack = (title: string) => `\`${title}\``;
+  const reopenSection = buildQuestionReopenSection(data, formatContextPack);
+
   return [
     `# ${data.openQuestionsTitle}`,
     "",
@@ -434,7 +572,7 @@ function buildWikiOpenQuestionsPage(data: KnowledgeMethodTemplateData) {
     "",
     "## Questions",
     "",
-    ...data.openQuestions.map((question) => `- ${question}`),
+    buildQuestionWorkflowBlocks(data, formatContextPack),
     "",
     "## What would resolve them",
     "",
@@ -458,6 +596,8 @@ function buildWikiOpenQuestionsPage(data: KnowledgeMethodTemplateData) {
       data.maintenanceRhythmTitle,
       data.archivedNoteTitle,
     ]),
+    "",
+    reopenSection,
   ].join("\n");
 }
 
@@ -695,11 +835,13 @@ function buildObsidianReadingPathsNote(data: KnowledgeMethodTemplateData) {
 }
 
 function buildObsidianOpenQuestionsNote(data: KnowledgeMethodTemplateData) {
+  const reopenSection = buildQuestionReopenSection(data);
+
   return `# Open Questions
 
 ## Highest-leverage open questions
 
-${data.openQuestions.map((question) => `- ${question}`).join("\n")}
+${buildQuestionWorkflowBlocks(data)}
 
 ## What would reduce uncertainty
 
@@ -710,6 +852,8 @@ ${data.resolutionSignals.map((signal) => `- ${signal}`).join("\n")}
 ${data.synthesisCandidates
   .map((candidate) => `- **${candidate.title}**: ${candidate.whyNow}`)
   .join("\n")}
+
+${reopenSection ? `\n\n${reopenSection}` : ""}
 `;
 }
 

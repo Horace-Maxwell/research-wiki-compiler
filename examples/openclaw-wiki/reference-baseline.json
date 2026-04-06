@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-04-05T19:36:58.540Z",
+  "generatedAt": "2026-04-05T19:36:59.044Z",
   "mode": "reference",
   "manifestLogicalPath": "manifest.json",
   "entries": [
     {
       "logicalPath": "manifest.json",
-      "sha256": "df7514711b63d5b5cb45064b27f8ddc3d5d6d9484ef9d78f72f1191a8409f125"
+      "sha256": "86bec4501ca5cfe581b9252349c10c7cadcac7128197290ca400e569578b5f78"
     },
     {
       "logicalPath": "obsidian-vault/.gitignore",
@@ -38,7 +38,7 @@
     },
     {
       "logicalPath": "obsidian-vault/00 Atlas/Open Questions.md",
-      "sha256": "de97816769cb53ea95da99516b702581ffec331b64b1ac4d3b63cd377d2d1e12"
+      "sha256": "9931a62f0652486aec1e242c3af938ef6db250bdd7be62aa5f8bc5b86fece6b5"
     },
     {
       "logicalPath": "obsidian-vault/00 Atlas/Reading Paths.md",
@@ -70,7 +70,7 @@
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/Note - What should I monitor before upgrading OpenClaw.md",
-      "sha256": "1dc463157d93f8aa74e327de0803ecfa9904e7ff1cc33376ef2754f344df79cd"
+      "sha256": "e1d114b90cf9f629ced1603f2b5c2dc54f4036ada0566ef6283392ded90a7ba9"
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/OpenClaw current tensions.md",
@@ -78,19 +78,19 @@
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/OpenClaw Example Index.md",
-      "sha256": "98c9bea5e88fea72316dd48d6836916afc1484291a6330a56dafd72003e2600a"
+      "sha256": "8d60fc802deba4381b63cc5fbf22353365d65c5d3a1eb791419f6a80b579f26d"
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/OpenClaw maintenance rhythm.md",
-      "sha256": "9dc43d7a53cdc3f1579f8b481d1ba6b6095b22df724890cc4d4449427f50ac9d"
+      "sha256": "521f0770a050987c2e01865f74b9c9f2438107f0302055b18e996f513649b4f3"
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/OpenClaw maintenance watchpoints.md",
-      "sha256": "739d5bc8247b61d92ecacfbf8b5481b20c9aae0c8cfe283605799d71ce8a4e68"
+      "sha256": "7789089f77575133bcef8f05dfbd2068e1fc02c995dd7c945b07fb36f1119312"
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/OpenClaw open questions.md",
-      "sha256": "a3149bba9ab5bcbcf19fdc4575a4f6f14ee4a37775e15a815c177fe25cb5f0a4"
+      "sha256": "900992c18974440511273444e94c30ce3e438a1febe434c292410228e51b6e77"
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/OpenClaw reading paths.md",
@@ -98,19 +98,19 @@
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/OpenClaw release cadence.md",
-      "sha256": "451b681f49c24ebd1536b496b3a184cb81f89256bd01ad558265a5ccfd2cc8db"
+      "sha256": "4aff808e6f0057e4012f125387ca1d6eccfab9c9673214ba0100c7c965843369"
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/OpenClaw.md",
-      "sha256": "7f9698c740bec3a8aa87aadd45ef46184fa2364e0e3d9dad45a512853b914ca0"
+      "sha256": "266cdff5fe63fded4d5a251c9a14292d66a3c09fbd10001d575e87968b5af20b"
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/Plugin compatibility.md",
-      "sha256": "fad464f50778749756d805376e86d6386d1d3f08ee218b3f9be4e3899c1b5417"
+      "sha256": "28e02e2a25b761435460391204be42118d9a371959b076a13f3f4705e38280be"
     },
     {
       "logicalPath": "obsidian-vault/10 Articles/Provider dependency risk.md",
-      "sha256": "e6534db591c523d2c6f78bbe89ce847db086ad2d055fd238cf92142680ff05a2"
+      "sha256": "b2af7e6b204405f2e9a4d921662f75e0cc99e2b372391aabcc625b10f41fddd3"
     },
     {
       "logicalPath": "obsidian-vault/20 Sources/Corpus Atlas.md",
@@ -378,27 +378,27 @@
     },
     {
       "logicalPath": "workspace/wiki/concepts/plugin-compatibility.md",
-      "sha256": "5d07e2ad23c26d137b3bf9c799ebb97d54232e252ac01516e6b4d577dbbd9426"
+      "sha256": "9eb2d2db7a275b8a98bbbfff700fafd2c74f2c091d1696f14e7973a106dcb9c4"
     },
     {
       "logicalPath": "workspace/wiki/concepts/provider-dependency-risk.md",
-      "sha256": "25aa4df0ca8fd93a3cba15c10d52ee4508647d14acb1607f88ffb56f659e3ffc"
+      "sha256": "a1899d036d0d929b0d470914f901290e08e546a452cbf1417ce931a2e335c227"
     },
     {
       "logicalPath": "workspace/wiki/entities/openclaw.md",
-      "sha256": "a1e323560c63e7ddcef6c8b10a4b8afb69158e3002e8ea7aeeb1d875bc02add4"
+      "sha256": "5506a1b7f3e4d76d38039e8bca0232861b6f913683c6cc85b23de40819a38d50"
     },
     {
       "logicalPath": "workspace/wiki/index.md",
-      "sha256": "3f0b69ebb7717046b8c41824d8a10da01480a31819f9f129ec2eb38becfbe266"
+      "sha256": "cd381960ae9578b927bc75a60db73c6d31ad97d0c91b5f1217095c114732efc1"
     },
     {
       "logicalPath": "workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md",
-      "sha256": "391045c98e96ad14537cc54711d5ca37d20f37c84936691cbab01912a288043d"
+      "sha256": "d96d7a916d22ce760299a403e48c3a2c178fcd4ebdb0b32ca4fe9315e71b7388"
     },
     {
       "logicalPath": "workspace/wiki/notes/openclaw-open-questions.md",
-      "sha256": "ae57751350a4cdb886c4a41081a3b3cce4caf5d2c95cd938063e6e830059901a"
+      "sha256": "dfd7d8a5058a3e79f07d635516b0faac93fcd6a459ac2ef3fbae64479b053375"
     },
     {
       "logicalPath": "workspace/wiki/syntheses/openclaw-current-tensions.md",
@@ -406,11 +406,11 @@
     },
     {
       "logicalPath": "workspace/wiki/syntheses/openclaw-maintenance-rhythm.md",
-      "sha256": "b77c4f6833e2737547ad2cbad3ac1ad2d4c9813e25c29597a9d7501c8e7d5816"
+      "sha256": "6438b55a84d28bc9f0f31eef83358fc797781a90fd32f6d13de54453fd0b2750"
     },
     {
       "logicalPath": "workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md",
-      "sha256": "e6fcd659f7b9a3f8e7c7e0e80b64dadb8f0a72b11bed8f3d6687e97d7ae0e60c"
+      "sha256": "4265234afc2fcc9d2639118b297e7ca4a8727d7727ce9ea6c1ab00f6c1099c23"
     },
     {
       "logicalPath": "workspace/wiki/syntheses/openclaw-reading-paths.md",
@@ -418,7 +418,7 @@
     },
     {
       "logicalPath": "workspace/wiki/topics/openclaw-release-cadence.md",
-      "sha256": "fd58316dd57a234009c507ee506e87709082a4347ff395a6696b74de7993825b"
+      "sha256": "29a48fba5b2306f0f9fdc0b6b493e14298a58c3266802a7f33d5a1473e3a5831"
     }
   ],
   "corpusEntries": [

@@ -3,7 +3,7 @@
 ## Overview
 
 - Target: example `openclaw`
-- Generated: 2026-04-06T01:52:51.209Z
+- Generated: 2026-04-06T02:32:43.232Z
 - Maturity stage: **flagship**
 - Overall score: **5/5** (100%)
 - Next stage: none
@@ -22,10 +22,10 @@ OpenClaw example wiki is operating at flagship quality: strong workflow complete
 | Surface completeness | 5/5 | strong | The expected surfaces are present and the topic is structurally complete. |
 | Navigation and wayfinding | 5/5 | strong | The navigation layer is calm, high-signal, and immediately usable. |
 | Canonical depth | 5/5 | strong | The canonical wiki has enough durable depth to act like a serious knowledge layer. |
-| Maintenance readiness | 4.9/5 | strong | The maintenance loop is explicit and actionable. |
+| Maintenance readiness | 5/5 | strong | The maintenance loop is explicit and actionable. |
 | Context-pack quality | 4.9/5 | strong | Context packs are compact, purposeful, and ready for daily use. |
 | Workflow and provenance | 5/5 | strong | The topic shows a real knowledge workflow: bounded inputs, visible artifacts, review history, and maintenance evidence. |
-| Projection utility | 4.9/5 | strong | The Obsidian projection is useful as a real daily working layer. |
+| Projection utility | 5/5 | strong | The Obsidian projection is useful as a real daily working layer. |
 
 ## Strongest signals
 
@@ -62,14 +62,14 @@ OpenClaw example wiki is operating at flagship quality: strong workflow complete
 | Topic Map | 5/5 | strong | Topic Map is doing its job cleanly. |
 | Key Pages | 5/5 | strong | Key Pages is doing its job cleanly. |
 | Reading Paths | 5/5 | strong | Reading Paths is doing its job cleanly. |
-| Open Questions | 4.5/5 | strong | Open Questions is usable, but it still has room to tighten. |
+| Open Questions | 5/5 | strong | Open Questions is doing its job cleanly. |
 | Current Tensions | 4.9/5 | strong | Current Tensions is usable, but it still has room to tighten. |
 | Monitoring / Watchpoints | 5/5 | strong | Monitoring / Watchpoints is doing its job cleanly. |
 | Maintenance Rhythm | 5/5 | strong | Maintenance Rhythm is doing its job cleanly. |
 | LLM Context Packs | 4.9/5 | strong | LLM Context Packs is usable, but it still has room to tighten. |
 | Artifact Map | 5/5 | strong | Artifact Map is usable, but it still has room to tighten. |
 | Canonical wiki pages | 5/5 | strong | Canonical wiki pages is doing its job cleanly. |
-| Obsidian projection | 4.9/5 | strong | Obsidian projection is doing its job cleanly. |
+| Obsidian projection | 5/5 | strong | Obsidian projection is doing its job cleanly. |
 
 ## Maturity ladder
 
@@ -96,7 +96,7 @@ OpenClaw example wiki is operating at flagship quality: strong workflow complete
 
 - Status: Achieved
 - [x] Developing stage is achieved: Developing requirements are satisfied.
-- [x] Maintenance surfaces are operational: 4.9/5 maintenance readiness score.
+- [x] Maintenance surfaces are operational: 5/5 maintenance readiness score.
 - [x] Context packs are high-signal enough for repeated use: 4.9/5 context-pack score.
 - [x] At least one audit report exists: 1 audit reports found.
 - [x] A stable validation path exists: Validation artifact is present.
@@ -108,7 +108,7 @@ OpenClaw example wiki is operating at flagship quality: strong workflow complete
 - [x] Overall quality is consistently high: 5/5 overall score.
 - [x] Canonical depth is strong: 5/5 canonical depth score.
 - [x] Workflow and provenance are strongly integrated: 5/5 workflow and provenance score.
-- [x] Projection utility is strong: 4.9/5 projection utility score.
+- [x] Projection utility is strong: 5/5 projection utility score.
 
 ## flagship
 

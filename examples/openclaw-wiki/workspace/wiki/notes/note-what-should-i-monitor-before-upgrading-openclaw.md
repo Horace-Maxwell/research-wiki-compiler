@@ -3,7 +3,7 @@ title: 'Note: What should I monitor before upgrading OpenClaw'
 slug: note-what-should-i-monitor-before-upgrading-openclaw
 type: note
 created_at: '2026-04-05T19:36:54.964Z'
-updated_at: '2026-04-05T19:36:57.547Z'
+updated_at: '2026-04-05T19:36:57.925Z'
 status: active
 aliases:
   - OpenClaw upgrade checklist

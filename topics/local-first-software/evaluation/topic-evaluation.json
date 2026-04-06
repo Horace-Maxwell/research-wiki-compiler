@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-04-06T01:52:42.906Z",
+  "generatedAt": "2026-04-06T02:32:43.229Z",
   "target": {
     "kind": "topic",
     "id": "local-first-software",
@@ -93,7 +93,7 @@
           {
             "label": "Maintenance surfaces are operational",
             "satisfied": true,
-            "details": "4.9/5 maintenance readiness score."
+            "details": "5/5 maintenance readiness score."
           },
           {
             "label": "Context packs are high-signal enough for repeated use",
@@ -139,7 +139,7 @@
           {
             "label": "Projection utility is strong",
             "satisfied": true,
-            "details": "4.9/5 projection utility score."
+            "details": "5/5 projection utility score."
           }
         ]
       },
@@ -234,9 +234,9 @@
     {
       "id": "maintenance_readiness",
       "label": "Maintenance readiness",
-      "score": 4.9,
+      "score": 5,
       "maxScore": 5,
-      "percent": 98,
+      "percent": 100,
       "status": "strong",
       "summary": "The maintenance loop is explicit and actionable.",
       "evidence": [
@@ -278,9 +278,9 @@
     {
       "id": "projection_utility",
       "label": "Projection utility",
-      "score": 4.9,
+      "score": 5,
       "maxScore": 5,
-      "percent": 98,
+      "percent": 100,
       "status": "strong",
       "summary": "The Obsidian projection is useful as a real daily working layer.",
       "evidence": [
@@ -384,24 +384,22 @@
         "workspace/wiki/notes/local-first-software-open-questions.md",
         "obsidian-vault/00 Atlas/Open Questions.md"
       ],
-      "score": 4.5,
+      "score": 5,
       "maxScore": 5,
-      "percent": 90,
+      "percent": 100,
       "status": "strong",
-      "summary": "Open Questions is usable, but it still has room to tighten.",
+      "summary": "Open Questions is doing its job cleanly.",
       "evidence": [
         "3/3 expected headings matched.",
-        "215 body words.",
-        "13 wiki links.",
-        "13 bullet items and 0 ordered steps.",
+        "555 body words.",
+        "28 wiki links.",
+        "39 bullet items and 0 ordered steps.",
         "3/3 expected headings matched.",
-        "164 body words.",
-        "0 wiki links.",
-        "8 bullet items and 0 ordered steps."
+        "504 body words.",
+        "21 wiki links.",
+        "34 bullet items and 0 ordered steps."
       ],
-      "issues": [
-        "Surface links fewer than 3 other notes/pages."
-      ]
+      "issues": []
     },
     {
       "id": "current-tensions",
@@ -599,15 +597,15 @@
         "obsidian-vault/10 Articles/Schema migration pressure.md",
         "obsidian-vault/10 Articles/Sync engines.md"
       ],
-      "score": 4.9,
+      "score": 5,
       "maxScore": 5,
-      "percent": 98,
+      "percent": 100,
       "status": "strong",
       "summary": "Obsidian projection is doing its job cleanly.",
       "evidence": [
         "10 atlas notes are present.",
         "10 projected article notes are present.",
-        "Average atlas note score: 4.9/5."
+        "Average atlas note score: 5/5."
       ],
       "issues": []
     }

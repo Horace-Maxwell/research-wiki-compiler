@@ -76,11 +76,13 @@ If you want the fastest path to understanding this project, do not start with th
 > Start here / 从这里开始  
 > 1. `npm install && npm run dev`  
 > 2. 打开 `http://localhost:3000/topics`  
-> 3. 再回来看 GitHub 里的 Markdown 源文件和中间 artifact
+> 3. 再打开 `http://localhost:3000/questions` 看当前研究问题队列  
+> 4. 再回来看 GitHub 里的 Markdown 源文件和中间 artifact
 
 | What to open | Why it matters |
 | --- | --- |
 | Topic portfolio route: `/topics` | 这是新的多主题产品入口，可以比较 topic maturity、查看下一步动作，并切换到具体 topic workspace。<br />This is the new multi-topic product entry point for comparing topic maturity, seeing next actions, and switching into specific topic workspaces. |
+| Research question route: `/questions` | 这是新的问题驱动工作入口，可以看到哪些问题最接近 synthesis、哪些问题缺证据、哪些已归档答案应该因为 topic 变化而重开。<br />This is the new question-centered work surface for seeing which questions are closest to synthesis, which still need evidence, and which grounded answers should reopen when a topic changes. |
 | Rendered example route: `/examples/openclaw` | 这是产品里的渲染视图，能直接看到 wiki 页面、链接关系和示例入口。<br />This is the rendered product view, where the wiki pages, links, and example framing are easiest to understand. |
 | Source-of-truth wiki files: [`examples/openclaw-wiki/workspace/wiki/`](./examples/openclaw-wiki/workspace/wiki/) | 这些 Markdown 文件就是最终 wiki 内容本身。<br />These Markdown files are the wiki content itself. |
 | Obsidian-ready vault: [`examples/openclaw-wiki/obsidian-vault/`](./examples/openclaw-wiki/obsidian-vault/) | 这是额外生成的 Obsidian 投影视图，保留同一份知识内容，但更适合本地阅读、链接和小上下文组装。<br />This is an additive Obsidian projection of the same knowledge, optimized for local reading, linking, and small context packs. |
@@ -197,17 +199,21 @@ For a fuller browser smoke pass, see [MANUAL_QA.md](./MANUAL_QA.md).
 
 ## Quick Demo / 快速体验
 
-1. 打开 `/dashboard`，确认 workspace 状态、最近活动与主循环入口。  
+1. 打开 `/topics`，确认 topic portfolio、maturity 和 topic-level next actions。  
+   Open `/topics` and inspect the topic portfolio, maturity, and topic-level next actions.
+2. 打开 `/questions`，查看哪些研究问题最该先做、哪些问题最接近 synthesis、哪些还缺 source evidence。  
+   Open `/questions` and inspect which research questions should be worked next, which are closest to synthesis, and which still need source evidence.
+3. 打开 `/dashboard`，确认 workspace 状态、最近活动与主循环入口。  
    Open `/dashboard` and inspect workspace state, recent activity, and the main loops.
-2. 打开 `/sources`，查看 source import、normalized text、summary artifact 和 metadata。  
+4. 打开 `/sources`，查看 source import、normalized text、summary artifact 和 metadata。  
    Open `/sources` and inspect source import, normalized text, summary artifacts, and metadata.
-3. 打开 `/reviews`，查看 proposal rationale、risk 和 patch diff。  
+5. 打开 `/reviews`，查看 proposal rationale、risk 和 patch diff。  
    Open `/reviews` and inspect proposal rationale, risk, and patch diffs.
-4. 打开 `/wiki`，确认最终结果是文件驱动的 compiled wiki，而不是对话记录。  
+6. 打开 `/wiki`，确认最终结果是文件驱动的 compiled wiki，而不是对话记录。  
    Open `/wiki` and confirm the result is a file-driven compiled wiki, not a transcript.
-5. 打开 `/ask`，查看 grounded answer，再把高价值答案 archive 回 wiki。  
+7. 打开 `/ask`，查看 grounded answer，再把高价值答案 archive 回 wiki。  
    Open `/ask`, inspect a grounded answer, and archive a valuable answer back into the wiki.
-6. 打开 `/audits`，运行一次 audit 并查看可读报告。  
+8. 打开 `/audits`，运行一次 audit 并查看可读报告。  
    Open `/audits`, run an audit, and inspect the readable report.
 
 ## 附带示例 / Included Example

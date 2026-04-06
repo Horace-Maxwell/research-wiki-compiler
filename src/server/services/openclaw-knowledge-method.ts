@@ -230,6 +230,202 @@ export const openClawKnowledgeMethodData: KnowledgeMethodTemplateData = {
     "Which plugin or SDK assumptions are most likely to drift between releases?",
     "Which provider-side changes would change adoption or upgrade decisions the fastest?",
   ],
+  researchQuestions: [
+    {
+      id: "define-openclaw-in-corpus",
+      question: "What is OpenClaw in this corpus?",
+      summary:
+        "The core identity question is already grounded well enough that the canonical entry page can carry it, rather than leaving it as a floating working note.",
+      status: "synthesized",
+      priority: "high",
+      whyNow:
+        "This question is the anchor for every later maintenance, risk, and comparison question in the topic.",
+      contextPackTitle: "Explain OpenClaw",
+      supportingContextPackTitles: ["Provenance And Review"],
+      relatedPages: ["OpenClaw", "OpenClaw current tensions", "OpenClaw release cadence"],
+      relatedTensions: ["Release speed versus local workflow stability."],
+      relatedWatchpoints: [],
+      evidenceToAdvance: [],
+      sourceGaps: [],
+      synthesizeInto: null,
+      canonicalTargetTitle: "OpenClaw",
+      reopenTriggers: [
+        "A new source changes the main description of the project.",
+        "The maintenance surfaces force a different top-level framing of what OpenClaw is.",
+      ],
+      provenanceNotes: [
+        "The canonical entity page now holds the strongest durable answer.",
+        "Use Provenance And Review if the identity story needs to be re-grounded from artifacts.",
+      ],
+    },
+    {
+      id: "unstable-surfaces",
+      question: "Which parts of OpenClaw look most unstable or fast-moving?",
+      summary:
+        "The question is already answerable through the tensions and monitoring syntheses, so it should stay grounded there unless the operating story changes again.",
+      status: "synthesized",
+      priority: "medium",
+      whyNow:
+        "This remains the quickest way to reopen the topic when release cadence, provider risk, or compatibility assumptions move.",
+      contextPackTitle: "Maintenance Triage",
+      supportingContextPackTitles: ["Explain OpenClaw"],
+      relatedPages: [
+        "OpenClaw current tensions",
+        "OpenClaw maintenance watchpoints",
+        "OpenClaw release cadence",
+      ],
+      relatedTensions: [
+        "Release speed versus local workflow stability.",
+        "Plugin-surface progress versus integration breakage risk.",
+        "Provider leverage versus durable access assumptions.",
+      ],
+      relatedWatchpoints: ["OpenClaw maintenance watchpoints"],
+      evidenceToAdvance: [],
+      sourceGaps: [],
+      synthesizeInto: null,
+      canonicalTargetTitle: "OpenClaw current tensions",
+      reopenTriggers: [
+        "A release note or provider signal changes what looks operationally unstable.",
+        "The watchpoint page starts recommending a different maintenance posture.",
+      ],
+      provenanceNotes: [
+        "Use the tensions synthesis first, then check monitoring for the operator-facing version.",
+      ],
+    },
+    {
+      id: "monitor-before-upgrade",
+      question: "What should I monitor before upgrading OpenClaw?",
+      summary:
+        "This question already has a grounded archived note, but it should reopen whenever the upgrade posture or provider-risk story changes.",
+      status: "synthesized",
+      priority: "high",
+      whyNow:
+        "It is the most reusable operational question in the example and the clearest bridge between Ask, archive, and maintenance work.",
+      contextPackTitle: "Upgrade Watchpoints",
+      supportingContextPackTitles: ["Maintenance Triage"],
+      relatedPages: [
+        "OpenClaw maintenance watchpoints",
+        "Note: What should I monitor before upgrading OpenClaw",
+        "Provider dependency risk",
+        "OpenClaw release cadence",
+      ],
+      relatedTensions: ["Release speed versus local workflow stability."],
+      relatedWatchpoints: ["OpenClaw maintenance watchpoints"],
+      evidenceToAdvance: [],
+      sourceGaps: [],
+      synthesizeInto: null,
+      canonicalTargetTitle: "Note: What should I monitor before upgrading OpenClaw",
+      reopenTriggers: [
+        "Release notes begin signaling different regression depth.",
+        "Provider-side policy or access changes alter upgrade posture.",
+        "Plugin compatibility drift makes the archived checklist incomplete.",
+      ],
+      provenanceNotes: [
+        "This question is grounded by the archived note plus the watchpoints synthesis.",
+      ],
+    },
+    {
+      id: "upgrade-regression-triggers",
+      question:
+        "Which release-note or changelog signals should trigger a full regression run instead of a light upgrade check?",
+      summary:
+        "This question is closest to durable synthesis because the release page, monitoring page, archived note, and open-question surface already carry most of the practical rule set.",
+      status: "ready-for-synthesis",
+      priority: "high",
+      whyNow:
+        "It is the highest-leverage next synthesis because it would turn repeated upgrade-reading work into a reusable operator-facing page.",
+      contextPackTitle: "Upgrade Watchpoints",
+      supportingContextPackTitles: ["Maintenance Triage"],
+      relatedPages: [
+        "OpenClaw release cadence",
+        "OpenClaw maintenance watchpoints",
+        "OpenClaw open questions",
+        "Note: What should I monitor before upgrading OpenClaw",
+      ],
+      relatedTensions: ["Release speed versus local workflow stability."],
+      relatedWatchpoints: ["OpenClaw maintenance watchpoints"],
+      evidenceToAdvance: [
+        "Release notes keep mapping shipped fixes to workflow-facing regression depth.",
+      ],
+      sourceGaps: [],
+      synthesizeInto: "OpenClaw upgrade regression triggers",
+      canonicalTargetTitle: null,
+      reopenTriggers: [
+        "Release packaging changes and invalidates the current trigger logic.",
+      ],
+      provenanceNotes: [
+        "The archived upgrade note already gives the operational bridge into this synthesis.",
+      ],
+    },
+    {
+      id: "plugin-sdk-drift",
+      question: "Which plugin or SDK assumptions are most likely to drift between releases?",
+      summary:
+        "The topic clearly exposes a compatibility boundary, but it still lacks enough longitudinal evidence to harden the drift story into a durable answer.",
+      status: "waiting-for-sources",
+      priority: "high",
+      whyNow:
+        "This is the thinnest high-value question left in the topic and the most likely source of avoidable integration surprise.",
+      contextPackTitle: "Upgrade Watchpoints",
+      supportingContextPackTitles: ["Provenance And Review"],
+      relatedPages: [
+        "Plugin compatibility",
+        "OpenClaw open questions",
+        "Review History",
+        "Summary Atlas",
+      ],
+      relatedTensions: ["Plugin-surface progress versus integration breakage risk."],
+      relatedWatchpoints: ["OpenClaw maintenance watchpoints"],
+      evidenceToAdvance: [
+        "Additional source excerpts that show how plugin API or SDK boundaries evolve over multiple releases.",
+      ],
+      sourceGaps: [
+        "The corpus needs more release-to-release evidence about concrete plugin or SDK drift.",
+      ],
+      synthesizeInto: null,
+      canonicalTargetTitle: null,
+      reopenTriggers: [
+        "A new release or changelog starts naming compatibility breakpoints directly.",
+      ],
+      provenanceNotes: [
+        "Start from Plugin compatibility, then audit summaries and review history for repeated drift signals.",
+      ],
+    },
+    {
+      id: "provider-exposure-map",
+      question: "Which provider-side changes would change adoption or upgrade decisions the fastest?",
+      summary:
+        "Provider exposure is already visible across the risk page, tensions page, and monitoring note, but it still wants a cleaner single synthesis.",
+      status: "ready-for-synthesis",
+      priority: "medium",
+      whyNow:
+        "This question is close enough to synthesis that one more focused pass could turn scattered provider-risk observations into a durable operating map.",
+      contextPackTitle: "Upgrade Watchpoints",
+      supportingContextPackTitles: ["Maintenance Triage"],
+      relatedPages: [
+        "Provider dependency risk",
+        "OpenClaw current tensions",
+        "OpenClaw maintenance watchpoints",
+        "Note: What should I monitor before upgrading OpenClaw",
+      ],
+      relatedTensions: ["Provider leverage versus durable access assumptions."],
+      relatedWatchpoints: ["OpenClaw maintenance watchpoints"],
+      evidenceToAdvance: [
+        "Stronger evidence about how provider restrictions show up in actual workflow outcomes, not just community chatter.",
+      ],
+      sourceGaps: [
+        "The corpus still needs one cleaner pass that ties provider events directly to operator decisions.",
+      ],
+      synthesizeInto: "OpenClaw provider exposure map",
+      canonicalTargetTitle: null,
+      reopenTriggers: [
+        "A provider-side restriction or policy shift changes adoption assumptions materially.",
+      ],
+      provenanceNotes: [
+        "Use Provider dependency risk with the monitoring synthesis to keep this question grounded in operational consequences.",
+      ],
+    },
+  ],
   resolutionSignals: [
     "More explicit release notes that connect shipped fixes to workflow-facing breakpoints.",
     "Additional source excerpts that show how plugin API or SDK boundaries evolve over multiple releases.",
