@@ -43,6 +43,7 @@ export const PROMPT_TEMPLATE_FILES = [
 export const PRODUCT_SURFACE = [
   { href: "/topics", label: "Topics" },
   { href: "/questions", label: "Questions" },
+  { href: "/gaps", label: "Evidence gaps" },
   { href: "/sessions", label: "Sessions" },
   { href: "/syntheses", label: "Syntheses" },
   { href: "/changes", label: "Changes" },

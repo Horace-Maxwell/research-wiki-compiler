@@ -70,6 +70,7 @@ refresh_triggers:
 - [What looks answerable next](#what-looks-answerable-next)
 - [Recent session outcomes](#recent-session-outcomes)
 - [Published syntheses](#published-syntheses)
+- [Evidence gaps to close next](#evidence-gaps-to-close-next)
 - [Reopened by evidence change](#reopened-by-evidence-change)
 - [Related pages](#related-pages)
 - [Reopen when the topic changes](#reopen-when-the-topic-changes)
@@ -195,6 +196,49 @@ These are the highest-leverage unresolved questions if you want to keep the Open
 - **Question effects**: Which parts of OpenClaw look most unstable or fast-moving? (resolved): The instability question now has a durable synthesis and should only reopen when the operating story changes materially. Which provider-side changes would change adoption or upgrade decisions the fastest? (advanced): The tension synthesis narrowed the remaining provider-risk work into a more specific synthesis candidate.
 - **Updated surfaces**: [[OpenClaw]], [[OpenClaw release cadence]], [[OpenClaw maintenance rhythm]], [[OpenClaw open questions]], [[OpenClaw maintenance watchpoints]], [[OpenClaw current tensions]]
 - **Revisit if**: A release note or provider signal changes what looks operationally unstable.
+
+## Evidence gaps to close next
+
+### OpenClaw upgrade trigger comparison evidence
+
+- **Status**: in session
+- **Gap type**: comparison evidence
+- **Missing evidence**: One cleaner comparison that distinguishes cosmetic release churn from release packaging signals that should change regression depth.
+- **Next evidence**: A focused comparison pass over the release page, watchpoints synthesis, and archived upgrade note that names which cues really justify a full regression run.
+- **Load first**: `Upgrade Watchpoints`, `Maintenance Triage`
+- **Inspect pages**: [[OpenClaw release cadence]], [[OpenClaw maintenance watchpoints]], [[OpenClaw open questions]], [[Note: What should I monitor before upgrading OpenClaw]]
+- **Inspect sources**: 2026-04-02 release cadence and test churn digest
+- **Acquisition session**: Promote upgrade regression triggers into synthesis
+- **Advances questions**: Which release-note or changelog signals should trigger a full regression run instead of a light upgrade check?
+- **Advances syntheses**: OpenClaw upgrade regression triggers
+- **Success looks like**: The trigger matrix reads like durable operator guidance instead of a loose note bundle.; Release cadence, watchpoints, and the archived upgrade note can all reuse the same trigger vocabulary.
+
+### OpenClaw plugin drift longitudinal evidence
+
+- **Status**: planned
+- **Gap type**: source coverage
+- **Missing evidence**: Another release-to-release pass that names concrete plugin or SDK drift instead of only a single compatibility baseline.
+- **Next evidence**: Wait for another release or changelog pass, then compare the new evidence directly against the existing plugin compatibility and review-history surfaces.
+- **Load first**: `Upgrade Watchpoints`, `Provenance And Review`
+- **Inspect pages**: [[Plugin compatibility]], [[OpenClaw open questions]], [[Review History]], [[Summary Atlas]]
+- **Inspect sources**: 2026-03-26 plugin SDK and policy digest; 2026-03-31 release and plugin surface digest
+- **Acquisition session**: Collect plugin and SDK drift evidence
+- **Advances questions**: Which plugin or SDK assumptions are most likely to drift between releases?
+- **Success looks like**: A later release names concrete compatibility breakpoints or SDK drift.; Plugin compatibility can cite more than one release-to-release signal before hardening the drift story.
+
+### OpenClaw provider consequence evidence
+
+- **Status**: planned
+- **Gap type**: recommendation confidence
+- **Missing evidence**: A tighter operational bridge from provider-side signal to adoption or upgrade decision.
+- **Next evidence**: A focused provider-risk pass that ties provider policy shifts to concrete operator consequences instead of leaving them as ambient signal.
+- **Load first**: `Upgrade Watchpoints`, `Maintenance Triage`
+- **Inspect pages**: [[Provider dependency risk]], [[OpenClaw current tensions]], [[OpenClaw maintenance watchpoints]]
+- **Inspect sources**: 2026-04-05 provider risk and changelog digest
+- **Acquisition session**: Tighten the provider exposure map
+- **Advances questions**: Which provider-side changes would change adoption or upgrade decisions the fastest?
+- **Advances syntheses**: OpenClaw provider exposure map
+- **Success looks like**: Provider-side events clearly change at least one operator decision.; The provider exposure synthesis can publish without leaning on generic uncertainty framing.
 
 ## Reopened by evidence change
 

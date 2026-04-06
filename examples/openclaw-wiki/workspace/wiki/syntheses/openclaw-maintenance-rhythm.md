@@ -2,8 +2,8 @@
 title: OpenClaw maintenance rhythm
 slug: openclaw-maintenance-rhythm
 type: synthesis
-created_at: '2026-04-05T19:36:55.565Z'
-updated_at: '2026-04-05T19:36:55.666Z'
+created_at: '2026-04-05T19:36:55.587Z'
+updated_at: '2026-04-05T19:36:55.699Z'
 status: active
 aliases: []
 tags:
@@ -123,6 +123,37 @@ This page is the maintenance control surface for the OpenClaw example. It turns 
 - **Canonical effect**: If published, this synthesis would sharpen the provider-risk concept page and make its operator consequences much clearer.
 - **Update surfaces**: [[Provider dependency risk]], [[OpenClaw maintenance rhythm]], [[OpenClaw open questions]], [[OpenClaw maintenance watchpoints]], [[OpenClaw current tensions]]
 - **Next step**: Run one tighter provider-focused pass and either publish this synthesis or explicitly downgrade it back to a candidate.
+
+## Highest-leverage next evidence
+
+### OpenClaw upgrade trigger comparison evidence
+
+- **Why it matters**: Closing this gap would likely publish the next highest-leverage synthesis in the flagship example and harden the upgrade posture across canonical and maintenance layers.
+- **Collect next**: A focused comparison pass over the release page, watchpoints synthesis, and archived upgrade note that names which cues really justify a full regression run.
+- **Context packs**: `Upgrade Watchpoints`, `Maintenance Triage`
+- **Run session**: Promote upgrade regression triggers into synthesis
+- **If closed, questions advance**: Which release-note or changelog signals should trigger a full regression run instead of a light upgrade check?
+- **If closed, syntheses advance**: OpenClaw upgrade regression triggers
+- **Success criteria**: The trigger matrix reads like durable operator guidance instead of a loose note bundle.; Release cadence, watchpoints, and the archived upgrade note can all reuse the same trigger vocabulary.
+
+### OpenClaw plugin drift longitudinal evidence
+
+- **Why it matters**: Closing this gap would advance the thinnest high-value question in the topic and make the compatibility surface less dependent on one-off signals.
+- **Collect next**: Wait for another release or changelog pass, then compare the new evidence directly against the existing plugin compatibility and review-history surfaces.
+- **Context packs**: `Upgrade Watchpoints`, `Provenance And Review`
+- **Run session**: Collect plugin and SDK drift evidence
+- **If closed, questions advance**: Which plugin or SDK assumptions are most likely to drift between releases?
+- **Success criteria**: A later release names concrete compatibility breakpoints or SDK drift.; Plugin compatibility can cite more than one release-to-release signal before hardening the drift story.
+
+### OpenClaw provider consequence evidence
+
+- **Why it matters**: Closing this gap would make the provider-exposure synthesis more trustworthy and would reduce how much of the provider story still depends on contextual reading.
+- **Collect next**: A focused provider-risk pass that ties provider policy shifts to concrete operator consequences instead of leaving them as ambient signal.
+- **Context packs**: `Upgrade Watchpoints`, `Maintenance Triage`
+- **Run session**: Tighten the provider exposure map
+- **If closed, questions advance**: Which provider-side changes would change adoption or upgrade decisions the fastest?
+- **If closed, syntheses advance**: OpenClaw provider exposure map
+- **Success criteria**: Provider-side events clearly change at least one operator decision.; The provider exposure synthesis can publish without leaning on generic uncertainty framing.
 
 ## Evidence changes to triage
 

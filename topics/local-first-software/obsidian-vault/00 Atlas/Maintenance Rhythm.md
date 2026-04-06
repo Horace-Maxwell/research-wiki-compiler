@@ -69,6 +69,30 @@
 - **Update surfaces**: [[Local-First Software]], [[Sync engines]], [[Local-First Software maintenance rhythm]], [[Local-First Software open questions]], [[Local-First Software current tensions]]
 - **Next step**: Run one more focused sync-risk pass before promoting this candidate into a published synthesis.
 
+## Highest-leverage next evidence
+
+### Local-First Software migration promotion evidence
+
+- **Why it matters**: Closing this gap would resolve the clearest ready-for-synthesis question and make the next maturity step feel earned instead of procedural.
+- **Collect next**: A focused maintenance pass proving one compact migration bundle can answer the candidate reliably without reopening the whole provenance graph.
+- **Context packs**: [[Maintenance Triage]], [[Explain Local-First Software]]
+- **Run session**: Promote the migration playbook
+- **If closed, questions advance**: Which migration concerns deserve their own synthesis instead of staying inside a concept page?
+- **If closed, syntheses advance**: Local-first migration playbook
+- **Maturity impact**: blocks developing
+- **Success criteria**: The migration playbook clearly outranks the other candidates.; Maintenance rhythm, open questions, and watchpoints can all be updated from the same promotion decision.
+
+### Local-First Software repeated watchpoint evidence
+
+- **Why it matters**: This gap blocks the watchpoint question from advancing cleanly and keeps the maintenance-watchpoints synthesis more provisional than it should be.
+- **Collect next**: A second bounded pass proving that the same repair or conflict signal changes revisit order or monitoring logic again.
+- **Context packs**: [[Maintenance Triage]], [[Provenance And Review]]
+- **Run session**: Collect repeat repair and conflict signals
+- **If closed, questions advance**: Which conflict or repair signals should become explicit watchpoints?
+- **If closed, syntheses advance**: Local-First Software maintenance watchpoints
+- **Maturity impact**: blocks maintained
+- **Success criteria**: A later source, review, or audit artifact repeats the same repair or conflict signal.; Maintenance rhythm would change in the same direction because of it.
+
 ## Evidence changes to triage
 
 ### Local-First Software maintenance evidence tightened

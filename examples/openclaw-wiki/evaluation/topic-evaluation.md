@@ -3,12 +3,12 @@
 ## Overview
 
 - Target: example `openclaw`
-- Generated: 2026-04-06T03:51:39.976Z
+- Generated: 2026-04-06T04:22:54.051Z
 - Maturity stage: **flagship**
 - Overall score: **5/5** (100%)
 - Next stage: none
 
-OpenClaw example wiki is operating at flagship quality: strong workflow completeness, strong daily-use surfaces, and a clear showcase path.
+OpenClaw example wiki is operating at flagship quality: strong workflow completeness, strong daily-use surfaces, and a clear showcase path. Remaining evidence risk is explicit and bounded, led by "OpenClaw upgrade trigger comparison evidence" instead of being hidden inside the canonical layer.
 
 ## Promotion readiness
 
@@ -46,12 +46,14 @@ OpenClaw example wiki is operating at flagship quality: strong workflow complete
 
 ## Recommended next improvements
 
+1. Close the next evidence blocker: OpenClaw upgrade trigger comparison evidence is the highest-leverage missing evidence in this workspace. A focused comparison pass over the release page, watchpoints synthesis, and archived upgrade note that names which cues really justify a full regression run.
 1. Broaden showcase-grade maintenance evidence: Expand audit variety and long-horizon maintenance signals so flagship quality stays deserved over time.
 
 ## Action queue
 
 | Priority | Category | Action | Why now |
 | --- | --- | --- | --- |
+| high | evidence | Close the next evidence blocker | The next durable gain should come from better evidence, not more notes. Closing "OpenClaw upgrade trigger comparison evidence" should advance the strongest question or synthesis fastest. |
 | medium | showcase | Broaden showcase-grade maintenance evidence | Flagship status requires more than strong content. It also needs reproducible product entry points and visible long-horizon maintenance signals. |
 
 ## Surface evaluation
@@ -87,7 +89,7 @@ OpenClaw example wiki is operating at flagship quality: strong workflow complete
 - [x] Starter stage is achieved: Starter requirements are satisfied.
 - [x] At least two downstream workflow layers are populated: 4/4 downstream workflow layers are populated.
 - [x] Workflow and provenance are no longer just starter-grade: 5/5 workflow and provenance score.
-- [x] Canonical pages are grounded in compiled artifacts, not only starter corpus refs: 11 canonical pages cite non-corpus workflow artifacts.
+- [x] Canonical pages are grounded in compiled artifacts, not only starter corpus refs: 11 canonical pages cite non-corpus workflow artifacts. Evidence blocker: OpenClaw upgrade trigger comparison evidence.
 - [x] The canonical layer extends beyond the bare starter minimum: 10 non-index pages found.
 - [x] The topic has at least one synthesis: 4 syntheses found.
 - [x] Navigation is already useful: 5/5 navigation score.
@@ -96,7 +98,7 @@ OpenClaw example wiki is operating at flagship quality: strong workflow complete
 
 - Status: Achieved
 - [x] Developing stage is achieved: Developing requirements are satisfied.
-- [x] Maintenance surfaces are operational: 5/5 maintenance readiness score.
+- [x] Maintenance surfaces are operational: 5/5 maintenance readiness score. Evidence blocker: OpenClaw upgrade trigger comparison evidence.
 - [x] Context packs are high-signal enough for repeated use: 4.9/5 context-pack score.
 - [x] At least one audit report exists: 1 audit reports found.
 - [x] A stable validation path exists: Validation artifact is present.
@@ -106,7 +108,7 @@ OpenClaw example wiki is operating at flagship quality: strong workflow complete
 - Status: Achieved
 - [x] Maintained stage is achieved: Maintained requirements are satisfied.
 - [x] Overall quality is consistently high: 5/5 overall score.
-- [x] Canonical depth is strong: 5/5 canonical depth score.
+- [x] Canonical depth is strong: 5/5 canonical depth score. Evidence blocker: OpenClaw upgrade trigger comparison evidence.
 - [x] Workflow and provenance are strongly integrated: 5/5 workflow and provenance score.
 - [x] Projection utility is strong: 5/5 projection utility score.
 

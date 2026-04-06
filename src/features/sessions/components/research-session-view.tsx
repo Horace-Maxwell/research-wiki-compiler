@@ -172,6 +172,11 @@ export function ResearchSessionView({
                 Open question queue
               </Link>
             </Button>
+            {focusedTopic ? (
+              <Button asChild variant="ghost">
+                <Link href={`/gaps?topic=${focusedTopic.id}`}>Open evidence gaps</Link>
+              </Button>
+            ) : null}
             <Button asChild>
               <Link href={focusedTopic ? `/topics/${focusedTopic.id}` : "/topics/openclaw"}>
                 {focusedTopic ? "Open topic home" : "Open flagship topic"}
@@ -308,6 +313,9 @@ export function ResearchSessionView({
                 <div className="flex flex-wrap gap-2">
                   <Button asChild>
                     <Link href={overview.focusSession.links.questionQueue.href}>Question queue</Link>
+                  </Button>
+                  <Button asChild variant="outline">
+                    <Link href={`/gaps?topic=${overview.focusSession.topicId}`}>Evidence gaps</Link>
                   </Button>
                   <Button asChild variant="outline">
                     <Link href={overview.focusSession.links.questionNote.href}>Question note</Link>

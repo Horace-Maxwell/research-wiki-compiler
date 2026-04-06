@@ -15,6 +15,7 @@ import {
   LayoutDashboard,
   LibraryBig,
   RefreshCw,
+  SearchCheck,
   Settings2,
   Sparkles,
 } from "lucide-react";
@@ -27,6 +28,7 @@ import { Button } from "@/components/ui/button";
 const navIconMap = {
   "/topics": LibraryBig,
   "/questions": CircleHelp,
+  "/gaps": SearchCheck,
   "/sessions": FlaskConical,
   "/syntheses": Sparkles,
   "/changes": RefreshCw,
@@ -43,7 +45,7 @@ const navIconMap = {
 const navGroups = [
   {
     title: "Portfolio",
-    items: ["/topics", "/questions", "/sessions", "/syntheses", "/changes", "/dashboard", "/onboarding"],
+    items: ["/topics", "/questions", "/gaps", "/sessions", "/syntheses", "/changes", "/dashboard", "/onboarding"],
   },
   {
     title: "Knowledge",
@@ -69,6 +71,11 @@ const surfaceCopy = {
     label: "Research questions",
     detail:
       "Treat questions as the real engine of research progression: what is open, what is ready, what needs sources, and what should reopen.",
+  },
+  "/gaps": {
+    label: "Evidence gap lane",
+    detail:
+      "Track what evidence is missing, why it matters, which session should close it next, and which topic is blocked more by evidence quality than by structure.",
   },
   "/sessions": {
     label: "Research sessions",
@@ -130,6 +137,10 @@ function normalizeActivePath(pathname: string) {
 
   if (pathname.startsWith("/questions")) {
     return "/questions";
+  }
+
+  if (pathname.startsWith("/gaps")) {
+    return "/gaps";
   }
 
   if (pathname.startsWith("/sessions")) {
@@ -207,6 +218,12 @@ export function AppShell({ children }: { children: ReactNode }) {
                     <Link href="/questions">
                       <CircleHelp className="size-4" />
                       Open question queue
+                    </Link>
+                  </Button>
+                  <Button asChild className="w-full justify-start" variant="ghost">
+                    <Link href="/gaps">
+                      <SearchCheck className="size-4" />
+                      Open evidence gaps
                     </Link>
                   </Button>
                   <Button asChild className="w-full justify-start" variant="ghost">
@@ -298,10 +315,10 @@ export function AppShell({ children }: { children: ReactNode }) {
               <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                 Product model
               </div>
-              <div className="mt-3 space-y-2 text-sm leading-6 text-muted-foreground">
+                <div className="mt-3 space-y-2 text-sm leading-6 text-muted-foreground">
                 <div>
-                  topics -&gt; questions -&gt; sessions -&gt; wiki workspaces -&gt; summaries/review
-                  -&gt; ask/archive -&gt; audit
+                  topics -&gt; questions -&gt; evidence gaps -&gt; sessions -&gt; syntheses -&gt;
+                  wiki workspaces -&gt; summaries/review -&gt; ask/archive -&gt; audit
                 </div>
                 <div>Evaluation exists to improve knowledge quality, not to gamify it.</div>
               </div>

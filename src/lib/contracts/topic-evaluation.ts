@@ -41,6 +41,7 @@ export type TopicActionPriority = z.infer<typeof topicActionPrioritySchema>;
 export const TOPIC_ACTION_CATEGORIES = [
   "workflow",
   "canonical",
+  "evidence",
   "navigation",
   "maintenance",
   "context-pack",

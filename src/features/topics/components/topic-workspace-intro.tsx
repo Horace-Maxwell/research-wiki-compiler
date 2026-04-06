@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowRight, FlaskConical, FolderTree, Gauge, Radar, RefreshCw, Sparkles } from "lucide-react";
+import { ArrowRight, FlaskConical, FolderTree, Gauge, Radar, RefreshCw, SearchCheck, Sparkles } from "lucide-react";
 
 import type { EvidenceChangeTopicSummary } from "@/lib/contracts/evidence-change";
+import type { EvidenceGapTopicSummary } from "@/lib/contracts/evidence-gap";
 import type { QuestionWorkflowTopicSummary } from "@/lib/contracts/research-question";
 import type { ResearchSessionTopicSummary } from "@/lib/contracts/research-session";
 import type { ResearchSynthesisTopicSummary } from "@/lib/contracts/research-synthesis";
@@ -93,6 +94,7 @@ export function TopicWorkspaceIntro({
   topic,
   comparisonSpotlight,
   evidenceChangeSummary,
+  evidenceGapSummary,
   questionWorkflow,
   sessionSummary,
   synthesisSummary,
@@ -100,6 +102,7 @@ export function TopicWorkspaceIntro({
   topic: TopicPortfolioItem;
   comparisonSpotlight: TopicPortfolioComparison | null;
   evidenceChangeSummary: EvidenceChangeTopicSummary | null;
+  evidenceGapSummary: EvidenceGapTopicSummary | null;
   questionWorkflow: QuestionWorkflowTopicSummary | null;
   sessionSummary: ResearchSessionTopicSummary | null;
   synthesisSummary: ResearchSynthesisTopicSummary | null;
@@ -129,6 +132,9 @@ export function TopicWorkspaceIntro({
               Open canonical start
               <ArrowRight className="size-4" />
             </Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href={`/gaps?topic=${topic.id}`}>Open evidence gaps</Link>
           </Button>
           <Button asChild variant="outline">
             <Link href={topic.links.maintenance.href}>Open maintenance rhythm</Link>
@@ -302,6 +308,79 @@ export function TopicWorkspaceIntro({
               </Button>
               <Button asChild variant="ghost">
                 <Link href="/questions">Open full question portfolio</Link>
+              </Button>
+            </div>
+          </div>
+        </Surface>
+      ) : null}
+
+      {evidenceGapSummary ? (
+        <Surface
+          title="Evidence gaps"
+          description="This keeps missing evidence visible as an acquisition surface, so the topic can be blocked by the right thing honestly instead of looking mature only because the pages are tidy."
+        >
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="outline">{evidenceGapSummary.gapCount} gaps</Badge>
+              <Badge variant="outline">{evidenceGapSummary.highPriorityCount} high priority</Badge>
+              <Badge variant="outline">{evidenceGapSummary.blockedQuestionCount} question blockers</Badge>
+              <Badge variant="outline">{evidenceGapSummary.blockedSynthesisCount} synthesis blockers</Badge>
+              <Badge variant="outline">{evidenceGapSummary.maturityBlockerCount} maturity blockers</Badge>
+            </div>
+            <div className="grid gap-3 xl:grid-cols-2">
+              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <SearchCheck className="size-4" />
+                  Highest-leverage next evidence
+                </div>
+                <div className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {evidenceGapSummary.nextGap ? (
+                    <>
+                      <div className="font-medium text-foreground">{evidenceGapSummary.nextGap.title}</div>
+                      <div className="mt-1">{evidenceGapSummary.nextGap.nextEvidenceToAcquire}</div>
+                    </>
+                  ) : (
+                    "No unresolved evidence gap is currently seeded for this topic."
+                  )}
+                </div>
+              </div>
+              <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Gauge className="size-4" />
+                  Latest resolved gap
+                </div>
+                <div className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {evidenceGapSummary.recentlyResolved ? (
+                    <>
+                      <div className="font-medium text-foreground">
+                        {evidenceGapSummary.recentlyResolved.title}
+                      </div>
+                      <div className="mt-1">
+                        {evidenceGapSummary.recentlyResolved.resolutionSummary ??
+                          evidenceGapSummary.recentlyResolved.summary}
+                      </div>
+                    </>
+                  ) : (
+                    "No resolved evidence gap has been seeded yet."
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild variant="outline">
+                <Link href={`/gaps?topic=${topic.id}`}>Open topic gap lane</Link>
+              </Button>
+              {evidenceGapSummary.nextGap ? (
+                <Button asChild variant="ghost">
+                  <Link href={evidenceGapSummary.nextGap.links.session.href}>
+                    {evidenceGapSummary.nextGap.acquisitionSessionStatus === "active"
+                      ? "Continue acquisition session"
+                      : "Run acquisition session"}
+                  </Link>
+                </Button>
+              ) : null}
+              <Button asChild variant="ghost">
+                <Link href="/gaps">Open full gap portfolio</Link>
               </Button>
             </div>
           </div>

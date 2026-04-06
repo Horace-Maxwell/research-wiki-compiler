@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import type { EvidenceGapSeed } from "@/lib/contracts/evidence-gap";
 import {
   openClawExampleManifestSchema,
   openClawExamplePipelineConfigSchema,
@@ -122,6 +123,7 @@ type EvaluationSubject = {
   auditFiles: string[];
   archivedAnswerCount: number;
   auditModeCount: number;
+  evidenceGaps: EvidenceGapSeed[];
   surfaceTitles: {
     indexTitle: string;
     readingPathsTitle: string;
@@ -391,6 +393,86 @@ function average(values: number[]) {
   return values.reduce((sum, value) => sum + value, 0) / values.length;
 }
 
+function evidenceGapStatusWeight(status: EvidenceGapSeed["status"]) {
+  switch (status) {
+    case "in-session":
+      return 0;
+    case "planned":
+      return 1;
+    case "open":
+      return 2;
+    case "resolved":
+    default:
+      return 3;
+  }
+}
+
+function evidenceGapPriorityWeight(priority: EvidenceGapSeed["priority"]) {
+  switch (priority) {
+    case "high":
+      return 0;
+    case "medium":
+      return 1;
+    case "low":
+    default:
+      return 2;
+  }
+}
+
+function sortEvidenceGaps(gaps: EvidenceGapSeed[]) {
+  return [...gaps].sort((left, right) => {
+    const statusDifference =
+      evidenceGapStatusWeight(left.status) - evidenceGapStatusWeight(right.status);
+
+    if (statusDifference !== 0) {
+      return statusDifference;
+    }
+
+    const maturityDifference =
+      right.maturityBlockerStages.length - left.maturityBlockerStages.length;
+
+    if (maturityDifference !== 0) {
+      return maturityDifference;
+    }
+
+    const priorityDifference =
+      evidenceGapPriorityWeight(left.priority) - evidenceGapPriorityWeight(right.priority);
+
+    if (priorityDifference !== 0) {
+      return priorityDifference;
+    }
+
+    return left.title.localeCompare(right.title);
+  });
+}
+
+function unresolvedEvidenceGaps(subject: EvaluationSubject) {
+  return sortEvidenceGaps(subject.evidenceGaps.filter((gap) => gap.status !== "resolved"));
+}
+
+function getEvidenceGapPressure(
+  subject: EvaluationSubject,
+  targetStage?: TopicMaturityStage | null,
+) {
+  const unresolved = unresolvedEvidenceGaps(subject);
+  const stageBlockers =
+    targetStage === undefined || targetStage === null
+      ? []
+      : unresolved.filter((gap) => gap.maturityBlockerStages.includes(targetStage));
+  const highPriority = unresolved.filter((gap) => gap.priority === "high");
+
+  return {
+    unresolvedCount: unresolved.length,
+    highPriorityCount: highPriority.length,
+    stageBlockerCount: stageBlockers.length,
+    nextGap: stageBlockers[0] ?? highPriority[0] ?? unresolved[0] ?? null,
+  };
+}
+
+function appendEvidenceBlockerDetails(details: string, gap: EvidenceGapSeed | null) {
+  return gap ? `${details} Evidence blocker: ${gap.title}.` : details;
+}
+
 function getStageStatus(score: number) {
   return scoreStatus(score);
 }
@@ -483,6 +565,7 @@ async function loadTopicSubject(slug: string) {
     auditFiles,
     archivedAnswerCount: 0,
     auditModeCount: 0,
+    evidenceGaps: config.evidenceGaps,
     surfaceTitles: {
       indexTitle: config.surfaces.indexTitle,
       readingPathsTitle: config.surfaces.readingPaths.title,
@@ -590,6 +673,7 @@ async function loadOpenClawSubject() {
     auditFiles,
     archivedAnswerCount: manifest.answers.filter((answer) => answer.archivedPagePath).length,
     auditModeCount: unique(manifest.audits.map((audit) => audit.mode)).length,
+    evidenceGaps: openClawKnowledgeMethodData.evidenceGaps,
     surfaceTitles: {
       indexTitle: openClawKnowledgeMethodData.indexTitle,
       readingPathsTitle: openClawKnowledgeMethodData.readingPathsTitle,
@@ -771,6 +855,7 @@ function evaluateOpenQuestions(subject: EvaluationSubject) {
       "Summary",
       "Questions",
       "What would resolve them",
+      "Evidence gaps to close next",
       "Published syntheses",
       "Reopened by evidence change",
     ],
@@ -783,6 +868,7 @@ function evaluateOpenQuestions(subject: EvaluationSubject) {
     expectedHeadings: [
       "Highest-leverage open questions",
       "What would reduce uncertainty",
+      "Evidence gaps to close next",
       "What might become a synthesis next",
       "Published syntheses",
       "Reopened by evidence change",
@@ -879,6 +965,7 @@ function evaluateMaintenanceRhythm(subject: EvaluationSubject) {
       "Review cadence",
       "Revisit next",
       "Synthesis decisions",
+      "Highest-leverage next evidence",
       "Evidence changes to triage",
       "Context packs to refresh",
       "Synthesis candidates",
@@ -894,6 +981,7 @@ function evaluateMaintenanceRhythm(subject: EvaluationSubject) {
       "Start a pass here",
       "Revisit next",
       "Synthesis decisions",
+      "Highest-leverage next evidence",
       "Evidence changes to triage",
       "Context packs to refresh",
       "Synthesis candidates",
@@ -1378,6 +1466,9 @@ function buildStageAssessments(
   const compiledGroundedPageCount = subject.pages.filter((page) =>
     page.frontmatter.source_refs.some((ref) => !ref.startsWith("corpus:")),
   ).length;
+  const developingEvidenceBlocker = getEvidenceGapPressure(subject, "developing").nextGap;
+  const maintainedEvidenceBlocker = getEvidenceGapPressure(subject, "maintained").nextGap;
+  const matureEvidenceBlocker = getEvidenceGapPressure(subject, "mature").nextGap;
   const starterCriteria: TopicEvaluationCriterion[] = [
     {
       label: "Required starter surfaces exist",
@@ -1421,7 +1512,10 @@ function buildStageAssessments(
     {
       label: "Canonical pages are grounded in compiled artifacts, not only starter corpus refs",
       satisfied: compiledGroundedPageCount >= 1,
-      details: `${compiledGroundedPageCount} canonical pages cite non-corpus workflow artifacts.`,
+      details: appendEvidenceBlockerDetails(
+        `${compiledGroundedPageCount} canonical pages cite non-corpus workflow artifacts.`,
+        developingEvidenceBlocker,
+      ),
     },
     {
       label: "The canonical layer extends beyond the bare starter minimum",
@@ -1450,7 +1544,10 @@ function buildStageAssessments(
     {
       label: "Maintenance surfaces are operational",
       satisfied: byId.get("maintenance_readiness")!.score >= 3.5,
-      details: `${byId.get("maintenance_readiness")!.score}/5 maintenance readiness score.`,
+      details: appendEvidenceBlockerDetails(
+        `${byId.get("maintenance_readiness")!.score}/5 maintenance readiness score.`,
+        maintainedEvidenceBlocker,
+      ),
     },
     {
       label: "Context packs are high-signal enough for repeated use",
@@ -1484,7 +1581,10 @@ function buildStageAssessments(
     {
       label: "Canonical depth is strong",
       satisfied: byId.get("canonical_depth")!.score >= 4,
-      details: `${byId.get("canonical_depth")!.score}/5 canonical depth score.`,
+      details: appendEvidenceBlockerDetails(
+        `${byId.get("canonical_depth")!.score}/5 canonical depth score.`,
+        matureEvidenceBlocker,
+      ),
     },
     {
       label: "Workflow and provenance are strongly integrated",
@@ -1584,22 +1684,36 @@ function resolveStage(stageAssessments: TopicStageAssessment[]) {
 }
 
 function buildMaturitySummary(stage: TopicMaturityStage, subject: EvaluationSubject) {
-  switch (stage) {
-    case "starter":
-      return `${subject.title} has a credible starter surface set, but it still behaves like a starter because real summarize, review, archive, and audit evidence has not populated enough of the workflow yet.`;
-    case "developing":
-      return `${subject.title} has moved beyond a bare starter and is beginning to accumulate real workflow evidence, but it still needs stronger maintenance and provenance depth.`;
-    case "maintained":
-      return `${subject.title} behaves like a real maintained topic: the maintenance loop is visible, workflow artifacts exist, and the workspace is usable over time.`;
-    case "mature":
-      return `${subject.title} is now a mature knowledge workspace with strong canonical, maintenance, workflow, and projection layers.`;
-    case "flagship":
-      return `${subject.title} is operating at flagship quality: strong workflow completeness, strong daily-use surfaces, and a clear showcase path.`;
+  const pressure = getEvidenceGapPressure(subject);
+  const baseSummary = (() => {
+    switch (stage) {
+      case "starter":
+        return `${subject.title} has a credible starter surface set, but it still behaves like a starter because real summarize, review, archive, and audit evidence has not populated enough of the workflow yet.`;
+      case "developing":
+        return `${subject.title} has moved beyond a bare starter and is beginning to accumulate real workflow evidence, but it still needs stronger maintenance and provenance depth.`;
+      case "maintained":
+        return `${subject.title} behaves like a real maintained topic: the maintenance loop is visible, workflow artifacts exist, and the workspace is usable over time.`;
+      case "mature":
+        return `${subject.title} is now a mature knowledge workspace with strong canonical, maintenance, workflow, and projection layers.`;
+      case "flagship":
+        return `${subject.title} is operating at flagship quality: strong workflow completeness, strong daily-use surfaces, and a clear showcase path.`;
+    }
+  })();
+
+  if (!pressure.nextGap) {
+    return baseSummary;
   }
+
+  if (stage === "flagship") {
+    return `${baseSummary} Remaining evidence risk is explicit and bounded, led by "${pressure.nextGap.title}" instead of being hidden inside the canonical layer.`;
+  }
+
+  return `${baseSummary} The clearest remaining honest limiter is evidence quality around "${pressure.nextGap.title}", so the next gain should come from acquisition rather than more surface area.`;
 }
 
 function buildPromotionReadiness(
   stageAssessments: TopicStageAssessment[],
+  subject: EvaluationSubject,
 ) {
   const nextStage = resolveStage(stageAssessments).nextStage;
 
@@ -1632,6 +1746,7 @@ function buildPromotionReadiness(
   const percent =
     totalCriteria === 0 ? 0 : Math.round((satisfiedCriteria / totalCriteria) * 100);
   const blockers = targetAssessment.criteria.filter((criterion) => !criterion.satisfied);
+  const evidencePressure = getEvidenceGapPressure(subject, nextStage);
 
   return {
     targetStage: nextStage,
@@ -1641,7 +1756,9 @@ function buildPromotionReadiness(
     summary:
       blockers.length === 0
         ? `This topic is ready to be promoted into ${nextStage}.`
-        : `${satisfiedCriteria}/${totalCriteria} criteria for ${nextStage} are already satisfied. The remaining blockers define the highest-leverage upgrade path.`,
+        : evidencePressure.nextGap
+          ? `${satisfiedCriteria}/${totalCriteria} criteria for ${nextStage} are already satisfied. The remaining blockers are led by the evidence gap "${evidencePressure.nextGap.title}".`
+          : `${satisfiedCriteria}/${totalCriteria} criteria for ${nextStage} are already satisfied. The remaining blockers define the highest-leverage upgrade path.`,
     blockers,
   };
 }
@@ -1670,6 +1787,7 @@ function buildNextActions(params: {
     ? stageAssessments.find((assessment) => assessment.stage === nextStage)
     : null;
   const blockers = nextStageAssessment?.criteria.filter((criterion) => !criterion.satisfied) ?? [];
+  const evidencePressure = getEvidenceGapPressure(subject, nextStage);
   const actions: TopicEvaluationAction[] = [];
   const dimensionsById = new Map(dimensions.map((dimension) => [dimension.id, dimension]));
 
@@ -1689,6 +1807,33 @@ function buildNextActions(params: {
       "Workflow and provenance are strongly integrated",
     ].includes(criterion.label),
   );
+
+  if (evidencePressure.nextGap) {
+    const gap = evidencePressure.nextGap;
+
+    pushAction({
+      id: `evidence-${gap.id}`,
+      priority: gap.priority,
+      category: "evidence",
+      title: "Close the next evidence blocker",
+      summary:
+        nextStage && gap.maturityBlockerStages.includes(nextStage)
+          ? `${gap.title} is the clearest evidence blocker between ${stage} and ${nextStage}. ${gap.nextEvidenceToAcquire}`
+          : `${gap.title} is the highest-leverage missing evidence in this workspace. ${gap.nextEvidenceToAcquire}`,
+      whyNow:
+        gap.maturityBlockerStages.length > 0
+          ? `The topic is structurally ahead of its evidence, and "${gap.title}" is the clearest limiter on honest promotion or stronger synthesis.`
+          : `The next durable gain should come from better evidence, not more notes. Closing "${gap.title}" should advance the strongest question or synthesis fastest.`,
+      targetStage: nextStage ?? stage,
+      relatedSurfaceIds: ["open-questions", "maintenance-rhythm", "llm-context-packs", "canonical-wiki-pages"],
+      pathHints: buildActionPathHints(surfaces, [
+        "open-questions",
+        "maintenance-rhythm",
+        "llm-context-packs",
+        "canonical-wiki-pages",
+      ]),
+    });
+  }
 
   if (hasWorkflowBlocker) {
     pushAction({
@@ -1915,7 +2060,7 @@ export async function evaluateTopicQuality(
   const overallScore = computeOverallScore(dimensions);
   const stageAssessments = buildStageAssessments(subject, dimensions, surfaces, overallScore);
   const { stage, nextStage } = resolveStage(stageAssessments);
-  const promotionReadiness = buildPromotionReadiness(stageAssessments);
+  const promotionReadiness = buildPromotionReadiness(stageAssessments, subject);
   const nextActions = buildNextActions({
     subject,
     stage,

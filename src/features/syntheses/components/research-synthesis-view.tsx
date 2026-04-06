@@ -165,6 +165,9 @@ export function ResearchSynthesisView({
                   <Link href="/syntheses">Open full synthesis portfolio</Link>
                 </Button>
                 <Button asChild variant="ghost">
+                  <Link href={`/gaps?topic=${focusedTopic.id}`}>Open evidence gaps</Link>
+                </Button>
+                <Button asChild variant="ghost">
                   <Link href={`/changes?topic=${focusedTopic.id}`}>Open change lane</Link>
                 </Button>
               </>
@@ -335,6 +338,9 @@ export function ResearchSynthesisView({
                 <div className="flex flex-wrap gap-2">
                   <Button asChild>
                     <Link href={focusSynthesis.links.questionQueue.href}>Question queue</Link>
+                  </Button>
+                  <Button asChild variant="outline">
+                    <Link href={`/gaps?topic=${focusSynthesis.topicId}`}>Evidence gaps</Link>
                   </Button>
                   <Button asChild variant="outline">
                     <Link href={focusSynthesis.links.sessionWorkspace.href}>Source sessions</Link>

@@ -3,7 +3,7 @@ title: OpenClaw maintenance watchpoints
 slug: openclaw-maintenance-watchpoints
 type: synthesis
 created_at: '2026-04-05T19:36:54.826Z'
-updated_at: '2026-04-05T19:36:56.205Z'
+updated_at: '2026-04-05T19:36:56.271Z'
 status: active
 aliases: []
 tags:

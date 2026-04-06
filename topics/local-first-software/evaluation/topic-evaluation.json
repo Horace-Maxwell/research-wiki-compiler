@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-04-06T03:52:48.549Z",
+  "generatedAt": "2026-04-06T04:22:45.988Z",
   "target": {
     "kind": "topic",
     "id": "local-first-software",
@@ -12,7 +12,7 @@
   "maturity": {
     "stage": "starter",
     "nextStage": "developing",
-    "summary": "Local-First Software has a credible starter surface set, but it still behaves like a starter because real summarize, review, archive, and audit evidence has not populated enough of the workflow yet.",
+    "summary": "Local-First Software has a credible starter surface set, but it still behaves like a starter because real summarize, review, archive, and audit evidence has not populated enough of the workflow yet. The clearest remaining honest limiter is evidence quality around \"Local-First Software migration promotion evidence\", so the next gain should come from acquisition rather than more surface area.",
     "stageAssessments": [
       {
         "stage": "starter",
@@ -62,7 +62,7 @@
           {
             "label": "Canonical pages are grounded in compiled artifacts, not only starter corpus refs",
             "satisfied": false,
-            "details": "0 canonical pages cite non-corpus workflow artifacts."
+            "details": "0 canonical pages cite non-corpus workflow artifacts. Evidence blocker: Local-First Software migration promotion evidence."
           },
           {
             "label": "The canonical layer extends beyond the bare starter minimum",
@@ -93,7 +93,7 @@
           {
             "label": "Maintenance surfaces are operational",
             "satisfied": true,
-            "details": "5/5 maintenance readiness score."
+            "details": "5/5 maintenance readiness score. Evidence blocker: Local-First Software repeated watchpoint evidence."
           },
           {
             "label": "Context packs are high-signal enough for repeated use",
@@ -129,7 +129,7 @@
           {
             "label": "Canonical depth is strong",
             "satisfied": true,
-            "details": "4.6/5 canonical depth score."
+            "details": "4.6/5 canonical depth score. Evidence blocker: Local-First Software migration promotion evidence."
           },
           {
             "label": "Workflow and provenance are strongly integrated",
@@ -390,14 +390,14 @@
       "status": "strong",
       "summary": "Open Questions is doing its job cleanly.",
       "evidence": [
-        "5/5 expected headings matched.",
-        "968 body words.",
-        "39 wiki links.",
-        "60 bullet items and 0 ordered steps.",
-        "5/5 expected headings matched.",
-        "917 body words.",
-        "35 wiki links.",
-        "55 bullet items and 0 ordered steps."
+        "6/6 expected headings matched.",
+        "1283 body words.",
+        "45 wiki links.",
+        "84 bullet items and 0 ordered steps.",
+        "6/6 expected headings matched.",
+        "1232 body words.",
+        "45 wiki links.",
+        "79 bullet items and 0 ordered steps."
       ],
       "issues": []
     },
@@ -472,14 +472,14 @@
       "status": "strong",
       "summary": "Maintenance Rhythm is doing its job cleanly.",
       "evidence": [
-        "8/8 expected headings matched.",
-        "1704 body words.",
+        "9/9 expected headings matched.",
+        "1967 body words.",
         "68 wiki links.",
-        "88 bullet items and 0 ordered steps.",
-        "6/6 expected headings matched.",
-        "1257 body words.",
-        "34 wiki links.",
-        "71 bullet items and 0 ordered steps."
+        "104 bullet items and 0 ordered steps.",
+        "7/7 expected headings matched.",
+        "1520 body words.",
+        "38 wiki links.",
+        "87 bullet items and 0 ordered steps."
       ],
       "issues": []
     },
@@ -625,7 +625,7 @@
     "satisfiedCriteria": 4,
     "totalCriteria": 7,
     "percent": 57,
-    "summary": "4/7 criteria for developing are already satisfied. The remaining blockers define the highest-leverage upgrade path.",
+    "summary": "4/7 criteria for developing are already satisfied. The remaining blockers are led by the evidence gap \"Local-First Software migration promotion evidence\".",
     "blockers": [
       {
         "label": "At least two downstream workflow layers are populated",
@@ -640,11 +640,32 @@
       {
         "label": "Canonical pages are grounded in compiled artifacts, not only starter corpus refs",
         "satisfied": false,
-        "details": "0 canonical pages cite non-corpus workflow artifacts."
+        "details": "0 canonical pages cite non-corpus workflow artifacts. Evidence blocker: Local-First Software migration promotion evidence."
       }
     ]
   },
   "nextActions": [
+    {
+      "id": "evidence-local-first-migration-promotion-gap",
+      "priority": "high",
+      "category": "evidence",
+      "title": "Close the next evidence blocker",
+      "summary": "Local-First Software migration promotion evidence is the clearest evidence blocker between starter and developing. A focused maintenance pass proving one compact migration bundle can answer the candidate reliably without reopening the whole provenance graph.",
+      "whyNow": "The topic is structurally ahead of its evidence, and \"Local-First Software migration promotion evidence\" is the clearest limiter on honest promotion or stronger synthesis.",
+      "targetStage": "developing",
+      "relatedSurfaceIds": [
+        "open-questions",
+        "maintenance-rhythm",
+        "llm-context-packs",
+        "canonical-wiki-pages"
+      ],
+      "pathHints": [
+        "workspace/wiki/notes/local-first-software-open-questions.md",
+        "obsidian-vault/00 Atlas/Open Questions.md",
+        "workspace/wiki/syntheses/local-first-software-maintenance-rhythm.md",
+        "obsidian-vault/00 Atlas/Maintenance Rhythm.md"
+      ]
+    },
     {
       "id": "workflow-density",
       "priority": "high",
@@ -687,6 +708,7 @@
     }
   ],
   "recommendedNextSteps": [
+    "Close the next evidence blocker: Local-First Software migration promotion evidence is the clearest evidence blocker between starter and developing. A focused maintenance pass proving one compact migration bundle can answer the candidate reliably without reopening the whole provenance graph.",
     "Populate the next real workflow layers: Run the first real summarize, review, archive, or audit pass so the topic stops behaving like a polished starter shell.",
     "Deepen the canonical layer with grounded synthesis: Promote the strongest recurring topic pressure into a better-grounded synthesis or update so important pages cite compiled workflow artifacts, not only starter corpus references."
   ],

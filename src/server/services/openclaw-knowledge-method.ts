@@ -922,6 +922,192 @@ export const openClawKnowledgeMethodData: KnowledgeMethodTemplateData = {
       ],
     },
   ],
+  evidenceGaps: [
+    {
+      id: "openclaw-upgrade-trigger-comparison-gap",
+      title: "OpenClaw upgrade trigger comparison evidence",
+      summary:
+        "The upgrade-trigger synthesis is close, but it still wants one tighter comparison proving which release and changelog signals truly separate light checks from full regression work.",
+      status: "in-session",
+      priority: "high",
+      gapType: "comparison-evidence",
+      whyItMatters:
+        "A durable regression-trigger synthesis should rest on a clear comparison rule set, not just a bundle of adjacent maintenance notes.",
+      impactSummary:
+        "Closing this gap would likely publish the next highest-leverage synthesis in the flagship example and harden the upgrade posture across canonical and maintenance layers.",
+      missingEvidence:
+        "One cleaner comparison that distinguishes cosmetic release churn from release packaging signals that should change regression depth.",
+      nextEvidenceToAcquire:
+        "A focused comparison pass over the release page, watchpoints synthesis, and archived upgrade note that names which cues really justify a full regression run.",
+      successCriteria: [
+        "The trigger matrix reads like durable operator guidance instead of a loose note bundle.",
+        "Release cadence, watchpoints, and the archived upgrade note can all reuse the same trigger vocabulary.",
+      ],
+      linkedQuestionIds: ["upgrade-regression-triggers"],
+      linkedSynthesisIds: ["openclaw-upgrade-regression-triggers"],
+      canonicalReviewTitles: [
+        "OpenClaw release cadence",
+        "Note: What should I monitor before upgrading OpenClaw",
+      ],
+      watchpointTitles: ["OpenClaw maintenance watchpoints"],
+      maintenanceSurfaceTitles: ["OpenClaw maintenance rhythm", "OpenClaw open questions"],
+      acquisitionSessionId: "session-upgrade-regression-triggers",
+      preferredContextPackTitles: ["Upgrade Watchpoints", "Maintenance Triage"],
+      firstPageTitles: [
+        "OpenClaw release cadence",
+        "OpenClaw maintenance watchpoints",
+        "OpenClaw open questions",
+        "Note: What should I monitor before upgrading OpenClaw",
+      ],
+      firstSourceTitles: [
+        "2026-04-02 release cadence and test churn digest",
+      ],
+      maturityBlockerStages: [],
+      qualityBlockerNotes: [
+        "The flagship example is already strong, but this gap still limits how durable the upgrade-regression rule set feels.",
+      ],
+      advancesQuestionIds: ["upgrade-regression-triggers"],
+      advancesSynthesisIds: ["openclaw-upgrade-regression-triggers"],
+      resolvedAt: null,
+      resolutionSummary: null,
+    },
+    {
+      id: "openclaw-provider-consequence-gap",
+      title: "OpenClaw provider consequence evidence",
+      summary:
+        "Provider exposure is visible, but it still wants one cleaner pass tying provider-side events directly to operator decisions rather than leaving that bridge implied.",
+      status: "planned",
+      priority: "medium",
+      gapType: "recommendation-confidence",
+      whyItMatters:
+        "Provider risk should only become durable guidance when it changes adoption or upgrade posture in inspectable ways.",
+      impactSummary:
+        "Closing this gap would make the provider-exposure synthesis more trustworthy and would reduce how much of the provider story still depends on contextual reading.",
+      missingEvidence:
+        "A tighter operational bridge from provider-side signal to adoption or upgrade decision.",
+      nextEvidenceToAcquire:
+        "A focused provider-risk pass that ties provider policy shifts to concrete operator consequences instead of leaving them as ambient signal.",
+      successCriteria: [
+        "Provider-side events clearly change at least one operator decision.",
+        "The provider exposure synthesis can publish without leaning on generic uncertainty framing.",
+      ],
+      linkedQuestionIds: ["provider-exposure-map"],
+      linkedSynthesisIds: ["openclaw-provider-exposure-map"],
+      canonicalReviewTitles: ["Provider dependency risk"],
+      watchpointTitles: ["OpenClaw maintenance watchpoints"],
+      maintenanceSurfaceTitles: ["OpenClaw maintenance rhythm", "OpenClaw open questions"],
+      acquisitionSessionId: "session-provider-exposure-map",
+      preferredContextPackTitles: ["Upgrade Watchpoints", "Maintenance Triage"],
+      firstPageTitles: [
+        "Provider dependency risk",
+        "OpenClaw current tensions",
+        "OpenClaw maintenance watchpoints",
+      ],
+      firstSourceTitles: [
+        "2026-04-05 provider risk and changelog digest",
+      ],
+      maturityBlockerStages: [],
+      qualityBlockerNotes: [
+        "The flagship topic is still under-evidenced at the exact point where provider signal should become durable operator guidance.",
+      ],
+      advancesQuestionIds: ["provider-exposure-map"],
+      advancesSynthesisIds: ["openclaw-provider-exposure-map"],
+      resolvedAt: null,
+      resolutionSummary: null,
+    },
+    {
+      id: "openclaw-plugin-drift-longitudinal-gap",
+      title: "OpenClaw plugin drift longitudinal evidence",
+      summary:
+        "The compatibility boundary is visible, but it still lacks enough release-to-release evidence to say which plugin or SDK assumptions truly drift over time.",
+      status: "planned",
+      priority: "high",
+      gapType: "source-coverage",
+      whyItMatters:
+        "Plugin compatibility looks important precisely where the current corpus is thinnest, so the system should keep that gap explicit instead of pretending it already has a durable answer.",
+      impactSummary:
+        "Closing this gap would advance the thinnest high-value question in the topic and make the compatibility surface less dependent on one-off signals.",
+      missingEvidence:
+        "Another release-to-release pass that names concrete plugin or SDK drift instead of only a single compatibility baseline.",
+      nextEvidenceToAcquire:
+        "Wait for another release or changelog pass, then compare the new evidence directly against the existing plugin compatibility and review-history surfaces.",
+      successCriteria: [
+        "A later release names concrete compatibility breakpoints or SDK drift.",
+        "Plugin compatibility can cite more than one release-to-release signal before hardening the drift story.",
+      ],
+      linkedQuestionIds: ["plugin-sdk-drift"],
+      linkedSynthesisIds: [],
+      canonicalReviewTitles: ["Plugin compatibility"],
+      watchpointTitles: ["OpenClaw maintenance watchpoints"],
+      maintenanceSurfaceTitles: ["OpenClaw open questions", "OpenClaw maintenance rhythm"],
+      acquisitionSessionId: "session-plugin-sdk-drift",
+      preferredContextPackTitles: ["Upgrade Watchpoints", "Provenance And Review"],
+      firstPageTitles: [
+        "Plugin compatibility",
+        "OpenClaw open questions",
+        "Review History",
+        "Summary Atlas",
+      ],
+      firstSourceTitles: [
+        "2026-03-26 plugin SDK and policy digest",
+        "2026-03-31 release and plugin surface digest",
+      ],
+      maturityBlockerStages: [],
+      qualityBlockerNotes: [
+        "This is one of the strongest remaining evidence-quality gaps in the flagship example.",
+      ],
+      advancesQuestionIds: ["plugin-sdk-drift"],
+      advancesSynthesisIds: [],
+      resolvedAt: null,
+      resolutionSummary: null,
+    },
+    {
+      id: "openclaw-upgrade-checklist-grounding-gap",
+      title: "OpenClaw upgrade checklist grounding gap",
+      summary:
+        "The reusable upgrade-monitoring question originally lacked a durable artifact tying watch logic to a concrete archived answer.",
+      status: "resolved",
+      priority: "medium",
+      gapType: "operational-evidence",
+      whyItMatters:
+        "A high-value operator question should not stay trapped in transient session notes once the answer is stable enough to archive.",
+      impactSummary:
+        "Closing this gap gave the topic a reusable archived answer and made the watchpoint synthesis easier to trust as an operator surface.",
+      missingEvidence:
+        "A grounded, reusable upgrade checklist that could survive as durable knowledge.",
+      nextEvidenceToAcquire:
+        "Already closed by the upgrade-monitoring archive pass that grounded the checklist and linked it back into maintenance.",
+      successCriteria: [
+        "The question has a durable archived answer.",
+        "Watchpoints and the archived note can be reused together on later maintenance passes.",
+      ],
+      linkedQuestionIds: ["monitor-before-upgrade"],
+      linkedSynthesisIds: ["openclaw-maintenance-watchpoints-synthesis"],
+      canonicalReviewTitles: ["Note: What should I monitor before upgrading OpenClaw"],
+      watchpointTitles: ["OpenClaw maintenance watchpoints"],
+      maintenanceSurfaceTitles: ["OpenClaw maintenance rhythm", "OpenClaw open questions"],
+      acquisitionSessionId: "session-upgrade-monitoring-note",
+      preferredContextPackTitles: ["Upgrade Watchpoints", "Maintenance Triage"],
+      firstPageTitles: [
+        "OpenClaw maintenance watchpoints",
+        "Note: What should I monitor before upgrading OpenClaw",
+        "Provider dependency risk",
+      ],
+      firstSourceTitles: [
+        "2026-04-05 provider risk and changelog digest",
+        "2026-04-02 release cadence and test churn digest",
+      ],
+      maturityBlockerStages: [],
+      qualityBlockerNotes: [
+        "The archived note is one reason the flagship example feels operational instead of purely encyclopedic.",
+      ],
+      advancesQuestionIds: ["monitor-before-upgrade"],
+      advancesSynthesisIds: ["openclaw-maintenance-watchpoints-synthesis"],
+      resolvedAt: "2026-04-04T20:00:00.000Z",
+      resolutionSummary:
+        "The upgrade-monitoring question now has both a durable archived note and a connected watchpoint synthesis behind it.",
+    },
+  ],
   evidenceBundles: [
     {
       id: "openclaw-release-trigger-evidence",

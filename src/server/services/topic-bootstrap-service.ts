@@ -7,6 +7,7 @@ import type {
   EvidenceBundleSeed,
   EvidenceChangeSeed,
 } from "@/lib/contracts/evidence-change";
+import type { EvidenceGapSeed } from "@/lib/contracts/evidence-gap";
 import type { WikiFrontmatter, WikiPageType } from "@/lib/contracts/wiki";
 import type { ResearchQuestionSeed } from "@/lib/contracts/research-question";
 import type { ResearchSessionSeed } from "@/lib/contracts/research-session";
@@ -991,6 +992,150 @@ function buildDefaultResearchSyntheses(params: {
   ];
 }
 
+function buildDefaultEvidenceGaps(params: {
+  title: string;
+  titles: ReturnType<typeof buildSurfaceTitleBundle>;
+  researchQuestions: ResearchQuestionSeed[];
+  researchSessions: ResearchSessionSeed[];
+  researchSyntheses: ResearchSynthesisSeed[];
+  corpusFiles: TopicBootstrapCorpusFile[];
+  seedTimestamp: string;
+}): EvidenceGapSeed[] {
+  const [boundaryQuestion, monitoringQuestion, synthesisQuestion] = params.researchQuestions;
+  const [boundarySession, synthesisSession, watchpointSession] = params.researchSessions;
+  const [, watchpointSynthesis, firstCandidate, secondCandidate] = params.researchSyntheses;
+  const corpusTitles = params.corpusFiles.map((file) => file.title);
+
+  return [
+    {
+      id: slugifyTitle(`${params.title}-canonical-grounding-gap`) || "canonical-grounding-gap",
+      title: `${params.title} canonical grounding gap`,
+      summary:
+        "The topic needed enough repeated framing evidence to keep the entry page durable without pretending every starter claim was already settled.",
+      status: "resolved",
+      priority: "medium",
+      gapType: "provenance-quality",
+      whyItMatters:
+        "A starter topic becomes trustworthy when the canonical entry stays compact and grounded instead of absorbing all unresolved detail.",
+      impactSummary:
+        "Closing this gap let the entry page stabilize while tensions and open questions kept the still-provisional work visible.",
+      missingEvidence:
+        "A stable framing that recurs across the bounded corpus without direct conflict.",
+      nextEvidenceToAcquire:
+        "Already closed by the canonical-boundary session that grounded the entry page against the bounded corpus.",
+      successCriteria: [
+        "The canonical entry can stay short and durable.",
+        "Unresolved trade-offs move into current tensions and open questions instead of the entry page.",
+      ],
+      linkedQuestionIds: boundaryQuestion ? [boundaryQuestion.id] : [],
+      linkedSynthesisIds: [firstCandidate?.id].filter((value): value is string => Boolean(value)),
+      canonicalReviewTitles: [params.title],
+      watchpointTitles: [params.titles.maintenanceWatchpoints],
+      maintenanceSurfaceTitles: [params.titles.currentTensions, params.titles.openQuestions],
+      acquisitionSessionId: boundarySession?.id ?? null,
+      preferredContextPackTitles: [`Explain ${params.title}`, "Provenance And Review"],
+      firstPageTitles: [params.title, params.titles.currentTensions, params.titles.openQuestions],
+      firstSourceTitles: corpusTitles.slice(0, 2),
+      maturityBlockerStages: [],
+      qualityBlockerNotes: [
+        "Canonical depth depends on keeping the durable story grounded instead of broadening too early.",
+      ],
+      advancesQuestionIds: boundaryQuestion ? [boundaryQuestion.id] : [],
+      advancesSynthesisIds: [firstCandidate?.id].filter((value): value is string => Boolean(value)),
+      resolvedAt: boundarySession?.sessionDate ?? offsetIsoTimestamp(params.seedTimestamp, 2),
+      resolutionSummary:
+        "The entry page now holds the shortest durable framing, and later evidence work can stay focused on syntheses and watchpoints.",
+    },
+    {
+      id:
+        slugifyTitle(`${params.title}-watchpoint-recurrence-gap`) ||
+        "watchpoint-recurrence-gap",
+      title: `${params.title} repeated watchpoint evidence`,
+      summary:
+        "The topic still needs repeated operating evidence before the strongest monitoring signal should harden into a more durable watchpoint answer.",
+      status: "planned",
+      priority: "high",
+      gapType: "operational-evidence",
+      whyItMatters:
+        "Without repeated operating evidence, watchpoints stay like organized concern instead of durable maintenance logic.",
+      impactSummary:
+        "This gap blocks the monitoring question from advancing and keeps the maintenance-watchpoint synthesis more provisional than it should be.",
+      missingEvidence:
+        "Another source, review, or audit pass showing the same signal changes operator behavior more than once.",
+      nextEvidenceToAcquire:
+        "A second bounded pass proving that the same monitoring signal changes revisit order or watch logic again.",
+      successCriteria: [
+        "A later source, review, or audit artifact repeats the same monitoring signal.",
+        "Maintenance rhythm would change in the same direction because of it.",
+      ],
+      linkedQuestionIds: monitoringQuestion ? [monitoringQuestion.id] : [],
+      linkedSynthesisIds: [watchpointSynthesis?.id].filter((value): value is string => Boolean(value)),
+      canonicalReviewTitles: [params.titles.maintenanceWatchpoints],
+      watchpointTitles: [params.titles.maintenanceWatchpoints],
+      maintenanceSurfaceTitles: [params.titles.maintenanceRhythm, params.titles.openQuestions],
+      acquisitionSessionId: watchpointSession?.id ?? null,
+      preferredContextPackTitles: ["Maintenance Triage", "Provenance And Review"],
+      firstPageTitles: [
+        params.titles.maintenanceWatchpoints,
+        params.titles.operationalNote,
+        params.titles.maintenanceRhythm,
+      ],
+      firstSourceTitles: corpusTitles.slice(1, 3),
+      maturityBlockerStages: ["maintained"],
+      qualityBlockerNotes: [
+        "The topic is structurally usable, but the monitoring surface is still under-evidenced.",
+      ],
+      advancesQuestionIds: monitoringQuestion ? [monitoringQuestion.id] : [],
+      advancesSynthesisIds: [watchpointSynthesis?.id].filter((value): value is string => Boolean(value)),
+      resolvedAt: null,
+      resolutionSummary: null,
+    },
+    {
+      id:
+        slugifyTitle(`${params.title}-synthesis-promotion-gap`) || "synthesis-promotion-gap",
+      title: `${params.title} synthesis promotion evidence`,
+      summary:
+        "The topic still needs one tighter justification for why the current candidate deserves to become the next durable synthesis instead of remaining a well-organized possibility.",
+      status: "in-session",
+      priority: "medium",
+      gapType: "synthesis-readiness",
+      whyItMatters:
+        "A starter topic becomes more than a scaffold when one candidate earns promotion for evidence-based reasons, not just because it is available.",
+      impactSummary:
+        "Closing this gap would advance the promotion question and make the next synthesis a more honest step toward topic maturity.",
+      missingEvidence:
+        "A cleaner comparison showing why one candidate now outranks the others for durable synthesis.",
+      nextEvidenceToAcquire:
+        "A focused maintenance pass proving one compact context bundle can answer the candidate reliably without reopening the whole provenance graph.",
+      successCriteria: [
+        "One synthesis candidate clearly outranks the others.",
+        "Maintenance rhythm and open questions can both be updated with the same promotion decision.",
+      ],
+      linkedQuestionIds: synthesisQuestion ? [synthesisQuestion.id] : [],
+      linkedSynthesisIds: [secondCandidate?.id].filter((value): value is string => Boolean(value)),
+      canonicalReviewTitles: [params.title],
+      watchpointTitles: [params.titles.maintenanceWatchpoints],
+      maintenanceSurfaceTitles: [params.titles.maintenanceRhythm, params.titles.openQuestions],
+      acquisitionSessionId: synthesisSession?.id ?? null,
+      preferredContextPackTitles: ["Maintenance Triage", `Explain ${params.title}`],
+      firstPageTitles: [
+        params.titles.maintenanceRhythm,
+        params.titles.currentTensions,
+        params.titles.openQuestions,
+      ],
+      firstSourceTitles: corpusTitles.slice(0, 1),
+      maturityBlockerStages: ["developing"],
+      qualityBlockerNotes: [
+        "The topic is organized, but its next synthesis is still under-justified.",
+      ],
+      advancesQuestionIds: synthesisQuestion ? [synthesisQuestion.id] : [],
+      advancesSynthesisIds: [secondCandidate?.id].filter((value): value is string => Boolean(value)),
+      resolvedAt: null,
+      resolutionSummary: null,
+    },
+  ];
+}
+
 function buildDefaultEvidenceBundles(params: {
   title: string;
   titles: ReturnType<typeof buildSurfaceTitleBundle>;
@@ -1189,6 +1334,15 @@ export function createDefaultTopicBootstrapConfig({
     titles: surfaceTitles,
     researchQuestions,
     researchSessions,
+    seedTimestamp: generatedAt,
+  });
+  const evidenceGaps = buildDefaultEvidenceGaps({
+    title: normalizedTitle,
+    titles: surfaceTitles,
+    researchQuestions,
+    researchSessions,
+    researchSyntheses,
+    corpusFiles,
     seedTimestamp: generatedAt,
   });
   const evidenceBundles = buildDefaultEvidenceBundles({
@@ -1432,6 +1586,7 @@ export function createDefaultTopicBootstrapConfig({
     researchQuestions,
     researchSessions,
     researchSyntheses,
+    evidenceGaps,
     evidenceBundles,
     evidenceChanges,
     resolutionSignals: [
@@ -1611,6 +1766,7 @@ function buildKnowledgeMethodData(config: TopicBootstrapConfig): KnowledgeMethod
     researchQuestions: config.researchQuestions,
     researchSessions: config.researchSessions,
     researchSyntheses: config.researchSyntheses,
+    evidenceGaps: config.evidenceGaps,
     evidenceBundles: config.evidenceBundles,
     evidenceChanges: config.evidenceChanges,
     resolutionSignals: config.resolutionSignals,
@@ -2365,6 +2521,7 @@ async function validateHeadings(params: {
         "Revisit next",
         "Session queue",
         "Synthesis decisions",
+        "Highest-leverage next evidence",
         "Evidence changes to triage",
         "Context packs to refresh",
         "Synthesis candidates",
@@ -2381,6 +2538,7 @@ async function validateHeadings(params: {
         "Summary",
         "Questions",
         "What would resolve them",
+        "Evidence gaps to close next",
         "Recent session outcomes",
         "Published syntheses",
         "Reopened by evidence change",

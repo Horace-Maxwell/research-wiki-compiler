@@ -189,6 +189,11 @@ function QuestionCard({
         <Button asChild size="sm" variant="ghost">
           <Link href={question.links.maintenance.href}>Maintenance</Link>
         </Button>
+        {question.sourceGaps.length > 0 ? (
+          <Button asChild size="sm" variant="ghost">
+            <Link href={`/gaps?topic=${question.topicId}`}>Evidence gaps</Link>
+          </Button>
+        ) : null}
         {synthesisHref ? (
           <Button asChild size="sm" variant="ghost">
             <Link href={synthesisHref}>Synthesis target</Link>
@@ -229,6 +234,9 @@ export function QuestionWorkflowView({
               <>
                 <Button asChild variant="outline">
                   <Link href="/questions">Open full question queue</Link>
+                </Button>
+                <Button asChild variant="ghost">
+                  <Link href={`/gaps?topic=${focusedTopic.id}`}>Open evidence gaps</Link>
                 </Button>
                 <Button asChild variant="ghost">
                   <Link href={`/changes?topic=${focusedTopic.id}`}>Open change lane</Link>

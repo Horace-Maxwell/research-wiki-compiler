@@ -26,6 +26,8 @@ describe("topic evaluation service", () => {
         step.includes("Populate the next real workflow layers"),
       ),
     ).toBe(true);
+    expect(localFirst.nextActions.some((action) => action.category === "evidence")).toBe(true);
+    expect(localFirst.maturity.summary).toContain("evidence quality");
   });
 
   it("renders a readable markdown report", async () => {

@@ -1,4 +1,5 @@
 import type { EvidenceBundleSeed, EvidenceChangeSeed } from "@/lib/contracts/evidence-change";
+import type { EvidenceGapSeed } from "@/lib/contracts/evidence-gap";
 import type { ResearchQuestionSeed, ResearchQuestionStatus } from "@/lib/contracts/research-question";
 import type { ResearchSessionSeed } from "@/lib/contracts/research-session";
 import type { ResearchSynthesisSeed } from "@/lib/contracts/research-synthesis";
@@ -81,6 +82,7 @@ export type KnowledgeMethodTemplateData = {
   researchQuestions: ResearchQuestionSeed[];
   researchSessions: ResearchSessionSeed[];
   researchSyntheses: ResearchSynthesisSeed[];
+  evidenceGaps: EvidenceGapSeed[];
   evidenceBundles: EvidenceBundleSeed[];
   evidenceChanges: EvidenceChangeSeed[];
   resolutionSignals: string[];
@@ -658,6 +660,239 @@ function buildResearchSessionOutcomeSection(
     .trim();
 }
 
+function evidenceGapStatusWeight(status: EvidenceGapSeed["status"]) {
+  switch (status) {
+    case "in-session":
+      return 0;
+    case "planned":
+      return 1;
+    case "open":
+      return 2;
+    case "resolved":
+    default:
+      return 3;
+  }
+}
+
+function evidenceGapPriorityWeight(priority: EvidenceGapSeed["priority"]) {
+  switch (priority) {
+    case "high":
+      return 0;
+    case "medium":
+      return 1;
+    case "low":
+    default:
+      return 2;
+  }
+}
+
+function sortEvidenceGaps(gaps: EvidenceGapSeed[]) {
+  return [...gaps].sort((left, right) => {
+    const statusDifference =
+      evidenceGapStatusWeight(left.status) - evidenceGapStatusWeight(right.status);
+
+    if (statusDifference !== 0) {
+      return statusDifference;
+    }
+
+    const priorityDifference =
+      evidenceGapPriorityWeight(left.priority) - evidenceGapPriorityWeight(right.priority);
+
+    if (priorityDifference !== 0) {
+      return priorityDifference;
+    }
+
+    return left.title.localeCompare(right.title);
+  });
+}
+
+function humanizeEvidenceGapStatus(status: EvidenceGapSeed["status"]) {
+  return status.replace(/-/g, " ");
+}
+
+function humanizeEvidenceGapType(gapType: EvidenceGapSeed["gapType"]) {
+  return gapType.replace(/-/g, " ");
+}
+
+function formatEvidenceGapQuestions(
+  data: KnowledgeMethodTemplateData,
+  questionIds: string[],
+) {
+  return uniqueTitles(
+    questionIds.map((questionId) => findResearchQuestion(data, questionId)?.question ?? questionId),
+  ).join("; ");
+}
+
+function formatEvidenceGapSyntheses(
+  data: KnowledgeMethodTemplateData,
+  synthesisIds: string[],
+) {
+  return uniqueTitles(
+    synthesisIds.map(
+      (synthesisId) =>
+        data.researchSyntheses.find((synthesis) => synthesis.id === synthesisId)?.title ??
+        synthesisId,
+    ),
+  ).join("; ");
+}
+
+function unresolvedEvidenceGaps(data: KnowledgeMethodTemplateData) {
+  return sortEvidenceGaps(data.evidenceGaps.filter((gap) => gap.status !== "resolved"));
+}
+
+function buildEvidenceGapSection(
+  data: KnowledgeMethodTemplateData,
+  contextPackFormatter: (title: string) => string = wikiLink,
+) {
+  const gaps = unresolvedEvidenceGaps(data);
+
+  if (gaps.length === 0) {
+    return [
+      "## Evidence gaps to close next",
+      "",
+      "- No unresolved evidence gaps are seeded yet.",
+    ].join("\n");
+  }
+
+  return [
+    "## Evidence gaps to close next",
+    "",
+    ...gaps.flatMap((gap) => {
+      const lines = [
+        `### ${gap.title}`,
+        "",
+        `- **Status**: ${humanizeEvidenceGapStatus(gap.status)}`,
+        `- **Gap type**: ${humanizeEvidenceGapType(gap.gapType)}`,
+        `- **Missing evidence**: ${gap.missingEvidence}`,
+        `- **Next evidence**: ${gap.nextEvidenceToAcquire}`,
+      ];
+
+      if (gap.preferredContextPackTitles.length > 0) {
+        lines.push(
+          `- **Load first**: ${formatContextPackList(
+            gap.preferredContextPackTitles,
+            contextPackFormatter,
+          )}`,
+        );
+      }
+
+      if (gap.firstPageTitles.length > 0) {
+        lines.push(`- **Inspect pages**: ${formatQuestionWikiLinks(gap.firstPageTitles)}`);
+      }
+
+      if (gap.firstSourceTitles.length > 0) {
+        lines.push(`- **Inspect sources**: ${gap.firstSourceTitles.join("; ")}`);
+      }
+
+      if (gap.acquisitionSessionId) {
+        const session = findResearchSession(data, gap.acquisitionSessionId);
+        lines.push(`- **Acquisition session**: ${session?.title ?? gap.acquisitionSessionId}`);
+      }
+
+      if (gap.advancesQuestionIds.length > 0) {
+        lines.push(
+          `- **Advances questions**: ${formatEvidenceGapQuestions(data, gap.advancesQuestionIds)}`,
+        );
+      }
+
+      if (gap.advancesSynthesisIds.length > 0) {
+        lines.push(
+          `- **Advances syntheses**: ${formatEvidenceGapSyntheses(
+            data,
+            gap.advancesSynthesisIds,
+          )}`,
+        );
+      }
+
+      if (gap.maturityBlockerStages.length > 0) {
+        lines.push(
+          `- **Blocks maturity**: ${gap.maturityBlockerStages.join("; ")}`,
+        );
+      }
+
+      lines.push(`- **Success looks like**: ${gap.successCriteria.join("; ")}`);
+      lines.push("");
+
+      return lines;
+    }),
+  ]
+    .join("\n")
+    .trim();
+}
+
+function buildNextEvidenceSection(
+  data: KnowledgeMethodTemplateData,
+  contextPackFormatter: (title: string) => string = wikiLink,
+) {
+  const gaps = unresolvedEvidenceGaps(data).slice(0, 3);
+
+  if (gaps.length === 0) {
+    return [
+      "## Highest-leverage next evidence",
+      "",
+      "- No unresolved evidence gaps are seeded yet.",
+    ].join("\n");
+  }
+
+  return [
+    "## Highest-leverage next evidence",
+    "",
+    ...gaps.flatMap((gap) => {
+      const session = gap.acquisitionSessionId
+        ? findResearchSession(data, gap.acquisitionSessionId)
+        : null;
+      const lines = [
+        `### ${gap.title}`,
+        "",
+        `- **Why it matters**: ${gap.impactSummary}`,
+        `- **Collect next**: ${gap.nextEvidenceToAcquire}`,
+      ];
+
+      if (gap.preferredContextPackTitles.length > 0) {
+        lines.push(
+          `- **Context packs**: ${formatContextPackList(
+            gap.preferredContextPackTitles,
+            contextPackFormatter,
+          )}`,
+        );
+      }
+
+      if (session) {
+        lines.push(`- **Run session**: ${session.title}`);
+      }
+
+      if (gap.advancesQuestionIds.length > 0) {
+        lines.push(
+          `- **If closed, questions advance**: ${formatEvidenceGapQuestions(
+            data,
+            gap.advancesQuestionIds,
+          )}`,
+        );
+      }
+
+      if (gap.advancesSynthesisIds.length > 0) {
+        lines.push(
+          `- **If closed, syntheses advance**: ${formatEvidenceGapSyntheses(
+            data,
+            gap.advancesSynthesisIds,
+          )}`,
+        );
+      }
+
+      if (gap.maturityBlockerStages.length > 0) {
+        lines.push(`- **Maturity impact**: blocks ${gap.maturityBlockerStages.join("; ")}`);
+      }
+
+      lines.push(`- **Success criteria**: ${gap.successCriteria.join("; ")}`);
+      lines.push("");
+
+      return lines;
+    }),
+  ]
+    .join("\n")
+    .trim();
+}
+
 function evidenceChangeStateWeight(state: EvidenceChangeSeed["state"]) {
   switch (state) {
     case "reopened":
@@ -1193,6 +1428,7 @@ function buildWikiOpenQuestionsPage(data: KnowledgeMethodTemplateData) {
   const sessionOutcomeSection = buildResearchSessionOutcomeSection(data, formatContextPack);
   const publishedSynthesisSection = buildPublishedSynthesisSection(data);
   const evidenceReopenSection = buildReopenedByEvidenceSection(data, formatContextPack);
+  const evidenceGapSection = buildEvidenceGapSection(data, formatContextPack);
 
   return [
     `# ${data.openQuestionsTitle}`,
@@ -1221,6 +1457,8 @@ function buildWikiOpenQuestionsPage(data: KnowledgeMethodTemplateData) {
     sessionOutcomeSection,
     "",
     publishedSynthesisSection,
+    "",
+    evidenceGapSection,
     "",
     evidenceReopenSection,
     "",
@@ -1285,6 +1523,7 @@ function buildWikiMaintenanceWatchpointsPage(data: KnowledgeMethodTemplateData) 
 function buildWikiMaintenanceRhythmPage(data: KnowledgeMethodTemplateData) {
   const sessionQueueSection = buildResearchSessionQueueSection(data, (title) => `\`${title}\``);
   const synthesisDecisionSection = buildSynthesisDecisionSection(data);
+  const nextEvidenceSection = buildNextEvidenceSection(data, (title) => `\`${title}\``);
   const evidenceChangeSection = buildEvidenceChangeSection(data);
 
   return [
@@ -1314,6 +1553,8 @@ function buildWikiMaintenanceRhythmPage(data: KnowledgeMethodTemplateData) {
     sessionQueueSection,
     "",
     synthesisDecisionSection,
+    "",
+    nextEvidenceSection,
     "",
     evidenceChangeSection,
     "",
@@ -1485,6 +1726,7 @@ function buildObsidianOpenQuestionsNote(data: KnowledgeMethodTemplateData) {
   const reopenSection = buildQuestionReopenSection(data);
   const sessionOutcomeSection = buildResearchSessionOutcomeSection(data);
   const publishedSynthesisSection = buildPublishedSynthesisSection(data);
+  const evidenceGapSection = buildEvidenceGapSection(data);
   const evidenceReopenSection = buildReopenedByEvidenceSection(data);
 
   return `# Open Questions
@@ -1506,6 +1748,8 @@ ${data.synthesisCandidates
 ${sessionOutcomeSection}
 
 ${publishedSynthesisSection}
+
+${evidenceGapSection}
 
 ${evidenceReopenSection}
 
@@ -1563,6 +1807,7 @@ ${data.contextPackRefreshes
 function buildObsidianMaintenanceRhythmNote(data: KnowledgeMethodTemplateData) {
   const sessionQueueSection = buildResearchSessionQueueSection(data);
   const synthesisDecisionSection = buildSynthesisDecisionSection(data);
+  const nextEvidenceSection = buildNextEvidenceSection(data);
   const evidenceChangeSection = buildEvidenceChangeSection(data);
 
   return `# Maintenance Rhythm
@@ -1583,6 +1828,8 @@ ${data.revisitQueue
 ${sessionQueueSection}
 
 ${synthesisDecisionSection}
+
+${nextEvidenceSection}
 
 ${evidenceChangeSection}
 

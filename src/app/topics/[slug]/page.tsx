@@ -4,6 +4,7 @@ import { TopicWorkspaceIntro } from "@/features/topics/components/topic-workspac
 import { WikiBrowser } from "@/features/wiki/components/wiki-browser";
 import type { WikiPageDetail, WikiPageSummary } from "@/lib/contracts/wiki";
 import { getTopicEvidenceChangeSummary } from "@/server/services/evidence-change-service";
+import { getTopicEvidenceGapSummary } from "@/server/services/evidence-gap-service";
 import { getOpenClawExampleManifest, ensureOpenClawRenderedWorkspace } from "@/server/services/openclaw-example-service";
 import { getTopicQuestionWorkflow } from "@/server/services/question-workflow-service";
 import { getTopicResearchSessionSummary } from "@/server/services/research-session-service";
@@ -47,11 +48,12 @@ export default async function TopicWorkspacePage({
   const requestedPageId = readParam(routeParams.pageId);
   const requestedPagePath = readParam(routeParams.pagePath);
   const workspaceRoot = await resolveWorkspaceRoot(slug);
-  const [questionWorkflow, sessionSummary, synthesisSummary, evidenceChangeSummary] = await Promise.all([
+  const [questionWorkflow, sessionSummary, synthesisSummary, evidenceChangeSummary, evidenceGapSummary] = await Promise.all([
     getTopicQuestionWorkflow(slug),
     getTopicResearchSessionSummary(slug),
     getTopicResearchSynthesisSummary(slug),
     getTopicEvidenceChangeSummary(slug),
+    getTopicEvidenceGapSummary(slug),
   ]);
   const initialPages: WikiPageSummary[] = await listWikiPages(workspaceRoot);
   const initialPage =
@@ -92,6 +94,7 @@ export default async function TopicWorkspacePage({
         <TopicWorkspaceIntro
           comparisonSpotlight={portfolio.comparisonSpotlight}
           evidenceChangeSummary={evidenceChangeSummary}
+          evidenceGapSummary={evidenceGapSummary}
           questionWorkflow={questionWorkflow}
           sessionSummary={sessionSummary}
           synthesisSummary={synthesisSummary}

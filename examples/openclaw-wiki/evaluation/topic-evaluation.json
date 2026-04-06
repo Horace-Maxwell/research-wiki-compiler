@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-04-06T03:51:39.976Z",
+  "generatedAt": "2026-04-06T04:22:54.051Z",
   "target": {
     "kind": "example",
     "id": "openclaw",
@@ -12,7 +12,7 @@
   "maturity": {
     "stage": "flagship",
     "nextStage": null,
-    "summary": "OpenClaw example wiki is operating at flagship quality: strong workflow completeness, strong daily-use surfaces, and a clear showcase path.",
+    "summary": "OpenClaw example wiki is operating at flagship quality: strong workflow completeness, strong daily-use surfaces, and a clear showcase path. Remaining evidence risk is explicit and bounded, led by \"OpenClaw upgrade trigger comparison evidence\" instead of being hidden inside the canonical layer.",
     "stageAssessments": [
       {
         "stage": "starter",
@@ -62,7 +62,7 @@
           {
             "label": "Canonical pages are grounded in compiled artifacts, not only starter corpus refs",
             "satisfied": true,
-            "details": "11 canonical pages cite non-corpus workflow artifacts."
+            "details": "11 canonical pages cite non-corpus workflow artifacts. Evidence blocker: OpenClaw upgrade trigger comparison evidence."
           },
           {
             "label": "The canonical layer extends beyond the bare starter minimum",
@@ -93,7 +93,7 @@
           {
             "label": "Maintenance surfaces are operational",
             "satisfied": true,
-            "details": "5/5 maintenance readiness score."
+            "details": "5/5 maintenance readiness score. Evidence blocker: OpenClaw upgrade trigger comparison evidence."
           },
           {
             "label": "Context packs are high-signal enough for repeated use",
@@ -129,7 +129,7 @@
           {
             "label": "Canonical depth is strong",
             "satisfied": true,
-            "details": "5/5 canonical depth score."
+            "details": "5/5 canonical depth score. Evidence blocker: OpenClaw upgrade trigger comparison evidence."
           },
           {
             "label": "Workflow and provenance are strongly integrated",
@@ -390,14 +390,14 @@
       "status": "strong",
       "summary": "Open Questions is doing its job cleanly.",
       "evidence": [
-        "5/5 expected headings matched.",
-        "1468 body words.",
-        "54 wiki links.",
-        "92 bullet items and 0 ordered steps.",
-        "5/5 expected headings matched.",
-        "1431 body words.",
-        "58 wiki links.",
-        "87 bullet items and 0 ordered steps."
+        "6/6 expected headings matched.",
+        "1945 body words.",
+        "65 wiki links.",
+        "124 bullet items and 0 ordered steps.",
+        "6/6 expected headings matched.",
+        "1908 body words.",
+        "75 wiki links.",
+        "119 bullet items and 0 ordered steps."
       ],
       "issues": []
     },
@@ -472,14 +472,14 @@
       "status": "strong",
       "summary": "Maintenance Rhythm is doing its job cleanly.",
       "evidence": [
-        "8/8 expected headings matched.",
-        "1923 body words.",
+        "9/9 expected headings matched.",
+        "2315 body words.",
         "80 wiki links.",
-        "110 bullet items and 0 ordered steps.",
-        "6/6 expected headings matched.",
-        "1482 body words.",
-        "45 wiki links.",
-        "92 bullet items and 0 ordered steps."
+        "130 bullet items and 0 ordered steps.",
+        "7/7 expected headings matched.",
+        "1874 body words.",
+        "51 wiki links.",
+        "112 bullet items and 0 ordered steps."
       ],
       "issues": []
     },
@@ -633,6 +633,27 @@
   },
   "nextActions": [
     {
+      "id": "evidence-openclaw-upgrade-trigger-comparison-gap",
+      "priority": "high",
+      "category": "evidence",
+      "title": "Close the next evidence blocker",
+      "summary": "OpenClaw upgrade trigger comparison evidence is the highest-leverage missing evidence in this workspace. A focused comparison pass over the release page, watchpoints synthesis, and archived upgrade note that names which cues really justify a full regression run.",
+      "whyNow": "The next durable gain should come from better evidence, not more notes. Closing \"OpenClaw upgrade trigger comparison evidence\" should advance the strongest question or synthesis fastest.",
+      "targetStage": "flagship",
+      "relatedSurfaceIds": [
+        "open-questions",
+        "maintenance-rhythm",
+        "llm-context-packs",
+        "canonical-wiki-pages"
+      ],
+      "pathHints": [
+        "workspace/wiki/notes/openclaw-open-questions.md",
+        "obsidian-vault/00 Atlas/Open Questions.md",
+        "workspace/wiki/syntheses/openclaw-maintenance-rhythm.md",
+        "obsidian-vault/00 Atlas/Maintenance Rhythm.md"
+      ]
+    },
+    {
       "id": "showcase-hardening",
       "priority": "medium",
       "category": "showcase",
@@ -653,6 +674,7 @@
     }
   ],
   "recommendedNextSteps": [
+    "Close the next evidence blocker: OpenClaw upgrade trigger comparison evidence is the highest-leverage missing evidence in this workspace. A focused comparison pass over the release page, watchpoints synthesis, and archived upgrade note that names which cues really justify a full regression run.",
     "Broaden showcase-grade maintenance evidence: Expand audit variety and long-horizon maintenance signals so flagship quality stays deserved over time."
   ],
   "reportPaths": {

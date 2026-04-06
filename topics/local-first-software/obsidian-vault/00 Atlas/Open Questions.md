@@ -76,6 +76,38 @@
 - **Updated surfaces**: [[Local-First Software]], [[Sync engines]], [[Local-First Software maintenance rhythm]], [[Local-First Software open questions]], [[Local-First Software maintenance watchpoints]], [[Local-First Software current tensions]]
 - **Revisit if**: A new source changes the basic framing of sync, migration, or maintenance burden.
 
+## Evidence gaps to close next
+
+### Local-First Software migration promotion evidence
+
+- **Status**: in session
+- **Gap type**: synthesis readiness
+- **Missing evidence**: A cleaner comparison showing why migration pressure now outranks the other starter candidates for durable synthesis.
+- **Next evidence**: A focused maintenance pass proving one compact migration bundle can answer the candidate reliably without reopening the whole provenance graph.
+- **Load first**: [[Maintenance Triage]], [[Explain Local-First Software]]
+- **Inspect pages**: [[Schema migration pressure]], [[Local-First Software maintenance rhythm]], [[Local-First Software open questions]]
+- **Inspect sources**: Sync engines; Maintenance risks
+- **Acquisition session**: Promote the migration playbook
+- **Advances questions**: Which migration concerns deserve their own synthesis instead of staying inside a concept page?
+- **Advances syntheses**: Local-first migration playbook
+- **Blocks maturity**: developing
+- **Success looks like**: The migration playbook clearly outranks the other candidates.; Maintenance rhythm, open questions, and watchpoints can all be updated from the same promotion decision.
+
+### Local-First Software repeated watchpoint evidence
+
+- **Status**: planned
+- **Gap type**: operational evidence
+- **Missing evidence**: Another source, review, or audit pass showing the same repair or conflict signal changes operator behavior more than once.
+- **Next evidence**: A second bounded pass proving that the same repair or conflict signal changes revisit order or monitoring logic again.
+- **Load first**: [[Maintenance Triage]], [[Provenance And Review]]
+- **Inspect pages**: [[Local-First Software maintenance watchpoints]], [[Local-First Software maintenance rhythm]], [[Local-First Software open questions]]
+- **Inspect sources**: Maintenance risks; Sync engines
+- **Acquisition session**: Collect repeat repair and conflict signals
+- **Advances questions**: Which conflict or repair signals should become explicit watchpoints?
+- **Advances syntheses**: Local-First Software maintenance watchpoints
+- **Blocks maturity**: maintained
+- **Success looks like**: A later source, review, or audit artifact repeats the same repair or conflict signal.; Maintenance rhythm would change in the same direction because of it.
+
 ## Reopened by evidence change
 
 ### Local-First Software maintenance evidence tightened

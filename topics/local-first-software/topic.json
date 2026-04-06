@@ -867,6 +867,186 @@
       ]
     }
   ],
+  "evidenceGaps": [
+    {
+      "id": "local-first-canonical-grounding-gap",
+      "title": "Local-First Software canonical grounding gap",
+      "summary": "The starter topic needed enough repeated framing evidence to keep the entry page durable without pretending every local-first trade-off was already settled.",
+      "status": "resolved",
+      "priority": "medium",
+      "gapType": "provenance-quality",
+      "whyItMatters": "A starter topic becomes trustworthy when the canonical entry stays compact and grounded instead of absorbing every still-moving operational claim.",
+      "impactSummary": "Closing this gap let the entry page stabilize while tensions, open questions, and later syntheses kept the still-provisional work visible.",
+      "missingEvidence": "A stable framing that recurs across the bounded corpus without direct conflict.",
+      "nextEvidenceToAcquire": "Already closed by the canonical-boundary session that separated durable sync framing from still-provisional repair and migration detail.",
+      "successCriteria": [
+        "The canonical entry can stay short and durable.",
+        "Unresolved trade-offs move into current tensions and open questions instead of the article layer."
+      ],
+      "linkedQuestionIds": [
+        "sync-assumptions-durable"
+      ],
+      "linkedSynthesisIds": [
+        "local-first-sync-risk-map"
+      ],
+      "canonicalReviewTitles": [
+        "Local-First Software"
+      ],
+      "watchpointTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "maintenanceSurfaceTitles": [
+        "Local-First Software current tensions",
+        "Local-First Software open questions"
+      ],
+      "acquisitionSessionId": "session-sync-canonical-boundary",
+      "preferredContextPackTitles": [
+        "Explain Local-First Software",
+        "Provenance And Review"
+      ],
+      "firstPageTitles": [
+        "Local-First Software",
+        "Sync engines",
+        "Local-First Software current tensions"
+      ],
+      "firstSourceTitles": [
+        "Local-first core ideas",
+        "Sync engines"
+      ],
+      "maturityBlockerStages": [],
+      "qualityBlockerNotes": [
+        "Canonical depth depends on keeping the durable story grounded instead of broadening too early."
+      ],
+      "advancesQuestionIds": [
+        "sync-assumptions-durable"
+      ],
+      "advancesSynthesisIds": [
+        "local-first-sync-risk-map"
+      ],
+      "resolvedAt": "2026-04-05T13:00:00.000Z",
+      "resolutionSummary": "The entry page now holds the shortest durable framing, and later evidence work can stay focused on syntheses and watchpoints."
+    },
+    {
+      "id": "local-first-watchpoint-recurrence-gap",
+      "title": "Local-First Software repeated watchpoint evidence",
+      "summary": "The topic still needs repeated operator-facing evidence before the strongest repair and conflict signals should harden into durable watchpoint guidance.",
+      "status": "planned",
+      "priority": "high",
+      "gapType": "operational-evidence",
+      "whyItMatters": "Without repeated operating evidence, the watch surface stays like organized concern instead of durable maintenance logic.",
+      "impactSummary": "This gap blocks the watchpoint question from advancing cleanly and keeps the maintenance-watchpoints synthesis more provisional than it should be.",
+      "missingEvidence": "Another source, review, or audit pass showing the same repair or conflict signal changes operator behavior more than once.",
+      "nextEvidenceToAcquire": "A second bounded pass proving that the same repair or conflict signal changes revisit order or monitoring logic again.",
+      "successCriteria": [
+        "A later source, review, or audit artifact repeats the same repair or conflict signal.",
+        "Maintenance rhythm would change in the same direction because of it."
+      ],
+      "linkedQuestionIds": [
+        "conflict-repair-watchpoints"
+      ],
+      "linkedSynthesisIds": [
+        "local-first-maintenance-watchpoints-synthesis"
+      ],
+      "canonicalReviewTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "watchpointTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "maintenanceSurfaceTitles": [
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ],
+      "acquisitionSessionId": "session-conflict-watchpoints",
+      "preferredContextPackTitles": [
+        "Maintenance Triage",
+        "Provenance And Review"
+      ],
+      "firstPageTitles": [
+        "Local-First Software maintenance watchpoints",
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ],
+      "firstSourceTitles": [
+        "Maintenance risks",
+        "Sync engines"
+      ],
+      "maturityBlockerStages": [
+        "maintained"
+      ],
+      "qualityBlockerNotes": [
+        "The topic is structurally usable, but the monitoring surface is still under-evidenced."
+      ],
+      "advancesQuestionIds": [
+        "conflict-repair-watchpoints"
+      ],
+      "advancesSynthesisIds": [
+        "local-first-maintenance-watchpoints-synthesis"
+      ],
+      "resolvedAt": null,
+      "resolutionSummary": null
+    },
+    {
+      "id": "local-first-migration-promotion-gap",
+      "title": "Local-First Software migration promotion evidence",
+      "summary": "The topic still needs one tighter justification for why the migration playbook deserves to become the next durable synthesis instead of remaining a well-organized candidate.",
+      "status": "in-session",
+      "priority": "high",
+      "gapType": "synthesis-readiness",
+      "whyItMatters": "The starter topic becomes more than a good scaffold when one candidate earns promotion for evidence-based reasons rather than just because it is available.",
+      "impactSummary": "Closing this gap would resolve the clearest ready-for-synthesis question and make the next maturity step feel earned instead of procedural.",
+      "missingEvidence": "A cleaner comparison showing why migration pressure now outranks the other starter candidates for durable synthesis.",
+      "nextEvidenceToAcquire": "A focused maintenance pass proving one compact migration bundle can answer the candidate reliably without reopening the whole provenance graph.",
+      "successCriteria": [
+        "The migration playbook clearly outranks the other candidates.",
+        "Maintenance rhythm, open questions, and watchpoints can all be updated from the same promotion decision."
+      ],
+      "linkedQuestionIds": [
+        "migration-playbook"
+      ],
+      "linkedSynthesisIds": [
+        "local-first-migration-playbook"
+      ],
+      "canonicalReviewTitles": [
+        "Schema migration pressure"
+      ],
+      "watchpointTitles": [
+        "Local-First Software maintenance watchpoints"
+      ],
+      "maintenanceSurfaceTitles": [
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ],
+      "acquisitionSessionId": "session-migration-playbook",
+      "preferredContextPackTitles": [
+        "Maintenance Triage",
+        "Explain Local-First Software"
+      ],
+      "firstPageTitles": [
+        "Schema migration pressure",
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ],
+      "firstSourceTitles": [
+        "Sync engines",
+        "Maintenance risks"
+      ],
+      "maturityBlockerStages": [
+        "developing"
+      ],
+      "qualityBlockerNotes": [
+        "The workspace is structurally coherent, but the next maturity move still depends on better evidence for synthesis promotion."
+      ],
+      "advancesQuestionIds": [
+        "migration-playbook"
+      ],
+      "advancesSynthesisIds": [
+        "local-first-migration-playbook"
+      ],
+      "resolvedAt": null,
+      "resolutionSummary": null
+    }
+  ],
   "evidenceBundles": [
     {
       "id": "local-first-software-canonical-boundary-evidence",
