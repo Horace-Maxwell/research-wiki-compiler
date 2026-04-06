@@ -25,6 +25,8 @@
   ·
   <a href="./examples/openclaw-wiki/README.md">OpenClaw Example / OpenClaw 示例</a>
   ·
+  <a href="./docs/topic-bootstrap.md">Topic Bootstrap / 主题启动</a>
+  ·
   <a href="./docs/architecture.md">Architecture / 架构</a>
   ·
   <a href="./docs/product-spec.md">Product Spec / 产品规格</a>
@@ -258,6 +260,46 @@ Start with:
 - [examples/openclaw-wiki/workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md](./examples/openclaw-wiki/workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md)
 - [examples/openclaw-wiki/obsidian-vault/README.md](./examples/openclaw-wiki/obsidian-vault/README.md)
 - [examples/openclaw-wiki/obsidian-vault/00 Atlas/Start Here.md](./examples/openclaw-wiki/obsidian-vault/00%20Atlas/Start%20Here.md)
+
+## New Topic Bootstrap / 新主题启动
+
+仓库现在不仅有 OpenClaw 旗舰示例，也有一个正式的新主题启动系统。它不是“复制 OpenClaw 文件夹再手改”，而是一个可复用的 starter contract + build + validate 路径。  
+The repository now ships not only the OpenClaw flagship example, but also a formal new-topic bootstrap system. It is not “copy the OpenClaw folder and hand-edit it.” It is a reusable starter contract plus build and validate path.
+
+官方命令：  
+Official commands:
+
+```bash
+npm run topic:init -- --slug my-topic --title "My Topic"
+npm run topic:build -- --slug my-topic
+npm run topic:validate -- --slug my-topic
+```
+
+如果你已经有一个小型 starter corpus，可以直接复制进去：  
+If you already have a small starter corpus, you can copy it in during init:
+
+```bash
+npm run topic:init -- \
+  --slug my-topic \
+  --title "My Topic" \
+  --copy-corpus-from ./path/to/corpus
+```
+
+入口文档：  
+Entry docs:
+
+- [docs/topic-bootstrap.md](./docs/topic-bootstrap.md)
+- [topics/README.md](./topics/README.md)
+- [topics/local-first-software/README.md](./topics/local-first-software/README.md)
+
+这个 starter system 会生成：
+
+- `topic.json` topic contract
+- `source-corpus/` bounded starter corpus
+- `workspace/wiki/` canonical starter pages
+- `obsidian-vault/` atlas / context-pack projection
+- `manifest.json` managed starter inventory
+- `starter-baseline.json` deterministic validation baseline
 - [examples/openclaw-wiki/obsidian-vault/00 Atlas/Maintenance Rhythm.md](./examples/openclaw-wiki/obsidian-vault/00%20Atlas/Maintenance%20Rhythm.md)
 - [examples/openclaw-wiki/obsidian-vault/00 Atlas/LLM Context Pack.md](./examples/openclaw-wiki/obsidian-vault/00%20Atlas/LLM%20Context%20Pack.md)
 - [examples/openclaw-wiki/obsidian-vault/00 Atlas/Topic Map.md](./examples/openclaw-wiki/obsidian-vault/00%20Atlas/Topic%20Map.md)

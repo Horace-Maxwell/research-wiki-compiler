@@ -7,6 +7,7 @@ export const REPO_ROOT = path.resolve(moduleDirectory, "../../..");
 export const DEMO_WORKSPACE_ROOT = path.join(REPO_ROOT, "demo-workspace");
 export const DEMO_DATA_ROOT = path.join(REPO_ROOT, "demo-data");
 export const EXAMPLES_ROOT = path.join(REPO_ROOT, "examples");
+export const TOPICS_ROOT = path.join(REPO_ROOT, "topics");
 export const OPENCLAW_EXAMPLE_ROOT = path.join(EXAMPLES_ROOT, "openclaw-wiki");
 export const OPENCLAW_EXAMPLE_SNAPSHOT_ROOT = path.join(
   OPENCLAW_EXAMPLE_ROOT,

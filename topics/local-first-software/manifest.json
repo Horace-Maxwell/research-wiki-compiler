@@ -1,0 +1,310 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-05T12:00:00.000Z",
+  "slug": "local-first-software",
+  "title": "Local-First Software",
+  "description": "A starter workspace for local-first software trade-offs, sync architecture, and maintenance watchpoints.",
+  "seedTimestamp": "2026-04-05T12:00:00.000Z",
+  "topicRoot": "local-first-software",
+  "managedPaths": {
+    "configPath": "topic.json",
+    "readmePath": "README.md",
+    "manifestPath": "manifest.json",
+    "baselinePath": "starter-baseline.json",
+    "sourceCorpusRoot": "source-corpus",
+    "workspaceRoot": "workspace",
+    "obsidianVaultRoot": "obsidian-vault"
+  },
+  "layers": {
+    "canonical": {
+      "root": "workspace/wiki",
+      "role": "Durable canonical pages and maintenance syntheses live here. This remains the source-of-truth layer for the topic."
+    },
+    "working": {
+      "root": "workspace/wiki + workspace/reviews + workspace/audits",
+      "role": "Working notes, maintenance sequencing, review artifacts, and audit follow-ups stay visible here so the topic can be resumed without guesswork."
+    },
+    "projection": {
+      "root": "obsidian-vault",
+      "role": "The Obsidian projection is an additive working layer for maps of content, compact bundles, and day-to-day reading. It is not the truth layer."
+    }
+  },
+  "qualityBar": {
+    "requiredStarterQualityBar": [
+      "canonical-index",
+      "start-here",
+      "topic-map",
+      "reading-paths",
+      "open-questions",
+      "current-tensions",
+      "maintenance-watchpoints",
+      "maintenance-rhythm",
+      "artifact-map",
+      "at-least-one-context-pack",
+      "starter-validation"
+    ],
+    "requiredAtlasNotes": [
+      "Start Here",
+      "Topic Map",
+      "Key Pages",
+      "Reading Paths",
+      "Open Questions",
+      "Current Tensions",
+      "Monitoring",
+      "Maintenance Rhythm",
+      "LLM Context Pack",
+      "Artifact Map"
+    ],
+    "requiredContextPackTitles": [
+      "Explain Local-First Software",
+      "Maintenance Triage",
+      "Provenance And Review"
+    ],
+    "keyInspectionPaths": [
+      "workspace/wiki/index.md",
+      "wiki/topics/local-first-software.md",
+      "obsidian-vault/00 Atlas/Start Here.md",
+      "obsidian-vault/00 Atlas/Topic Map.md",
+      "obsidian-vault/00 Atlas/Maintenance Rhythm.md"
+    ]
+  },
+  "corpusFiles": [
+    {
+      "fileName": "2026-04-01-local-first-core.md",
+      "title": "Local-first core ideas",
+      "description": "A bounded starter note on local copies, offline use, and sync as a first-class system concern.",
+      "origin": "repo-curated starter corpus"
+    },
+    {
+      "fileName": "2026-04-02-sync-engines.md",
+      "title": "Sync engines",
+      "description": "A starter note on replication models, conflict policy, and schema-change cost.",
+      "origin": "repo-curated starter corpus"
+    },
+    {
+      "fileName": "2026-04-03-maintenance-risks.md",
+      "title": "Maintenance risks",
+      "description": "A starter note on migration pressure, device drift, and when watchpoints should graduate into syntheses.",
+      "origin": "repo-curated starter corpus"
+    }
+  ],
+  "pages": [
+    {
+      "title": "Local-First Software",
+      "type": "topic",
+      "path": "wiki/topics/local-first-software.md",
+      "managedRole": "canonical"
+    },
+    {
+      "title": "Sync engines",
+      "type": "concept",
+      "path": "wiki/concepts/sync-engines.md",
+      "managedRole": "canonical"
+    },
+    {
+      "title": "Schema migration pressure",
+      "type": "concept",
+      "path": "wiki/concepts/schema-migration-pressure.md",
+      "managedRole": "canonical"
+    },
+    {
+      "title": "Local-First Software Index",
+      "type": "index",
+      "path": "wiki/index.md",
+      "managedRole": "navigation"
+    },
+    {
+      "title": "Local-First Software reading paths",
+      "type": "synthesis",
+      "path": "wiki/syntheses/local-first-software-reading-paths.md",
+      "managedRole": "working"
+    },
+    {
+      "title": "Local-First Software current tensions",
+      "type": "synthesis",
+      "path": "wiki/syntheses/local-first-software-current-tensions.md",
+      "managedRole": "working"
+    },
+    {
+      "title": "Local-First Software open questions",
+      "type": "note",
+      "path": "wiki/notes/local-first-software-open-questions.md",
+      "managedRole": "working"
+    },
+    {
+      "title": "Local-First Software maintenance watchpoints",
+      "type": "synthesis",
+      "path": "wiki/syntheses/local-first-software-maintenance-watchpoints.md",
+      "managedRole": "monitoring"
+    },
+    {
+      "title": "Local-First Software maintenance rhythm",
+      "type": "synthesis",
+      "path": "wiki/syntheses/local-first-software-maintenance-rhythm.md",
+      "managedRole": "working"
+    },
+    {
+      "title": "Note: What should I revisit next for Local-First Software",
+      "type": "note",
+      "path": "wiki/notes/note-what-should-i-revisit-next-for-local-first-software.md",
+      "managedRole": "monitoring"
+    }
+  ],
+  "obsidianNotes": [
+    {
+      "title": "README",
+      "path": "README.md",
+      "kind": "readme"
+    },
+    {
+      "title": "Start Here",
+      "path": "00 Atlas/Start Here.md",
+      "kind": "atlas"
+    },
+    {
+      "title": "Topic Map",
+      "path": "00 Atlas/Topic Map.md",
+      "kind": "atlas"
+    },
+    {
+      "title": "Key Pages",
+      "path": "00 Atlas/Key Pages.md",
+      "kind": "atlas"
+    },
+    {
+      "title": "Reading Paths",
+      "path": "00 Atlas/Reading Paths.md",
+      "kind": "atlas"
+    },
+    {
+      "title": "Open Questions",
+      "path": "00 Atlas/Open Questions.md",
+      "kind": "atlas"
+    },
+    {
+      "title": "Current Tensions",
+      "path": "00 Atlas/Current Tensions.md",
+      "kind": "atlas"
+    },
+    {
+      "title": "Monitoring",
+      "path": "00 Atlas/Monitoring.md",
+      "kind": "atlas"
+    },
+    {
+      "title": "Maintenance Rhythm",
+      "path": "00 Atlas/Maintenance Rhythm.md",
+      "kind": "atlas"
+    },
+    {
+      "title": "LLM Context Pack",
+      "path": "00 Atlas/LLM Context Pack.md",
+      "kind": "atlas"
+    },
+    {
+      "title": "Artifact Map",
+      "path": "00 Atlas/Artifact Map.md",
+      "kind": "atlas"
+    },
+    {
+      "title": "Explain Local-First Software",
+      "path": "05 Context Packs/Explain Local-First Software.md",
+      "kind": "context-pack"
+    },
+    {
+      "title": "Provenance And Review",
+      "path": "05 Context Packs/Provenance And Review.md",
+      "kind": "context-pack"
+    },
+    {
+      "title": "Maintenance Triage",
+      "path": "05 Context Packs/Maintenance Triage.md",
+      "kind": "context-pack"
+    },
+    {
+      "title": "Local-First Software",
+      "path": "10 Articles/Local-First Software.md",
+      "kind": "article"
+    },
+    {
+      "title": "Sync engines",
+      "path": "10 Articles/Sync engines.md",
+      "kind": "article"
+    },
+    {
+      "title": "Schema migration pressure",
+      "path": "10 Articles/Schema migration pressure.md",
+      "kind": "article"
+    },
+    {
+      "title": "Local-First Software Index",
+      "path": "10 Articles/Local-First Software Index.md",
+      "kind": "article"
+    },
+    {
+      "title": "Local-First Software reading paths",
+      "path": "10 Articles/Local-First Software reading paths.md",
+      "kind": "article"
+    },
+    {
+      "title": "Local-First Software current tensions",
+      "path": "10 Articles/Local-First Software current tensions.md",
+      "kind": "article"
+    },
+    {
+      "title": "Local-First Software open questions",
+      "path": "10 Articles/Local-First Software open questions.md",
+      "kind": "article"
+    },
+    {
+      "title": "Local-First Software maintenance watchpoints",
+      "path": "10 Articles/Local-First Software maintenance watchpoints.md",
+      "kind": "article"
+    },
+    {
+      "title": "Local-First Software maintenance rhythm",
+      "path": "10 Articles/Local-First Software maintenance rhythm.md",
+      "kind": "article"
+    },
+    {
+      "title": "Note: What should I revisit next for Local-First Software",
+      "path": "10 Articles/Note - What should I revisit next for Local-First Software.md",
+      "kind": "article"
+    },
+    {
+      "title": "Corpus Atlas",
+      "path": "20 Sources/Corpus Atlas.md",
+      "kind": "artifact"
+    },
+    {
+      "title": "Processed Source Atlas",
+      "path": "25 Normalized Sources/Processed Source Atlas.md",
+      "kind": "artifact"
+    },
+    {
+      "title": "Summary Atlas",
+      "path": "30 Summaries/Summary Atlas.md",
+      "kind": "artifact"
+    },
+    {
+      "title": "Review History",
+      "path": "40 Reviews/Review History.md",
+      "kind": "artifact"
+    },
+    {
+      "title": "Audit Atlas",
+      "path": "50 Audits/Audit Atlas.md",
+      "kind": "artifact"
+    },
+    {
+      "title": ".gitignore",
+      "path": ".gitignore",
+      "kind": "artifact"
+    }
+  ],
+  "notes": {
+    "bootstrapMode": "deterministic starter bootstrap",
+    "canonicalSourceOfTruth": "workspace/wiki",
+    "projectionRole": "obsidian-vault is a working projection and not the source of truth"
+  }
+}

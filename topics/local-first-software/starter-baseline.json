@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-04-05T12:00:00.000Z",
+  "seedTimestamp": "2026-04-05T12:00:00.000Z",
+  "manifestLogicalPath": "manifest.json",
+  "entries": [
+    {
+      "logicalPath": "manifest.json",
+      "sha256": "49281b8dac5fbaf6da3f669540e6339f9dfb5bfa43ffb45e638da4e7afc4a55c"
+    },
+    {
+      "logicalPath": "obsidian-vault/.gitignore",
+      "sha256": "21cf8be8d676f8514757ed765da2f861f17af29acbec6bae2b5818405705ba18"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Artifact Map.md",
+      "sha256": "98d8fce60bfeb4557d96132325b64a4512599f1465d0436eeaa06c084632e5c8"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Current Tensions.md",
+      "sha256": "4d63b2023ccc7e02ae39b6edb8c2b70d238610eae0da65a9cf39a04edea3c87e"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Key Pages.md",
+      "sha256": "5f6fd09c2f923d58a164e77429744886e2d473ce7948355f332a7289d10aa3da"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/LLM Context Pack.md",
+      "sha256": "e36b4d815919ce1cef4da6e5259d904459167e25acc02a26a95a476be9882192"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Maintenance Rhythm.md",
+      "sha256": "324d11c48bb4b8e94e7c6b8e793571705283eea46c907c410835804439c78d25"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Monitoring.md",
+      "sha256": "6f965f835a135091b872ef465bc86e711b196a3a1c19b490a320633e47bb4d7f"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Open Questions.md",
+      "sha256": "52fed82db2b81923091952700e06e5b248d1b65c1fcdae67e94b396a2c6c652c"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Reading Paths.md",
+      "sha256": "0f9a36d6dc1318e966579a63452977cfa94d804a3f7390f73de12c42dff1a1b9"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Start Here.md",
+      "sha256": "9f9efa2e8159695883373dd522995660f87414344587b6bdaf30b7105e2c7132"
+    },
+    {
+      "logicalPath": "obsidian-vault/00 Atlas/Topic Map.md",
+      "sha256": "99a2db7f6db40b42ac91fc18b2b2a4f3dee42124bad2867f1240c17741930a25"
+    },
+    {
+      "logicalPath": "obsidian-vault/05 Context Packs/Explain Local-First Software.md",
+      "sha256": "e81c7deb68eb0f4448db19b4e1191c8b15871690218775498051b44245cf96cb"
+    },
+    {
+      "logicalPath": "obsidian-vault/05 Context Packs/Maintenance Triage.md",
+      "sha256": "3d51afc927ff5bc5e085d63e0c70f4e9324705816540c1eacf38e06683cf38e5"
+    },
+    {
+      "logicalPath": "obsidian-vault/05 Context Packs/Provenance And Review.md",
+      "sha256": "512cf261ff24f728eb7ecf7802ff99b460c7882a7d62a206e501390a47643bdb"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/Local-First Software current tensions.md",
+      "sha256": "d6108277f515eb582c70ad91f04d308aa995be27e2f4e6c2abbc555ad475eec5"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/Local-First Software Index.md",
+      "sha256": "a9a597831518b89d320bb68f5617608a89900eff866fe5777d2c972ec64e1880"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/Local-First Software maintenance rhythm.md",
+      "sha256": "7b85980b3c364a57c455ce643d096ac42c187c0f8a2c6a0a0b67350bcd9d2c6f"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/Local-First Software maintenance watchpoints.md",
+      "sha256": "576a8df8ff2764c0dfbdebce7f2733f58f569e2602fc9ad2576615d7f4e501fb"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/Local-First Software open questions.md",
+      "sha256": "2eb53707ef07a37c7673df6d432de6800ce79263071d969418006e78b1817795"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/Local-First Software reading paths.md",
+      "sha256": "847be5e897051e68ba302427065f4a0d50402c460ef66decfdd249058cba906d"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/Local-First Software.md",
+      "sha256": "8189abd696b2e3b2bd7439fa65db8e35514009a89834cb2889e1ae18588e7551"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/Note - What should I revisit next for Local-First Software.md",
+      "sha256": "444c6fb3de72a07c21e912685aeb34c01764377bae42dc558b72321c2d6dd7a7"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/Schema migration pressure.md",
+      "sha256": "d0d3a34ccedf45ae5396c1429f69503ee522fc3d53bbc94a133e065870ced0c6"
+    },
+    {
+      "logicalPath": "obsidian-vault/10 Articles/Sync engines.md",
+      "sha256": "5938fc03bea3947b5cf95b351c67c88e14d8193bcf7b523cfdaa9af350b7be70"
+    },
+    {
+      "logicalPath": "obsidian-vault/20 Sources/Corpus Atlas.md",
+      "sha256": "9ffc72cc4a6fc16c5095490ce27e8f50613ccfe005644d93d4e27bab38ad8345"
+    },
+    {
+      "logicalPath": "obsidian-vault/25 Normalized Sources/Processed Source Atlas.md",
+      "sha256": "5a1482e1a755a4eb79fca07dc8b9f0c1cc4c26347c2fd10fedee527e60847f7c"
+    },
+    {
+      "logicalPath": "obsidian-vault/30 Summaries/Summary Atlas.md",
+      "sha256": "e9a207072e5a9fd59fdb27578135a0094a37763be9cb937ebf12033d4b611ce0"
+    },
+    {
+      "logicalPath": "obsidian-vault/40 Reviews/Review History.md",
+      "sha256": "e1ac49183c5f02ad58b350549653b22ce7bf27e38ce8f86311cf6436e00a0108"
+    },
+    {
+      "logicalPath": "obsidian-vault/50 Audits/Audit Atlas.md",
+      "sha256": "908d4df334ad540e6b3d0004191255689788ff006c0878b6227d717b4a93f1a2"
+    },
+    {
+      "logicalPath": "obsidian-vault/README.md",
+      "sha256": "397eca77020f13753f2624eaf7b58025500f81c9497d5dbd32f0d69cae09572a"
+    },
+    {
+      "logicalPath": "README.md",
+      "sha256": "5d44d834e32f20f2db4a7d90f1acd22fba05420b7c9937e734173b9b25498d40"
+    },
+    {
+      "logicalPath": "topic.json",
+      "sha256": "7ac947964749698e5a00e14ee18698e00cc70490671cc5bcc266415a98278dd6"
+    },
+    {
+      "logicalPath": "workspace/audits/.gitkeep",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "logicalPath": "workspace/raw/inbox/.gitkeep",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/.gitkeep",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "logicalPath": "workspace/raw/processed/summaries/.gitkeep",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "logicalPath": "workspace/reviews/approved/.gitkeep",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "logicalPath": "workspace/reviews/pending/.gitkeep",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "logicalPath": "workspace/reviews/rejected/.gitkeep",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "logicalPath": "workspace/wiki/concepts/schema-migration-pressure.md",
+      "sha256": "d0d3a34ccedf45ae5396c1429f69503ee522fc3d53bbc94a133e065870ced0c6"
+    },
+    {
+      "logicalPath": "workspace/wiki/concepts/sync-engines.md",
+      "sha256": "5938fc03bea3947b5cf95b351c67c88e14d8193bcf7b523cfdaa9af350b7be70"
+    },
+    {
+      "logicalPath": "workspace/wiki/index.md",
+      "sha256": "a9a597831518b89d320bb68f5617608a89900eff866fe5777d2c972ec64e1880"
+    },
+    {
+      "logicalPath": "workspace/wiki/notes/local-first-software-open-questions.md",
+      "sha256": "2eb53707ef07a37c7673df6d432de6800ce79263071d969418006e78b1817795"
+    },
+    {
+      "logicalPath": "workspace/wiki/notes/note-what-should-i-revisit-next-for-local-first-software.md",
+      "sha256": "444c6fb3de72a07c21e912685aeb34c01764377bae42dc558b72321c2d6dd7a7"
+    },
+    {
+      "logicalPath": "workspace/wiki/syntheses/local-first-software-current-tensions.md",
+      "sha256": "d6108277f515eb582c70ad91f04d308aa995be27e2f4e6c2abbc555ad475eec5"
+    },
+    {
+      "logicalPath": "workspace/wiki/syntheses/local-first-software-maintenance-rhythm.md",
+      "sha256": "7b85980b3c364a57c455ce643d096ac42c187c0f8a2c6a0a0b67350bcd9d2c6f"
+    },
+    {
+      "logicalPath": "workspace/wiki/syntheses/local-first-software-maintenance-watchpoints.md",
+      "sha256": "576a8df8ff2764c0dfbdebce7f2733f58f569e2602fc9ad2576615d7f4e501fb"
+    },
+    {
+      "logicalPath": "workspace/wiki/syntheses/local-first-software-reading-paths.md",
+      "sha256": "847be5e897051e68ba302427065f4a0d50402c460ef66decfdd249058cba906d"
+    },
+    {
+      "logicalPath": "workspace/wiki/topics/local-first-software.md",
+      "sha256": "8189abd696b2e3b2bd7439fa65db8e35514009a89834cb2889e1ae18588e7551"
+    }
+  ],
+  "corpusEntries": [
+    {
+      "logicalPath": "source-corpus/2026-04-01-local-first-core.md",
+      "sha256": "c180653a9069ccc5fe9db278e64546ac7d81fb0ebade7552cc08e0731e6244e0"
+    },
+    {
+      "logicalPath": "source-corpus/2026-04-02-sync-engines.md",
+      "sha256": "84c0fb776c26440f519be7cd922f80ec6639a02df8aff637b75af6c57a0211f2"
+    },
+    {
+      "logicalPath": "source-corpus/2026-04-03-maintenance-risks.md",
+      "sha256": "b9cca57956b1feb61896a04d756f213c7de6b95de9292c721ff9eeadb317eb05"
+    },
+    {
+      "logicalPath": "source-corpus/README.md",
+      "sha256": "6762af40cef4845091049f3dfddafa4005fecd2da77400df65485f4e058e9c6d"
+    }
+  ]
+}

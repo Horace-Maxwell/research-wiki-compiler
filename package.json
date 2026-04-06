@@ -38,6 +38,9 @@
     "example:openclaw:validate": "tsx scripts/validate-openclaw-example.ts",
     "example:openclaw:live": "tsx scripts/generate-openclaw-example.ts --mode=live",
     "example:openclaw:sync": "tsx scripts/generate-openclaw-example.ts --mode=reference --sync-snapshot",
+    "topic:init": "tsx scripts/init-topic-bootstrap.ts",
+    "topic:build": "tsx scripts/build-topic-bootstrap.ts",
+    "topic:validate": "tsx scripts/validate-topic-bootstrap.ts",
     "db:generate": "drizzle-kit generate",
     "db:check": "drizzle-kit check"
   },

@@ -54,6 +54,7 @@ export type KnowledgeAuditAction = {
 };
 
 export type KnowledgeMethodTemplateData = {
+  workspaceFlavor?: "compiled-example" | "starter-topic";
   topicTitle: string;
   indexTitle: string;
   readingPathsTitle: string;
@@ -129,6 +130,58 @@ function formatSurfaceBullets(surfaces: KnowledgeSurfaceTemplate[]) {
       return `- ${wikiLink(surface.title)}: ${cleanSentenceFragment(surface.purpose)}.${cadence}`;
     })
     .join("\n");
+}
+
+function getWorkspaceFlavor(data: KnowledgeMethodTemplateData) {
+  return data.workspaceFlavor ?? "compiled-example";
+}
+
+function buildWikiOverviewText(data: KnowledgeMethodTemplateData) {
+  if (getWorkspaceFlavor(data) === "starter-topic") {
+    return `This topic workspace is a deterministic bootstrap built around a bounded ${data.topicTitle} corpus. It establishes canonical wiki pages, maintenance-facing working surfaces, an Obsidian projection, and validation targets before the topic moves into deeper summarize, review, archive, and audit loops.`;
+  }
+
+  return `This wiki is a compiled example built from a bounded ${data.topicTitle} corpus. It shows how the product turns raw source excerpts into summaries, reviewable patch proposals, durable wiki pages, grounded answers, archived notes, audits, and repeatable maintenance surfaces.`;
+}
+
+function buildObsidianProjectionIntro(data: KnowledgeMethodTemplateData) {
+  if (getWorkspaceFlavor(data) === "starter-topic") {
+    return `This folder is an Obsidian-first projection of the ${data.topicTitle} topic bootstrap. The source of truth still lives in \`../workspace/\`, while this vault reorganizes the same starter knowledge structure into a calmer map-of-content layout for reading, maintenance, iterative synthesis, and small context selection.`;
+  }
+
+  return `This folder is an Obsidian-first projection of the official ${data.topicTitle} example. The source of truth still lives in \`../workspace/\`, while this vault reorganizes the same compiled knowledge and artifact trail into a calmer map-of-content layout for reading, maintenance, iterative synthesis, and small context selection.`;
+}
+
+function buildStartHereIntro(data: KnowledgeMethodTemplateData) {
+  if (getWorkspaceFlavor(data) === "starter-topic") {
+    return `This vault takes the ${data.topicTitle} topic bootstrap and reshapes it for Obsidian usage: clear maps of content, article-first notes, visible provenance handoffs, compact maintenance surfaces, and small context packs for local reading or LLM-assisted work.`;
+  }
+
+  return `This vault takes the official ${data.topicTitle} example and reshapes it for Obsidian usage: clear maps of content, article-first notes, visible provenance, compact maintenance surfaces, and small context packs for local reading or LLM-assisted work.`;
+}
+
+function buildMaintenanceRhythmSummary(data: KnowledgeMethodTemplateData) {
+  if (getWorkspaceFlavor(data) === "starter-topic") {
+    return `This page is the maintenance control surface for the ${data.topicTitle} bootstrap. It turns the starter wiki into a durable daily workflow: what to revisit next, which compact context packs deserve refresh, what should graduate into synthesis, and where future audit findings should land.`;
+  }
+
+  return `This page is the maintenance control surface for the ${data.topicTitle} example. It turns the compiled wiki into a durable daily workflow: what to revisit next, which compact context packs deserve refresh, what should graduate into synthesis, and where audit findings should land.`;
+}
+
+function buildObsidianSourceFolderDescription(data: KnowledgeMethodTemplateData) {
+  if (getWorkspaceFlavor(data) === "starter-topic") {
+    return "- `20 Sources/`: the bounded starter corpus for this topic.";
+  }
+
+  return "- `20 Sources/`: the bounded user-first corpus used for the example.";
+}
+
+function buildObsidianProjectionIdentity(data: KnowledgeMethodTemplateData) {
+  if (getWorkspaceFlavor(data) === "starter-topic") {
+    return `- A projection of the committed ${data.topicTitle} bootstrap, not a second source-of-truth system.`;
+  }
+
+  return `- A projection of the committed ${data.topicTitle} example, not a second source-of-truth system.`;
 }
 
 export function findKnowledgeSurface(
@@ -235,7 +288,7 @@ function buildWikiIndexPage(data: KnowledgeMethodTemplateData) {
     "",
     "## Overview",
     "",
-    `This wiki is a compiled example built from a bounded ${data.topicTitle} corpus. It shows how the product turns raw source excerpts into summaries, reviewable patch proposals, durable wiki pages, grounded answers, archived notes, audits, and repeatable maintenance surfaces.`,
+    buildWikiOverviewText(data),
     "",
     "## Start here",
     "",
@@ -458,7 +511,7 @@ function buildWikiMaintenanceRhythmPage(data: KnowledgeMethodTemplateData) {
     "",
     "## Summary",
     "",
-    `This page is the maintenance control surface for the ${data.topicTitle} example. It turns the compiled wiki into a durable daily workflow: what to revisit next, which compact context packs deserve refresh, what should graduate into synthesis, and where audit findings should land.`,
+    buildMaintenanceRhythmSummary(data),
     "",
     "## Review cadence",
     "",
@@ -505,7 +558,7 @@ function buildObsidianReadme(data: KnowledgeMethodTemplateData) {
   return `# ${data.topicTitle} Obsidian Vault
 
 > [!info]
-> This folder is an Obsidian-first projection of the official ${data.topicTitle} example. The source of truth still lives in \`../workspace/\`, while this vault reorganizes the same compiled knowledge and artifact trail into a calmer map-of-content layout for reading, maintenance, iterative synthesis, and small context selection.
+> ${buildObsidianProjectionIntro(data)}
 
 ## Start here
 
@@ -525,7 +578,7 @@ function buildObsidianReadme(data: KnowledgeMethodTemplateData) {
 - \`00 Atlas/\`: maps of content, reading routes, maintenance logic, and context-pack guidance.
 - \`05 Context Packs/\`: compact note bundles for small human or model context windows.
 - \`10 Articles/\`: the compiled wiki pages projected into Obsidian-friendly article notes.
-- \`20 Sources/\`: the bounded user-first corpus used for the example.
+${buildObsidianSourceFolderDescription(data)}
 - \`25 Normalized Sources/\`: the processed source layer between raw excerpts and summaries.
 - \`30 Summaries/\`: source summary notes that sit between raw materials and review proposals.
 - \`40 Reviews/\`: approved and rejected patch proposals, kept visible as part of the mutation gate.
@@ -544,11 +597,11 @@ function buildObsidianStartHereNote(data: KnowledgeMethodTemplateData) {
   return `# Start Here
 
 > [!summary]
-> This vault takes the official ${data.topicTitle} example and reshapes it for Obsidian usage: clear maps of content, article-first notes, visible provenance, compact maintenance surfaces, and small context packs for local reading or LLM-assisted work.
+> ${buildStartHereIntro(data)}
 
 ## What this vault is
 
-- A projection of the committed ${data.topicTitle} example, not a second source-of-truth system.
+${buildObsidianProjectionIdentity(data)}
 - A calmer working surface for browsing the compiled wiki in Obsidian.
 - A way to keep articles, source excerpts, normalized sources, summaries, proposals, audits, and maintenance loops one hop apart.
 

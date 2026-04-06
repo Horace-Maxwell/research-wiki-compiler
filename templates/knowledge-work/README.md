@@ -86,6 +86,20 @@ Each pack should be small enough to load into an LLM or into your own head witho
 
 ## Source files that encode the method
 
+- `src/lib/contracts/topic-bootstrap.ts`
+  The reusable starter-topic contract and manifest/baseline schemas.
+- `src/server/services/topic-bootstrap-service.ts`
+  The deterministic topic bootstrap builder and validator.
+- `scripts/init-topic-bootstrap.ts`
+  The public command for creating a new starter topic.
+- `scripts/build-topic-bootstrap.ts`
+  The public command for materializing the starter workspace.
+- `scripts/validate-topic-bootstrap.ts`
+  The public command for validating the starter baseline.
+- `docs/topic-bootstrap.md`
+  The topic-bootstrap playbook and quality bar.
+- `topics/README.md`
+  The folder layout and developer entry path for reusable topics.
 - `src/server/services/knowledge-method-template-service.ts`
   The reusable template generator for canonical maintenance pages and Obsidian atlas/context-pack notes.
 - `src/server/services/openclaw-knowledge-method.ts`

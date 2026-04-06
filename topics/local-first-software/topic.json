@@ -1,0 +1,567 @@
+{
+  "schemaVersion": 1,
+  "topic": {
+    "slug": "local-first-software",
+    "title": "Local-First Software",
+    "aliases": [],
+    "description": "A starter workspace for local-first software trade-offs, sync architecture, and maintenance watchpoints.",
+    "seedTimestamp": "2026-04-05T12:00:00.000Z"
+  },
+  "layerModel": {
+    "canonical": {
+      "root": "workspace/wiki",
+      "role": "Durable canonical pages and maintenance syntheses live here. This remains the source-of-truth layer for the topic."
+    },
+    "working": {
+      "root": "workspace/wiki + workspace/reviews + workspace/audits",
+      "role": "Working notes, maintenance sequencing, review artifacts, and audit follow-ups stay visible here so the topic can be resumed without guesswork."
+    },
+    "projection": {
+      "root": "obsidian-vault",
+      "role": "The Obsidian projection is an additive working layer for maps of content, compact bundles, and day-to-day reading. It is not the truth layer."
+    }
+  },
+  "corpus": {
+    "root": "source-corpus",
+    "notes": [
+      "3 starter corpus files define the first bounded reading set for Local-First Software.",
+      "The corpus is intentionally small so the initial atlas, working notes, and context packs stay compact and debuggable."
+    ],
+    "files": [
+      {
+        "fileName": "2026-04-01-local-first-core.md",
+        "title": "Local-first core ideas",
+        "description": "A bounded starter note on local copies, offline use, and sync as a first-class system concern.",
+        "origin": "repo-curated starter corpus"
+      },
+      {
+        "fileName": "2026-04-02-sync-engines.md",
+        "title": "Sync engines",
+        "description": "A starter note on replication models, conflict policy, and schema-change cost.",
+        "origin": "repo-curated starter corpus"
+      },
+      {
+        "fileName": "2026-04-03-maintenance-risks.md",
+        "title": "Maintenance risks",
+        "description": "A starter note on migration pressure, device drift, and when watchpoints should graduate into syntheses.",
+        "origin": "repo-curated starter corpus"
+      }
+    ]
+  },
+  "surfaces": {
+    "indexTitle": "Local-First Software Index",
+    "starterPages": [
+      {
+        "title": "Local-First Software",
+        "type": "topic",
+        "summary": "Local-First Software is the canonical entry page for this topic bootstrap. Use it to record the shortest durable explanation of what the bounded corpus currently seems to say.",
+        "purpose": "The canonical entry page for the topic bootstrap.",
+        "role": "The durable entry point for first-pass understanding.",
+        "aliases": [],
+        "tags": [
+          "local-first-software",
+          "bootstrap",
+          "entry-point",
+          "topic"
+        ],
+        "refreshTriggers": [],
+        "sourceFiles": [
+          "2026-04-01-local-first-core.md",
+          "2026-04-02-sync-engines.md",
+          "2026-04-03-maintenance-risks.md"
+        ],
+        "relatedPages": [
+          "Sync engines",
+          "Schema migration pressure",
+          "Local-First Software current tensions",
+          "Local-First Software open questions",
+          "Local-First Software maintenance watchpoints",
+          "Local-First Software maintenance rhythm",
+          "Local-First Software reading paths"
+        ],
+        "nextSteps": [
+          "Use [[Local-First Software current tensions]] to keep live uncertainty visible instead of hiding it in the article layer.",
+          "Use [[Local-First Software reading paths]] to keep the first note bundles compact and reusable."
+        ],
+        "sections": [
+          {
+            "heading": "Why this topic matters",
+            "lines": [
+              "This page should become the shortest durable explanation of Local-First Software once the corpus has been reviewed and the strongest claims have stabilized."
+            ]
+          },
+          {
+            "heading": "Starter boundaries",
+            "lines": [
+              "Keep the first pass bounded. A small, explicit corpus produces better starter pages than a broad pile of undifferentiated intake.",
+              "Treat this page as durable knowledge, not as the place where unresolved tensions or maintenance sequencing should accumulate.",
+              "Use concept pages for sync architecture and migration pressure once those patterns recur often enough to deserve durable coverage."
+            ]
+          },
+          {
+            "heading": "Evidence to strengthen next",
+            "lines": [
+              "Promote only the highest-confidence recurring claims into this page.",
+              "Leave disputes, unresolved questions, and watch logic in the dedicated working surfaces until they stabilize.",
+              "A durable explanation of local-first software should connect local copies, sync cost, and long-term maintenance rather than treating them as separate concerns."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Sync engines",
+        "type": "concept",
+        "summary": "In this starter corpus, sync engines look like the operational heart of a local-first system: they decide how state replicates, how conflicts resolve, and how expensive schema changes become over time.",
+        "purpose": "A concept page that keeps replication and conflict policy visible as a central design pressure.",
+        "role": "The canonical sync-architecture page.",
+        "aliases": [],
+        "tags": [
+          "local-first-software",
+          "bootstrap",
+          "concept",
+          "sync"
+        ],
+        "refreshTriggers": [],
+        "sourceFiles": [
+          "2026-04-02-sync-engines.md",
+          "2026-04-03-maintenance-risks.md"
+        ],
+        "relatedPages": [
+          "Local-First Software",
+          "Schema migration pressure",
+          "Local-First Software maintenance watchpoints"
+        ],
+        "nextSteps": [
+          "Use this page to keep replication-model decisions separate from higher-level product framing.",
+          "Promote recurring sync-engine trade-offs into watchpoints only when they start changing maintenance behavior."
+        ],
+        "sections": [
+          {
+            "heading": "Design pressures",
+            "lines": [
+              "A sync engine is not just transport. It shapes the cost of collaboration, repair, and schema evolution.",
+              "If the sync layer is weakly specified, local-first ergonomics can look convincing in demos while staying fragile in practice."
+            ]
+          },
+          {
+            "heading": "What to inspect next",
+            "lines": [
+              "Track whether conflict policy is explicit enough to stay out of ad hoc repair playbooks.",
+              "Track whether replication choices are starting to dictate migration and device-repair workflows."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Schema migration pressure",
+        "type": "concept",
+        "summary": "The starter corpus frames migration pressure as one of the hardest long-term burdens in local-first software because every local copy can turn a data-model change into an operational event.",
+        "purpose": "A concept page that turns maintenance and upgrade cost into a durable design surface.",
+        "role": "The canonical maintenance-pressure page.",
+        "aliases": [],
+        "tags": [
+          "local-first-software",
+          "bootstrap",
+          "concept",
+          "migration"
+        ],
+        "refreshTriggers": [],
+        "sourceFiles": [
+          "2026-04-02-sync-engines.md",
+          "2026-04-03-maintenance-risks.md"
+        ],
+        "relatedPages": [
+          "Local-First Software",
+          "Sync engines",
+          "Local-First Software maintenance rhythm"
+        ],
+        "nextSteps": [
+          "Use this page to keep migration and repair pressure visible as part of the topic's durable story.",
+          "If watchpoints repeatedly mention upgrade or repair cadence, turn that pattern into a stronger synthesis candidate."
+        ],
+        "sections": [
+          {
+            "heading": "Why migration pressure matters",
+            "lines": [
+              "A local-first system inherits every copy of the data model, so migrations can become a coordination problem instead of a one-time deployment task.",
+              "Repair paths, drift handling, and upgrade timing belong in the same conversation as schema evolution."
+            ]
+          },
+          {
+            "heading": "Signals to monitor",
+            "lines": [
+              "Look for recurring evidence that schema shifts are forcing manual repair or device-specific recovery work.",
+              "Look for signs that migration tooling is becoming the hidden boundary between a believable system and a fragile one."
+            ]
+          }
+        ]
+      }
+    ],
+    "readingPaths": {
+      "title": "Local-First Software reading paths",
+      "purpose": "A synthesis that organizes the smallest useful note bundles for orientation, maintenance, provenance tracing, and context loading.",
+      "role": "The bundle-selection guide.",
+      "revisitCadence": "Refresh whenever the smallest useful bundle changes.",
+      "refreshTriggers": [
+        "A new canonical page becomes essential to first-pass understanding.",
+        "A context pack grows stale or too broad."
+      ]
+    },
+    "currentTensions": {
+      "title": "Local-First Software current tensions",
+      "purpose": "A synthesis that keeps active trade-offs visible instead of hiding them inside neutral articles.",
+      "role": "The live-uncertainty surface.",
+      "revisitCadence": "Refresh whenever new evidence changes practical risk or ambiguity.",
+      "refreshTriggers": [
+        "A source file changes the current framing of the topic.",
+        "A recurring disagreement belongs in a durable tension instead of scattered notes."
+      ]
+    },
+    "openQuestions": {
+      "title": "Local-First Software open questions",
+      "purpose": "A working note for unresolved questions that should drive the next reading pass.",
+      "role": "The unresolved-work queue.",
+      "revisitCadence": "Refresh after every new source batch, review pass, or audit.",
+      "refreshTriggers": [
+        "A question becomes answerable enough to promote into synthesis.",
+        "A new source exposes a gap in the current article set."
+      ]
+    },
+    "maintenanceWatchpoints": {
+      "title": "Local-First Software maintenance watchpoints",
+      "purpose": "A synthesis that turns the canonical pages into an operator-facing monitoring surface.",
+      "role": "The operational monitoring synthesis.",
+      "revisitCadence": "Refresh when maintenance posture, operating assumptions, or monitoring logic changes.",
+      "refreshTriggers": [
+        "A recurring issue changes what needs routine monitoring.",
+        "A context pack or reading path needs escalation into durable watch logic."
+      ]
+    },
+    "maintenanceRhythm": {
+      "title": "Local-First Software maintenance rhythm",
+      "purpose": "A maintenance map that decides revisit order, context-pack refreshes, and synthesis candidates.",
+      "role": "The daily maintenance control surface.",
+      "revisitCadence": "Review at the start of each maintenance pass.",
+      "refreshTriggers": [
+        "An audit finding changes revisit order.",
+        "A context pack or open question becomes stale enough to reshape next work."
+      ]
+    },
+    "operationalNote": {
+      "title": "Note: What should I revisit next for Local-First Software",
+      "type": "note",
+      "summary": "This starter operational note keeps the next reading pass concrete. It should stay short, grounded, and closely tied to the maintenance loop for Local-First Software.",
+      "purpose": "A working operational note that keeps the next-pass checklist visible.",
+      "role": "The small operational handoff note.",
+      "aliases": [],
+      "tags": [
+        "local-first-software",
+        "bootstrap",
+        "operational-note"
+      ],
+      "refreshTriggers": [],
+      "sourceFiles": [
+        "2026-04-01-local-first-core.md",
+        "2026-04-02-sync-engines.md",
+        "2026-04-03-maintenance-risks.md"
+      ],
+      "relatedPages": [
+        "Local-First Software maintenance watchpoints",
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions"
+      ],
+      "nextSteps": [
+        "Refresh this note after updating [[Local-First Software maintenance watchpoints]].",
+        "If the same checklist item keeps recurring, promote it into [[Local-First Software maintenance rhythm]] or a durable synthesis candidate."
+      ],
+      "sections": [
+        {
+          "heading": "Current checklist",
+          "lines": [
+            "Keep the next reading pass narrow and explicit.",
+            "Check whether the bounded corpus still supports the current starter framing.",
+            "Promote repeated operational concerns into maintenance watchpoints instead of letting them drift between notes."
+          ]
+        }
+      ]
+    },
+    "artifactSurfaces": [
+      {
+        "title": "Corpus Atlas",
+        "purpose": "The bounded source intake surface.",
+        "role": "The raw source entry layer.",
+        "refreshTriggers": []
+      },
+      {
+        "title": "Processed Source Atlas",
+        "purpose": "The normalized-source bridge between raw intake and later summaries.",
+        "role": "The cleaned-source layer.",
+        "refreshTriggers": []
+      },
+      {
+        "title": "Summary Atlas",
+        "purpose": "The summary layer that will expose what the summarizer extracted before patch planning.",
+        "role": "The source-to-claim bridge.",
+        "refreshTriggers": []
+      },
+      {
+        "title": "Review History",
+        "purpose": "The proposal and review layer that will preserve how the wiki mutated.",
+        "role": "The mutation-gate history.",
+        "refreshTriggers": []
+      },
+      {
+        "title": "Audit Atlas",
+        "purpose": "The audit layer that will expose structural weakness and freshness gaps.",
+        "role": "The maintenance-diagnostic layer.",
+        "refreshTriggers": []
+      }
+    ]
+  },
+  "readingPasses": [
+    {
+      "title": "Orientation pass",
+      "description": "Use this when you want the shortest durable explanation of local-first software together with its main operational tension.",
+      "steps": [
+        "Local-First Software",
+        "Sync engines",
+        "Local-First Software current tensions",
+        "Local-First Software maintenance watchpoints"
+      ]
+    },
+    {
+      "title": "Maintenance pass",
+      "description": "Use this when deciding what should be revisited next without rereading the full topic.",
+      "steps": [
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions",
+        "Note: What should I revisit next for Local-First Software",
+        "Local-First Software maintenance watchpoints"
+      ]
+    },
+    {
+      "title": "Provenance pass",
+      "description": "Use this when you need to inspect the bounded corpus and the future artifact trail instead of only reading the canonical pages.",
+      "steps": [
+        "Local-First Software",
+        "Corpus Atlas",
+        "Processed Source Atlas",
+        "Review History",
+        "Audit Atlas"
+      ]
+    }
+  ],
+  "tensionsSummary": "The starter corpus points to a classic local-first tension: the product feels strongest when data is always local and collaborative, but sync policy, migration cost, and repair burden become the real long-term operating surface.",
+  "tensions": [
+    "Offline-first confidence versus sync-system complexity.",
+    "Elegant collaboration promises versus conflict-resolution reality.",
+    "Fast product iteration versus schema migration and repair cost."
+  ],
+  "tensionImportance": [
+    "A local-first system can look simple from the top-level product story while hiding most of its real cost inside replication and recovery logic.",
+    "If conflict policy stays vague, users pay the price later through repair workflows and trust erosion.",
+    "If migration pressure is treated as an implementation detail, maintenance work becomes harder to resume and harder to plan."
+  ],
+  "openQuestionsSummary": "These are the highest-leverage questions if you want this starter workspace to become a serious durable knowledge base instead of a thin concept sketch.",
+  "openQuestions": [
+    "Which sync-engine assumptions are durable enough to keep in canonical pages instead of working notes?",
+    "Which conflict or repair signals should become explicit watchpoints?",
+    "Which migration concerns deserve their own synthesis instead of staying inside a concept page?"
+  ],
+  "resolutionSignals": [
+    "The corpus starts connecting local copies, sync choices, and repair burden in a stable way.",
+    "A context pack can answer migration or watchpoint questions without reopening every source note.",
+    "The same watchpoint keeps changing maintenance order and deserves durable synthesis treatment."
+  ],
+  "revisitQueue": [
+    {
+      "title": "Local-First Software current tensions",
+      "why": "This is the fastest way to see whether the operating story moved.",
+      "trigger": "After any new source intake or recurring disagreement."
+    },
+    {
+      "title": "Local-First Software open questions",
+      "why": "This keeps unresolved work visible instead of dissolving into general backlog noise.",
+      "trigger": "After each reading pass or audit."
+    },
+    {
+      "title": "Local-First Software maintenance rhythm",
+      "why": "This controls revisit order, context-pack refreshes, and next synthesis candidates.",
+      "trigger": "Before deciding what to reopen next."
+    }
+  ],
+  "contextPackRefreshes": [
+    {
+      "title": "Explain Local-First Software",
+      "trigger": "the canonical entry page or tension framing changes",
+      "load": [
+        "Local-First Software",
+        "Local-First Software current tensions",
+        "Local-First Software maintenance watchpoints"
+      ]
+    },
+    {
+      "title": "Maintenance Triage",
+      "trigger": "revisit order, open questions, or monitoring posture changes",
+      "load": [
+        "Local-First Software maintenance rhythm",
+        "Local-First Software current tensions",
+        "Local-First Software open questions",
+        "Note: What should I revisit next for Local-First Software"
+      ]
+    },
+    {
+      "title": "Provenance And Review",
+      "trigger": "you need to inspect where future source summaries, reviews, or audits should land",
+      "load": [
+        "Local-First Software",
+        "Corpus Atlas",
+        "Review History",
+        "Audit Atlas"
+      ]
+    }
+  ],
+  "synthesisCandidates": [
+    {
+      "title": "Local-first sync risk map",
+      "whyNow": "The corpus already hints that sync policy is the real durability boundary, but the practical risk story is still split across the entry page, a concept page, and the maintenance surfaces.",
+      "load": [
+        "Local-First Software",
+        "Sync engines",
+        "Local-First Software current tensions",
+        "Local-First Software maintenance watchpoints"
+      ]
+    },
+    {
+      "title": "Local-first migration playbook",
+      "whyNow": "Migration pressure is already visible as a durable concern, but the corpus is not yet rich enough to turn it into a fully stable operational synthesis.",
+      "load": [
+        "Schema migration pressure",
+        "Local-First Software maintenance rhythm",
+        "Local-First Software open questions",
+        "Note: What should I revisit next for Local-First Software"
+      ]
+    }
+  ],
+  "auditActions": [
+    {
+      "signal": "A coverage audit flags a thin or weakly linked area.",
+      "nextSurface": "Local-First Software maintenance rhythm",
+      "action": "decide whether the gap belongs in the revisit queue, the open-question note, or a new synthesis candidate."
+    },
+    {
+      "signal": "A review concern keeps recurring across different additions.",
+      "nextSurface": "Local-First Software current tensions",
+      "action": "promote the disagreement into a durable tension instead of letting it disappear into proposal history."
+    },
+    {
+      "signal": "A watchpoint repeatedly changes what you read next.",
+      "nextSurface": "Local-First Software maintenance watchpoints",
+      "action": "rewrite the monitoring synthesis first, then update the operational note only if the checklist actually changed."
+    }
+  ],
+  "contextPacks": [
+    {
+      "title": "Explain Local-First Software",
+      "useWhen": "you want the smallest durable starter bundle that explains what Local-First Software is and what still feels unsettled",
+      "load": [
+        "Local-First Software",
+        "Local-First Software current tensions",
+        "Local-First Software maintenance watchpoints"
+      ],
+      "optional": [
+        "Local-First Software reading paths",
+        "Local-First Software open questions"
+      ],
+      "keepActive": [],
+      "walkOrder": []
+    },
+    {
+      "title": "Provenance And Review",
+      "useWhen": "you want to inspect what entered the topic, where later summaries will land, and how future review output should be interpreted",
+      "load": [
+        "Local-First Software",
+        "Corpus Atlas",
+        "Review History",
+        "Audit Atlas"
+      ],
+      "optional": [
+        "Processed Source Atlas",
+        "Summary Atlas"
+      ],
+      "keepActive": [],
+      "walkOrder": [
+        "Start at [[Local-First Software]].",
+        "Open [[Corpus Atlas]] to inspect the bounded corpus.",
+        "Use [[Review History]] and [[Audit Atlas]] to understand where later maintenance work should land."
+      ]
+    },
+    {
+      "title": "Maintenance Triage",
+      "useWhen": "you are resuming work and want the smallest bundle that tells you what to read, what to revisit, and what might deserve synthesis next",
+      "load": [
+        "Local-First Software maintenance rhythm",
+        "Local-First Software current tensions",
+        "Local-First Software open questions",
+        "Note: What should I revisit next for Local-First Software"
+      ],
+      "optional": [
+        "Local-First Software maintenance watchpoints",
+        "Local-First Software reading paths"
+      ],
+      "keepActive": [
+        "What changed enough to alter the next reading pass?",
+        "Which context pack is stale or too broad?",
+        "Which open question is closest to becoming a durable synthesis?"
+      ],
+      "walkOrder": []
+    }
+  ],
+  "artifactLadder": [
+    "Source files enter through `source-corpus/` and remain the explicit input set for this topic.",
+    "Future normalized files should land in `workspace/raw/processed/` once import and cleanup begin.",
+    "Future source summaries should land in `workspace/raw/processed/summaries/`.",
+    "Future review proposals should land in `workspace/reviews/approved/` and `workspace/reviews/rejected/`.",
+    "Durable canonical knowledge for Local-First Software lives in `workspace/wiki/` and remains the source of truth.",
+    "The Obsidian vault is an additive projection for daily work, not a second truth layer."
+  ],
+  "validation": {
+    "requiredStarterQualityBar": [
+      "canonical-index",
+      "start-here",
+      "topic-map",
+      "reading-paths",
+      "open-questions",
+      "current-tensions",
+      "maintenance-watchpoints",
+      "maintenance-rhythm",
+      "artifact-map",
+      "at-least-one-context-pack",
+      "starter-validation"
+    ],
+    "requiredAtlasNotes": [
+      "Start Here",
+      "Topic Map",
+      "Key Pages",
+      "Reading Paths",
+      "Open Questions",
+      "Current Tensions",
+      "Monitoring",
+      "Maintenance Rhythm",
+      "LLM Context Pack",
+      "Artifact Map"
+    ],
+    "requiredContextPackTitles": [
+      "Explain Local-First Software",
+      "Maintenance Triage",
+      "Provenance And Review"
+    ],
+    "keyInspectionPaths": [
+      "workspace/wiki/index.md",
+      "wiki/topics/local-first-software.md",
+      "obsidian-vault/00 Atlas/Start Here.md",
+      "obsidian-vault/00 Atlas/Topic Map.md",
+      "obsidian-vault/00 Atlas/Maintenance Rhythm.md"
+    ]
+  }
+}

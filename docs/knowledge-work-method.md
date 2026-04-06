@@ -184,19 +184,27 @@ Bad signs:
 
 ## 10. Applying the method to a new topic
 
-The method is encoded in:
+The reusable bootstrap system is encoded in:
 
+- `src/lib/contracts/topic-bootstrap.ts`
+- `src/server/services/topic-bootstrap-service.ts`
+- `scripts/init-topic-bootstrap.ts`
+- `scripts/build-topic-bootstrap.ts`
+- `scripts/validate-topic-bootstrap.ts`
+- `docs/topic-bootstrap.md`
+- `topics/README.md`
 - `src/server/services/knowledge-method-template-service.ts`
 - `src/server/services/openclaw-knowledge-method.ts`
 - `templates/knowledge-work/README.md`
 
-The practical path for a new topic is:
+The practical path for a new topic is now:
 
-1. define the new topic’s `KnowledgeMethodTemplateData`
-2. name the canonical surfaces
-3. define the working surfaces and revisit cadence
-4. define 3-4 task-shaped context packs
-5. generate the canonical maintenance pages and Obsidian atlas notes
-6. wire them into that topic’s official example/workflow/validation path
+1. run `npm run topic:init -- --slug my-topic --title "My Topic"`
+2. add or copy a bounded corpus into `topics/my-topic/source-corpus/`
+3. refine `topics/my-topic/topic.json`
+4. run `npm run topic:build -- --slug my-topic`
+5. inspect the canonical wiki and Obsidian projection
+6. run `npm run topic:validate -- --slug my-topic`
 
-This keeps the system reproducible and prevents every new topic from inventing a different navigation model.
+OpenClaw remains the flagship full workflow example.
+The topic bootstrap system makes it possible to start new topics with the same layer model, starter quality bar, and validation path instead of inventing a fresh structure every time.
