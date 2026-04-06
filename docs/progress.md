@@ -755,3 +755,25 @@ Prepare the repository for a future GitHub push with consistent launch docs, com
 
 - screenshots or a decision to keep screenshot placeholders at first push
 - exact public-launch timing and visibility change from private to public
+
+## Knowledge Maintenance And Method Extraction
+
+Status: In progress and encoded into the official OpenClaw example
+
+### Goal
+
+Turn the polished OpenClaw example into a more durable knowledge-work system by making maintenance explicit, improving daily-use note bundles, and extracting the strongest working pattern into reusable templates and method docs.
+
+### Direction
+
+- avoid adding pages for their own sake; favor a small number of high-leverage maintenance surfaces
+- make stale context, next actions, synthesis candidates, and audit-to-action transitions explicit
+- extract the OpenClaw working pattern into source-level templates and starter documentation instead of leaving it embedded in one-off prose
+
+### Current Changes
+
+1. Added a canonical `OpenClaw maintenance rhythm` surface that acts as the maintenance control page for revisit order, context-pack refreshes, synthesis candidates, and audit transitions.
+2. Expanded the existing OpenClaw wiki working pages so they better distinguish canonical durable pages from working/maintenance surfaces.
+3. Added a reusable knowledge-method template service plus concrete OpenClaw method data so the example now encodes a repeatable pattern for future topics.
+4. Expanded the Obsidian atlas with a maintenance-rhythm note and a maintenance-triage context pack for faster day-to-day resume flows.
+5. Added a repo-level knowledge-work playbook and starter template documentation so future topics can reuse the same method coherently.

@@ -91,6 +91,7 @@ The Obsidian layer is additive. It does not replace the source-of-truth wiki.
 - `obsidian-vault/` is a projection of the same example into an Obsidian-friendly folder layout.
 - Start with [`obsidian-vault/README.md`](obsidian-vault/README.md) and [`obsidian-vault/00 Atlas/Start Here.md`](obsidian-vault/00%20Atlas/Start%20Here.md).
 - The vault now adds stronger maps of content, discrete context-pack notes, open-question and current-tension notes, normalized-source atlases, and article-first projections tuned for day-to-day reading and compact context assembly.
+- It now also adds a maintenance-rhythm surface and a maintenance-triage context pack so daily upkeep does not depend on rereading the entire graph.
 
 Key vault notes:
 
@@ -98,9 +99,11 @@ Key vault notes:
 - [`obsidian-vault/00 Atlas/Open Questions.md`](obsidian-vault/00%20Atlas/Open%20Questions.md)
 - [`obsidian-vault/00 Atlas/Current Tensions.md`](obsidian-vault/00%20Atlas/Current%20Tensions.md)
 - [`obsidian-vault/00 Atlas/Monitoring.md`](obsidian-vault/00%20Atlas/Monitoring.md)
+- [`obsidian-vault/00 Atlas/Maintenance Rhythm.md`](obsidian-vault/00%20Atlas/Maintenance%20Rhythm.md)
 - [`obsidian-vault/05 Context Packs/Explain OpenClaw.md`](obsidian-vault/05%20Context%20Packs/Explain%20OpenClaw.md)
 - [`obsidian-vault/05 Context Packs/Upgrade Watchpoints.md`](obsidian-vault/05%20Context%20Packs/Upgrade%20Watchpoints.md)
 - [`obsidian-vault/05 Context Packs/Provenance And Review.md`](obsidian-vault/05%20Context%20Packs/Provenance%20And%20Review.md)
+- [`obsidian-vault/05 Context Packs/Maintenance Triage.md`](obsidian-vault/05%20Context%20Packs/Maintenance%20Triage.md)
 
 ## What to inspect first
 
@@ -111,12 +114,15 @@ Start here:
 - [`workspace/wiki/entities/openclaw.md`](workspace/wiki/entities/openclaw.md)
 - [`workspace/wiki/syntheses/openclaw-current-tensions.md`](workspace/wiki/syntheses/openclaw-current-tensions.md)
 - [`workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md`](workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md)
+- [`workspace/wiki/syntheses/openclaw-maintenance-rhythm.md`](workspace/wiki/syntheses/openclaw-maintenance-rhythm.md)
 - [`workspace/wiki/syntheses/openclaw-reading-paths.md`](workspace/wiki/syntheses/openclaw-reading-paths.md)
 - [`workspace/wiki/notes/openclaw-open-questions.md`](workspace/wiki/notes/openclaw-open-questions.md)
 - [`workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md`](workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md)
 - [`obsidian-vault/README.md`](obsidian-vault/README.md)
 - [`obsidian-vault/00 Atlas/Start Here.md`](obsidian-vault/00%20Atlas/Start%20Here.md)
+- [`obsidian-vault/00 Atlas/Maintenance Rhythm.md`](obsidian-vault/00%20Atlas/Maintenance%20Rhythm.md)
 - [`obsidian-vault/00 Atlas/LLM Context Pack.md`](obsidian-vault/00%20Atlas/LLM%20Context%20Pack.md)
+- [`obsidian-vault/05 Context Packs/Maintenance Triage.md`](obsidian-vault/05%20Context%20Packs/Maintenance%20Triage.md)
 
 Then inspect the visible intermediate layer:
 
@@ -127,6 +133,11 @@ Then inspect the visible intermediate layer:
 - [`manifest.json`](manifest.json)
 - [`pipeline.json`](pipeline.json)
 - [`reference-baseline.json`](reference-baseline.json)
+
+Method and reuse docs:
+
+- [`../../docs/knowledge-work-method.md`](../../docs/knowledge-work-method.md)
+- [`../../templates/knowledge-work/README.md`](../../templates/knowledge-work/README.md)
 
 ## Maintainer note
 

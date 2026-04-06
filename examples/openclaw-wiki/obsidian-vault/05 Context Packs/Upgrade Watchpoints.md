@@ -2,7 +2,7 @@
 
 ## Use this pack when
 
-- You want the smallest operational bundle for deciding what to monitor before upgrading.
+- you want the smallest operational bundle for deciding what to monitor before upgrading
 
 ## Load these notes
 

@@ -3,7 +3,7 @@ title: OpenClaw release cadence
 slug: openclaw-release-cadence
 type: topic
 created_at: '2026-04-05T19:36:54.477Z'
-updated_at: '2026-04-05T19:36:55.589Z'
+updated_at: '2026-04-05T19:36:56.533Z'
 status: active
 aliases: []
 tags:
@@ -17,10 +17,17 @@ source_refs:
 page_refs:
   - OpenClaw
   - OpenClaw maintenance watchpoints
+  - OpenClaw maintenance rhythm
   - OpenClaw current tensions
   - 'Note: What should I monitor before upgrading OpenClaw'
 confidence: 0.2
 review_status: approved
+knowledge_role: The canonical release and upgrade checkpoint page.
+surface_kind: canonical
+revisit_cadence: Refresh on each notable release signal or changelog packaging change.
+refresh_triggers:
+  - A release note changes regression expectations.
+  - Changelog packaging becomes a stronger upgrade signal.
 ---
 
 # OpenClaw release cadence

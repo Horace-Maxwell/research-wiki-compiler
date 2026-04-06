@@ -3,7 +3,7 @@ title: 'Note: What should I monitor before upgrading OpenClaw'
 slug: note-what-should-i-monitor-before-upgrading-openclaw
 type: note
 created_at: '2026-04-05T19:36:54.964Z'
-updated_at: '2026-04-05T19:36:56.125Z'
+updated_at: '2026-04-05T19:36:57.547Z'
 status: active
 aliases:
   - OpenClaw upgrade checklist
@@ -33,6 +33,7 @@ page_refs:
   - Plugin compatibility
   - Provider dependency risk
   - OpenClaw maintenance watchpoints
+  - OpenClaw maintenance rhythm
   - OpenClaw current tensions
   - OpenClaw open questions
 confidence: 0.72
@@ -41,6 +42,12 @@ answer_artifact_id: ans_c62546aa8a924b8d3a6cf034d6d1c9e0
 archived_at: '2026-04-05T19:36:54.983Z'
 archived_from_question: What should I monitor before upgrading OpenClaw?
 archive_kind: note
+knowledge_role: A working operational note that feeds the maintenance loop.
+surface_kind: monitoring
+revisit_cadence: Refresh when a better grounded answer becomes available.
+refresh_triggers:
+  - The compiled pages can now answer the question more directly.
+  - A monitoring assumption becomes stale.
 ---
 # Note: What should I monitor before upgrading OpenClaw
 
@@ -51,9 +58,13 @@ archive_kind: note
 > Before upgrading OpenClaw, monitor release/changelog packaging, plugin compatibility, and provider-side changes that could alter access paths or defaults.
 >
 > - **Type**: Note
+> - **Role**: A working operational note that feeds the maintenance loop.
+> - **Surface**: monitoring
 > - **Review status**: approved
 > - **Confidence**: 0.72
 > - **Source refs**: 4
+> - **Revisit cadence**: Refresh when a better grounded answer becomes available.
+> - **Refresh triggers**: The compiled pages can now answer the question more directly.; A monitoring assumption becomes stale.
 > - **Canonical page**: `wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md`
 > - **Vault companions**: [[Start Here]], [[Reading Paths]], [[Artifact Map]]
 
@@ -77,11 +88,11 @@ archive_kind: note
 - [[Start Here]]
 - [[Topic Map]]
 - [[Reading Paths]]
+- [[Maintenance Rhythm]]
 - [[Artifact Map]]
 - [[Open Questions]]
 - [[Monitoring]]
 - [[OpenClaw release cadence]]
-- [[Plugin compatibility]]
 
 ## Prompt
 

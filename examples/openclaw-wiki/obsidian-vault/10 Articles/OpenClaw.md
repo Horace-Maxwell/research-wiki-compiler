@@ -3,7 +3,7 @@ title: OpenClaw
 slug: openclaw
 type: entity
 created_at: '2026-04-05T19:36:54.460Z'
-updated_at: '2026-04-05T19:36:55.455Z'
+updated_at: '2026-04-05T19:36:56.195Z'
 status: active
 aliases:
   - open claw
@@ -28,10 +28,17 @@ page_refs:
   - Plugin compatibility
   - Provider dependency risk
   - OpenClaw maintenance watchpoints
+  - OpenClaw maintenance rhythm
   - OpenClaw current tensions
   - OpenClaw open questions
 confidence: 0.2
 review_status: approved
+knowledge_role: The canonical entry point for the topic.
+surface_kind: canonical
+revisit_cadence: Refresh when the corpus changes the main story of the project.
+refresh_triggers:
+  - A new source changes the main description of OpenClaw.
+  - A tension or monitoring page changes the top-level framing.
 ---
 # OpenClaw
 
@@ -39,9 +46,13 @@ review_status: approved
 > In this corpus, OpenClaw appears as a fast-moving AI developer tool and workflow surface whose releases, plugin interfaces, and provider-facing behavior all matter to maintainers.
 >
 > - **Type**: Entity
+> - **Role**: The canonical entry point for the topic.
+> - **Surface**: canonical
 > - **Review status**: approved
 > - **Confidence**: 0.20
 > - **Source refs**: 4
+> - **Revisit cadence**: Refresh when the corpus changes the main story of the project.
+> - **Refresh triggers**: A new source changes the main description of OpenClaw.; A tension or monitoring page changes the top-level framing.
 > - **Canonical page**: `wiki/entities/openclaw.md`
 > - **Vault companions**: [[Start Here]], [[Reading Paths]], [[Artifact Map]]
 
@@ -64,11 +75,11 @@ review_status: approved
 - [[Start Here]]
 - [[Topic Map]]
 - [[Reading Paths]]
+- [[Maintenance Rhythm]]
 - [[Artifact Map]]
 - [[Key Pages]]
 - [[Current Tensions]]
 - [[Open Questions]]
-- [[OpenClaw release cadence]]
 
 # OpenClaw
 

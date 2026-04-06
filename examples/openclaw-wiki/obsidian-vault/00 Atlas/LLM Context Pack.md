@@ -9,14 +9,14 @@
 - Pull in source notes only when a claim needs inspection.
 - Add review or audit notes only when you need to understand how the wiki mutated or where it is weak.
 
-## Pack 1: Explain OpenClaw
+## Available packs
 
 - [[Explain OpenClaw]]
-
-## Pack 2: Upgrade watchpoints
-
 - [[Upgrade Watchpoints]]
-
-## Pack 3: Provenance check
-
 - [[Provenance And Review]]
+- [[Maintenance Triage]]
+
+## When to reopen the pack list
+
+- Reopen this note after updating [[Maintenance Rhythm]].
+- Reopen this note when a previously compact pack starts feeling too stale or too broad.

@@ -3,7 +3,7 @@ title: Provider dependency risk
 slug: provider-dependency-risk
 type: concept
 created_at: '2026-04-05T19:36:54.741Z'
-updated_at: '2026-04-05T19:36:55.857Z'
+updated_at: '2026-04-05T19:36:57.209Z'
 status: active
 aliases: []
 tags:
@@ -22,9 +22,16 @@ page_refs:
   - OpenClaw
   - OpenClaw current tensions
   - OpenClaw maintenance watchpoints
+  - OpenClaw maintenance rhythm
   - 'Note: What should I monitor before upgrading OpenClaw'
 confidence: 0.2
 review_status: approved
+knowledge_role: The canonical external-dependency page.
+surface_kind: canonical
+revisit_cadence: 'Refresh when provider policy, access, or workflow dependency shifts.'
+refresh_triggers:
+  - Provider policy changes affect access assumptions.
+  - Workflow behavior starts depending on a provider-side change.
 ---
 # Provider dependency risk
 
@@ -32,9 +39,13 @@ review_status: approved
 > Provider dependency risk describes the way OpenClaw capabilities and upgrade choices can be reshaped by model-provider changes, restrictions, and provider-specific integration paths.
 >
 > - **Type**: Concept
+> - **Role**: The canonical external-dependency page.
+> - **Surface**: canonical
 > - **Review status**: approved
 > - **Confidence**: 0.20
 > - **Source refs**: 1
+> - **Revisit cadence**: Refresh when provider policy, access, or workflow dependency shifts.
+> - **Refresh triggers**: Provider policy changes affect access assumptions.; Workflow behavior starts depending on a provider-side change.
 > - **Canonical page**: `wiki/concepts/provider-dependency-risk.md`
 > - **Vault companions**: [[Start Here]], [[Reading Paths]], [[Artifact Map]]
 
@@ -53,6 +64,7 @@ review_status: approved
 - [[Start Here]]
 - [[Topic Map]]
 - [[Reading Paths]]
+- [[Maintenance Rhythm]]
 - [[Artifact Map]]
 - [[OpenClaw]]
 - [[Plugin compatibility]]

@@ -1,7 +1,7 @@
 # OpenClaw Obsidian Vault
 
 > [!info]
-> This folder is an Obsidian-first projection of the official OpenClaw example. The source of truth still lives in `../workspace/`, while this vault reorganizes the same compiled knowledge and artifact trail into a calmer map-of-content layout for reading, linking, progressive refinement, and small context selection.
+> This folder is an Obsidian-first projection of the official OpenClaw example. The source of truth still lives in `../workspace/`, while this vault reorganizes the same compiled knowledge and artifact trail into a calmer map-of-content layout for reading, maintenance, iterative synthesis, and small context selection.
 
 ## Start here
 
@@ -9,6 +9,7 @@
 - [[Topic Map]]
 - [[Key Pages]]
 - [[Reading Paths]]
+- [[Maintenance Rhythm]]
 - [[LLM Context Pack]]
 - [[Open Questions]]
 - [[Current Tensions]]
@@ -17,7 +18,7 @@
 
 ## Vault layout
 
-- `00 Atlas/`: maps of content, reading routes, and context-pack guidance.
+- `00 Atlas/`: maps of content, reading routes, maintenance logic, and context-pack guidance.
 - `05 Context Packs/`: compact note bundles for small human or model context windows.
 - `10 Articles/`: the compiled wiki pages projected into Obsidian-friendly article notes.
 - `20 Sources/`: the bounded user-first corpus used for the example.
@@ -28,7 +29,7 @@
 
 ## How to work inside Obsidian
 
-- Pin [[Start Here]] and keep backlinks plus outline open while reading.
+- Pin [[Start Here]] and [[Maintenance Rhythm]] when using the vault as a daily working surface.
 - Use [[Topic Map]], [[Current Tensions]], and [[Open Questions]] as the daily navigation trio.
-- Use [[LLM Context Pack]] or one of the notes in [[Explain OpenClaw]], [[Upgrade Watchpoints]], and [[Provenance And Review]] when you need a compact note bundle.
-- Move from articles to normalized sources, summaries, reviews, and audits only when you need provenance or to inspect how a claim was compiled.
+- Use [[Explain OpenClaw]], [[Upgrade Watchpoints]], [[Provenance And Review]], [[Maintenance Triage]] when you need a compact note bundle rather than the full article graph.
+- Move from articles to normalized sources, summaries, reviews, and audits only when you need provenance or need to inspect how a claim was compiled.

@@ -473,3 +473,19 @@ Refine the wiki reading surface toward an encyclopedia-like article experience b
 
 Why:
 The product promise is durable knowledge, not just rendered markdown. Borrowing the structural reading qualities of serious encyclopedia articles makes the wiki feel more authoritative and navigable while still keeping the local-first, file-first product identity distinct from any external brand.
+
+### D-057: Knowledge maintenance should be encoded as first-class working surfaces, not implicit operator memory
+
+Decision:
+Add explicit maintenance surfaces such as a maintenance-rhythm page, refresh-cadence metadata, and audit-to-action transitions so long-term upkeep does not depend on a human remembering how the example was previously steered.
+
+Why:
+Once the example became polished enough to read, the next quality bar was maintainability. Durable knowledge work needs explicit revisit order, synthesis candidates, and working-vs-canonical distinctions or it decays back into an ad hoc manual process.
+
+### D-058: The successful OpenClaw working pattern should be extracted into a reusable template service
+
+Decision:
+Extract the strongest atlas, context-pack, reading-path, tension, question, monitoring, and maintenance patterns into a reusable knowledge-method template service plus a documented starter pack instead of leaving them hardcoded as one-off prose.
+
+Why:
+The repository is more valuable as a repeatable method than as a single polished topic. Encoding the pattern in source makes future topics more consistent, lowers onboarding cost, and keeps the example honest as the canonical demonstration of the method.

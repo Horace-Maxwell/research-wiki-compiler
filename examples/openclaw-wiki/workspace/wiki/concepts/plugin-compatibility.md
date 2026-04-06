@@ -3,7 +3,7 @@ title: Plugin compatibility
 slug: plugin-compatibility
 type: concept
 created_at: '2026-04-05T19:36:54.530Z'
-updated_at: '2026-04-05T19:36:55.723Z'
+updated_at: '2026-04-05T19:36:56.871Z'
 status: active
 aliases: []
 tags:
@@ -17,10 +17,17 @@ page_refs:
   - OpenClaw
   - OpenClaw release cadence
   - OpenClaw maintenance watchpoints
+  - OpenClaw maintenance rhythm
   - OpenClaw current tensions
   - OpenClaw open questions
 confidence: 0.2
 review_status: approved
+knowledge_role: The canonical integration-boundary page.
+surface_kind: canonical
+revisit_cadence: 'Refresh when plugin APIs, SDK baselines, or integration assumptions move.'
+refresh_triggers:
+  - SDK baseline updates land.
+  - Integration or plugin assumptions begin to drift.
 ---
 
 # Plugin compatibility

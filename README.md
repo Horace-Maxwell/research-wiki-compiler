@@ -252,14 +252,17 @@ Start with:
 - [examples/openclaw-wiki/workspace/wiki/entities/openclaw.md](./examples/openclaw-wiki/workspace/wiki/entities/openclaw.md)
 - [examples/openclaw-wiki/workspace/wiki/syntheses/openclaw-current-tensions.md](./examples/openclaw-wiki/workspace/wiki/syntheses/openclaw-current-tensions.md)
 - [examples/openclaw-wiki/workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md](./examples/openclaw-wiki/workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md)
+- [examples/openclaw-wiki/workspace/wiki/syntheses/openclaw-maintenance-rhythm.md](./examples/openclaw-wiki/workspace/wiki/syntheses/openclaw-maintenance-rhythm.md)
 - [examples/openclaw-wiki/workspace/wiki/syntheses/openclaw-reading-paths.md](./examples/openclaw-wiki/workspace/wiki/syntheses/openclaw-reading-paths.md)
 - [examples/openclaw-wiki/workspace/wiki/notes/openclaw-open-questions.md](./examples/openclaw-wiki/workspace/wiki/notes/openclaw-open-questions.md)
 - [examples/openclaw-wiki/workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md](./examples/openclaw-wiki/workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md)
 - [examples/openclaw-wiki/obsidian-vault/README.md](./examples/openclaw-wiki/obsidian-vault/README.md)
 - [examples/openclaw-wiki/obsidian-vault/00 Atlas/Start Here.md](./examples/openclaw-wiki/obsidian-vault/00%20Atlas/Start%20Here.md)
+- [examples/openclaw-wiki/obsidian-vault/00 Atlas/Maintenance Rhythm.md](./examples/openclaw-wiki/obsidian-vault/00%20Atlas/Maintenance%20Rhythm.md)
 - [examples/openclaw-wiki/obsidian-vault/00 Atlas/LLM Context Pack.md](./examples/openclaw-wiki/obsidian-vault/00%20Atlas/LLM%20Context%20Pack.md)
 - [examples/openclaw-wiki/obsidian-vault/00 Atlas/Topic Map.md](./examples/openclaw-wiki/obsidian-vault/00%20Atlas/Topic%20Map.md)
 - [examples/openclaw-wiki/obsidian-vault/05 Context Packs/Upgrade Watchpoints.md](./examples/openclaw-wiki/obsidian-vault/05%20Context%20Packs/Upgrade%20Watchpoints.md)
+- [examples/openclaw-wiki/obsidian-vault/05 Context Packs/Maintenance Triage.md](./examples/openclaw-wiki/obsidian-vault/05%20Context%20Packs/Maintenance%20Triage.md)
 
 这个示例是一个好的 showcase，因为它不是手写静态样品，而是完整跑过：
 - import
@@ -272,6 +275,14 @@ Start with:
 
 验证和基线细节见 [examples/openclaw-wiki/README.md](./examples/openclaw-wiki/README.md)、[examples/openclaw-wiki/pipeline.json](./examples/openclaw-wiki/pipeline.json)、[examples/openclaw-wiki/reference-baseline.json](./examples/openclaw-wiki/reference-baseline.json)。  
 For the validation path and baseline details, see [examples/openclaw-wiki/README.md](./examples/openclaw-wiki/README.md), [examples/openclaw-wiki/pipeline.json](./examples/openclaw-wiki/pipeline.json), and [examples/openclaw-wiki/reference-baseline.json](./examples/openclaw-wiki/reference-baseline.json).
+
+此外，仓库现在还把这套做法抽成了可复用的方法层，而不只是一个示例结果。  
+The repository now also extracts the successful pattern into a reusable method layer instead of leaving it as a one-off example.
+
+- [docs/knowledge-work-method.md](./docs/knowledge-work-method.md)：如何把 canonical wiki、Obsidian projection、context pack、tensions、questions、watchpoints 和 syntheses 组织成长期可维护的知识系统。  
+  [docs/knowledge-work-method.md](./docs/knowledge-work-method.md): the playbook for turning canonical wiki pages, Obsidian projection, context packs, tensions, questions, watchpoints, and syntheses into a durable knowledge system.
+- [templates/knowledge-work/README.md](./templates/knowledge-work/README.md)：从 OpenClaw 抽取出来的复用模板与命名约定。  
+  [templates/knowledge-work/README.md](./templates/knowledge-work/README.md): the reusable template pack and naming conventions extracted from OpenClaw.
 
 ## 截图 / Screenshots
 

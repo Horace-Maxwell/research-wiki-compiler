@@ -337,6 +337,21 @@ function resolvePageReference(reference: string, pages: WikiPageSummary[]) {
   );
 }
 
+function readFrontmatterStringValue(frontmatter: Record<string, unknown>, key: string) {
+  const value = frontmatter[key];
+  return typeof value === "string" && value.trim().length > 0 ? value : null;
+}
+
+function readFrontmatterStringArrayValue(frontmatter: Record<string, unknown>, key: string) {
+  const value = frontmatter[key];
+
+  if (!Array.isArray(value)) {
+    return [] as string[];
+  }
+
+  return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+}
+
 function extractMarkdownSection(body: string, headingNames: string[]) {
   for (const heading of headingNames) {
     const pattern = new RegExp(
@@ -431,6 +446,26 @@ function buildWorkingCueSections(detail: WikiPageDetail, pages: WikiPageSummary[
     {
       title: "Artifact ladder",
       headings: ["Artifact ladder", "Visible artifacts", "Artifact trail"],
+    },
+    {
+      title: "Revisit next",
+      headings: ["Revisit next", "Review cadence", "Resume without rereading everything"],
+    },
+    {
+      title: "Context refresh",
+      headings: ["Context packs to refresh", "Feed to the model", "Available packs"],
+    },
+    {
+      title: "Synthesis candidates",
+      headings: [
+        "Synthesis candidates",
+        "What should become synthesis next",
+        "What might become synthesis next",
+      ],
+    },
+    {
+      title: "Working surfaces",
+      headings: ["Canonical vs working surfaces", "Maintenance surfaces", "Working surfaces"],
     },
   ] as const;
 
@@ -688,6 +723,18 @@ export function WikiBrowser({
   const articleLeadText = renderedArticle.leadText;
   const articleHeadings = renderedArticle.headings;
   const articleMeta = detail ? ARTICLE_ENTRY_META[detail.type] : null;
+  const knowledgeRole = detail
+    ? readFrontmatterStringValue(detail.frontmatter, "knowledge_role")
+    : null;
+  const surfaceKind = detail
+    ? readFrontmatterStringValue(detail.frontmatter, "surface_kind")
+    : null;
+  const revisitCadence = detail
+    ? readFrontmatterStringValue(detail.frontmatter, "revisit_cadence")
+    : null;
+  const refreshTriggers = detail
+    ? readFrontmatterStringArrayValue(detail.frontmatter, "refresh_triggers")
+    : [];
   const relatedReferencePages = useMemo(() => {
     if (!detail) {
       return [] as Array<{ reference: string; page: WikiPageSummary | null }>;
@@ -1183,6 +1230,12 @@ export function WikiBrowser({
                       label="Entry"
                       value={articleMeta?.label ?? WIKI_PAGE_TYPE_LABELS[detail.type]}
                     />
+                    {knowledgeRole ? (
+                      <SummaryFact label="Role" value={knowledgeRole} />
+                    ) : null}
+                    {surfaceKind ? (
+                      <SummaryFact label="Surface" value={surfaceKind} />
+                    ) : null}
                     {detail.aliases.length > 0 ? (
                       <SummaryFact label="Aliases" value={detail.aliases.join(", ")} />
                     ) : null}
@@ -1190,6 +1243,12 @@ export function WikiBrowser({
                       label="Coverage"
                       value={`${detail.sourceRefs.length} source ref${detail.sourceRefs.length === 1 ? "" : "s"}`}
                     />
+                    {revisitCadence ? (
+                      <SummaryFact label="Cadence" value={revisitCadence} />
+                    ) : null}
+                    {refreshTriggers.length > 0 ? (
+                      <SummaryFact label="Refresh" value={refreshTriggers.join("; ")} />
+                    ) : null}
                     <SummaryFact label="Confidence" value={detail.confidence.toFixed(2)} />
                     <SummaryFact
                       label="Revised"
@@ -1642,6 +1701,8 @@ export function WikiBrowser({
                 Page cues
               </div>
               <div className="space-y-4">
+                {surfaceKind ? <MetaBlock label="Surface" value={surfaceKind} /> : null}
+                {revisitCadence ? <MetaBlock label="Cadence" value={revisitCadence} /> : null}
                 <MetaBlock label="Path" value={<span className="font-mono text-xs">{detail.path}</span>} />
                 <MetaBlock label="Slug" value={detail.slug} />
                 <MetaBlock

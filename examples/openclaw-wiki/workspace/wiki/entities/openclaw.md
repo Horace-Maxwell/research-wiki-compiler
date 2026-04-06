@@ -3,7 +3,7 @@ title: OpenClaw
 slug: openclaw
 type: entity
 created_at: '2026-04-05T19:36:54.460Z'
-updated_at: '2026-04-05T19:36:55.455Z'
+updated_at: '2026-04-05T19:36:56.195Z'
 status: active
 aliases:
   - open claw
@@ -22,10 +22,17 @@ page_refs:
   - Plugin compatibility
   - Provider dependency risk
   - OpenClaw maintenance watchpoints
+  - OpenClaw maintenance rhythm
   - OpenClaw current tensions
   - OpenClaw open questions
 confidence: 0.2
 review_status: approved
+knowledge_role: The canonical entry point for the topic.
+surface_kind: canonical
+revisit_cadence: Refresh when the corpus changes the main story of the project.
+refresh_triggers:
+  - A new source changes the main description of OpenClaw.
+  - A tension or monitoring page changes the top-level framing.
 ---
 
 # OpenClaw

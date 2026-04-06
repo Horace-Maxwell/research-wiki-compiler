@@ -2,16 +2,15 @@
 
 ## Use this pack when
 
-- You want the smallest durable bundle that explains what OpenClaw is in this corpus.
+- you want the smallest durable bundle that explains what OpenClaw is in this corpus
 
 ## Load these notes
 
 - [[OpenClaw]]
-- [[OpenClaw release cadence]]
-- [[Plugin compatibility]]
 - [[OpenClaw current tensions]]
+- [[OpenClaw release cadence]]
 
 ## Optional deepening
 
-- [[Provider dependency risk]]
+- [[Plugin compatibility]]
 - [[OpenClaw maintenance watchpoints]]

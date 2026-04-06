@@ -3,7 +3,7 @@ title: Provider dependency risk
 slug: provider-dependency-risk
 type: concept
 created_at: '2026-04-05T19:36:54.741Z'
-updated_at: '2026-04-05T19:36:55.857Z'
+updated_at: '2026-04-05T19:36:57.209Z'
 status: active
 aliases: []
 tags:
@@ -17,9 +17,16 @@ page_refs:
   - OpenClaw
   - OpenClaw current tensions
   - OpenClaw maintenance watchpoints
+  - OpenClaw maintenance rhythm
   - 'Note: What should I monitor before upgrading OpenClaw'
 confidence: 0.2
 review_status: approved
+knowledge_role: The canonical external-dependency page.
+surface_kind: canonical
+revisit_cadence: 'Refresh when provider policy, access, or workflow dependency shifts.'
+refresh_triggers:
+  - Provider policy changes affect access assumptions.
+  - Workflow behavior starts depending on a provider-side change.
 ---
 
 # Provider dependency risk

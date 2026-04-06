@@ -2,8 +2,8 @@
 title: OpenClaw current tensions
 slug: openclaw-current-tensions
 type: synthesis
-created_at: '2026-04-05T19:36:55.169Z'
-updated_at: '2026-04-05T19:36:55.204Z'
+created_at: '2026-04-05T19:36:55.185Z'
+updated_at: '2026-04-05T19:36:55.228Z'
 status: active
 aliases: []
 tags:
@@ -25,12 +25,22 @@ source_refs:
   - src_359c7879b0c1f818df8434be7b27682d
 page_refs:
   - OpenClaw
+  - OpenClaw release cadence
   - Plugin compatibility
   - Provider dependency risk
   - OpenClaw maintenance watchpoints
   - OpenClaw open questions
+  - OpenClaw maintenance rhythm
+  - OpenClaw reading paths
+  - 'Note: What should I monitor before upgrading OpenClaw'
 confidence: 0.79
 review_status: approved
+knowledge_role: The live-uncertainty surface.
+surface_kind: working
+revisit_cadence: Refresh whenever a new signal changes practical risk or strategic ambiguity.
+refresh_triggers:
+  - A release or provider signal changes the risk story.
+  - A rejected proposal keeps recurring in review history.
 ---
 # OpenClaw current tensions
 
@@ -38,9 +48,13 @@ review_status: approved
 > The most important tension in this corpus is that OpenClaw looks useful precisely where it is still moving: releases are frequent, plugin surfaces are changing, and provider-side constraints remain outside the project's direct control.
 >
 > - **Type**: Synthesis
+> - **Role**: The live-uncertainty surface.
+> - **Surface**: working
 > - **Review status**: approved
 > - **Confidence**: 0.79
 > - **Source refs**: 4
+> - **Revisit cadence**: Refresh whenever a new signal changes practical risk or strategic ambiguity.
+> - **Refresh triggers**: A release or provider signal changes the risk story.; A rejected proposal keeps recurring in review history.
 > - **Canonical page**: `wiki/syntheses/openclaw-current-tensions.md`
 > - **Vault companions**: [[Start Here]], [[Reading Paths]], [[Artifact Map]]
 
@@ -53,6 +67,7 @@ review_status: approved
 - [Summary](#summary)
 - [Current tensions](#current-tensions)
 - [Why they matter](#why-they-matter)
+- [What might become synthesis next](#what-might-become-synthesis-next)
 - [Related pages](#related-pages)
 
 ## Connected notes
@@ -60,11 +75,11 @@ review_status: approved
 - [[Start Here]]
 - [[Topic Map]]
 - [[Reading Paths]]
+- [[Maintenance Rhythm]]
 - [[Artifact Map]]
 - [[Current Tensions]]
 - [[Monitoring]]
 - [[Open Questions]]
-- [[OpenClaw]]
 
 ## Summary
 
@@ -78,13 +93,18 @@ The most important tension in this corpus is that OpenClaw looks useful precisel
 
 ## Why they matter
 
-- A maintainer can read the release notes and still miss workflow drift if they do not also inspect compatibility and provider assumptions.
+- A maintainer can read release notes and still miss workflow drift if they do not also inspect compatibility and provider assumptions.
 - The same fast motion that makes the project interesting also makes upgrade timing and regression depth more important.
+- If a tension keeps recurring, it should leave the article layer and become an explicit maintenance or synthesis surface.
+
+## What might become synthesis next
+
+- **OpenClaw upgrade regression triggers**: Release cadence, monitoring, and open-question surfaces already suggest this synthesis, but the rule set is not yet durable enough to stand alone.
+- **OpenClaw provider exposure map**: Provider risk is visible, but the practical workflow consequences are still split across a concept page, a tension page, and an operational note.
 
 ## Related pages
 
 - [[OpenClaw]]
-- [[Plugin compatibility]]
-- [[Provider dependency risk]]
 - [[OpenClaw maintenance watchpoints]]
 - [[OpenClaw open questions]]
+- [[OpenClaw maintenance rhythm]]

@@ -3,7 +3,7 @@ title: OpenClaw release cadence
 slug: openclaw-release-cadence
 type: topic
 created_at: '2026-04-05T19:36:54.477Z'
-updated_at: '2026-04-05T19:36:55.589Z'
+updated_at: '2026-04-05T19:36:56.533Z'
 status: active
 aliases: []
 tags:
@@ -23,10 +23,17 @@ source_refs:
 page_refs:
   - OpenClaw
   - OpenClaw maintenance watchpoints
+  - OpenClaw maintenance rhythm
   - OpenClaw current tensions
   - 'Note: What should I monitor before upgrading OpenClaw'
 confidence: 0.2
 review_status: approved
+knowledge_role: The canonical release and upgrade checkpoint page.
+surface_kind: canonical
+revisit_cadence: Refresh on each notable release signal or changelog packaging change.
+refresh_triggers:
+  - A release note changes regression expectations.
+  - Changelog packaging becomes a stronger upgrade signal.
 ---
 # OpenClaw release cadence
 
@@ -34,9 +41,13 @@ review_status: approved
 > OpenClaw release cadence matters because the corpus keeps treating new versions as near-term upgrade checkpoints with direct workflow impact.
 >
 > - **Type**: Topic
+> - **Role**: The canonical release and upgrade checkpoint page.
+> - **Surface**: canonical
 > - **Review status**: approved
 > - **Confidence**: 0.20
 > - **Source refs**: 2
+> - **Revisit cadence**: Refresh on each notable release signal or changelog packaging change.
+> - **Refresh triggers**: A release note changes regression expectations.; Changelog packaging becomes a stronger upgrade signal.
 > - **Canonical page**: `wiki/topics/openclaw-release-cadence.md`
 > - **Vault companions**: [[Start Here]], [[Reading Paths]], [[Artifact Map]]
 
@@ -56,6 +67,7 @@ review_status: approved
 - [[Start Here]]
 - [[Topic Map]]
 - [[Reading Paths]]
+- [[Maintenance Rhythm]]
 - [[Artifact Map]]
 - [[OpenClaw]]
 - [[Plugin compatibility]]

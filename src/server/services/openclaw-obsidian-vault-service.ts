@@ -7,6 +7,13 @@ import type {
 } from "@/lib/contracts/openclaw-example";
 import { REPO_ROOT } from "@/server/lib/repo-paths";
 import {
+  buildKnowledgeMethodPack,
+  findKnowledgeSurface,
+} from "@/server/services/knowledge-method-template-service";
+import {
+  openClawKnowledgeMethodData,
+} from "@/server/services/openclaw-knowledge-method";
+import {
   parseWikiDocument,
   serializeWikiDocument,
 } from "@/server/services/wiki-frontmatter-service";
@@ -36,6 +43,7 @@ const normalizedSourcesFolderName = "25 Normalized Sources";
 const summariesFolderName = "30 Summaries";
 const reviewsFolderName = "40 Reviews";
 const auditsFolderName = "50 Audits";
+const openClawMethodPack = buildKnowledgeMethodPack(openClawKnowledgeMethodData);
 
 function uniqueValues(values: string[]) {
   return [...new Set(values.filter((value) => value.trim().length > 0))];
@@ -125,6 +133,23 @@ function buildObsidianAliases(title: string, existingAliases: string[]) {
   return uniqueValues(aliases);
 }
 
+function readStringFrontmatterValue(frontmatter: Record<string, unknown>, key: string) {
+  const value = frontmatter[key];
+  return typeof value === "string" && value.trim().length > 0 ? value : null;
+}
+
+function readStringArrayFrontmatterValue(frontmatter: Record<string, unknown>, key: string) {
+  const value = frontmatter[key];
+
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .filter((item): item is string => typeof item === "string" && item.trim().length > 0)
+    .map((item) => item.trim());
+}
+
 function buildObsidianTags(params: {
   title: string;
   type: string;
@@ -168,6 +193,8 @@ function describeWorkingUse(title: string, type: string) {
       return "Load this when you need the compact operational checklist rather than the full article graph.";
     case "OpenClaw current tensions":
       return "Load this when you want the active trade-offs and risks, not just the neutral article layer.";
+    case "OpenClaw maintenance rhythm":
+      return "Load this when you want to resume maintenance quickly, refresh the right context pack, and decide what should become synthesis next.";
     case "OpenClaw reading paths":
       return "Load this when you want a small note bundle for orientation, maintenance review, or provenance tracing.";
     case "OpenClaw open questions":
@@ -186,7 +213,7 @@ function describeWorkingUse(title: string, type: string) {
 }
 
 function defaultConnectedNotes(title: string, type: string) {
-  const base = ["Start Here", "Topic Map", "Reading Paths", "Artifact Map"];
+  const base = ["Start Here", "Topic Map", "Reading Paths", "Maintenance Rhythm", "Artifact Map"];
 
   if (type === "synthesis") {
     base.push("Current Tensions", "Monitoring");
@@ -201,7 +228,11 @@ function defaultConnectedNotes(title: string, type: string) {
   }
 
   if (title === "OpenClaw current tensions") {
-    base.push("Open Questions");
+    base.push("Open Questions", "Maintenance Rhythm");
+  }
+
+  if (title === "OpenClaw maintenance rhythm") {
+    base.push("Monitoring", "LLM Context Pack", "Open Questions");
   }
 
   return uniqueValues(base);
@@ -214,6 +245,10 @@ function buildArticleProjectionBody(params: {
   reviewStatus: string;
   confidence: number;
   sourceRefCount: number;
+  knowledgeRole?: string | null;
+  surfaceKind?: string | null;
+  revisitCadence?: string | null;
+  refreshTriggers?: string[];
   body: string;
 }) {
   const leadHeadingNames =
@@ -247,9 +282,21 @@ function buildArticleProjectionBody(params: {
     lines.push(`> ${lead}`);
     lines.push(">");
     lines.push(`> - **Type**: ${formatTypeLabel(params.type)}`);
+    if (params.knowledgeRole) {
+      lines.push(`> - **Role**: ${params.knowledgeRole}`);
+    }
+    if (params.surfaceKind) {
+      lines.push(`> - **Surface**: ${params.surfaceKind}`);
+    }
     lines.push(`> - **Review status**: ${params.reviewStatus}`);
     lines.push(`> - **Confidence**: ${params.confidence.toFixed(2)}`);
     lines.push(`> - **Source refs**: ${params.sourceRefCount}`);
+    if (params.revisitCadence) {
+      lines.push(`> - **Revisit cadence**: ${params.revisitCadence}`);
+    }
+    if (params.refreshTriggers && params.refreshTriggers.length > 0) {
+      lines.push(`> - **Refresh triggers**: ${params.refreshTriggers.join("; ")}`);
+    }
     lines.push(`> - **Canonical page**: \`${params.relativePath}\``);
     lines.push("> - **Vault companions**: [[Start Here]], [[Reading Paths]], [[Artifact Map]]");
     lines.push("");
@@ -358,6 +405,13 @@ async function buildProjectedWikiNotes(params: {
       reviewStatus: parsed.frontmatter.review_status,
       confidence: parsed.frontmatter.confidence,
       sourceRefCount: parsed.frontmatter.source_refs.length,
+      knowledgeRole: readStringFrontmatterValue(parsed.frontmatter, "knowledge_role"),
+      surfaceKind:
+        readStringFrontmatterValue(parsed.frontmatter, "surface_kind") ??
+        findKnowledgeSurface(openClawKnowledgeMethodData, page.title)?.surfaceKind ??
+        null,
+      revisitCadence: readStringFrontmatterValue(parsed.frontmatter, "revisit_cadence"),
+      refreshTriggers: readStringArrayFrontmatterValue(parsed.frontmatter, "refresh_triggers"),
       body: parsed.body,
     });
 
@@ -373,335 +427,6 @@ async function buildProjectedWikiNotes(params: {
   }
 
   return projectedNotes.sort((left, right) => left.title.localeCompare(right.title));
-}
-
-function buildReadmeNote() {
-  return `# OpenClaw Obsidian Vault
-
-> [!info]
-> This folder is an Obsidian-first projection of the official OpenClaw example. The source of truth still lives in \`../workspace/\`, while this vault reorganizes the same compiled knowledge and artifact trail into a calmer map-of-content layout for reading, linking, progressive refinement, and small context selection.
-
-## Start here
-
-- [[Start Here]]
-- [[Topic Map]]
-- [[Key Pages]]
-- [[Reading Paths]]
-- [[LLM Context Pack]]
-- [[Open Questions]]
-- [[Current Tensions]]
-- [[Monitoring]]
-- [[Artifact Map]]
-
-## Vault layout
-
-- \`00 Atlas/\`: maps of content, reading routes, and context-pack guidance.
-- \`05 Context Packs/\`: compact note bundles for small human or model context windows.
-- \`10 Articles/\`: the compiled wiki pages projected into Obsidian-friendly article notes.
-- \`20 Sources/\`: the bounded user-first corpus used for the example.
-- \`25 Normalized Sources/\`: the processed source layer between raw excerpts and summaries.
-- \`30 Summaries/\`: source summary notes that sit between raw materials and review proposals.
-- \`40 Reviews/\`: approved and rejected patch proposals, kept visible as part of the mutation gate.
-- \`50 Audits/\`: audit notes that highlight structural weaknesses or missing coverage.
-
-## How to work inside Obsidian
-
-- Pin [[Start Here]] and keep backlinks plus outline open while reading.
-- Use [[Topic Map]], [[Current Tensions]], and [[Open Questions]] as the daily navigation trio.
-- Use [[LLM Context Pack]] or one of the notes in [[Explain OpenClaw]], [[Upgrade Watchpoints]], and [[Provenance And Review]] when you need a compact note bundle.
-- Move from articles to normalized sources, summaries, reviews, and audits only when you need provenance or to inspect how a claim was compiled.
-`;
-}
-
-function buildStartHereNote() {
-  return `# Start Here
-
-> [!summary]
-> This vault takes the official OpenClaw example and reshapes it for Obsidian usage: clear maps of content, article-first notes, visible provenance, and small context packs for local reading or LLM-assisted work.
-
-## What this vault is
-
-- A projection of the committed OpenClaw example, not a second source-of-truth system.
-- A calmer working surface for browsing the compiled wiki in Obsidian.
-- A way to keep articles, source excerpts, normalized sources, summaries, proposals, and audits one hop apart.
-
-## Primary reading path
-
-- [[OpenClaw]]
-- [[OpenClaw current tensions]]
-- [[OpenClaw release cadence]]
-- [[Plugin compatibility]]
-- [[Provider dependency risk]]
-- [[OpenClaw maintenance watchpoints]]
-- [[OpenClaw reading paths]]
-- [[OpenClaw open questions]]
-- [[Note: What should I monitor before upgrading OpenClaw]]
-
-## Artifact ladder
-
-- [[Corpus Atlas]]
-- [[Processed Source Atlas]]
-- [[Summary Atlas]]
-- [[Review History]]
-- [[Audit Atlas]]
-
-## Obsidian habits
-
-- Keep [[Start Here]] pinned as your map of content.
-- Use backlinks to see where a concept or entity is being reused.
-- Use [[LLM Context Pack]] when you want a minimal, high-signal bundle of notes for analysis.
-`;
-}
-
-function buildReadingPathsNote() {
-  return `# Reading Paths
-
-## Ten-minute orientation
-
-1. Read [[OpenClaw]].
-2. Read [[OpenClaw current tensions]].
-3. Read [[OpenClaw maintenance watchpoints]].
-4. Read [[Note: What should I monitor before upgrading OpenClaw]].
-
-## Maintenance pass
-
-1. Read [[OpenClaw release cadence]].
-2. Read [[Plugin compatibility]].
-3. Read [[Provider dependency risk]].
-4. Read [[OpenClaw open questions]].
-5. Open [[Review History]] to inspect what was approved or rejected.
-
-## Provenance pass
-
-1. Start from [[OpenClaw]].
-2. Jump to [[Processed Source Atlas]] to inspect the normalized source layer.
-3. Jump to [[Summary Atlas]] to inspect the summary layer.
-4. Open [[Corpus Atlas]] to see the original bounded source notes.
-5. Finish in [[Audit Atlas]] to inspect structural weaknesses or coverage gaps.
-`;
-}
-
-function buildTopicMapNote() {
-  return `# Topic Map
-
-## Core pages
-
-- [[OpenClaw]]
-- [[OpenClaw release cadence]]
-- [[Plugin compatibility]]
-- [[Provider dependency risk]]
-
-## Decision surfaces
-
-- [[OpenClaw current tensions]]
-- [[OpenClaw maintenance watchpoints]]
-- [[Note: What should I monitor before upgrading OpenClaw]]
-
-## Next working surfaces
-
-- [[OpenClaw reading paths]]
-- [[OpenClaw open questions]]
-- [[Review History]]
-- [[Audit Atlas]]
-`;
-}
-
-function buildKeyPagesNote() {
-  return `# Key Pages
-
-## Read these first
-
-- [[OpenClaw]]
-- [[OpenClaw current tensions]]
-- [[OpenClaw maintenance watchpoints]]
-
-## Read these when operating
-
-- [[OpenClaw release cadence]]
-- [[Plugin compatibility]]
-- [[Provider dependency risk]]
-- [[Note: What should I monitor before upgrading OpenClaw]]
-
-## Read these when checking provenance
-
-- [[Processed Source Atlas]]
-- [[Summary Atlas]]
-- [[Review History]]
-- [[Audit Atlas]]
-`;
-}
-
-function buildOpenQuestionsAtlasNote() {
-  return `# Open Questions
-
-## Highest-leverage open questions
-
-- [[OpenClaw open questions]]
-- Which release signals should trigger a full regression run?
-- Which plugin assumptions are most likely to drift next?
-- Which provider-side changes would most quickly change adoption or upgrade decisions?
-
-## What would reduce uncertainty
-
-- More explicit release notes that connect shipped changes to workflow breakpoints.
-- More processed source notes and summaries that show plugin and SDK drift over time.
-- Better evidence connecting provider-policy movement to actual OpenClaw workflow outcomes.
-`;
-}
-
-function buildCurrentTensionsAtlasNote() {
-  return `# Current Tensions
-
-## Main tensions
-
-- [[OpenClaw current tensions]]
-- Release speed versus local stability.
-- Plugin surface progress versus integration breakage risk.
-- Provider leverage versus durable access assumptions.
-
-## Where to inspect them
-
-- [[OpenClaw]]
-- [[Plugin compatibility]]
-- [[Provider dependency risk]]
-- [[Review History]]
-`;
-}
-
-function buildMonitoringAtlasNote() {
-  return `# Monitoring
-
-## What to monitor
-
-- [[OpenClaw maintenance watchpoints]]
-- [[Note: What should I monitor before upgrading OpenClaw]]
-- [[OpenClaw release cadence]]
-
-## Fast maintenance bundle
-
-- [[Upgrade Watchpoints]]
-- [[OpenClaw current tensions]]
-- [[OpenClaw open questions]]
-
-## Escalation questions
-
-- Which release note implies a breaking local regression?
-- Which provider change forces a new workflow assumption?
-- Which plugin-surface change should be promoted into a stronger wiki page update?
-`;
-}
-
-function buildLlmContextPackNote() {
-  return `# LLM Context Pack
-
-> [!info]
-> This vault is organized for small, deliberate context packs. The goal is to keep the active note set compact, grounded, and inspectable.
-
-## Working principle
-
-- Start from the compiled article notes, not the raw corpus.
-- Pull in source notes only when a claim needs inspection.
-- Add review or audit notes only when you need to understand how the wiki mutated or where it is weak.
-
-## Pack 1: Explain OpenClaw
-
-- [[Explain OpenClaw]]
-
-## Pack 2: Upgrade watchpoints
-
-- [[Upgrade Watchpoints]]
-
-## Pack 3: Provenance check
-
-- [[Provenance And Review]]
-`;
-}
-
-function buildExplainOpenClawPack() {
-  return `# Explain OpenClaw
-
-## Use this pack when
-
-- You want the smallest durable bundle that explains what OpenClaw is in this corpus.
-
-## Load these notes
-
-- [[OpenClaw]]
-- [[OpenClaw release cadence]]
-- [[Plugin compatibility]]
-- [[OpenClaw current tensions]]
-
-## Optional deepening
-
-- [[Provider dependency risk]]
-- [[OpenClaw maintenance watchpoints]]
-`;
-}
-
-function buildUpgradeWatchpointsPack() {
-  return `# Upgrade Watchpoints
-
-## Use this pack when
-
-- You want the smallest operational bundle for deciding what to monitor before upgrading.
-
-## Load these notes
-
-- [[OpenClaw maintenance watchpoints]]
-- [[Note: What should I monitor before upgrading OpenClaw]]
-- [[Provider dependency risk]]
-- [[OpenClaw release cadence]]
-
-## Questions to keep active
-
-- Which release signals imply a full regression run?
-- Which provider assumptions are changing fastest?
-- Which compatibility signals would make this upgrade non-routine?
-`;
-}
-
-function buildProvenanceAndReviewPack() {
-  return `# Provenance And Review
-
-## Use this pack when
-
-- You want to audit how the compiled wiki was built instead of only reading the final pages.
-
-## Load these notes
-
-- [[OpenClaw]]
-- [[Processed Source Atlas]]
-- [[Summary Atlas]]
-- [[Review History]]
-- [[Audit Atlas]]
-
-## Walk order
-
-1. Start at [[OpenClaw]].
-2. Drop to [[Processed Source Atlas]] and [[Summary Atlas]].
-3. Inspect [[Review History]].
-4. Finish at [[Audit Atlas]].
-`;
-}
-
-function buildArtifactMapNote() {
-  return `# Artifact Map
-
-## Read the compiled wiki first
-
-- [[OpenClaw]]
-- [[OpenClaw current tensions]]
-- [[OpenClaw maintenance watchpoints]]
-- [[Note: What should I monitor before upgrading OpenClaw]]
-
-## Then inspect the artifact trail
-
-- [[Corpus Atlas]]
-- [[Processed Source Atlas]]
-- [[Summary Atlas]]
-- [[Review History]]
-- [[Audit Atlas]]
-`;
 }
 
 function buildCorpusAtlasNote(config: OpenClawExamplePipelineConfig) {
@@ -820,55 +545,16 @@ export async function buildOpenClawObsidianVault(
   const auditsRoot = path.join(params.workspaceRoot, "audits");
 
   await writeTextFile(path.join(params.outputRoot, ".gitignore"), ".obsidian/\n.trash/\n");
-  await writeTextFile(path.join(params.outputRoot, "README.md"), buildReadmeNote());
-  await writeTextFile(
-    path.join(params.outputRoot, atlasFolderName, "Start Here.md"),
-    buildStartHereNote(),
-  );
-  await writeTextFile(
-    path.join(params.outputRoot, atlasFolderName, "Topic Map.md"),
-    buildTopicMapNote(),
-  );
-  await writeTextFile(
-    path.join(params.outputRoot, atlasFolderName, "Key Pages.md"),
-    buildKeyPagesNote(),
-  );
-  await writeTextFile(
-    path.join(params.outputRoot, atlasFolderName, "Reading Paths.md"),
-    buildReadingPathsNote(),
-  );
-  await writeTextFile(
-    path.join(params.outputRoot, atlasFolderName, "Open Questions.md"),
-    buildOpenQuestionsAtlasNote(),
-  );
-  await writeTextFile(
-    path.join(params.outputRoot, atlasFolderName, "Current Tensions.md"),
-    buildCurrentTensionsAtlasNote(),
-  );
-  await writeTextFile(
-    path.join(params.outputRoot, atlasFolderName, "Monitoring.md"),
-    buildMonitoringAtlasNote(),
-  );
-  await writeTextFile(
-    path.join(params.outputRoot, atlasFolderName, "LLM Context Pack.md"),
-    buildLlmContextPackNote(),
-  );
-  await writeTextFile(
-    path.join(params.outputRoot, atlasFolderName, "Artifact Map.md"),
-    buildArtifactMapNote(),
-  );
-  await writeTextFile(
-    path.join(params.outputRoot, contextPackFolderName, "Explain OpenClaw.md"),
-    buildExplainOpenClawPack(),
-  );
-  await writeTextFile(
-    path.join(params.outputRoot, contextPackFolderName, "Upgrade Watchpoints.md"),
-    buildUpgradeWatchpointsPack(),
-  );
-  await writeTextFile(
-    path.join(params.outputRoot, contextPackFolderName, "Provenance And Review.md"),
-    buildProvenanceAndReviewPack(),
-  );
+  await writeTextFile(path.join(params.outputRoot, "README.md"), openClawMethodPack.obsidian.readme);
+  for (const [noteName, content] of Object.entries(openClawMethodPack.obsidian.atlas)) {
+    await writeTextFile(path.join(params.outputRoot, atlasFolderName, `${noteName}.md`), content);
+  }
+  for (const [noteName, content] of Object.entries(openClawMethodPack.obsidian.contextPacks)) {
+    await writeTextFile(
+      path.join(params.outputRoot, contextPackFolderName, `${noteName}.md`),
+      content,
+    );
+  }
 
   await buildProjectedWikiNotes({
     workspaceRoot: params.workspaceRoot,

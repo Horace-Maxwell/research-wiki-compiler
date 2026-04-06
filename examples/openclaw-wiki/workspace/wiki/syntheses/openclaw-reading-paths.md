@@ -24,17 +24,26 @@ page_refs:
   - OpenClaw maintenance watchpoints
   - OpenClaw current tensions
   - OpenClaw open questions
+  - OpenClaw maintenance rhythm
   - 'Note: What should I monitor before upgrading OpenClaw'
 confidence: 0.82
 review_status: approved
+knowledge_role: The bundle-selection guide.
+surface_kind: working
+revisit_cadence: Refresh whenever the smallest useful bundle changes.
+refresh_triggers:
+  - A new working surface becomes essential.
+  - The recommended model-loading bundle changes.
 ---
 # OpenClaw reading paths
 
 ## Overview
 
-This page organizes the example into small working bundles so a reader can load only the notes needed for orientation, maintenance review, or provenance tracing.
+This page organizes OpenClaw into small working bundles so a reader can load only the notes needed for orientation, maintenance review, provenance tracing, or model input.
 
 ## Orientation pass
+
+Use this when you want the shortest durable statement of the topic and its active risks.
 
 1. [[OpenClaw]]
 2. [[OpenClaw current tensions]]
@@ -42,21 +51,42 @@ This page organizes the example into small working bundles so a reader can load 
 
 ## Maintenance pass
 
-1. [[OpenClaw release cadence]]
-2. [[Plugin compatibility]]
-3. [[Provider dependency risk]]
-4. [[Note: What should I monitor before upgrading OpenClaw]]
+Use this when deciding whether the example needs operational refresh.
+
+1. [[OpenClaw maintenance rhythm]]
+2. [[OpenClaw release cadence]]
+3. [[Plugin compatibility]]
+4. [[Provider dependency risk]]
+5. [[Note: What should I monitor before upgrading OpenClaw]]
 
 ## Provenance pass
 
+Use this when you need to inspect how the compiled story was assembled.
+
 1. [[OpenClaw]]
-2. [[Plugin compatibility]]
-3. [[OpenClaw current tensions]]
-4. [[OpenClaw open questions]]
-5. [[Note: What should I monitor before upgrading OpenClaw]]
+2. [[Processed Source Atlas]]
+3. [[Summary Atlas]]
+4. [[Review History]]
+5. [[Audit Atlas]]
+
+## Resume without rereading everything
+
+Use this when you are returning to the topic after time away.
+
+1. [[OpenClaw maintenance rhythm]]
+2. [[OpenClaw current tensions]]
+3. [[OpenClaw open questions]]
+4. [[Note: What should I monitor before upgrading OpenClaw]]
+
+## Feed to the model
+
+- Start from [[OpenClaw]] instead of raw sources.
+- Use [[OpenClaw maintenance rhythm]] to decide which bundle is still current.
+- In the Obsidian projection, prefer `Explain OpenClaw`, `Upgrade Watchpoints`, `Provenance And Review`, `Maintenance Triage` when you want a compact note set instead of the full article graph.
 
 ## Related pages
 
 - [[OpenClaw Example Index]]
-- [[OpenClaw maintenance watchpoints]]
+- [[OpenClaw maintenance rhythm]]
 - [[OpenClaw open questions]]
+- [[OpenClaw maintenance watchpoints]]

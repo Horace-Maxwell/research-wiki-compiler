@@ -103,11 +103,13 @@
           "Start here",
           "How to use this wiki",
           "Key pages",
+          "Maintenance surfaces",
           "Open fronts",
           "Open questions",
           "Corpus",
           "Artifact ladder",
           "Visible artifacts",
+          "Canonical vs working surfaces",
           "Reading path"
         ]
       },
@@ -163,6 +165,23 @@
         "requiredHeadings": [
           "Thesis",
           "Watchpoints",
+          "Refresh triggers",
+          "Action path",
+          "Related pages"
+        ]
+      },
+      {
+        "path": "wiki/syntheses/openclaw-maintenance-rhythm.md",
+        "title": "OpenClaw maintenance rhythm",
+        "type": "synthesis",
+        "requiredHeadings": [
+          "Summary",
+          "Review cadence",
+          "Revisit next",
+          "Context packs to refresh",
+          "Synthesis candidates",
+          "Audit to action",
+          "Canonical vs working surfaces",
           "Related pages"
         ]
       },
@@ -175,6 +194,7 @@
           "Orientation pass",
           "Maintenance pass",
           "Provenance pass",
+          "Feed to the model",
           "Related pages"
         ]
       },
@@ -186,6 +206,7 @@
           "Summary",
           "Current tensions",
           "Why they matter",
+          "What might become synthesis next",
           "Related pages"
         ]
       },
@@ -197,6 +218,7 @@
           "Summary",
           "Questions",
           "What would resolve them",
+          "What looks answerable next",
           "Related pages"
         ]
       },
@@ -246,6 +268,7 @@
       "workspace/wiki/index.md",
       "workspace/wiki/entities/openclaw.md",
       "workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md",
+      "workspace/wiki/syntheses/openclaw-maintenance-rhythm.md",
       "workspace/wiki/syntheses/openclaw-reading-paths.md",
       "workspace/wiki/syntheses/openclaw-current-tensions.md",
       "workspace/wiki/notes/openclaw-open-questions.md",
@@ -268,25 +291,27 @@
           "What this vault is",
           "Primary reading path",
           "Artifact ladder",
-          "Obsidian habits"
+          "Daily habits"
         ]
       },
       {
         "path": "00 Atlas/Reading Paths.md",
         "title": "Reading Paths",
         "requiredHeadings": [
-          "Ten-minute orientation",
+          "Orientation pass",
           "Maintenance pass",
-          "Provenance pass"
+          "Provenance pass",
+          "Resume without rereading everything"
         ]
       },
       {
         "path": "00 Atlas/Topic Map.md",
         "title": "Topic Map",
         "requiredHeadings": [
-          "Core pages",
-          "Decision surfaces",
-          "Next working surfaces"
+          "Canonical entries",
+          "Working surfaces",
+          "Monitoring surfaces",
+          "Artifact surfaces"
         ]
       },
       {
@@ -303,7 +328,8 @@
         "title": "Open Questions",
         "requiredHeadings": [
           "Highest-leverage open questions",
-          "What would reduce uncertainty"
+          "What would reduce uncertainty",
+          "What might become a synthesis next"
         ]
       },
       {
@@ -311,7 +337,18 @@
         "title": "Current Tensions",
         "requiredHeadings": [
           "Main tensions",
-          "Where to inspect them"
+          "Where to inspect them",
+          "What should become synthesis next"
+        ]
+      },
+      {
+        "path": "00 Atlas/Maintenance Rhythm.md",
+        "title": "Maintenance Rhythm",
+        "requiredHeadings": [
+          "Start a pass here",
+          "Revisit next",
+          "Context packs to refresh",
+          "Synthesis candidates"
         ]
       },
       {
@@ -319,8 +356,8 @@
         "title": "Monitoring",
         "requiredHeadings": [
           "What to monitor",
-          "Fast maintenance bundle",
-          "Escalation questions"
+          "Refresh triggers",
+          "Escalation path"
         ]
       },
       {
@@ -328,9 +365,8 @@
         "title": "LLM Context Pack",
         "requiredHeadings": [
           "Working principle",
-          "Pack 1: Explain OpenClaw",
-          "Pack 2: Upgrade watchpoints",
-          "Pack 3: Provenance check"
+          "Available packs",
+          "When to reopen the pack list"
         ]
       },
       {
@@ -361,11 +397,22 @@
         ]
       },
       {
+        "path": "05 Context Packs/Maintenance Triage.md",
+        "title": "Maintenance Triage",
+        "requiredHeadings": [
+          "Use this pack when",
+          "Load these notes",
+          "Optional deepening",
+          "Questions to keep active"
+        ]
+      },
+      {
         "path": "00 Atlas/Artifact Map.md",
         "title": "Artifact Map",
         "requiredHeadings": [
           "Read the compiled wiki first",
-          "Then inspect the artifact trail"
+          "Then inspect the artifact trail",
+          "Where unresolved items should land"
         ]
       },
       {
@@ -420,6 +467,17 @@
         ]
       },
       {
+        "path": "10 Articles/OpenClaw maintenance rhythm.md",
+        "title": "OpenClaw maintenance rhythm",
+        "requiredHeadings": [
+          "Use this note when",
+          "Article map",
+          "Connected notes",
+          "Summary",
+          "Revisit next"
+        ]
+      },
+      {
         "path": "10 Articles/OpenClaw maintenance watchpoints.md",
         "title": "OpenClaw maintenance watchpoints",
         "requiredHeadings": [
@@ -427,7 +485,8 @@
           "Article map",
           "Connected notes",
           "Thesis",
-          "Watchpoints"
+          "Watchpoints",
+          "Refresh triggers"
         ]
       },
       {
@@ -438,7 +497,8 @@
           "Article map",
           "Connected notes",
           "Overview",
-          "Orientation pass"
+          "Orientation pass",
+          "Feed to the model"
         ]
       },
       {
@@ -449,7 +509,8 @@
           "Article map",
           "Connected notes",
           "Summary",
-          "Current tensions"
+          "Current tensions",
+          "What might become synthesis next"
         ]
       },
       {
@@ -460,7 +521,8 @@
           "Article map",
           "Connected notes",
           "Summary",
-          "Questions"
+          "Questions",
+          "What looks answerable next"
         ]
       },
       {

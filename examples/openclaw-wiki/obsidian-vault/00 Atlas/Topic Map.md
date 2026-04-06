@@ -1,21 +1,29 @@
 # Topic Map
 
-## Core pages
+## Canonical entries
 
 - [[OpenClaw]]
 - [[OpenClaw release cadence]]
 - [[Plugin compatibility]]
 - [[Provider dependency risk]]
+- [[OpenClaw maintenance watchpoints]]
 
-## Decision surfaces
+## Working surfaces
 
 - [[OpenClaw current tensions]]
+- [[OpenClaw open questions]]
+- [[OpenClaw maintenance rhythm]]
+- [[OpenClaw reading paths]]
+
+## Monitoring surfaces
+
 - [[OpenClaw maintenance watchpoints]]
 - [[Note: What should I monitor before upgrading OpenClaw]]
 
-## Next working surfaces
+## Artifact surfaces
 
-- [[OpenClaw reading paths]]
-- [[OpenClaw open questions]]
+- [[Corpus Atlas]]
+- [[Processed Source Atlas]]
+- [[Summary Atlas]]
 - [[Review History]]
 - [[Audit Atlas]]

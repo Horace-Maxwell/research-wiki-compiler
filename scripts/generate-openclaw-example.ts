@@ -41,6 +41,11 @@ import {
   buildOpenClawObsidianVault,
 } from "@/server/services/openclaw-obsidian-vault-service";
 import {
+  buildKnowledgeMethodPack,
+  findKnowledgeSurface,
+} from "@/server/services/knowledge-method-template-service";
+import { openClawKnowledgeMethodData } from "@/server/services/openclaw-knowledge-method";
+import {
   parseWikiDocument,
   serializeWikiDocument,
 } from "@/server/services/wiki-frontmatter-service";
@@ -67,6 +72,7 @@ import { initializeWorkspace } from "@/server/services/workspace-service";
 
 const EXAMPLE_ROOT = path.join(REPO_ROOT, "examples", "openclaw-wiki");
 const PIPELINE_CONFIG_PATH = path.join(EXAMPLE_ROOT, "pipeline.json");
+const openClawMethodPack = buildKnowledgeMethodPack(openClawKnowledgeMethodData);
 
 type SourcePlan = {
   importedId: string;
@@ -1623,6 +1629,29 @@ function uniqueStringValues(values: string[]) {
   return [...new Set(values.filter((value) => value.trim().length > 0))];
 }
 
+function buildKnowledgeFrontmatter(title: string) {
+  const surface = findKnowledgeSurface(openClawKnowledgeMethodData, title);
+
+  if (!surface) {
+    return {};
+  }
+
+  return {
+    knowledge_role: surface.role,
+    surface_kind: surface.surfaceKind,
+    ...(surface.revisitCadence
+      ? {
+          revisit_cadence: surface.revisitCadence,
+        }
+      : {}),
+    ...(surface.refreshTriggers && surface.refreshTriggers.length > 0
+      ? {
+          refresh_triggers: surface.refreshTriggers,
+        }
+      : {}),
+  };
+}
+
 async function rewritePageByPath(params: {
   workspaceRoot: string;
   pagePath: string;
@@ -1663,6 +1692,7 @@ async function upsertCuratedPage(params: {
   sourceRefs?: string[];
   pageRefs?: string[];
   confidence?: number;
+  extraFrontmatter?: Record<string, unknown>;
   body: string;
 }) {
   const pages = await listWikiPages(params.workspaceRoot);
@@ -1696,6 +1726,7 @@ async function upsertCuratedPage(params: {
         review_status: "approved",
         status: "active",
         updated_at: new Date().toISOString(),
+        ...(params.extraFrontmatter ?? {}),
       },
       params.body,
     ),
@@ -1869,94 +1900,29 @@ async function rewriteExampleIndex(workspaceRoot: string, sourceIds: string[]) {
     rawContent: indexDetail.rawContent,
     relativePath: indexDetail.path,
   });
-  const archivedNoteTitle = "Note: What should I monitor before upgrading OpenClaw";
+  const surfaceTitles = uniqueStringValues([
+    ...openClawKnowledgeMethodData.canonicalSurfaces.map((surface) => surface.title),
+    ...openClawKnowledgeMethodData.workingSurfaces.map((surface) => surface.title),
+    ...openClawKnowledgeMethodData.monitoringSurfaces.map((surface) => surface.title),
+  ]);
   const nextFrontmatter = {
     ...parsed.frontmatter,
-    title: "OpenClaw Example Index",
+    title: openClawKnowledgeMethodData.indexTitle,
     aliases: ["OpenClaw MOC", "OpenClaw map of content"],
     tags: ["workspace", "example", "openclaw", "navigation", "start-here"],
     source_refs: sourceIds,
-    page_refs: [
-      "OpenClaw",
-      "OpenClaw release cadence",
-      "Plugin compatibility",
-      "Provider dependency risk",
-      "OpenClaw maintenance watchpoints",
-      "OpenClaw reading paths",
-      "OpenClaw current tensions",
-      "OpenClaw open questions",
-      archivedNoteTitle,
-    ],
+    page_refs: surfaceTitles,
     updated_at: new Date().toISOString(),
+    knowledge_role: "The atlas and start-here surface for the topic.",
+    surface_kind: "navigation",
+    revisit_cadence:
+      "Refresh when the recommended entry path, maintenance order, or key-page set changes.",
+    refresh_triggers: [
+      "A new working surface becomes part of the default path.",
+      "Maintenance or context-pack guidance changes.",
+    ],
   };
-  const nextBody = [
-    "# OpenClaw Example Index",
-    "",
-    "## Overview",
-    "",
-    "This wiki is a compiled example built from a small user-derived OpenClaw corpus. It shows how the product turns raw source excerpts into summaries, reviewable patch proposals, durable wiki pages, grounded answers, archived notes, and audit findings.",
-    "",
-    "## Start here",
-    "",
-    "- [[OpenClaw]]",
-    "- [[OpenClaw current tensions]]",
-    "- [[OpenClaw release cadence]]",
-    "- [[Plugin compatibility]]",
-    "- [[Provider dependency risk]]",
-    "- [[OpenClaw maintenance watchpoints]]",
-    "- [[OpenClaw reading paths]]",
-    "- [[OpenClaw open questions]]",
-    `- [[${archivedNoteTitle}]]`,
-    "",
-    "## How to use this wiki",
-    "",
-    "- Read [[OpenClaw]] first if you want the compact explanation of what the corpus says the product is.",
-    "- Read [[OpenClaw current tensions]] when you want the active risks and trade-offs rather than a neutral overview.",
-    "- Read [[OpenClaw maintenance watchpoints]] and the archived upgrade note when you want the operational checklist.",
-    "- Read [[OpenClaw reading paths]] when you want a small note bundle for orientation, maintenance review, or provenance tracing.",
-    "",
-    "## Key pages",
-    "",
-    "- [[OpenClaw]]: the core entity page.",
-    "- [[OpenClaw release cadence]]: why releases behave like near-term upgrade checkpoints.",
-    "- [[Plugin compatibility]]: the integration and SDK-surface concept page.",
-    "- [[Provider dependency risk]]: the concept page for external provider constraints.",
-    "- [[OpenClaw maintenance watchpoints]]: the maintainer-facing synthesis.",
-    "",
-    "## Open fronts",
-    "",
-    "- [[OpenClaw current tensions]]",
-    "- [[OpenClaw open questions]]",
-    "",
-    "## Open questions",
-    "",
-    "- Which release signals should trigger a full local regression run?",
-    "- Which plugin assumptions are most likely to break next?",
-    "- Which provider-side changes would materially change upgrade or adoption decisions?",
-    "",
-    "## Corpus",
-    "",
-    "- Four curated excerpts from the user's Obsidian AI news digests between 2026-03-26 and 2026-04-05.",
-    "- The corpus emphasizes releases, plugin/API baseline changes, provider-facing refactors, and external provider-policy risk signals.",
-    "",
-    "## Artifact ladder",
-    "",
-    "- Source excerpts enter through `source-corpus/` and `raw/processed/`.",
-    "- Source summaries make the first abstraction layer visible under `raw/processed/summaries/`.",
-    "- Review proposals preserve the mutation gate under `reviews/approved/` and `reviews/rejected/`.",
-    "- Durable compiled pages remain in `wiki/` and stay the source of truth.",
-    "- The archived note and coverage audit show how ask/archive/audit re-enter the knowledge base.",
-    "",
-    "## Visible artifacts",
-    "",
-    "- Source summaries live under `raw/processed/summaries/`.",
-    "- Review proposals live under `reviews/approved/` and `reviews/rejected/`.",
-    "- Audit reports live under `audits/`.",
-    "",
-    "## Reading path",
-    "",
-    "Read the OpenClaw entity page first, then the release-cadence and plugin-compatibility pages, then the provider-risk and maintenance-watchpoints pages, and finally the archived upgrade note.",
-  ].join("\n");
+  const nextBody = openClawMethodPack.wiki.index;
 
   await updateWikiPage({
     workspaceRoot,
@@ -1968,147 +1934,75 @@ async function rewriteExampleIndex(workspaceRoot: string, sourceIds: string[]) {
 }
 
 async function applyKnowledgeWorkOptimization(workspaceRoot: string, sourceIds: string[]) {
-  const archivedNoteTitle = "Note: What should I monitor before upgrading OpenClaw";
+  const archivedNoteTitle = openClawKnowledgeMethodData.archivedNoteTitle;
+  const durableSurfaceRefs = uniqueStringValues([
+    ...openClawKnowledgeMethodData.canonicalSurfaces.map((surface) => surface.title),
+    ...openClawKnowledgeMethodData.workingSurfaces.map((surface) => surface.title),
+    ...openClawKnowledgeMethodData.monitoringSurfaces.map((surface) => surface.title),
+  ]);
+  const relatedSurfaceRefs = (pageTitle: string) =>
+    durableSurfaceRefs.filter((title) => title.toLowerCase() !== pageTitle.toLowerCase());
 
   await upsertCuratedPage({
     workspaceRoot,
-    title: "OpenClaw reading paths",
+    title: openClawKnowledgeMethodData.readingPathsTitle,
     type: "synthesis",
     tags: ["navigation", "reading-paths", "openclaw", "synthesis"],
     sourceRefs: sourceIds,
-    pageRefs: [
-      "OpenClaw",
-      "OpenClaw release cadence",
-      "Plugin compatibility",
-      "Provider dependency risk",
-      "OpenClaw maintenance watchpoints",
-      "OpenClaw current tensions",
-      "OpenClaw open questions",
-      archivedNoteTitle,
-    ],
+    pageRefs: relatedSurfaceRefs(openClawKnowledgeMethodData.readingPathsTitle),
     confidence: 0.82,
-    body: [
-      "# OpenClaw reading paths",
-      "",
-      "## Overview",
-      "",
-      "This page organizes the example into small working bundles so a reader can load only the notes needed for orientation, maintenance review, or provenance tracing.",
-      "",
-      "## Orientation pass",
-      "",
-      "1. [[OpenClaw]]",
-      "2. [[OpenClaw current tensions]]",
-      "3. [[OpenClaw maintenance watchpoints]]",
-      "",
-      "## Maintenance pass",
-      "",
-      "1. [[OpenClaw release cadence]]",
-      "2. [[Plugin compatibility]]",
-      "3. [[Provider dependency risk]]",
-      "4. [[Note: What should I monitor before upgrading OpenClaw]]",
-      "",
-      "## Provenance pass",
-      "",
-      "1. [[OpenClaw]]",
-      "2. [[Plugin compatibility]]",
-      "3. [[OpenClaw current tensions]]",
-      "4. [[OpenClaw open questions]]",
-      "5. [[Note: What should I monitor before upgrading OpenClaw]]",
-      "",
-      "## Related pages",
-      "",
-      "- [[OpenClaw Example Index]]",
-      "- [[OpenClaw maintenance watchpoints]]",
-      "- [[OpenClaw open questions]]",
-    ].join("\n"),
+    extraFrontmatter: buildKnowledgeFrontmatter(openClawKnowledgeMethodData.readingPathsTitle),
+    body: openClawMethodPack.wiki.readingPaths,
   });
 
   await upsertCuratedPage({
     workspaceRoot,
-    title: "OpenClaw current tensions",
+    title: openClawKnowledgeMethodData.currentTensionsTitle,
     type: "synthesis",
     tags: ["tensions", "risk", "openclaw", "synthesis"],
     sourceRefs: sourceIds,
-    pageRefs: [
-      "OpenClaw",
-      "Plugin compatibility",
-      "Provider dependency risk",
-      "OpenClaw maintenance watchpoints",
-      "OpenClaw open questions",
-    ],
+    pageRefs: relatedSurfaceRefs(openClawKnowledgeMethodData.currentTensionsTitle),
     confidence: 0.79,
-    body: [
-      "# OpenClaw current tensions",
-      "",
-      "## Summary",
-      "",
-      "The most important tension in this corpus is that OpenClaw looks useful precisely where it is still moving: releases are frequent, plugin surfaces are changing, and provider-side constraints remain outside the project's direct control.",
-      "",
-      "## Current tensions",
-      "",
-      "- Release speed versus local workflow stability.",
-      "- Plugin-surface progress versus integration breakage risk.",
-      "- Provider leverage versus durable access assumptions.",
-      "",
-      "## Why they matter",
-      "",
-      "- A maintainer can read the release notes and still miss workflow drift if they do not also inspect compatibility and provider assumptions.",
-      "- The same fast motion that makes the project interesting also makes upgrade timing and regression depth more important.",
-      "",
-      "## Related pages",
-      "",
-      "- [[OpenClaw]]",
-      "- [[Plugin compatibility]]",
-      "- [[Provider dependency risk]]",
-      "- [[OpenClaw maintenance watchpoints]]",
-      "- [[OpenClaw open questions]]",
-    ].join("\n"),
+    extraFrontmatter: buildKnowledgeFrontmatter(openClawKnowledgeMethodData.currentTensionsTitle),
+    body: openClawMethodPack.wiki.currentTensions,
   });
 
   await upsertCuratedPage({
     workspaceRoot,
-    title: "OpenClaw open questions",
+    title: openClawKnowledgeMethodData.openQuestionsTitle,
     type: "note",
     tags: ["open-questions", "next-work", "openclaw", "note"],
     sourceRefs: sourceIds,
-    pageRefs: [
-      "OpenClaw",
-      "OpenClaw release cadence",
-      "Plugin compatibility",
-      "Provider dependency risk",
-      "OpenClaw maintenance watchpoints",
-      "OpenClaw current tensions",
-      archivedNoteTitle,
-    ],
+    pageRefs: relatedSurfaceRefs(openClawKnowledgeMethodData.openQuestionsTitle),
     confidence: 0.74,
-    body: [
-      "# OpenClaw open questions",
-      "",
-      "## Summary",
-      "",
-      "These are the highest-leverage unresolved questions if you want to keep the OpenClaw example current or use it as an operational case study.",
-      "",
-      "## Questions",
-      "",
-      "- Which release-note or changelog signals should trigger a full regression run instead of a light upgrade check?",
-      "- Which plugin or SDK assumptions are most likely to drift between releases?",
-      "- Which provider-side changes would change adoption or upgrade decisions the fastest?",
-      "",
-      "## What would resolve them",
-      "",
-      "- More explicit release notes that connect shipped fixes to workflow-facing breakpoints.",
-      "- Additional source excerpts that show how plugin API or SDK boundaries evolve over multiple releases.",
-      "- Stronger evidence about how provider restrictions show up in actual workflow outcomes, not just community chatter.",
-      "",
-      "## Related pages",
-      "",
-      "- [[OpenClaw]]",
-      "- [[OpenClaw release cadence]]",
-      "- [[Plugin compatibility]]",
-      "- [[Provider dependency risk]]",
-      "- [[OpenClaw maintenance watchpoints]]",
-      `- [[${archivedNoteTitle}]]`,
-    ].join("\n"),
+    extraFrontmatter: buildKnowledgeFrontmatter(openClawKnowledgeMethodData.openQuestionsTitle),
+    body: openClawMethodPack.wiki.openQuestions,
+  });
+
+  await upsertCuratedPage({
+    workspaceRoot,
+    title: openClawKnowledgeMethodData.maintenanceRhythmTitle,
+    type: "synthesis",
+    tags: ["maintenance", "triage", "next-work", "openclaw", "synthesis"],
+    sourceRefs: sourceIds,
+    pageRefs: relatedSurfaceRefs(openClawKnowledgeMethodData.maintenanceRhythmTitle),
+    confidence: 0.81,
+    extraFrontmatter: buildKnowledgeFrontmatter(openClawKnowledgeMethodData.maintenanceRhythmTitle),
+    body: openClawMethodPack.wiki.maintenanceRhythm,
+  });
+
+  await upsertCuratedPage({
+    workspaceRoot,
+    title: openClawKnowledgeMethodData.maintenanceWatchpointsTitle,
+    type: "synthesis",
+    tags: ["synthesis", "openclaw", "monitoring", "operations"],
+    sourceRefs: sourceIds,
+    pageRefs: relatedSurfaceRefs(openClawKnowledgeMethodData.maintenanceWatchpointsTitle),
+    confidence: 0.78,
+    extraFrontmatter: buildKnowledgeFrontmatter(
+      openClawKnowledgeMethodData.maintenanceWatchpointsTitle,
+    ),
+    body: openClawMethodPack.wiki.maintenanceWatchpoints,
   });
 
   await rewritePageByPath({
@@ -2124,11 +2018,13 @@ async function applyKnowledgeWorkOptimization(workspaceRoot: string, sourceIds: 
           "Plugin compatibility",
           "Provider dependency risk",
           "OpenClaw maintenance watchpoints",
+          "OpenClaw maintenance rhythm",
           "OpenClaw current tensions",
           "OpenClaw open questions",
         ],
         source_refs: sourceIds,
         updated_at: new Date().toISOString(),
+        ...buildKnowledgeFrontmatter("OpenClaw"),
       },
       body,
     }),
@@ -2144,10 +2040,12 @@ async function applyKnowledgeWorkOptimization(workspaceRoot: string, sourceIds: 
         page_refs: [
           "OpenClaw",
           "OpenClaw maintenance watchpoints",
+          "OpenClaw maintenance rhythm",
           "OpenClaw current tensions",
           archivedNoteTitle,
         ],
         updated_at: new Date().toISOString(),
+        ...buildKnowledgeFrontmatter("OpenClaw release cadence"),
       },
       body,
     }),
@@ -2164,10 +2062,12 @@ async function applyKnowledgeWorkOptimization(workspaceRoot: string, sourceIds: 
           "OpenClaw",
           "OpenClaw release cadence",
           "OpenClaw maintenance watchpoints",
+          "OpenClaw maintenance rhythm",
           "OpenClaw current tensions",
           "OpenClaw open questions",
         ],
         updated_at: new Date().toISOString(),
+        ...buildKnowledgeFrontmatter("Plugin compatibility"),
       },
       body,
     }),
@@ -2184,31 +2084,11 @@ async function applyKnowledgeWorkOptimization(workspaceRoot: string, sourceIds: 
           "OpenClaw",
           "OpenClaw current tensions",
           "OpenClaw maintenance watchpoints",
+          "OpenClaw maintenance rhythm",
           archivedNoteTitle,
         ],
         updated_at: new Date().toISOString(),
-      },
-      body,
-    }),
-  });
-
-  await rewritePageByPath({
-    workspaceRoot,
-    pagePath: "wiki/syntheses/openclaw-maintenance-watchpoints.md",
-    mutate: ({ frontmatter, body }) => ({
-      frontmatter: {
-        ...frontmatter,
-        tags: ["synthesis", "openclaw", "monitoring", "operations"],
-        page_refs: [
-          "OpenClaw",
-          "OpenClaw release cadence",
-          "Plugin compatibility",
-          "Provider dependency risk",
-          "OpenClaw current tensions",
-          "OpenClaw open questions",
-          archivedNoteTitle,
-        ],
-        updated_at: new Date().toISOString(),
+        ...buildKnowledgeFrontmatter("Provider dependency risk"),
       },
       body,
     }),
@@ -2236,10 +2116,12 @@ async function applyKnowledgeWorkOptimization(workspaceRoot: string, sourceIds: 
           "Plugin compatibility",
           "Provider dependency risk",
           "OpenClaw maintenance watchpoints",
+          "OpenClaw maintenance rhythm",
           "OpenClaw current tensions",
           "OpenClaw open questions",
         ],
         updated_at: new Date().toISOString(),
+        ...buildKnowledgeFrontmatter(archivedNoteTitle),
       },
       body: body.replace(
         "## Based-on pages\n\n- No directly grounded wiki pages were attached to this answer artifact.",

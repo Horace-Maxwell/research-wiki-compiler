@@ -2,7 +2,7 @@
 
 ## Use this pack when
 
-- You want to audit how the compiled wiki was built instead of only reading the final pages.
+- you want to inspect how the compiled wiki was built instead of only reading the final pages
 
 ## Load these notes
 

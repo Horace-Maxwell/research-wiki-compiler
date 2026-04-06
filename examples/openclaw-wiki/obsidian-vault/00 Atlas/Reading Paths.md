@@ -1,24 +1,38 @@
 # Reading Paths
 
-## Ten-minute orientation
+## Orientation pass
 
-1. Read [[OpenClaw]].
-2. Read [[OpenClaw current tensions]].
-3. Read [[OpenClaw maintenance watchpoints]].
-4. Read [[Note: What should I monitor before upgrading OpenClaw]].
+Use this when you want the shortest durable statement of the topic and its active risks.
+
+1. [[OpenClaw]]
+2. [[OpenClaw current tensions]]
+3. [[OpenClaw maintenance watchpoints]]
 
 ## Maintenance pass
 
-1. Read [[OpenClaw release cadence]].
-2. Read [[Plugin compatibility]].
-3. Read [[Provider dependency risk]].
-4. Read [[OpenClaw open questions]].
-5. Open [[Review History]] to inspect what was approved or rejected.
+Use this when deciding whether the example needs operational refresh.
+
+1. [[OpenClaw maintenance rhythm]]
+2. [[OpenClaw release cadence]]
+3. [[Plugin compatibility]]
+4. [[Provider dependency risk]]
+5. [[Note: What should I monitor before upgrading OpenClaw]]
 
 ## Provenance pass
 
-1. Start from [[OpenClaw]].
-2. Jump to [[Processed Source Atlas]] to inspect the normalized source layer.
-3. Jump to [[Summary Atlas]] to inspect the summary layer.
-4. Open [[Corpus Atlas]] to see the original bounded source notes.
-5. Finish in [[Audit Atlas]] to inspect structural weaknesses or coverage gaps.
+Use this when you need to inspect how the compiled story was assembled.
+
+1. [[OpenClaw]]
+2. [[Processed Source Atlas]]
+3. [[Summary Atlas]]
+4. [[Review History]]
+5. [[Audit Atlas]]
+
+## Resume without rereading everything
+
+Use this when you are returning to the topic after time away.
+
+1. [[OpenClaw maintenance rhythm]]
+2. [[OpenClaw current tensions]]
+3. [[OpenClaw open questions]]
+4. [[Note: What should I monitor before upgrading OpenClaw]]

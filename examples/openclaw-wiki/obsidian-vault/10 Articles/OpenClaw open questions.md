@@ -2,8 +2,8 @@
 title: OpenClaw open questions
 slug: openclaw-open-questions
 type: note
-created_at: '2026-04-05T19:36:55.281Z'
-updated_at: '2026-04-05T19:36:55.321Z'
+created_at: '2026-04-05T19:36:55.319Z'
+updated_at: '2026-04-05T19:36:55.366Z'
 status: active
 aliases: []
 tags:
@@ -30,19 +30,31 @@ page_refs:
   - Provider dependency risk
   - OpenClaw maintenance watchpoints
   - OpenClaw current tensions
+  - OpenClaw maintenance rhythm
+  - OpenClaw reading paths
   - 'Note: What should I monitor before upgrading OpenClaw'
 confidence: 0.74
 review_status: approved
+knowledge_role: The unresolved-work queue.
+surface_kind: working
+revisit_cadence: Refresh after every new source batch or audit pass.
+refresh_triggers:
+  - New evidence lands.
+  - A question becomes answerable enough to promote into synthesis.
 ---
 # OpenClaw open questions
 
 > [!abstract]
-> These are the highest-leverage unresolved questions if you want to keep the OpenClaw example current or use it as an operational case study.
+> These are the highest-leverage unresolved questions if you want to keep the OpenClaw example current or use it as a durable operational case study.
 >
 > - **Type**: Note
+> - **Role**: The unresolved-work queue.
+> - **Surface**: working
 > - **Review status**: approved
 > - **Confidence**: 0.74
 > - **Source refs**: 4
+> - **Revisit cadence**: Refresh after every new source batch or audit pass.
+> - **Refresh triggers**: New evidence lands.; A question becomes answerable enough to promote into synthesis.
 > - **Canonical page**: `wiki/notes/openclaw-open-questions.md`
 > - **Vault companions**: [[Start Here]], [[Reading Paths]], [[Artifact Map]]
 
@@ -55,6 +67,7 @@ review_status: approved
 - [Summary](#summary)
 - [Questions](#questions)
 - [What would resolve them](#what-would-resolve-them)
+- [What looks answerable next](#what-looks-answerable-next)
 - [Related pages](#related-pages)
 
 ## Connected notes
@@ -62,15 +75,15 @@ review_status: approved
 - [[Start Here]]
 - [[Topic Map]]
 - [[Reading Paths]]
+- [[Maintenance Rhythm]]
 - [[Artifact Map]]
 - [[Open Questions]]
 - [[Monitoring]]
-- [[OpenClaw]]
 - [[OpenClaw release cadence]]
 
 ## Summary
 
-These are the highest-leverage unresolved questions if you want to keep the OpenClaw example current or use it as an operational case study.
+These are the highest-leverage unresolved questions if you want to keep the OpenClaw example current or use it as a durable operational case study.
 
 ## Questions
 
@@ -84,11 +97,15 @@ These are the highest-leverage unresolved questions if you want to keep the Open
 - Additional source excerpts that show how plugin API or SDK boundaries evolve over multiple releases.
 - Stronger evidence about how provider restrictions show up in actual workflow outcomes, not just community chatter.
 
+## What looks answerable next
+
+- **OpenClaw upgrade regression triggers** looks closest if you load [[OpenClaw release cadence]], [[OpenClaw maintenance watchpoints]], [[OpenClaw open questions]], [[Note: What should I monitor before upgrading OpenClaw]].
+- **OpenClaw provider exposure map** looks closest if you load [[Provider dependency risk]], [[OpenClaw current tensions]], [[OpenClaw maintenance watchpoints]].
+
 ## Related pages
 
 - [[OpenClaw]]
-- [[OpenClaw release cadence]]
-- [[Plugin compatibility]]
-- [[Provider dependency risk]]
+- [[OpenClaw current tensions]]
 - [[OpenClaw maintenance watchpoints]]
+- [[OpenClaw maintenance rhythm]]
 - [[Note: What should I monitor before upgrading OpenClaw]]

@@ -79,6 +79,11 @@ export default async function OpenClawExamplePage({
       note: "A synthesis page that shows the compiled-wiki outcome clearly.",
     },
     {
+      title: "OpenClaw maintenance rhythm",
+      path: "wiki/syntheses/openclaw-maintenance-rhythm.md",
+      note: "The daily maintenance surface for revisit order, stale context packs, and next syntheses.",
+    },
+    {
       title: "OpenClaw current tensions",
       path: "wiki/syntheses/openclaw-current-tensions.md",
       note: "The fastest way to see what still feels unstable or strategically important.",
@@ -193,8 +198,8 @@ export default async function OpenClawExamplePage({
                 Maintenance bundle
               </div>
               <div className="mt-2">
-                Release cadence / plugin compatibility / provider dependency risk / archived
-                upgrade note.
+                Maintenance rhythm / release cadence / plugin compatibility / provider
+                dependency risk / archived upgrade note.
               </div>
             </div>
             <div className="rounded-2xl border border-border/50 bg-background/62 p-4">
@@ -202,7 +207,8 @@ export default async function OpenClawExamplePage({
                 Next-work bundle
               </div>
               <div className="mt-2">
-                Open questions / reviews / audit report for the next refinement pass.
+                Current tensions / open questions / maintenance rhythm / reviews / audit report
+                for the next refinement pass.
               </div>
             </div>
           </div>
