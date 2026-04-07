@@ -255,7 +255,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <Button asChild className="w-full justify-start" variant="outline">
                     <Link href="/topics/openclaw">
                       <Sparkles className="size-4" />
-                      Open flagship topic
+                      Open official showcase
                     </Link>
                   </Button>
                   <Button asChild className="w-full justify-start" variant="ghost">

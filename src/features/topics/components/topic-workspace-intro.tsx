@@ -140,6 +140,7 @@ export function TopicWorkspaceIntro({
     comparisonSpotlight &&
     (comparisonSpotlight.leaderId === topic.id ||
       comparisonSpotlight.challengerId === topic.id);
+  const isOfficialShowcase = topic.id === "openclaw";
   const leadQuestion = questionWorkflow?.questions[0] ?? null;
   const nextSession = sessionSummary?.nextSession ?? null;
   const nextSynthesis = synthesisSummary?.nextSynthesis ?? null;
@@ -186,6 +187,7 @@ export function TopicWorkspaceIntro({
         <div className="flex flex-wrap items-center gap-3">
           <Badge variant={stageVariant(topic.maturityStage)}>{topic.maturityStage}</Badge>
           <Badge variant="outline">{topic.kind === "example" ? "official example" : "topic workspace"}</Badge>
+          {isOfficialShowcase ? <Badge variant="outline">official showcase</Badge> : null}
           <Badge variant="outline">{topic.corpusFileCount} corpus files</Badge>
           <Badge variant="outline">{topic.pageCount} pages</Badge>
           <Badge variant="outline">{topic.contextPackCount} context packs</Badge>
@@ -193,6 +195,13 @@ export function TopicWorkspaceIntro({
         <div className="mt-4 max-w-4xl space-y-3">
           <p className="text-lg font-medium text-foreground">{topic.description}</p>
           <p className="text-sm leading-7 text-muted-foreground">{topic.summary}</p>
+          {isOfficialShowcase ? (
+            <p className="text-sm leading-7 text-muted-foreground">
+              This is the flagship showcase topic. Use this page as the real working cockpit, then
+              open the rendered showcase route only when you want the guided article-first tour of
+              the same committed Markdown source.
+            </p>
+          ) : null}
         </div>
         <div className="mt-6 rounded-[22px] border border-border/55 bg-background/58 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.32)]">
           <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
@@ -273,6 +282,11 @@ export function TopicWorkspaceIntro({
           <Button asChild variant="ghost">
             <Link href={topic.links.maintenance.href}>Open maintenance rhythm</Link>
           </Button>
+          {isOfficialShowcase ? (
+            <Button asChild variant="ghost">
+              <Link href="/examples/openclaw">Open rendered showcase</Link>
+            </Button>
+          ) : null}
           <Button asChild variant="ghost">
             <Link href="/topics">Back to portfolio</Link>
           </Button>

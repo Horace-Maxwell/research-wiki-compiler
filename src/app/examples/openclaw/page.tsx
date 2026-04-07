@@ -103,13 +103,16 @@ export default async function OpenClawExamplePage({
   const intro = isArticleDetailPage ? (
     <div className="flex flex-wrap items-center justify-between gap-3 rounded-[18px] border border-border/52 bg-background/58 px-4 py-3">
       <div className="flex flex-wrap items-center gap-3">
-        <Badge variant="success">Rendered example</Badge>
+        <Badge variant="success">Official showcase</Badge>
         <Badge variant="outline">OpenClaw</Badge>
         <span className="text-sm leading-6 text-muted-foreground">
           Committed article, rendered from Markdown source of truth.
         </span>
       </div>
       <div className="flex flex-wrap gap-3">
+        <Button asChild size="sm" variant="ghost">
+          <Link href="/topics/openclaw">Open topic home</Link>
+        </Button>
         <Button asChild size="sm" variant="ghost">
           <Link href="/examples/openclaw?pagePath=wiki/index.md">Back to example index</Link>
         </Button>
@@ -124,14 +127,14 @@ export default async function OpenClawExamplePage({
     <div className="space-y-6">
       <div className="rounded-[28px] bg-[linear-gradient(180deg,rgba(255,255,255,0.84),rgba(248,246,240,0.96))] p-6 ring-1 ring-border/55">
         <div className="flex flex-wrap items-center gap-3">
-          <Badge variant="success">Rendered example</Badge>
+          <Badge variant="success">Official showcase</Badge>
           <Badge variant="outline">OpenClaw</Badge>
           <Badge variant="outline">{manifest.corpusFiles.length} source excerpts</Badge>
           <Badge variant="outline">{manifest.pages.length} wiki pages</Badge>
         </div>
         <div className="mt-4 max-w-4xl space-y-3">
           <p className="text-lg font-medium text-foreground">
-            This route is the guided, rendered entry point for the OpenClaw example.
+            This route is the guided official showcase for the OpenClaw example.
           </p>
           <p className="text-sm leading-7 text-muted-foreground">
             The Markdown files in <code>examples/openclaw-wiki/workspace/wiki/</code>{" "}
@@ -139,8 +142,22 @@ export default async function OpenClawExamplePage({
             wiki browser so GitHub visitors can understand both layers: the raw artifact layer in
             the repository and the rendered wiki experience in the product.
           </p>
+          <p className="text-sm leading-7 text-muted-foreground">
+            The strongest daily-use path still starts at <code>/topics/openclaw</code>. Use this
+            showcase route when you want the cleanest demonstration of how canonical wiki,
+            questions, sessions, syntheses, signals, and Obsidian all fit together in one case.
+          </p>
         </div>
         <div className="mt-5 flex flex-wrap gap-3">
+          <Button asChild>
+            <Link href="/topics/openclaw">Open topic home</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/questions?topic=openclaw">Open question queue</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/sessions?topic=openclaw">Open session queue</Link>
+          </Button>
           <Button asChild>
             <Link href="/examples/openclaw?pagePath=wiki/index.md">Open the example index</Link>
           </Button>
@@ -150,11 +167,143 @@ export default async function OpenClawExamplePage({
             </Link>
           </Button>
           <Button asChild variant="outline">
-            <Link href="https://github.com/Horace-Maxwell/research-wiki-compiler/tree/main/examples/openclaw-wiki/source-corpus">
-              Open source corpus
+            <Link href="https://github.com/Horace-Maxwell/research-wiki-compiler/tree/main/examples/openclaw-wiki/obsidian-vault">
+              Open Obsidian vault
             </Link>
           </Button>
         </div>
+      </div>
+
+      <div className="grid gap-4 xl:grid-cols-3">
+        <ExampleCard
+          title="Why This Showcase"
+          description="OpenClaw is the best single case for understanding the product because it keeps the workflow loop, the durable wiki, and the file-backed artifact trail visible at the same time."
+        >
+          <div className="space-y-3 text-sm leading-7 text-foreground">
+            <div className="rounded-2xl border border-border/50 bg-background/62 p-4">
+              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                Full loop
+              </div>
+              <div className="mt-2">
+                Source to summary to question to session to synthesis to evidence gap and change to
+                acquisition and monitoring to canonical wiki.
+              </div>
+            </div>
+            <div className="rounded-2xl border border-border/50 bg-background/62 p-4">
+              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                Same knowledge, three views
+              </div>
+              <div className="mt-2">
+                Canonical Markdown stays authoritative; the app renders it; the Obsidian vault
+                reorganizes it for day-to-day reading.
+              </div>
+            </div>
+            <div className="rounded-2xl border border-border/50 bg-background/62 p-4">
+              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                Honest reproducibility
+              </div>
+              <div className="mt-2">
+                Reference mode is deterministic and validated. Live mode stays real, not fake-stable.
+              </div>
+            </div>
+          </div>
+        </ExampleCard>
+
+        <ExampleCard
+          title="Best App Walkthrough"
+          description="Use the topic home as the working cockpit, then move through the main research path before opening supporting lanes."
+        >
+          <div className="space-y-3">
+            <div className="rounded-2xl border border-border/50 bg-background/62 p-4">
+              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                Daily path
+              </div>
+              <div className="mt-2 text-sm leading-6 text-foreground">
+                /topics to /topics/openclaw to /questions to /sessions to /syntheses
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Button asChild size="sm" variant="outline">
+                  <Link href="/topics/openclaw">Topic home</Link>
+                </Button>
+                <Button asChild size="sm" variant="outline">
+                  <Link href="/questions?topic=openclaw">Questions</Link>
+                </Button>
+                <Button asChild size="sm" variant="outline">
+                  <Link href="/sessions?topic=openclaw">Sessions</Link>
+                </Button>
+                <Button asChild size="sm" variant="outline">
+                  <Link href="/syntheses?topic=openclaw">Syntheses</Link>
+                </Button>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-border/50 bg-background/62 p-4">
+              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                Supporting lanes
+              </div>
+              <div className="mt-2 text-sm leading-6 text-muted-foreground">
+                Open these only when the main path points to missing evidence or changed assumptions.
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Button asChild size="sm" variant="ghost">
+                  <Link href="/gaps?topic=openclaw">Gaps</Link>
+                </Button>
+                <Button asChild size="sm" variant="ghost">
+                  <Link href="/changes?topic=openclaw">Changes</Link>
+                </Button>
+                <Button asChild size="sm" variant="ghost">
+                  <Link href="/acquisition?topic=openclaw">Acquisition</Link>
+                </Button>
+                <Button asChild size="sm" variant="ghost">
+                  <Link href="/monitoring?topic=openclaw">Monitoring</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </ExampleCard>
+
+        <ExampleCard
+          title="Inspect The Layers"
+          description="The same example should make sense whether you approach it as rendered product, canonical wiki files, or Obsidian working environment."
+        >
+          <div className="space-y-3">
+            <div className="rounded-2xl border border-border/50 bg-background/62 p-4">
+              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                Canonical wiki
+              </div>
+              <div className="mt-2 text-sm leading-6 text-muted-foreground">
+                Start at the committed index, entity page, and maintenance rhythm.
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Button asChild size="sm" variant="outline">
+                  <Link href="/examples/openclaw?pagePath=wiki/index.md">Index</Link>
+                </Button>
+                <Button asChild size="sm" variant="outline">
+                  <Link href="/examples/openclaw?pagePath=wiki/entities/openclaw.md">Entity page</Link>
+                </Button>
+                <Button asChild size="sm" variant="outline">
+                  <Link href="/examples/openclaw?pagePath=wiki/syntheses/openclaw-maintenance-rhythm.md">
+                    Maintenance rhythm
+                  </Link>
+                </Button>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-border/50 bg-background/62 p-4">
+              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                Obsidian projection
+              </div>
+              <div className="mt-2 text-sm leading-6 text-muted-foreground">
+                Use Start Here, Topic Map, and Maintenance Rhythm as the working trio.
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Button asChild size="sm" variant="outline">
+                  <Link href="https://github.com/Horace-Maxwell/research-wiki-compiler/tree/main/examples/openclaw-wiki/obsidian-vault">
+                    Open vault folder
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </ExampleCard>
       </div>
 
       <div className="grid gap-4 xl:grid-cols-3">
@@ -275,12 +424,12 @@ export default async function OpenClawExamplePage({
       initialDetail={initialDetail}
       initialPages={initialPages}
       header={{
-        eyebrow: "Rendered example",
-        title: "Explore the OpenClaw example as a rendered wiki",
+        eyebrow: "Official showcase",
+        title: "Explore OpenClaw as the flagship rendered example",
         description: isArticleDetailPage
-          ? "Read a committed OpenClaw example article in the product's rendered wiki view. The underlying Markdown remains the durable source of truth."
-          : "This route showcases the committed OpenClaw example in the app's rendered wiki view. The underlying Markdown files remain the source of truth; this page is the product layer that renders them.",
-        badge: "Showcase route",
+          ? "Read a committed OpenClaw showcase article in the product's rendered wiki view. The underlying Markdown remains the durable source of truth."
+          : "This route is the official showcase layer for OpenClaw. It explains how the rendered app, the canonical Markdown wiki, and the Obsidian projection all describe the same example.",
+        badge: "Official showcase",
       }}
       internalLinkBasePath="/examples/openclaw"
       intro={intro}

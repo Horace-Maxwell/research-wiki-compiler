@@ -1580,6 +1580,47 @@ function buildObsidianProjectionIdentity(data: KnowledgeMethodTemplateData) {
   return `- A projection of the committed ${data.topicTitle} example, not a second source-of-truth system.`;
 }
 
+function buildObsidianShowcasePathSection(data: KnowledgeMethodTemplateData) {
+  if (getWorkspaceFlavor(data) === "starter-topic") {
+    return "";
+  }
+
+  return `
+
+## Showcase path
+
+If you are opening this vault as part of the official showcase, use this order first:
+
+1. [[Start Here]]
+2. [[Topic Map]]
+3. [[Maintenance Rhythm]]
+4. [[LLM Context Pack]]
+5. [[Open Questions]]`;
+}
+
+function buildObsidianShowcaseWorkingHint(data: KnowledgeMethodTemplateData) {
+  if (getWorkspaceFlavor(data) === "starter-topic") {
+    return "";
+  }
+
+  return "\n- Use the showcase path first when you want the fastest proof that the Obsidian projection is a real working environment rather than an export afterthought.";
+}
+
+function buildObsidianStartHereShowcasePathSection(data: KnowledgeMethodTemplateData) {
+  if (getWorkspaceFlavor(data) === "starter-topic") {
+    return "";
+  }
+
+  return `
+
+## Official showcase path
+
+- Start with [[Topic Map]] if you want the shortest orientation pass.
+- Open [[Maintenance Rhythm]] next if you want the real operating surface instead of the whole graph.
+- Open [[LLM Context Pack]] when you want a compact working bundle after the atlas layer is clear.
+- Use [[Open Questions]] to decide what should advance next without rereading every article.`;
+}
+
 export function findKnowledgeSurface(
   data: KnowledgeMethodTemplateData,
   title: string,
@@ -2012,7 +2053,7 @@ function buildObsidianReadme(data: KnowledgeMethodTemplateData) {
 - [[Open Questions]]
 - [[Current Tensions]]
 - [[Monitoring]]
-- [[Artifact Map]]
+- [[Artifact Map]]${buildObsidianShowcasePathSection(data)}
 
 ## Vault layout
 
@@ -2028,7 +2069,7 @@ ${buildObsidianSourceFolderDescription(data)}
 ## How to work inside Obsidian
 
 - Pin [[Start Here]] and [[Maintenance Rhythm]] when using the vault as a daily working surface.
-- Use [[Topic Map]], [[Current Tensions]], and [[Open Questions]] as the daily navigation trio.
+- Use [[Topic Map]], [[Current Tensions]], and [[Open Questions]] as the daily navigation trio.${buildObsidianShowcaseWorkingHint(data)}
 - Use ${contextPackTitles} when you need a compact note bundle rather than the full article graph.
 - Move from articles to normalized sources, summaries, reviews, and audits only when you need provenance or need to inspect how a claim was compiled.
 `;
@@ -2044,7 +2085,7 @@ function buildObsidianStartHereNote(data: KnowledgeMethodTemplateData) {
 
 ${buildObsidianProjectionIdentity(data)}
 - A calmer working surface for browsing the compiled wiki in Obsidian.
-- A way to keep articles, source excerpts, normalized sources, summaries, proposals, audits, and maintenance loops one hop apart.
+- A way to keep articles, source excerpts, normalized sources, summaries, proposals, audits, and maintenance loops one hop apart.${buildObsidianStartHereShowcasePathSection(data)}
 
 ## Primary reading path
 

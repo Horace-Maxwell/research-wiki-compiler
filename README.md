@@ -23,6 +23,8 @@
   ·
   <a href="#quick-demo--快速体验">Quick Demo / 快速体验</a>
   ·
+  <a href="./docs/official-showcase.md">Official Showcase / 官方案例</a>
+  ·
   <a href="./examples/openclaw-wiki/README.md">OpenClaw Example / OpenClaw 示例</a>
   ·
   <a href="./docs/merge-review-guide.md">Review Guide / 评审指引</a>
@@ -50,6 +52,7 @@
 </p>
 
 <p align="center">
+  <a href="./docs/official-showcase.md"><img alt="Read the official showcase" src="https://img.shields.io/badge/official-showcase-0b57d0?style=for-the-badge" /></a>
   <a href="./examples/openclaw-wiki/README.md"><img alt="Open the example" src="https://img.shields.io/badge/openclaw-example-0b57d0?style=for-the-badge" /></a>
   <a href="#quickstart--快速开始"><img alt="Go to quickstart" src="https://img.shields.io/badge/quickstart-111827?style=for-the-badge" /></a>
   <a href="./docs/architecture.md"><img alt="Read architecture" src="https://img.shields.io/badge/architecture-0f766e?style=for-the-badge" /></a>
@@ -77,8 +80,8 @@ If you want the fastest path to understanding this project, do not start with th
 
 > Start here / 从这里开始  
 > 1. `npm install && npm run dev`  
-> 2. 打开 `http://localhost:3000/topics`  
-> 3. 进入一个 topic home，例如 `http://localhost:3000/topics/openclaw`  
+> 2. 打开 Next 启动时打印出来的本地地址，通常是 `http://localhost:3000/topics`  
+> 3. 进入一个 topic home，例如 `/topics/openclaw`  
 > 4. 再按默认路径看 `questions -> sessions -> syntheses`  
 > 5. 最后再回来看 GitHub 里的 Markdown 源文件和中间 artifact
 
@@ -97,6 +100,24 @@ If you want the fastest path to understanding this project, do not start with th
 
 GitHub 正在展示这个项目的底层 artifact layer，这不是退而求其次，而是设计选择：Markdown 文件是 source of truth，app 负责把这些文件渲染成真正的 wiki 体验。  
 GitHub is intentionally showing the artifact layer of the system. That is not a fallback. It is the design: Markdown files are the source of truth, and the app renders those same files into the actual wiki experience.
+
+## Official Showcase / 官方案例
+
+官方 showcase 主题现在明确是 OpenClaw。  
+OpenClaw is now the explicit official showcase topic.
+
+之所以选它，不是因为题材“更花哨”，而是因为它已经同时满足了最关键的展示条件：
+
+- source -> summary -> question -> session -> synthesis -> change / gap -> acquisition / monitoring -> canonical wiki 的完整链路
+- 多 topic 入口、topic home、默认工作路径和 rendered example 都已经对齐
+- canonical wiki、working surfaces、Obsidian projection 和 reproducible validation 在同一个主题上成立
+- 剩余不确定性是显式的 evidence risk，不是假装“已经全都解决”
+
+如果你想按最短路径理解这个项目，先看这三个入口：
+
+1. [docs/official-showcase.md](./docs/official-showcase.md)
+2. [examples/openclaw-wiki/README.md](./examples/openclaw-wiki/README.md)
+3. app 里的 `/topics -> /topics/openclaw -> /questions?topic=openclaw -> /sessions?topic=openclaw -> /syntheses?topic=openclaw`
 
 ## 为什么要做 / Why It Exists
 
@@ -183,8 +204,8 @@ npm run demo:reset
 npm run dev
 ```
 
-打开 [http://localhost:3000/topics](http://localhost:3000/topics)。  
-Open [http://localhost:3000/topics](http://localhost:3000/topics).
+打开 Next 启动时打印出来的本地地址，通常是 [http://localhost:3000/topics](http://localhost:3000/topics)。  
+Open the local URL printed by Next, usually [http://localhost:3000/topics](http://localhost:3000/topics).
 
 默认日常路径 / Default daily path:  
 `/topics -> /topics/[slug] -> /questions -> /sessions -> /syntheses`

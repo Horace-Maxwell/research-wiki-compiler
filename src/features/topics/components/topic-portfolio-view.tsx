@@ -80,6 +80,8 @@ function TopicRow({
 }: {
   topic: TopicPortfolioOverview["topics"][number];
 }) {
+  const isOfficialShowcase = topic.id === "openclaw";
+
   return (
     <div className="border-t border-border/60 px-5 py-5 first:border-t-0">
       <div className="flex flex-wrap items-start justify-between gap-5">
@@ -90,6 +92,7 @@ function TopicRow({
             </Link>
             <Badge variant={stageVariant(topic.maturityStage)}>{topic.maturityStage}</Badge>
             <Badge variant="outline">{topic.kind === "example" ? "example" : "topic"}</Badge>
+            {isOfficialShowcase ? <Badge variant="outline">official showcase</Badge> : null}
             <Badge variant="outline">{topic.overallScore}/5</Badge>
           </div>
           <p className="max-w-[75ch] text-sm leading-7 text-muted-foreground">{topic.summary}</p>
@@ -128,6 +131,11 @@ function TopicRow({
           <Button asChild variant="outline">
             <Link href={topic.links.home.href}>Open topic home</Link>
           </Button>
+          {isOfficialShowcase ? (
+            <Button asChild variant="outline">
+              <Link href="/examples/openclaw">Rendered walkthrough</Link>
+            </Button>
+          ) : null}
           <Button asChild variant="ghost">
             <Link href={`/questions?topic=${topic.id}`}>Question queue</Link>
           </Button>
@@ -150,16 +158,16 @@ export function TopicPortfolioView({
       <PageHeader
         eyebrow="Topic portfolio"
         title="Choose a topic, then work from its home"
-        description="The portfolio is the front door, not the whole workspace. Open a topic home first, then move into questions, sessions, and syntheses from there. Evidence gaps, changes, acquisition, and monitoring stay available, but they should usually appear because the topic asks for them."
+        description="The portfolio is the front door, not the whole workspace. Open a topic home first, then move into questions, sessions, and syntheses from there. If you want the clearest official showcase, start with OpenClaw. Evidence gaps, changes, acquisition, and monitoring stay available, but they should usually appear because the topic asks for them."
         badge={`${portfolio.summary.totalTopics} topics`}
         actions={
           <div className="flex flex-wrap gap-2">
             <Button asChild variant="outline">
-              <Link href="/questions">Open research questions</Link>
+              <Link href="/examples/openclaw">Open rendered walkthrough</Link>
             </Button>
             <Button asChild>
               <Link href="/topics/openclaw">
-                Open flagship topic
+                Open official showcase
                 <ArrowRight className="size-4" />
               </Link>
             </Button>

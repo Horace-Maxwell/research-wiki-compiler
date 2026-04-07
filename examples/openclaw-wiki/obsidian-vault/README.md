@@ -16,6 +16,16 @@
 - [[Monitoring]]
 - [[Artifact Map]]
 
+## Showcase path
+
+If you are opening this vault as part of the official showcase, use this order first:
+
+1. [[Start Here]]
+2. [[Topic Map]]
+3. [[Maintenance Rhythm]]
+4. [[LLM Context Pack]]
+5. [[Open Questions]]
+
 ## Vault layout
 
 - `00 Atlas/`: maps of content, reading routes, maintenance logic, and context-pack guidance.
@@ -31,5 +41,6 @@
 
 - Pin [[Start Here]] and [[Maintenance Rhythm]] when using the vault as a daily working surface.
 - Use [[Topic Map]], [[Current Tensions]], and [[Open Questions]] as the daily navigation trio.
+- Use the showcase path first when you want the fastest proof that the Obsidian projection is a real working environment rather than an export afterthought.
 - Use [[Explain OpenClaw]], [[Upgrade Watchpoints]], [[Provenance And Review]], [[Maintenance Triage]] when you need a compact note bundle rather than the full article graph.
 - Move from articles to normalized sources, summaries, reviews, and audits only when you need provenance or need to inspect how a claim was compiled.

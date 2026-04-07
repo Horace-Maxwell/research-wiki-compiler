@@ -1,6 +1,23 @@
-# OpenClaw Example Wiki
+# OpenClaw Official Showcase
 
-This directory is the official end-to-end example workflow for the Research Wiki Compiler. It preserves both the final high-quality wiki output and the reproducible execution path that generated it.
+This directory is the official showcase for Research Wiki Compiler.
+
+It is not just a demo folder. It is the strongest complete case in the repository: canonical wiki, working workflow, rendered app experience, Obsidian projection, and reproducible validation all point at the same committed example.
+
+Use this file as the standard walkthrough for GitHub review, app demo, local reproduction, and Obsidian inspection.
+
+## Why OpenClaw is the flagship showcase
+
+- It already demonstrates the full source -> summary -> question -> session -> synthesis -> evidence gap / change -> acquisition / monitoring -> canonical wiki loop.
+- It is the clearest example of the default daily-use path: `/topics -> /topics/openclaw -> /questions -> /sessions -> /syntheses`.
+- It has a real canonical wiki, not just rendered cards.
+- It has a real Obsidian projection, not just a repo export.
+- It keeps the remaining uncertainty honest: explicit evidence gaps, explicit review triggers, and explicit monitoring items.
+
+Cross-repo guide:
+
+- [`../../docs/official-showcase.md`](../../docs/official-showcase.md)
+- [`../../README.md`](../../README.md)
 
 ## What lives here
 
@@ -12,6 +29,58 @@ This directory is the official end-to-end example workflow for the Research Wiki
 - `reference-baseline.json`: the canonical hash baseline used by `npm run example:openclaw:validate`.
 - `evaluation/`: topic-maturity and topic-quality reports written by `npm run example:openclaw:evaluate`.
 - the rendered app also exposes the workflow lanes through `/questions`, `/gaps`, `/acquisition`, `/sessions`, `/syntheses`, `/changes`, and `/monitoring`.
+
+## Fastest walkthrough
+
+### Start on GitHub
+
+Read in this order:
+
+1. [`../../docs/official-showcase.md`](../../docs/official-showcase.md)
+2. [`workspace/wiki/index.md`](workspace/wiki/index.md)
+3. [`workspace/wiki/entities/openclaw.md`](workspace/wiki/entities/openclaw.md)
+4. [`workspace/wiki/syntheses/openclaw-maintenance-rhythm.md`](workspace/wiki/syntheses/openclaw-maintenance-rhythm.md)
+5. [`workspace/wiki/notes/openclaw-open-questions.md`](workspace/wiki/notes/openclaw-open-questions.md)
+6. [`obsidian-vault/README.md`](obsidian-vault/README.md)
+
+### Start in the app
+
+Open these routes in order:
+
+1. `/topics`
+2. `/topics/openclaw`
+3. `/questions?topic=openclaw`
+4. `/sessions?topic=openclaw`
+5. `/syntheses?topic=openclaw`
+
+Then use these only when the main path makes them relevant:
+
+- `/gaps?topic=openclaw`
+- `/changes?topic=openclaw`
+- `/acquisition?topic=openclaw`
+- `/monitoring?topic=openclaw`
+- `/examples/openclaw`
+
+### Inspect the canonical layer
+
+Start with:
+
+- [`workspace/wiki/index.md`](workspace/wiki/index.md)
+- [`workspace/wiki/entities/openclaw.md`](workspace/wiki/entities/openclaw.md)
+- [`workspace/wiki/syntheses/openclaw-current-tensions.md`](workspace/wiki/syntheses/openclaw-current-tensions.md)
+- [`workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md`](workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md)
+- [`workspace/wiki/syntheses/openclaw-maintenance-rhythm.md`](workspace/wiki/syntheses/openclaw-maintenance-rhythm.md)
+- [`workspace/wiki/notes/openclaw-open-questions.md`](workspace/wiki/notes/openclaw-open-questions.md)
+
+### Inspect the Obsidian layer
+
+Start with:
+
+- [`obsidian-vault/README.md`](obsidian-vault/README.md)
+- [`obsidian-vault/00 Atlas/Start Here.md`](obsidian-vault/00%20Atlas/Start%20Here.md)
+- [`obsidian-vault/00 Atlas/Topic Map.md`](obsidian-vault/00%20Atlas/Topic%20Map.md)
+- [`obsidian-vault/00 Atlas/Maintenance Rhythm.md`](obsidian-vault/00%20Atlas/Maintenance%20Rhythm.md)
+- [`obsidian-vault/05 Context Packs/Upgrade Watchpoints.md`](obsidian-vault/05%20Context%20Packs/Upgrade%20Watchpoints.md)
 
 ## Two execution modes
 
@@ -109,34 +178,9 @@ Key vault notes:
 - [`obsidian-vault/05 Context Packs/Provenance And Review.md`](obsidian-vault/05%20Context%20Packs/Provenance%20And%20Review.md)
 - [`obsidian-vault/05 Context Packs/Maintenance Triage.md`](obsidian-vault/05%20Context%20Packs/Maintenance%20Triage.md)
 
-## What to inspect first
+## Visible intermediate layer
 
-Start here:
-
-- portfolio route: `/topics`
-- question queue: `/questions`
-- topic question queue: `/questions?topic=openclaw`
-- acquisition queue: `/acquisition`
-- topic acquisition queue: `/acquisition?topic=openclaw`
-- monitoring queue: `/monitoring`
-- topic monitoring queue: `/monitoring?topic=openclaw`
-- topic home: `/topics/openclaw`
-- rendered route: `/examples/openclaw`
-- [`workspace/wiki/index.md`](workspace/wiki/index.md)
-- [`workspace/wiki/entities/openclaw.md`](workspace/wiki/entities/openclaw.md)
-- [`workspace/wiki/syntheses/openclaw-current-tensions.md`](workspace/wiki/syntheses/openclaw-current-tensions.md)
-- [`workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md`](workspace/wiki/syntheses/openclaw-maintenance-watchpoints.md)
-- [`workspace/wiki/syntheses/openclaw-maintenance-rhythm.md`](workspace/wiki/syntheses/openclaw-maintenance-rhythm.md)
-- [`workspace/wiki/syntheses/openclaw-reading-paths.md`](workspace/wiki/syntheses/openclaw-reading-paths.md)
-- [`workspace/wiki/notes/openclaw-open-questions.md`](workspace/wiki/notes/openclaw-open-questions.md)
-- [`workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md`](workspace/wiki/notes/note-what-should-i-monitor-before-upgrading-openclaw.md)
-- [`obsidian-vault/README.md`](obsidian-vault/README.md)
-- [`obsidian-vault/00 Atlas/Start Here.md`](obsidian-vault/00%20Atlas/Start%20Here.md)
-- [`obsidian-vault/00 Atlas/Maintenance Rhythm.md`](obsidian-vault/00%20Atlas/Maintenance%20Rhythm.md)
-- [`obsidian-vault/00 Atlas/LLM Context Pack.md`](obsidian-vault/00%20Atlas/LLM%20Context%20Pack.md)
-- [`obsidian-vault/05 Context Packs/Maintenance Triage.md`](obsidian-vault/05%20Context%20Packs/Maintenance%20Triage.md)
-
-Then inspect the visible intermediate layer:
+After the main walkthrough, inspect the artifact trail:
 
 - [`source-corpus/`](source-corpus/)
 - [`workspace/raw/processed/summaries/`](workspace/raw/processed/summaries/)

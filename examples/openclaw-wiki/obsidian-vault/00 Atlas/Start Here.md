@@ -9,6 +9,13 @@
 - A calmer working surface for browsing the compiled wiki in Obsidian.
 - A way to keep articles, source excerpts, normalized sources, summaries, proposals, audits, and maintenance loops one hop apart.
 
+## Official showcase path
+
+- Start with [[Topic Map]] if you want the shortest orientation pass.
+- Open [[Maintenance Rhythm]] next if you want the real operating surface instead of the whole graph.
+- Open [[LLM Context Pack]] when you want a compact working bundle after the atlas layer is clear.
+- Use [[Open Questions]] to decide what should advance next without rereading every article.
+
 ## Primary reading path
 
 - [[OpenClaw]]
