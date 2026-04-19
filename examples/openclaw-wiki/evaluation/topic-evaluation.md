@@ -3,7 +3,7 @@
 ## Overview
 
 - Target: example `openclaw`
-- Generated: 2026-04-06T05:05:26.236Z
+- Generated: 2026-04-19T06:48:09.210Z
 - Maturity stage: **flagship**
 - Overall score: **5/5** (100%)
 - Next stage: none

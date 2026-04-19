@@ -19,7 +19,7 @@ const EXAMPLE_SYNC_MARKER_PATH = path.join(
   "openclaw-example-sync.json",
 );
 
-let openClawWorkspacePromise: Promise<string> | null = null;
+let openClawWorkspaceSyncPromise: Promise<string> | null = null;
 
 async function fileExists(targetPath: string) {
   try {
@@ -85,23 +85,29 @@ export async function getOpenClawExampleManifest() {
 }
 
 export async function ensureOpenClawRenderedWorkspace() {
-  if (!openClawWorkspacePromise) {
-    openClawWorkspacePromise = (async () => {
-      const manifest = await getOpenClawExampleManifest();
-      const marker = await readSyncMarker();
-      const hasDatabase = await fileExists(
-        path.join(OPENCLAW_RENDERED_WORKSPACE_ROOT, ".research-wiki", "app.db"),
-      );
-
-      if (!hasDatabase || marker?.generatedAt !== manifest.generatedAt) {
-        await rebuildOpenClawRenderedWorkspace(manifest);
-      }
-
-      return OPENCLAW_RENDERED_WORKSPACE_ROOT;
-    })();
+  if (openClawWorkspaceSyncPromise) {
+    return openClawWorkspaceSyncPromise;
   }
 
-  return openClawWorkspacePromise;
+  openClawWorkspaceSyncPromise = (async () => {
+    const manifest = await getOpenClawExampleManifest();
+    const marker = await readSyncMarker();
+    const hasDatabase = await fileExists(
+      path.join(OPENCLAW_RENDERED_WORKSPACE_ROOT, ".research-wiki", "app.db"),
+    );
+
+    if (!hasDatabase || marker?.generatedAt !== manifest.generatedAt) {
+      await rebuildOpenClawRenderedWorkspace(manifest);
+    }
+
+    return OPENCLAW_RENDERED_WORKSPACE_ROOT;
+  })();
+
+  try {
+    return await openClawWorkspaceSyncPromise;
+  } finally {
+    openClawWorkspaceSyncPromise = null;
+  }
 }
 
 export async function getOpenClawRenderedExamplePageCount() {

@@ -99,7 +99,7 @@ function Metric({
 }: {
   label: string;
   value: string;
-  detail: string;
+  detail?: string;
 }) {
   return (
     <div className="space-y-2 border-l border-border/60 pl-4 first:border-l-0 first:pl-0">
@@ -107,7 +107,7 @@ function Metric({
         {label}
       </div>
       <div className="text-[1.9rem] font-semibold tracking-[-0.05em] text-foreground">{value}</div>
-      <p className="max-w-[24ch] text-sm leading-6 text-muted-foreground">{detail}</p>
+      {detail ? <p className="max-w-[24ch] text-sm leading-6 text-muted-foreground">{detail}</p> : null}
     </div>
   );
 }
@@ -188,14 +188,7 @@ export function MonitoringView({
       <PageHeader
         eyebrow="Monitoring"
         title={
-          focusedTopic
-            ? `${focusedTopic.title} monitoring signals`
-            : "Monitoring keeps signals quiet until they matter"
-        }
-        description={
-          focusedTopic
-            ? "Use this lower-frequency lane after topic home, changes, or acquisition work points you to a watch surface."
-            : "This is a lower-frequency lane across the portfolio for watchpoints that may mark review or spawn acquisition, not a default daily front door."
+          focusedTopic ? `${focusedTopic.title} monitoring` : "Monitoring"
         }
         badge={`${overview.summary.totalItems} monitors`}
         actions={
@@ -203,20 +196,20 @@ export function MonitoringView({
             {focusedTopic ? (
               <>
                 <Button asChild variant="outline">
-                  <Link href={`/acquisition?topic=${focusedTopic.id}`}>Open acquisition queue</Link>
+                  <Link href={`/acquisition?topic=${focusedTopic.id}`}>Acquisition</Link>
                 </Button>
                 <Button asChild variant="ghost">
-                  <Link href={`/changes?topic=${focusedTopic.id}`}>Open evidence shifts</Link>
+                  <Link href={`/changes?topic=${focusedTopic.id}`}>Changes</Link>
                 </Button>
               </>
             ) : (
               <Button asChild variant="outline">
-                <Link href="/topics">Open topic portfolio</Link>
+                <Link href="/topics">Topics</Link>
               </Button>
             )}
             <Button asChild>
               <Link href={focusedTopic ? `/topics/${focusedTopic.id}` : "/topics/openclaw"}>
-                {focusedTopic ? "Open topic home" : "Open flagship topic"}
+                {focusedTopic ? "Topic" : "Showcase"}
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
@@ -226,45 +219,18 @@ export function MonitoringView({
 
       <Surface className="px-5 py-5">
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-5">
-          <Metric
-            label="Monitors"
-            value={String(overview.summary.totalItems)}
-            detail="Meaningful monitoring items currently modeled in the selected workspace scope."
-          />
-          <Metric
-            label="Spawn work"
-            value={String(overview.summary.spawnedAcquisition)}
-            detail="Monitoring signals already strong enough to spawn bounded acquisition work."
-          />
-          <Metric
-            label="Review needed"
-            value={String(overview.summary.reviewNeeded)}
-            detail="Signals that should mark bounded review without necessarily reopening all work."
-          />
-          <Metric
-            label="Triggered"
-            value={String(overview.summary.triggered)}
-            detail="Monitoring items actively signaling that something changed and needs attention."
-          />
-          <Metric
-            label="Periodic review"
-            value={String(overview.summary.periodicReview)}
-            detail="Watch surfaces that need a cadence because they are not yet background-stable."
-          />
+          <Metric label="Monitors" value={String(overview.summary.totalItems)} />
+          <Metric label="Spawn" value={String(overview.summary.spawnedAcquisition)} />
+          <Metric label="Review" value={String(overview.summary.reviewNeeded)} />
+          <Metric label="Triggered" value={String(overview.summary.triggered)} />
+          <Metric label="Periodic" value={String(overview.summary.periodicReview)} />
         </div>
       </Surface>
 
       <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
         <Surface>
           <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-            <div className="space-y-2">
-              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Focus monitor
-              </div>
-              <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                What should we watch or escalate?
-              </h2>
-            </div>
+            <h2 className="text-xl font-semibold tracking-tight text-foreground">Focus</h2>
             <Radar className="size-5 text-muted-foreground" />
           </div>
           <div className="px-5 py-5">
@@ -334,10 +300,10 @@ export function MonitoringView({
                 ) : null}
                 <div className="flex flex-wrap gap-2">
                   <Button asChild>
-                    <Link href={focusMonitor.links.acquisition.href}>Open linked acquisition</Link>
+                    <Link href={focusMonitor.links.acquisition.href}>Acquisition</Link>
                   </Button>
                   <Button asChild variant="outline">
-                    <Link href={focusMonitor.links.maintenance.href}>Open maintenance rhythm</Link>
+                    <Link href={focusMonitor.links.maintenance.href}>Maintenance</Link>
                   </Button>
                   <Button asChild variant="ghost">
                     <Link href={focusMonitor.links.canonicalReview.href}>
@@ -349,7 +315,7 @@ export function MonitoringView({
               </div>
             ) : (
               <div className="rounded-[22px] border border-border/50 bg-background/62 px-5 py-5 text-sm leading-6 text-muted-foreground">
-                No monitoring item is seeded yet for the selected scope.
+                No monitors yet.
               </div>
             )}
           </div>
@@ -357,14 +323,7 @@ export function MonitoringView({
 
         <Surface>
           <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-            <div className="space-y-2">
-              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Consequences
-              </div>
-              <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                Review, reopen, or keep watching
-              </h2>
-            </div>
+            <h2 className="text-xl font-semibold tracking-tight text-foreground">Impact</h2>
             <RefreshCw className="size-5 text-muted-foreground" />
           </div>
           <div className="space-y-4 px-5 py-5">
@@ -372,7 +331,7 @@ export function MonitoringView({
               <div className="text-sm font-medium text-foreground">Recommended action</div>
               <div className="mt-2 text-sm leading-6 text-muted-foreground">
                 {focusMonitor?.recommendedAction ??
-                  "Select a monitoring item to see the recommended escalation or review action."}
+                  "Select a monitor to see the next move."}
               </div>
             </div>
             <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
@@ -380,7 +339,7 @@ export function MonitoringView({
               <div className="mt-2 text-sm leading-6 text-muted-foreground">
                 {focusMonitor?.linkedAcquisitionTaskTitles.length
                   ? focusMonitor.linkedAcquisitionTaskTitles.join("; ")
-                  : "No acquisition task is explicitly linked to the focused monitor."}
+                  : "No linked acquisition."}
               </div>
             </div>
             <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
@@ -388,15 +347,15 @@ export function MonitoringView({
               <div className="mt-2 text-sm leading-6 text-muted-foreground">
                 {focusMonitor?.linkedChangeTitles.length
                   ? focusMonitor.linkedChangeTitles.join("; ")
-                  : "No specific evidence change is linked to the focused monitor."}
+                  : "No linked changes."}
               </div>
             </div>
             <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
-              <div className="text-sm font-medium text-foreground">Canonical review surfaces</div>
+              <div className="text-sm font-medium text-foreground">Review targets</div>
               <div className="mt-2 text-sm leading-6 text-muted-foreground">
                 {focusMonitor?.canonicalReviewTitles.length
                   ? focusMonitor.canonicalReviewTitles.join("; ")
-                  : "This monitoring item does not currently point at a canonical review target."}
+                  : "No review targets."}
               </div>
             </div>
           </div>
@@ -414,7 +373,6 @@ export function MonitoringView({
                 <h2 className="text-xl font-semibold tracking-tight text-foreground">
                   {bucket.title}
                 </h2>
-                <p className="text-sm leading-6 text-muted-foreground">{bucket.description}</p>
               </div>
               <SearchCheck className="size-5 text-muted-foreground" />
             </div>
@@ -429,7 +387,7 @@ export function MonitoringView({
                 ))
               ) : (
                 <div className="rounded-[22px] border border-border/50 bg-background/62 px-5 py-5 text-sm leading-6 text-muted-foreground">
-                  No monitoring item currently lands in this bucket.
+                  No monitors here.
                 </div>
               )}
             </div>

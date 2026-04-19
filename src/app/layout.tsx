@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
 
+import { AppLocaleProvider } from "@/components/app-locale-provider";
 import { AppShell } from "@/components/app-shell";
+import {
+  APP_LOCALE_COOKIE_NAME,
+  localeToHtmlLang,
+  resolveAppLocale,
+} from "@/lib/app-locale";
 import "./globals.css";
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -27,17 +34,22 @@ export const metadata: Metadata = {
   description: "Local-first compiled research wiki workspace",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const locale = resolveAppLocale(cookieStore.get(APP_LOCALE_COOKIE_NAME)?.value);
+
   return (
-    <html lang="en">
+    <html lang={localeToHtmlLang(locale)} suppressHydrationWarning>
       <body
         className={`${ibmPlexSans.variable} ${ibmPlexMono.variable} ${ibmPlexSerif.variable} antialiased`}
       >
-        <AppShell>{children}</AppShell>
+        <AppLocaleProvider initialLocale={locale}>
+          <AppShell>{children}</AppShell>
+        </AppLocaleProvider>
       </body>
     </html>
   );

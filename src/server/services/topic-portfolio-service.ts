@@ -23,6 +23,7 @@ import {
 } from "@/lib/contracts/topic-evaluation";
 import { topicEvaluationReportSchema } from "@/lib/contracts/topic-evaluation";
 import { EXAMPLES_ROOT, REPO_ROOT, TOPICS_ROOT } from "@/server/lib/repo-paths";
+import { buildTopicPageHref } from "@/server/lib/page-route-hrefs";
 import { evaluateTopicQuality } from "@/server/services/topic-evaluation-service";
 
 type ManifestLikePage = {
@@ -143,11 +144,11 @@ function buildPortfolioLinks(source: TopicPortfolioSource) {
     },
     canonical: {
       label: "Open canonical start",
-      href: `${homeHref}?pagePath=${encodeURIComponent(canonicalPath)}`,
+      href: buildTopicPageHref(source.id, canonicalPath),
     },
     maintenance: {
       label: "Open maintenance rhythm",
-      href: `${homeHref}?pagePath=${encodeURIComponent(maintenancePath)}`,
+      href: buildTopicPageHref(source.id, maintenancePath),
     },
     evaluation: {
       label: "Open evaluation",

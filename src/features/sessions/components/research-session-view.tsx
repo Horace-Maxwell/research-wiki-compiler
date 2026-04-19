@@ -5,9 +5,17 @@ import {
   Clock3,
   FlaskConical,
   GitBranchPlus,
-  History,
 } from "lucide-react";
 
+import type { AppLocale } from "@/lib/app-locale";
+import {
+  getLocaleCopy,
+  getPriorityLabel,
+  getSessionOutcomeLabel,
+  getSessionStatusLabel,
+  getTopicMaturityStageLabel,
+  localeToIntlTag,
+} from "@/lib/app-locale";
 import type {
   ResearchSessionItem,
   ResearchSessionOverview,
@@ -95,16 +103,8 @@ function outcomeVariant(outcome: ResearchSessionItem["outcome"]) {
   }
 }
 
-function humanizeStatus(status: ResearchSessionItem["status"]) {
-  return status.replace(/-/g, " ");
-}
-
-function humanizeOutcome(outcome: ResearchSessionItem["outcome"]) {
-  return outcome ? outcome.replace(/-/g, " ") : "in progress";
-}
-
-function formatSessionDate(value: string) {
-  return new Intl.DateTimeFormat("en-US", {
+function formatSessionDate(locale: AppLocale, value: string) {
+  return new Intl.DateTimeFormat(localeToIntlTag(locale), {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -124,7 +124,7 @@ function Metric({
 }: {
   label: string;
   value: string;
-  detail: string;
+  detail?: string;
 }) {
   return (
     <div className="space-y-2 border-l border-border/60 pl-4 first:border-l-0 first:pl-0">
@@ -132,16 +132,19 @@ function Metric({
         {label}
       </div>
       <div className="text-[1.9rem] font-semibold tracking-[-0.05em] text-foreground">{value}</div>
-      <p className="max-w-[24ch] text-sm leading-6 text-muted-foreground">{detail}</p>
+      {detail ? <p className="max-w-[24ch] text-sm leading-6 text-muted-foreground">{detail}</p> : null}
     </div>
   );
 }
 
 export function ResearchSessionView({
   overview,
+  locale,
 }: {
   overview: ResearchSessionOverview;
+  locale: AppLocale;
 }) {
+  const copy = getLocaleCopy(locale);
   const focusedTopic = overview.focusedTopic;
   const focusedQuestion = overview.focusedQuestion;
   const focusSynthesisHref = overview.focusSession ? buildSynthesisHref(overview.focusSession) : null;
@@ -149,37 +152,24 @@ export function ResearchSessionView({
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow="Research sessions"
-        title={
-          focusedQuestion
-            ? `${focusedQuestion.question} session lane`
-            : focusedTopic
-              ? `${focusedTopic.title} session queue`
-              : "Sessions turn questions into durable work"
-        }
-        description={
-          focusedQuestion
-            ? "Use this focused session lane to reload the right context, see what changed the question last time, and decide whether the next pass should harden into synthesis, archive, or a canonical update."
-            : focusedTopic
-              ? "This is the next primary lane after questions. Use it to continue the next bounded pass, capture what changed, and keep the topic moving without reopening everything."
-              : "Sessions are the second main working lane after topics and questions. Use them to run the next bounded pass, load the right context pack, capture the outcome, and decide what should become durable knowledge."
-        }
-        badge={`${overview.summary.totalSessions} sessions`}
+        eyebrow={copy.sessions.eyebrow}
+        title={copy.sessions.pageTitle(focusedTopic?.title, Boolean(focusedQuestion))}
+        badge={copy.sessions.badge(overview.summary.totalSessions)}
         actions={
           <div className="flex flex-wrap gap-2">
             <Button asChild variant="outline">
               <Link href={focusedTopic ? `/questions?topic=${focusedTopic.id}` : "/questions"}>
-                Open question queue
+                {copy.sessions.questions}
               </Link>
             </Button>
             {focusedTopic ? (
               <Button asChild variant="ghost">
-                <Link href={`/syntheses?topic=${focusedTopic.id}`}>Open syntheses</Link>
+                <Link href={`/syntheses?topic=${focusedTopic.id}`}>{copy.sessions.syntheses}</Link>
               </Button>
             ) : null}
             <Button asChild>
               <Link href={focusedTopic ? `/topics/${focusedTopic.id}` : "/topics/openclaw"}>
-                {focusedTopic ? "Open topic home" : "Open flagship topic"}
+                {focusedTopic ? copy.sessions.topic : copy.sessions.showcase}
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
@@ -189,55 +179,20 @@ export function ResearchSessionView({
 
       <Surface className="px-5 py-5">
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-7">
-          <Metric
-            label="Sessions"
-            value={String(overview.summary.totalSessions)}
-            detail="Bounded research passes currently modeled in the selected workspace scope."
-          />
-          <Metric
-            label="Queued"
-            value={String(overview.summary.queued)}
-            detail="Sessions that are staged but not yet actively in progress."
-          />
-          <Metric
-            label="Active"
-            value={String(overview.summary.active)}
-            detail="Sessions that should be continued before starting broader new work."
-          />
-          <Metric
-            label="Done"
-            value={String(overview.summary.completed)}
-            detail="Completed sessions that already recorded an explicit research outcome."
-          />
-          <Metric
-            label="State changes"
-            value={String(overview.summary.changedQuestionState)}
-            detail="Sessions that explicitly moved a question forward, closed it, or reopened it."
-          />
-          <Metric
-            label="Durable"
-            value={String(overview.summary.producedDurableUpdate)}
-            detail="Sessions that produced a canonical update, archived note, or other durable result."
-          />
-          <Metric
-            label="Near synthesis"
-            value={String(overview.summary.readyForSynthesis)}
-            detail="Sessions that look close enough to harden into synthesis on the next pass."
-          />
+          <Metric label={copy.sessions.eyebrow} value={String(overview.summary.totalSessions)} />
+          <Metric label={copy.sessions.queued} value={String(overview.summary.queued)} />
+          <Metric label={copy.sessions.active} value={String(overview.summary.active)} />
+          <Metric label={copy.sessions.done} value={String(overview.summary.completed)} />
+          <Metric label={copy.sessions.state} value={String(overview.summary.changedQuestionState)} />
+          <Metric label={copy.sessions.durable} value={String(overview.summary.producedDurableUpdate)} />
+          <Metric label={copy.sessions.nearSynthesis} value={String(overview.summary.readyForSynthesis)} />
         </div>
       </Surface>
 
       <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
         <Surface>
           <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-            <div className="space-y-2">
-              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Focus session
-              </div>
-              <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                What should this session do?
-              </h2>
-            </div>
+            <h2 className="text-xl font-semibold tracking-tight text-foreground">{copy.sessions.next}</h2>
             <FlaskConical className="size-5 text-muted-foreground" />
           </div>
           <div className="px-5 py-5">
@@ -245,15 +200,15 @@ export function ResearchSessionView({
               <div className="space-y-4 rounded-[22px] border border-border/50 bg-background/62 px-5 py-5">
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge variant={statusVariant(overview.focusSession.status)}>
-                    {humanizeStatus(overview.focusSession.status)}
+                    {getSessionStatusLabel(locale, overview.focusSession.status)}
                   </Badge>
                   <Badge variant={priorityVariant(overview.focusSession.priority)}>
-                    {overview.focusSession.priority}
+                    {getPriorityLabel(locale, overview.focusSession.priority)}
                   </Badge>
                   <Badge variant={outcomeVariant(overview.focusSession.outcome)}>
-                    {humanizeOutcome(overview.focusSession.outcome)}
+                    {getSessionOutcomeLabel(locale, overview.focusSession.outcome)}
                   </Badge>
-                  <Badge variant="outline">{formatSessionDate(overview.focusSession.sessionDate)}</Badge>
+                  <Badge variant="outline">{formatSessionDate(locale, overview.focusSession.sessionDate)}</Badge>
                 </div>
                 <div>
                   <div className="text-lg font-semibold tracking-tight text-foreground">
@@ -265,39 +220,39 @@ export function ResearchSessionView({
                 </div>
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
-                    <div className="text-sm font-medium text-foreground">Question</div>
+                    <div className="text-sm font-medium text-foreground">{copy.sessions.question}</div>
                     <p className="mt-1 text-sm leading-6 text-muted-foreground">
                       {overview.focusSession.question}
                     </p>
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-foreground">Goal</div>
+                    <div className="text-sm font-medium text-foreground">{copy.sessions.goal}</div>
                     <p className="mt-1 text-sm leading-6 text-muted-foreground">
                       {overview.focusSession.goal}
                     </p>
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-foreground">Load first</div>
+                    <div className="text-sm font-medium text-foreground">{copy.sessions.loadFirst}</div>
                     <p className="mt-1 text-sm leading-6 text-muted-foreground">
                       {overview.focusSession.loadedContextPackTitles.join(", ")}
                     </p>
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-foreground">Recommended next step</div>
+                    <div className="text-sm font-medium text-foreground">{copy.sessions.nextField}</div>
                     <p className="mt-1 text-sm leading-6 text-muted-foreground">
                       {overview.focusSession.recommendedNextStep}
                     </p>
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm font-medium text-foreground">Draft conclusion</div>
+                  <div className="text-sm font-medium text-foreground">{copy.sessions.conclusion}</div>
                   <p className="mt-1 text-sm leading-6 text-muted-foreground">
                     {overview.focusSession.draftConclusion}
                   </p>
                 </div>
                 {overview.focusSession.resumeNotes.length > 0 ? (
                   <div>
-                    <div className="text-sm font-medium text-foreground">Resume cues</div>
+                    <div className="text-sm font-medium text-foreground">{copy.sessions.resume}</div>
                     <div className="mt-2 space-y-2">
                       {overview.focusSession.resumeNotes.map((note) => (
                         <div
@@ -312,25 +267,25 @@ export function ResearchSessionView({
                 ) : null}
                 <div className="flex flex-wrap gap-2">
                   <Button asChild>
-                    <Link href={overview.focusSession.links.questionQueue.href}>Question queue</Link>
+                    <Link href={overview.focusSession.links.questionQueue.href}>{copy.sessions.questions}</Link>
                   </Button>
                   <Button asChild variant="outline">
-                    <Link href={`/gaps?topic=${overview.focusSession.topicId}`}>Evidence gaps</Link>
+                    <Link href={`/gaps?topic=${overview.focusSession.topicId}`}>{copy.sessions.gaps}</Link>
                   </Button>
                   <Button asChild variant="outline">
-                    <Link href={overview.focusSession.links.questionNote.href}>Question note</Link>
+                    <Link href={overview.focusSession.links.questionNote.href}>{copy.sessions.note}</Link>
                   </Button>
                   <Button asChild variant="ghost">
-                    <Link href={overview.focusSession.links.maintenance.href}>Maintenance rhythm</Link>
+                    <Link href={overview.focusSession.links.maintenance.href}>{copy.sessions.maintenance}</Link>
                   </Button>
                   {focusSynthesisHref ? (
                     <Button asChild variant="ghost">
-                      <Link href={focusSynthesisHref}>Synthesis target</Link>
+                      <Link href={focusSynthesisHref}>{copy.sessions.synthesis}</Link>
                     </Button>
                   ) : null}
                   <Button asChild variant="ghost">
                     <Link href={overview.focusSession.links.canonicalTarget.href}>
-                      Target context
+                      {copy.sessions.page}
                       <ArrowUpRight className="size-4" />
                     </Link>
                   </Button>
@@ -338,7 +293,7 @@ export function ResearchSessionView({
               </div>
             ) : (
               <div className="rounded-[18px] bg-background/65 px-4 py-5 text-sm leading-6 text-muted-foreground">
-                No research sessions are currently queued.
+                {copy.sessions.noSessions}
               </div>
             )}
           </div>
@@ -346,14 +301,7 @@ export function ResearchSessionView({
 
         <Surface>
           <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-            <div className="space-y-2">
-              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Session lenses
-              </div>
-              <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                Read sessions by workflow need
-              </h2>
-            </div>
+            <h2 className="text-xl font-semibold tracking-tight text-foreground">{copy.sessions.byStatus}</h2>
             <Clock3 className="size-5 text-muted-foreground" />
           </div>
           <div className="space-y-4 px-5 py-5">
@@ -363,7 +311,6 @@ export function ResearchSessionView({
                   <Badge variant="outline">{bucket.sessions.length}</Badge>
                   <div className="text-sm font-medium text-foreground">{bucket.title}</div>
                 </div>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">{bucket.description}</p>
                 <div className="mt-3 space-y-2">
                   {bucket.sessions.slice(0, 3).map((session) => (
                     <Link
@@ -372,9 +319,11 @@ export function ResearchSessionView({
                       className="block rounded-[16px] border border-border/50 bg-background/75 px-3 py-3 transition-colors hover:bg-background"
                     >
                       <div className="flex flex-wrap items-center gap-2">
-                        <Badge variant={statusVariant(session.status)}>{humanizeStatus(session.status)}</Badge>
+                        <Badge variant={statusVariant(session.status)}>
+                          {getSessionStatusLabel(locale, session.status)}
+                        </Badge>
                         <Badge variant={outcomeVariant(session.outcome)}>
-                          {humanizeOutcome(session.outcome)}
+                          {getSessionOutcomeLabel(locale, session.outcome)}
                         </Badge>
                       </div>
                       <div className="mt-2 text-sm font-medium text-foreground">{session.title}</div>
@@ -384,7 +333,7 @@ export function ResearchSessionView({
                     </Link>
                   ))}
                   {bucket.sessions.length === 0 ? (
-                    <div className="text-sm leading-6 text-muted-foreground">Nothing currently in this lane.</div>
+                    <div className="text-sm leading-6 text-muted-foreground">{copy.sessions.nothingHere}</div>
                   ) : null}
                 </div>
               </div>
@@ -395,14 +344,7 @@ export function ResearchSessionView({
 
       <Surface>
         <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-          <div className="space-y-2">
-            <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-              Topic sessions
-            </div>
-            <h2 className="text-xl font-semibold tracking-tight text-foreground">
-              How session depth differs by topic
-            </h2>
-          </div>
+          <h2 className="text-xl font-semibold tracking-tight text-foreground">{copy.sessions.topicsSection}</h2>
           <GitBranchPlus className="size-5 text-muted-foreground" />
         </div>
         <div>
@@ -418,21 +360,21 @@ export function ResearchSessionView({
                       {topic.topicTitle}
                     </Link>
                     <Badge variant={stageVariant(topic.topicMaturityStage)}>
-                      {topic.topicMaturityStage}
+                      {getTopicMaturityStageLabel(locale, topic.topicMaturityStage)}
                     </Badge>
-                    <Badge variant="outline">{topic.sessionCount} sessions</Badge>
+                    <Badge variant="outline">{copy.sessions.badge(topic.sessionCount)}</Badge>
                   </div>
                   <p className="max-w-[75ch] text-sm leading-7 text-muted-foreground">{topic.summary}</p>
                   <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
-                    <span>{topic.activeCount} active</span>
-                    <span>{topic.queuedCount} queued</span>
-                    <span>{topic.completedCount} completed</span>
-                    <span>{topic.changedQuestionStateCount} changed question state</span>
+                    <span>{copy.sessions.summaryActive(topic.activeCount)}</span>
+                    <span>{copy.sessions.summaryQueued(topic.queuedCount)}</span>
+                    <span>{copy.sessions.summaryCompleted(topic.completedCount)}</span>
+                    <span>{copy.sessions.summaryChangedState(topic.changedQuestionStateCount)}</span>
                   </div>
                   {topic.nextSession ? (
                     <div className="rounded-[18px] bg-background/65 px-4 py-3 ring-1 ring-border/50">
                       <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                        Next session
+                        {copy.sessions.nextSession}
                       </div>
                       <div className="mt-2 text-sm font-medium text-foreground">
                         {topic.nextSession.title}
@@ -444,7 +386,7 @@ export function ResearchSessionView({
                   ) : topic.recentSession ? (
                     <div className="rounded-[18px] bg-background/65 px-4 py-3 ring-1 ring-border/50">
                       <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                        Latest completed session
+                        {copy.sessions.latestCompletedSession}
                       </div>
                       <div className="mt-2 text-sm font-medium text-foreground">
                         {topic.recentSession.title}
@@ -457,10 +399,10 @@ export function ResearchSessionView({
                 </div>
                 <div className="flex shrink-0 flex-wrap gap-2">
                   <Button asChild variant="outline">
-                    <Link href={`/sessions?topic=${topic.topicId}`}>Topic sessions</Link>
+                    <Link href={`/sessions?topic=${topic.topicId}`}>{copy.sessions.eyebrow}</Link>
                   </Button>
                   <Button asChild variant="ghost">
-                    <Link href={`/topics/${topic.topicId}`}>Topic home</Link>
+                    <Link href={`/topics/${topic.topicId}`}>{copy.sessions.topic}</Link>
                   </Button>
                   {topic.nextSession?.synthesisTitle ? (
                     <Button asChild variant="ghost">
@@ -469,7 +411,7 @@ export function ResearchSessionView({
                           topic.nextSession.synthesisTitle,
                         )}`}
                       >
-                        Synthesis target
+                        {copy.sessions.synthesis}
                       </Link>
                     </Button>
                   ) : null}
@@ -480,37 +422,6 @@ export function ResearchSessionView({
         </div>
       </Surface>
 
-      <Surface className="px-5 py-5">
-        <div className="grid gap-4 lg:grid-cols-3">
-          <div className="rounded-[20px] border border-border/50 bg-background/60 px-4 py-4">
-            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <FlaskConical className="size-4" />
-              Bound the pass
-            </div>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              A session loads only the context packs and pages needed for the current question instead of reopening the full topic graph by default.
-            </p>
-          </div>
-          <div className="rounded-[20px] border border-border/50 bg-background/60 px-4 py-4">
-            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <ArrowUpRight className="size-4" />
-              Land the result
-            </div>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Every completed session records whether it changed question state, produced a durable update, or still needs more evidence before hardening.
-            </p>
-          </div>
-          <div className="rounded-[20px] border border-border/50 bg-background/60 px-4 py-4">
-            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <History className="size-4" />
-              Resume honestly
-            </div>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Session summaries and resume cues now preserve what changed last time so a question can be continued without rereading everything.
-            </p>
-          </div>
-        </div>
-      </Surface>
     </div>
   );
 }

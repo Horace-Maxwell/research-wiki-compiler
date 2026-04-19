@@ -21,6 +21,10 @@ function getSyncMarkerPath(slug: string) {
   );
 }
 
+function getTopicSourceWorkspaceRoot(slug: string) {
+  return path.join(TOPICS_ROOT, slug, "workspace");
+}
+
 async function fileExists(targetPath: string) {
   try {
     await fs.access(targetPath);
@@ -33,21 +37,69 @@ async function fileExists(targetPath: string) {
 async function readSyncMarker(slug: string) {
   try {
     const raw = await fs.readFile(getSyncMarkerPath(slug), "utf8");
-    return JSON.parse(raw) as { generatedAt: string };
+    return JSON.parse(raw) as {
+      generatedAt: string;
+      sourceUpdatedAt?: string;
+    };
   } catch {
     return null;
   }
 }
 
-async function writeSyncMarker(slug: string, generatedAt: string) {
+async function writeSyncMarker(
+  slug: string,
+  generatedAt: string,
+  sourceUpdatedAt: string | null,
+) {
   const markerPath = getSyncMarkerPath(slug);
 
   await fs.mkdir(path.dirname(markerPath), { recursive: true });
   await fs.writeFile(
     markerPath,
-    `${JSON.stringify({ generatedAt }, null, 2)}\n`,
+    `${JSON.stringify(
+      {
+        generatedAt,
+        sourceUpdatedAt,
+      },
+      null,
+      2,
+    )}\n`,
     "utf8",
   );
+}
+
+async function getLatestModifiedAt(root: string): Promise<string | null> {
+  try {
+    const rootStat = await fs.stat(root);
+    let latestModifiedAt = rootStat.mtimeMs;
+    const entries = await fs.readdir(root, { withFileTypes: true });
+
+    for (const entry of entries) {
+      const entryPath = path.join(root, entry.name);
+
+      if (entry.isDirectory()) {
+        const nestedModifiedAt = await getLatestModifiedAt(entryPath);
+
+        if (nestedModifiedAt) {
+          latestModifiedAt = Math.max(
+            latestModifiedAt,
+            new Date(nestedModifiedAt).getTime(),
+          );
+        }
+
+        continue;
+      }
+
+      if (entry.isFile()) {
+        const stat = await fs.stat(entryPath);
+        latestModifiedAt = Math.max(latestModifiedAt, stat.mtimeMs);
+      }
+    }
+
+    return new Date(latestModifiedAt).toISOString();
+  } catch {
+    return null;
+  }
 }
 
 async function getTopicManifest(slug: string) {
@@ -70,6 +122,8 @@ async function copyTopicWorkspace(slug: string) {
 }
 
 async function rebuildRenderedTopicWorkspace(slug: string, manifest: TopicBootstrapManifest) {
+  const sourceUpdatedAt = await getLatestModifiedAt(getTopicSourceWorkspaceRoot(slug));
+
   await copyTopicWorkspace(slug);
 
   await initializeWorkspace({
@@ -78,7 +132,7 @@ async function rebuildRenderedTopicWorkspace(slug: string, manifest: TopicBootst
     initializeGit: false,
   });
   await syncWikiIndex(getRenderedTopicRoot(slug));
-  await writeSyncMarker(slug, manifest.generatedAt);
+  await writeSyncMarker(slug, manifest.generatedAt, sourceUpdatedAt);
 }
 
 export async function ensureRenderedTopicWorkspace(slug: string) {
@@ -86,8 +140,13 @@ export async function ensureRenderedTopicWorkspace(slug: string) {
   const marker = await readSyncMarker(slug);
   const workspaceRoot = getRenderedTopicRoot(slug);
   const hasDatabase = await fileExists(path.join(workspaceRoot, ".research-wiki", "app.db"));
+  const sourceUpdatedAt = await getLatestModifiedAt(getTopicSourceWorkspaceRoot(slug));
 
-  if (!hasDatabase || marker?.generatedAt !== manifest.generatedAt) {
+  if (
+    !hasDatabase ||
+    marker?.generatedAt !== manifest.generatedAt ||
+    marker?.sourceUpdatedAt !== sourceUpdatedAt
+  ) {
     await rebuildRenderedTopicWorkspace(slug, manifest);
   }
 

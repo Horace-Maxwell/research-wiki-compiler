@@ -21,6 +21,7 @@ import {
   type TopicBootstrapConfig,
   type TopicBootstrapManifest,
 } from "@/lib/contracts/topic-bootstrap";
+import { buildTopicPageHref } from "@/server/lib/page-route-hrefs";
 import { OPENCLAW_EXAMPLE_ROOT, TOPICS_ROOT } from "@/server/lib/repo-paths";
 import { openClawKnowledgeMethodData } from "@/server/services/openclaw-knowledge-method";
 import { getResearchSessionOverview } from "@/server/services/research-session-service";
@@ -181,20 +182,22 @@ function buildQuestionItem(
     findPagePath(source, question.relatedPages[0] ?? null);
   const topicHome = source.topic.links.home.href;
   const openQuestionsHref = openQuestionsPath
-    ? `${topicHome}?pagePath=${encodeURIComponent(openQuestionsPath)}`
+    ? buildTopicPageHref(source.topic.id, openQuestionsPath)
     : topicHome;
   const maintenanceHref = maintenancePath
-    ? `${topicHome}?pagePath=${encodeURIComponent(maintenancePath)}`
+    ? buildTopicPageHref(source.topic.id, maintenancePath)
     : source.topic.links.maintenance.href;
   const canonicalTargetHref = canonicalTargetPath
-    ? `${topicHome}?pagePath=${encodeURIComponent(canonicalTargetPath)}`
+    ? buildTopicPageHref(source.topic.id, canonicalTargetPath)
     : source.topic.links.canonical.href;
   const readinessPercent = computeReadiness(question);
-  const needsSources =
-    question.status === "waiting-for-sources" ||
-    question.status === "blocked" ||
-    question.sourceGaps.length > 0;
   const readyForSynthesis = question.status === "ready-for-synthesis";
+  const needsSources =
+    !readyForSynthesis &&
+    question.status !== "synthesized" &&
+    (question.status === "waiting-for-sources" ||
+      question.status === "blocked" ||
+      question.sourceGaps.length > 0);
   const watchForReopen =
     question.status === "stale" ||
     (question.status === "synthesized" && question.reopenTriggers.length > 0);

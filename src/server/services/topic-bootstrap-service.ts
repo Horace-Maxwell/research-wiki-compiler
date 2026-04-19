@@ -1723,7 +1723,7 @@ export function createDefaultTopicBootstrapConfig({
         {
           title: normalizedTitle,
           type: "topic",
-          summary: `${normalizedTitle} is the canonical entry page for this topic bootstrap. Use it to record the shortest durable explanation of what the bounded corpus currently seems to say.`,
+          summary: `${normalizedTitle} is the anchor page for this topic, focused on the clearest durable explanation supported by the current corpus.`,
           purpose: "The canonical entry page for the topic bootstrap.",
           role: "The durable entry point for first-pass understanding.",
           aliases,
@@ -1737,28 +1737,28 @@ export function createDefaultTopicBootstrapConfig({
             surfaceTitles.readingPaths,
           ],
           nextSteps: [
-            `Use ${wikiLink(surfaceTitles.currentTensions)} to keep live uncertainty visible instead of hiding it in the article layer.`,
-            `Use ${wikiLink(surfaceTitles.readingPaths)} to keep the first note bundles compact and reusable.`,
+            `${wikiLink(surfaceTitles.currentTensions)} keeps unresolved trade-offs visible.`,
+            `${wikiLink(surfaceTitles.readingPaths)} groups the smallest useful note bundles for the topic.`,
           ],
           sections: [
             {
               heading: "Why this topic matters",
               lines: [
-                `This page should become the shortest durable explanation of ${normalizedTitle} once the corpus has been reviewed and the strongest claims have stabilized.`,
+                `${normalizedTitle} matters because the corpus keeps returning to a small set of recurring pressures that deserve a durable explanation.`,
               ],
             },
             {
-              heading: "Starter boundaries",
+              heading: "Topic boundaries",
               lines: [
-                "Keep the first pass bounded. A small, explicit corpus produces better starter pages than a broad pile of undifferentiated intake.",
-                "Treat this page as durable knowledge, not as the place where unresolved tensions or maintenance sequencing should accumulate.",
+                "In the starter corpus, the goal is a clear topic frame rather than exhaustive coverage.",
+                "Detailed mechanisms belong in concept pages, while live uncertainty belongs in the working syntheses.",
               ],
             },
             {
               heading: "Evidence to strengthen next",
               lines: [
-                "Promote only the highest-confidence recurring claims into this page.",
-                "Leave disputes, unresolved questions, and watch logic in the dedicated working surfaces until they stabilize.",
+                "What still needs stronger support are the claims that connect the topic's core mechanics to long-term maintenance.",
+                "Only recurring claims should harden into the canonical page.",
               ],
             },
           ],
@@ -2130,7 +2130,7 @@ function buildPageMarkdown(page: TopicBootstrapPage) {
 
   if (page.nextSteps.length > 0) {
     lines.push(
-      "## Bootstrap next steps",
+      "## Further reading",
       "",
       ...page.nextSteps.map((step) => `- ${step}`),
       "",

@@ -1,4 +1,5 @@
 import { QuestionWorkflowView } from "@/features/questions/components/question-workflow-view";
+import { readRequestLocale } from "@/lib/app-locale-server";
 import { getQuestionWorkflowOverview } from "@/server/services/question-workflow-service";
 
 export const dynamic = "force-dynamic";
@@ -12,9 +13,10 @@ function readParam(value: string | string[] | undefined) {
 }
 
 export default async function QuestionsPage({ searchParams }: QuestionsPageProps) {
+  const locale = await readRequestLocale();
   const routeParams = searchParams ? await searchParams : {};
   const topicId = readParam(routeParams.topic);
   const overview = await getQuestionWorkflowOverview(topicId ?? null);
 
-  return <QuestionWorkflowView overview={overview} />;
+  return <QuestionWorkflowView locale={locale} overview={overview} />;
 }

@@ -1,4 +1,5 @@
 import { ResearchSynthesisView } from "@/features/syntheses/components/research-synthesis-view";
+import { readRequestLocale } from "@/lib/app-locale-server";
 import { getResearchSynthesisOverview } from "@/server/services/research-synthesis-service";
 
 export const dynamic = "force-dynamic";
@@ -12,6 +13,7 @@ function readParam(value: string | string[] | undefined) {
 }
 
 export default async function SynthesesPage({ searchParams }: SynthesesPageProps) {
+  const locale = await readRequestLocale();
   const routeParams = searchParams ? await searchParams : {};
   const topicId = readParam(routeParams.topic);
   const synthesisId = readParam(routeParams.synthesis);
@@ -22,5 +24,5 @@ export default async function SynthesesPage({ searchParams }: SynthesesPageProps
     focusSynthesisTitle: title ?? null,
   });
 
-  return <ResearchSynthesisView overview={overview} />;
+  return <ResearchSynthesisView locale={locale} overview={overview} />;
 }

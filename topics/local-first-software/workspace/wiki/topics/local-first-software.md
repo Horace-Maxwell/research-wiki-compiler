@@ -36,23 +36,7 @@ managed_by: topic-bootstrap-v1
 
 ## Summary
 
-Local-First Software is the canonical entry page for this topic bootstrap. Use it to record the shortest durable explanation of what the bounded corpus currently seems to say.
-
-## Why this topic matters
-
-This page should become the shortest durable explanation of Local-First Software once the corpus has been reviewed and the strongest claims have stabilized.
-
-## Starter boundaries
-
-Keep the first pass bounded. A small, explicit corpus produces better starter pages than a broad pile of undifferentiated intake.
-Treat this page as durable knowledge, not as the place where unresolved tensions or maintenance sequencing should accumulate.
-Use concept pages for sync architecture and migration pressure once those patterns recur often enough to deserve durable coverage.
-
-## Evidence to strengthen next
-
-Promote only the highest-confidence recurring claims into this page.
-Leave disputes, unresolved questions, and watch logic in the dedicated working surfaces until they stabilize.
-A durable explanation of local-first software should connect local copies, sync cost, and long-term maintenance rather than treating them as separate concerns.
+Local-First Software covers the trade-offs between local copies, sync behavior, repair cost, and long-term maintenance.
 
 ## Related pages
 
@@ -63,8 +47,3 @@ A durable explanation of local-first software should connect local copies, sync 
 - [[Local-First Software maintenance watchpoints]]
 - [[Local-First Software maintenance rhythm]]
 - [[Local-First Software reading paths]]
-
-## Bootstrap next steps
-
-- Use [[Local-First Software current tensions]] to keep live uncertainty visible instead of hiding it in the article layer.
-- Use [[Local-First Software reading paths]] to keep the first note bundles compact and reusable.

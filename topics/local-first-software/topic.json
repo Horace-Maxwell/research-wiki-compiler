@@ -54,7 +54,7 @@
       {
         "title": "Local-First Software",
         "type": "topic",
-        "summary": "Local-First Software is the canonical entry page for this topic bootstrap. Use it to record the shortest durable explanation of what the bounded corpus currently seems to say.",
+        "summary": "Local-First Software is the anchor page for this topic, focused on the trade-offs between local copies, sync behavior, and long-term maintenance.",
         "purpose": "The canonical entry page for the topic bootstrap.",
         "role": "The durable entry point for first-pass understanding.",
         "aliases": [],
@@ -80,30 +80,28 @@
           "Local-First Software reading paths"
         ],
         "nextSteps": [
-          "Use [[Local-First Software current tensions]] to keep live uncertainty visible instead of hiding it in the article layer.",
-          "Use [[Local-First Software reading paths]] to keep the first note bundles compact and reusable."
+          "[[Local-First Software current tensions]] tracks the trade-offs that are still unresolved.",
+          "[[Local-First Software reading paths]] groups the smallest useful note bundles for this topic."
         ],
         "sections": [
           {
             "heading": "Why this topic matters",
             "lines": [
-              "This page should become the shortest durable explanation of Local-First Software once the corpus has been reviewed and the strongest claims have stabilized."
+              "Local-first software matters because offline access and user-owned state only hold up when sync, repair, and upgrades remain coherent over time."
             ]
           },
           {
-            "heading": "Starter boundaries",
+            "heading": "Topic boundaries",
             "lines": [
-              "Keep the first pass bounded. A small, explicit corpus produces better starter pages than a broad pile of undifferentiated intake.",
-              "Treat this page as durable knowledge, not as the place where unresolved tensions or maintenance sequencing should accumulate.",
-              "Use concept pages for sync architecture and migration pressure once those patterns recur often enough to deserve durable coverage."
+              "In this corpus, the strongest recurring pressures are local copies, sync-engine behavior, and migration cost.",
+              "Architectural detail belongs in the concept pages, while live uncertainty belongs in the working syntheses."
             ]
           },
           {
             "heading": "Evidence to strengthen next",
             "lines": [
-              "Promote only the highest-confidence recurring claims into this page.",
-              "Leave disputes, unresolved questions, and watch logic in the dedicated working surfaces until they stabilize.",
-              "A durable explanation of local-first software should connect local copies, sync cost, and long-term maintenance rather than treating them as separate concerns."
+              "This page still needs stronger support for how local copies, sync cost, and maintenance burden connect.",
+              "Claims about repair workflows, drift, and migration pressure should harden only when they recur across sources."
             ]
           }
         ]

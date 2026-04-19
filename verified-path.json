@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "lastReviewed": "2026-04-13",
+  "officialVerifiedPath": {
+    "machine": {
+      "os": "macOS 15.5",
+      "arch": "arm64"
+    },
+    "node": {
+      "verified": "25.6.1",
+      "minimum": "20+"
+    },
+    "packageManager": "npm",
+    "browserAutomation": "Playwright Chromium",
+    "manualBrowserPass": "desktop repeated-use pass on the same machine",
+    "languageModes": ["en", "zh"],
+    "productMode": "local reference mode with committed demo/showcase data",
+    "officialShowcase": "openclaw",
+    "routes": [
+      "/dashboard",
+      "/topics",
+      "/topics/openclaw",
+      "/topics/local-first-software",
+      "/questions?topic=openclaw",
+      "/sessions?topic=openclaw",
+      "/syntheses?topic=openclaw",
+      "/examples/openclaw",
+      "/settings"
+    ],
+    "commands": [
+      "npm install",
+      "npm run env:check",
+      "npm run demo:reset",
+      "npm run showcase:openclaw",
+      "npm run verify:fast",
+      "npm run verify:local",
+      "npm run verify:full",
+      "npm run test:e2e:navigation",
+      "npm run verify:routes"
+    ]
+  },
+  "partiallyVerified": {
+    "operatingSystems": [
+      "other desktop UNIX-like environments where Node.js 20+, Next.js, and Playwright Chromium all run cleanly"
+    ],
+    "browsers": [
+      "other Chromium-based browsers used manually"
+    ],
+    "modes": [
+      "local runs on machines where you override the default verification ports",
+      "live provider-backed runs with OPENAI_API_KEY configured"
+    ]
+  },
+  "notYetFullyCertified": {
+    "operatingSystems": [
+      "Windows",
+      "Linux"
+    ],
+    "browsers": [
+      "Safari",
+      "Firefox",
+      "mobile browsers"
+    ],
+    "other": [
+      "CI matrices across multiple operating systems",
+      "byte-for-byte stable output for live provider-backed runs"
+    ]
+  }
+}

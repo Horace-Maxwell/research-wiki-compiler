@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-04-06T05:05:26.236Z",
+  "generatedAt": "2026-04-19T06:48:09.210Z",
   "target": {
     "kind": "example",
     "id": "openclaw",
@@ -305,9 +305,9 @@
       "summary": "Start Here is doing its job cleanly.",
       "evidence": [
         "4/4 expected headings matched.",
-        "170 body words.",
-        "17 wiki links.",
-        "20 bullet items and 0 ordered steps."
+        "230 body words.",
+        "21 wiki links.",
+        "24 bullet items and 0 ordered steps."
       ],
       "issues": []
     },

@@ -104,7 +104,7 @@ function Metric({
 }: {
   label: string;
   value: string;
-  detail: string;
+  detail?: string;
 }) {
   return (
     <div className="space-y-2 border-l border-border/60 pl-4 first:border-l-0 first:pl-0">
@@ -112,7 +112,7 @@ function Metric({
         {label}
       </div>
       <div className="text-[1.9rem] font-semibold tracking-[-0.05em] text-foreground">{value}</div>
-      <p className="max-w-[24ch] text-sm leading-6 text-muted-foreground">{detail}</p>
+      {detail ? <p className="max-w-[24ch] text-sm leading-6 text-muted-foreground">{detail}</p> : null}
     </div>
   );
 }
@@ -215,14 +215,7 @@ export function EvidenceGapView({
       <PageHeader
         eyebrow="Evidence gaps"
         title={
-          focusedTopic
-            ? `${focusedTopic.title} evidence blockers`
-            : "Evidence blockers show what to acquire next"
-        }
-        description={
-          focusedTopic
-            ? "Use this supporting lane only when the topic home, question queue, or synthesis lane makes clear that missing evidence is the blocker."
-            : "This is a supporting lane across the portfolio for moments when missing evidence is what is actually stopping progress."
+          focusedTopic ? `${focusedTopic.title} gaps` : "Evidence gaps"
         }
         badge={`${overview.summary.totalGaps} gaps`}
         actions={
@@ -230,20 +223,20 @@ export function EvidenceGapView({
             {focusedTopic ? (
               <>
                 <Button asChild variant="outline">
-                  <Link href={`/questions?topic=${focusedTopic.id}`}>Open question queue</Link>
+                  <Link href={`/questions?topic=${focusedTopic.id}`}>Questions</Link>
                 </Button>
                 <Button asChild variant="ghost">
-                  <Link href={`/acquisition?topic=${focusedTopic.id}`}>Open acquisition queue</Link>
+                  <Link href={`/acquisition?topic=${focusedTopic.id}`}>Acquisition</Link>
                 </Button>
               </>
             ) : (
               <Button asChild variant="outline">
-                <Link href="/topics">Open topic portfolio</Link>
+                <Link href="/topics">Topics</Link>
               </Button>
             )}
             <Button asChild>
               <Link href={focusedTopic ? `/topics/${focusedTopic.id}` : "/topics/openclaw"}>
-                {focusedTopic ? "Open topic home" : "Open flagship topic"}
+                {focusedTopic ? "Topic" : "Showcase"}
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
@@ -253,50 +246,19 @@ export function EvidenceGapView({
 
       <Surface className="px-5 py-5">
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-6">
-          <Metric
-            label="Gaps"
-            value={String(overview.summary.totalGaps)}
-            detail="Meaningful evidence gaps currently modeled in the selected workspace scope."
-          />
-          <Metric
-            label="High priority"
-            value={String(overview.summary.highPriority)}
-            detail="Unresolved gaps whose next acquisition could move the workspace noticeably."
-          />
-          <Metric
-            label="Question blockers"
-            value={String(overview.summary.blockedQuestions)}
-            detail="Questions currently held back by missing evidence instead of missing structure."
-          />
-          <Metric
-            label="Synthesis blockers"
-            value={String(overview.summary.blockedSyntheses)}
-            detail="Syntheses that should not harden yet because the evidence boundary is still thin."
-          />
-          <Metric
-            label="Maturity blockers"
-            value={String(overview.summary.maturityBlockers)}
-            detail="Gaps that keep a topic from advancing for evidence reasons, not page-count reasons."
-          />
-          <Metric
-            label="Resolved"
-            value={String(overview.summary.resolved)}
-            detail="Recently closed gaps that explain why a question or synthesis became more trustworthy."
-          />
+          <Metric label="Gaps" value={String(overview.summary.totalGaps)} />
+          <Metric label="High" value={String(overview.summary.highPriority)} />
+          <Metric label="Questions" value={String(overview.summary.blockedQuestions)} />
+          <Metric label="Syntheses" value={String(overview.summary.blockedSyntheses)} />
+          <Metric label="Maturity" value={String(overview.summary.maturityBlockers)} />
+          <Metric label="Resolved" value={String(overview.summary.resolved)} />
         </div>
       </Surface>
 
       <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
         <Surface>
           <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-            <div className="space-y-2">
-              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Focus gap
-              </div>
-              <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                What exactly is missing?
-              </h2>
-            </div>
+            <h2 className="text-xl font-semibold tracking-tight text-foreground">Focus</h2>
             <SearchCheck className="size-5 text-muted-foreground" />
           </div>
           <div className="px-5 py-5">
@@ -377,19 +339,19 @@ export function EvidenceGapView({
                   <Button asChild>
                     <Link href={focusGap.links.session.href}>
                       {focusGap.acquisitionSessionStatus === "active"
-                        ? "Continue acquisition session"
-                        : "Open acquisition session"}
+                        ? "Continue"
+                        : "Session"}
                     </Link>
                   </Button>
                   <Button asChild variant="outline">
-                    <Link href={`/acquisition?topic=${focusGap.topicId}`}>Acquisition queue</Link>
+                    <Link href={`/acquisition?topic=${focusGap.topicId}`}>Acquisition</Link>
                   </Button>
                   <Button asChild variant="outline">
-                    <Link href={focusGap.links.questionQueue.href}>Question queue</Link>
+                    <Link href={focusGap.links.questionQueue.href}>Questions</Link>
                   </Button>
                   <Button asChild variant="ghost">
                     <Link href={focusGap.links.canonicalReview.href}>
-                      Review canonical target
+                      Page
                       <ArrowUpRight className="size-4" />
                     </Link>
                   </Button>
@@ -397,7 +359,7 @@ export function EvidenceGapView({
               </div>
             ) : (
               <div className="rounded-[22px] border border-border/50 bg-background/62 px-5 py-5 text-sm leading-6 text-muted-foreground">
-                No evidence gaps are seeded yet for the selected scope.
+                No gaps yet.
               </div>
             )}
           </div>
@@ -405,14 +367,7 @@ export function EvidenceGapView({
 
         <Surface>
           <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-            <div className="space-y-2">
-              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Consequences
-              </div>
-              <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                What moves if we close it?
-              </h2>
-            </div>
+            <h2 className="text-xl font-semibold tracking-tight text-foreground">Impact</h2>
             <Scale className="size-5 text-muted-foreground" />
           </div>
           <div className="space-y-4 px-5 py-5">
@@ -421,7 +376,7 @@ export function EvidenceGapView({
               <div className="mt-2 text-sm leading-6 text-muted-foreground">
                 {focusGap?.advancesQuestions.length
                   ? focusGap.advancesQuestions.join("; ")
-                  : "No explicit question advancement is seeded for the focused gap."}
+                  : "No linked questions."}
               </div>
             </div>
             <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
@@ -429,15 +384,15 @@ export function EvidenceGapView({
               <div className="mt-2 text-sm leading-6 text-muted-foreground">
                 {focusGap?.advancesSyntheses.length
                   ? focusGap.advancesSyntheses.join("; ")
-                  : "No synthesis advancement is explicitly seeded for the focused gap."}
+                  : "No linked syntheses."}
               </div>
             </div>
             <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
-              <div className="text-sm font-medium text-foreground">Canonical review targets</div>
+              <div className="text-sm font-medium text-foreground">Review targets</div>
               <div className="mt-2 text-sm leading-6 text-muted-foreground">
                 {focusGap?.canonicalReviewTitles.length
                   ? focusGap.canonicalReviewTitles.join("; ")
-                  : "No canonical review target is explicitly attached to the focused gap."}
+                  : "No review targets."}
               </div>
             </div>
             <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
@@ -451,8 +406,8 @@ export function EvidenceGapView({
                       ...focusGap.qualityBlockerNotes,
                     ]
                       .filter(Boolean)
-                      .join("; ") || "No additional maturity blocker note is seeded."
-                  : "Choose a gap to see how it affects topic quality and promotion."}
+                      .join("; ") || "No extra impact notes."
+                  : "Select a gap to see impact."}
               </div>
             </div>
             {focusGap?.resolutionSummary ? (
@@ -481,7 +436,6 @@ export function EvidenceGapView({
                 <h2 className="text-xl font-semibold tracking-tight text-foreground">
                   {bucket.title}
                 </h2>
-                <p className="text-sm leading-6 text-muted-foreground">{bucket.description}</p>
               </div>
               <Radar className="size-5 text-muted-foreground" />
             </div>
@@ -492,7 +446,7 @@ export function EvidenceGapView({
                 ))
               ) : (
                 <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4 text-sm leading-6 text-muted-foreground">
-                  Nothing is currently seeded in this lane.
+                  Nothing here.
                 </div>
               )}
             </div>
@@ -507,11 +461,8 @@ export function EvidenceGapView({
               Topic summaries
             </div>
             <h2 className="text-xl font-semibold tracking-tight text-foreground">
-              Which topics are blocked most by evidence quality?
+              Which topics are most blocked?
             </h2>
-            <p className="text-sm leading-6 text-muted-foreground">
-              These summaries separate structural maturity from evidence maturity, so the next acquisition move is visible at the topic level.
-            </p>
           </div>
           <FlaskConical className="size-5 text-muted-foreground" />
         </div>

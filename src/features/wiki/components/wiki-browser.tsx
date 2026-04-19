@@ -7,7 +7,6 @@ import {
   FilePlus2,
   FileText,
   PencilLine,
-  RefreshCw,
   Save,
   X,
 } from "lucide-react";
@@ -23,10 +22,20 @@ import {
 } from "@/lib/contracts/wiki";
 import {
   ACTIVE_WORKSPACE_STORAGE_KEY,
-  WIKI_PAGE_TYPE_LABELS,
   WIKI_PAGE_TYPES,
 } from "@/lib/constants";
+import {
+  getLocaleCopy,
+  getReviewStatusLabel,
+  getWikiEntryMeta,
+  getWikiLinkGapReasonLabel,
+  getWikiLinkResolutionKindLabel,
+  getWikiPageTypeLabel,
+  getWorkingCueDefinitions,
+  localeToIntlTag,
+} from "@/lib/app-locale";
 import { cn } from "@/lib/utils";
+import { useAppLocale } from "@/components/app-locale-provider";
 import { PageHeader } from "@/components/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -38,6 +47,7 @@ type WikiBrowserProps = {
   initialPages?: WikiPageSummary[];
   initialDetail?: WikiPageDetail | null;
   preferredInitialPagePath?: string;
+  topicHomePagePath?: string;
   internalLinkBasePath?: string;
   workspaceRootMode?: "sticky" | "fixed";
   showWorkspaceRootCard?: boolean;
@@ -47,7 +57,7 @@ type WikiBrowserProps = {
   header?: {
     eyebrow: string;
     title: string;
-    description: string;
+    description?: string;
     badge?: string;
   };
   intro?: ReactNode;
@@ -76,140 +86,118 @@ type WorkingCueSection = {
   items: WorkingCueItem[];
 };
 
-const ARTICLE_ENTRY_META: Record<
-  WikiPageType,
-  {
-    label: string;
-    description: string;
+const WIKI_REQUEST_TIMEOUT_MS = 10_000;
+const WIKI_WORKSPACE_RECOVERY_STORAGE_KEY = "research-wiki.workspace-root-recovery";
+
+class WikiRequestTimeoutError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "WikiRequestTimeoutError";
   }
-> = {
-  index: {
-    label: "Index entry",
-    description: "An entry page that helps readers navigate a broader area of the wiki.",
-  },
-  topic: {
-    label: "Topic overview",
-    description: "A broad explanatory article that organizes a larger subject into a durable entry.",
-  },
-  concept: {
-    label: "Concept entry",
-    description: "A reference article that defines a reusable idea and its place in the knowledge base.",
-  },
-  entity: {
-    label: "Entity entry",
-    description: "A durable reference entry for a named system, actor, tool, or artifact.",
-  },
-  timeline: {
-    label: "Timeline entry",
-    description: "A chronology-focused article that helps track change over time.",
-  },
-  synthesis: {
-    label: "Research synthesis",
-    description: "A compiled article that combines multiple materials into one reviewable synthesis.",
-  },
-  note: {
-    label: "Wiki note",
-    description: "A durable note or archived answer that remains integrated with the rest of the wiki.",
-  },
-};
+}
 
-async function fetchPageList(workspaceRoot: string) {
-  const response = await fetch(
-    `/api/wiki/pages?${new URLSearchParams({ workspaceRoot }).toString()}`,
-    {
-      cache: "no-store",
-    },
-  );
-  const data = await response.json();
+function isWikiTimeoutError(error: unknown) {
+  return error instanceof Error && error.name === "WikiRequestTimeoutError";
+}
 
-  if (!response.ok) {
-    throw new Error(data.message ?? "Failed to load wiki pages.");
+async function readResponseJson(response: Response) {
+  try {
+    return await response.json();
+  } catch {
+    return null;
   }
-
-  return listWikiPagesResponseSchema.parse(data).pages;
 }
 
-async function fetchPageDetail(workspaceRoot: string, pageId: string) {
-  const response = await fetch(
-    `/api/wiki/pages/${pageId}?${new URLSearchParams({ workspaceRoot }).toString()}`,
-    {
-      cache: "no-store",
-    },
-  );
-  const data = await response.json();
+async function fetchPageList(workspaceRoot: string, fallbackMessage: string) {
+  const controller = new AbortController();
+  let timeoutId: number | null = null;
 
-  if (!response.ok) {
-    throw new Error(data.message ?? "Failed to load wiki page.");
+  try {
+    return await Promise.race([
+      (async () => {
+        const response = await fetch(
+          `/api/wiki/pages?${new URLSearchParams({ workspaceRoot }).toString()}`,
+          {
+            cache: "no-store",
+            signal: controller.signal,
+          },
+        );
+        const data = await readResponseJson(response);
+
+        if (!response.ok) {
+          throw new Error((data as { message?: string } | null)?.message ?? fallbackMessage);
+        }
+
+        return listWikiPagesResponseSchema.parse(data).pages;
+      })(),
+      new Promise<never>((_resolve, reject) => {
+        timeoutId = window.setTimeout(() => {
+          reject(new WikiRequestTimeoutError(fallbackMessage));
+          queueMicrotask(() => {
+            controller.abort();
+          });
+        }, WIKI_REQUEST_TIMEOUT_MS);
+      }),
+    ]);
+  } finally {
+    if (timeoutId !== null) {
+      window.clearTimeout(timeoutId);
+    }
   }
-
-  return wikiPageDetailSchema.parse(data);
 }
 
-function Surface({
-  className,
-  children,
-}: {
-  className?: string;
-  children: ReactNode;
-}) {
-  return (
-    <section
-      className={cn(
-        "rounded-[28px] border border-border/58 bg-card/80 shadow-[0_14px_38px_-34px_rgba(15,23,42,0.18)] backdrop-blur-[2px]",
-        className,
-      )}
-    >
-      {children}
-    </section>
-  );
+async function fetchPageDetail(workspaceRoot: string, pageId: string, fallbackMessage: string) {
+  const controller = new AbortController();
+  let timeoutId: number | null = null;
+
+  try {
+    return await Promise.race([
+      (async () => {
+        const response = await fetch(
+          `/api/wiki/pages/${pageId}?${new URLSearchParams({ workspaceRoot }).toString()}`,
+          {
+            cache: "no-store",
+            signal: controller.signal,
+          },
+        );
+        const data = await readResponseJson(response);
+
+        if (!response.ok) {
+          throw new Error((data as { message?: string } | null)?.message ?? fallbackMessage);
+        }
+
+        return wikiPageDetailSchema.parse(data);
+      })(),
+      new Promise<never>((_resolve, reject) => {
+        timeoutId = window.setTimeout(() => {
+          reject(new WikiRequestTimeoutError(fallbackMessage));
+          queueMicrotask(() => {
+            controller.abort();
+          });
+        }, WIKI_REQUEST_TIMEOUT_MS);
+      }),
+    ]);
+  } finally {
+    if (timeoutId !== null) {
+      window.clearTimeout(timeoutId);
+    }
+  }
 }
 
-function SurfaceHeader({
-  title,
-  description,
-  actions,
-}: {
-  title: string;
-  description?: string;
-  actions?: ReactNode;
-}) {
-  return (
-    <div className="flex flex-wrap items-start justify-between gap-4 border-b border-border/60 px-5 py-3.5">
-      <div className="space-y-1.5">
-        <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-          {title}
-        </div>
-        {description ? (
-          <div className="text-sm leading-6 text-muted-foreground">{description}</div>
-        ) : null}
-      </div>
-      {actions}
-    </div>
-  );
-}
-
-function LocalizedDateTime({ value }: { value: string }) {
-  return (
-    <time dateTime={value} suppressHydrationWarning>
-      {new Date(value).toLocaleString()}
-    </time>
-  );
-}
-
-function MetaBlock({
-  label,
+function LocalizedDateTime({
+  locale,
   value,
 }: {
-  label: string;
-  value: ReactNode;
+  locale: "en" | "zh";
+  value: string;
 }) {
   return (
-    <div className="border-l border-border/65 pl-3.5">
-      <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-        {label}
-      </div>
-      <div className="mt-2 break-words text-sm leading-6 text-foreground">{value}</div>
-    </div>
+    <time dateTime={value} suppressHydrationWarning>
+      {new Intl.DateTimeFormat(localeToIntlTag(locale), {
+        dateStyle: "medium",
+        timeStyle: "short",
+      }).format(new Date(value))}
+    </time>
   );
 }
 
@@ -221,11 +209,11 @@ function SummaryFact({
   value: ReactNode;
 }) {
   return (
-    <div className="grid grid-cols-[92px_minmax(0,1fr)] items-start gap-3 border-t border-border/55 py-3 first:border-t-0 first:pt-0 last:pb-0">
+    <div className="grid grid-cols-[62px_minmax(0,1fr)] items-start gap-2.5 py-1">
       <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
         {label}
       </div>
-      <div className="text-sm leading-6 text-foreground">{value}</div>
+      <div className="text-[13px] leading-5 text-foreground">{value}</div>
     </div>
   );
 }
@@ -244,22 +232,208 @@ function groupPagesByType(pages: WikiPageSummary[]) {
   return groups;
 }
 
-function rewriteRenderedHtmlLinks(renderedHtml: string, internalLinkBasePath: string) {
-  if (internalLinkBasePath === "/wiki") {
-    return renderedHtml;
+const INTERNAL_APP_HREF_PREFIXES = [
+  "/dashboard",
+  "/topics",
+  "/examples",
+  "/wiki",
+  "/questions",
+  "/sessions",
+  "/syntheses",
+  "/gaps",
+  "/changes",
+  "/acquisition",
+  "/monitoring",
+  "/settings",
+] as const;
+
+function isInternalAppPath(pathname: string) {
+  return INTERNAL_APP_HREF_PREFIXES.some(
+    (prefix) =>
+      pathname === prefix ||
+      pathname.startsWith(`${prefix}/`) ||
+      pathname.startsWith(`${prefix}?`),
+  );
+}
+
+function findPageByPath(pages: WikiPageSummary[], pagePath: string | null) {
+  if (!pagePath) {
+    return null;
   }
 
-  return renderedHtml.replaceAll('href="/wiki?', `href="${internalLinkBasePath}?`);
+  return pages.find((page) => page.path === pagePath) ?? null;
+}
+
+function normalizeExportedHtmlPathToWikiPath(pathname: string) {
+  if (!pathname.endsWith(".html")) {
+    return null;
+  }
+
+  const cleanedPath = pathname.replace(/\/+$/, "");
+
+  if (cleanedPath === "" || cleanedPath === "/index.html") {
+    return "wiki/index.md";
+  }
+
+  if (cleanedPath.endsWith("/index.html")) {
+    const withoutIndex = cleanedPath.slice(0, -"/index.html".length).replace(/^\/+/, "");
+    return withoutIndex.length > 0 ? `wiki/${withoutIndex}.md` : "wiki/index.md";
+  }
+
+  const withoutExtension = cleanedPath.slice(0, -".html".length).replace(/^\/+/, "");
+
+  if (withoutExtension.length === 0) {
+    return "wiki/index.md";
+  }
+
+  return withoutExtension.startsWith("wiki/")
+    ? `${withoutExtension}.md`
+    : `wiki/${withoutExtension}.md`;
+}
+
+function normalizeMarkdownPathToWikiPath(pathname: string) {
+  if (!pathname.endsWith(".md")) {
+    return null;
+  }
+
+  const cleanedPath = pathname.replace(/\/+$/, "").replace(/^\/+/, "");
+
+  if (cleanedPath.length === 0) {
+    return null;
+  }
+
+  return cleanedPath.startsWith("wiki/") ? cleanedPath : `wiki/${cleanedPath}`;
+}
+
+function buildInternalWikiPageHref(
+  page: WikiPageSummary,
+  internalLinkBasePath: string,
+) {
+  const params = new URLSearchParams({
+    pageId: page.id,
+  });
+
+  return `${internalLinkBasePath}?${params.toString()}`;
+}
+
+function normalizeInternalAppHref(
+  href: string,
+  internalLinkBasePath: string,
+  pages: WikiPageSummary[],
+) {
+  const decodedHref = decodeHtmlEntities(href);
+
+  try {
+    const url = new URL(decodedHref, "http://localhost");
+    const exportedPagePath = normalizeExportedHtmlPathToWikiPath(url.pathname);
+    const markdownPagePath = normalizeMarkdownPathToWikiPath(url.pathname);
+
+    if (exportedPagePath) {
+      const page = findPageByPath(pages, exportedPagePath);
+
+      if (!page) {
+        return null;
+      }
+
+      return buildInternalWikiPageHref(page, internalLinkBasePath);
+    }
+
+    if (markdownPagePath) {
+      const page = findPageByPath(pages, markdownPagePath);
+
+      if (!page) {
+        return null;
+      }
+
+      return buildInternalWikiPageHref(page, internalLinkBasePath);
+    }
+
+    if (!isInternalAppPath(url.pathname)) {
+      return null;
+    }
+
+    if (url.searchParams.has("pagePath") && !url.searchParams.has("pageId")) {
+      const page = findPageByPath(pages, url.searchParams.get("pagePath"));
+
+      if (page) {
+        url.searchParams.set("pageId", page.id);
+      }
+    }
+
+    url.searchParams.delete("workspaceRoot");
+    url.searchParams.delete("pagePath");
+
+    if (internalLinkBasePath !== "/wiki") {
+      if (url.pathname === "/wiki") {
+        url.pathname = internalLinkBasePath;
+      }
+    }
+
+    return `${url.pathname}${url.search}${url.hash}`;
+  } catch {
+    return null;
+  }
+}
+
+function rewriteRenderedHtmlLinks(
+  renderedHtml: string,
+  internalLinkBasePath: string,
+  pages: WikiPageSummary[],
+) {
+  return renderedHtml.replace(/href=(["'])(.*?)\1/g, (match, quote, href: string) => {
+    const nextHref = normalizeInternalAppHref(href, internalLinkBasePath, pages);
+
+    if (!nextHref) {
+      return match;
+    }
+
+    return `href=${quote}${nextHref.replaceAll("&", "&amp;")}${quote}`;
+  });
 }
 
 function decodeHtmlEntities(value: string) {
   return value
+    .replace(/&#x([0-9a-f]+);/gi, (_match, hex: string) =>
+      String.fromCharCode(Number.parseInt(hex, 16)),
+    )
+    .replace(/&#(\d+);/g, (_match, numeric: string) =>
+      String.fromCharCode(Number.parseInt(numeric, 10)),
+    )
     .replaceAll("&amp;", "&")
     .replaceAll("&lt;", "<")
     .replaceAll("&gt;", ">")
     .replaceAll("&quot;", '"')
     .replaceAll("&#39;", "'")
     .replaceAll("&nbsp;", " ");
+}
+
+function createBrowserRouteParams({
+  pageId,
+  workspaceRoot,
+  workspaceRootMode,
+  defaultWorkspaceRoot,
+}: {
+  pageId?: string | null;
+  workspaceRoot: string;
+  workspaceRootMode: "sticky" | "fixed";
+  defaultWorkspaceRoot: string;
+}) {
+  const params = new URLSearchParams();
+
+  if (workspaceRootMode === "sticky" && workspaceRoot !== defaultWorkspaceRoot) {
+    params.set("workspaceRoot", workspaceRoot);
+  }
+
+  if (pageId) {
+    params.set("pageId", pageId);
+  }
+
+  return params;
+}
+
+function buildPathWithParams(pathname: string, params: URLSearchParams) {
+  const query = params.toString();
+  return query.length > 0 ? `${pathname}?${query}` : pathname;
 }
 
 function stripHtml(value: string) {
@@ -277,8 +451,9 @@ function createHeadingSlug(value: string) {
 function enhanceRenderedArticle(
   renderedHtml: string,
   internalLinkBasePath: string,
+  pages: WikiPageSummary[],
 ): EnhancedRenderedArticle {
-  let html = rewriteRenderedHtmlLinks(renderedHtml, internalLinkBasePath);
+  let html = rewriteRenderedHtmlLinks(renderedHtml, internalLinkBasePath, pages);
   let leadHtml: string | null = null;
   let leadText: string | null = null;
 
@@ -429,55 +604,12 @@ function parseWorkingCueItems(sectionMarkdown: string) {
   });
 }
 
-function buildWorkingCueSections(detail: WikiPageDetail, pages: WikiPageSummary[]) {
-  const cueDefinitions = [
-    {
-      title: "Start here",
-      headings: ["Start here", "Key pages", "Primary reading path"],
-    },
-    {
-      title: "Reading path",
-      headings: ["Reading path", "Reading paths", "Orientation pass"],
-    },
-    {
-      title: "Watchpoints",
-      headings: ["Watchpoints", "Monitoring", "What to monitor"],
-    },
-    {
-      title: "Current tensions",
-      headings: ["Current tensions", "Open fronts", "Tensions"],
-    },
-    {
-      title: "Open questions",
-      headings: ["Open questions", "Follow-up questions", "Questions"],
-    },
-    {
-      title: "Artifact ladder",
-      headings: ["Artifact ladder", "Visible artifacts", "Artifact trail"],
-    },
-    {
-      title: "Revisit next",
-      headings: ["Revisit next", "Review cadence", "Resume without rereading everything"],
-    },
-    {
-      title: "Context refresh",
-      headings: ["Context packs to refresh", "Feed to the model", "Available packs"],
-    },
-    {
-      title: "Synthesis candidates",
-      headings: [
-        "Synthesis candidates",
-        "Synthesis decisions",
-        "Published syntheses",
-        "What should become synthesis next",
-        "What might become synthesis next",
-      ],
-    },
-    {
-      title: "Working surfaces",
-      headings: ["Canonical vs working surfaces", "Maintenance surfaces", "Working surfaces"],
-    },
-  ] as const;
+function buildWorkingCueSections(
+  locale: "en" | "zh",
+  detail: WikiPageDetail,
+  pages: WikiPageSummary[],
+) {
+  const cueDefinitions = getWorkingCueDefinitions(locale);
 
   const sections = cueDefinitions
     .map((cue) => {
@@ -519,6 +651,7 @@ export function WikiBrowser({
   initialPages = [],
   initialDetail = null,
   preferredInitialPagePath,
+  topicHomePagePath,
   internalLinkBasePath = "/wiki",
   workspaceRootMode = "sticky",
   showWorkspaceRootCard = true,
@@ -528,10 +661,13 @@ export function WikiBrowser({
   header,
   intro,
 }: WikiBrowserProps) {
+  const { locale } = useAppLocale();
+  const copy = getLocaleCopy(locale);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [workspaceRoot, setWorkspaceRoot] = useState(defaultWorkspaceRoot);
+  const [workspaceRootOverride, setWorkspaceRootOverride] = useState<string | null>(null);
   const [pages, setPages] = useState<WikiPageSummary[]>(initialPages);
   const [detail, setDetail] = useState<WikiPageDetail | null>(initialDetail);
   const [isLoadingPages, setIsLoadingPages] = useState(false);
@@ -552,21 +688,48 @@ export function WikiBrowser({
 
   const queryWorkspaceRoot = searchParams.get("workspaceRoot");
   const selectedPageId = searchParams.get("pageId");
-  const selectedPagePath = searchParams.get("pagePath");
+  const hasLegacyPagePath = searchParams.has("pagePath");
 
   useEffect(() => {
+    const recoveryWorkspaceRoot =
+      workspaceRootMode === "sticky"
+        ? window.sessionStorage.getItem(WIKI_WORKSPACE_RECOVERY_STORAGE_KEY)
+        : null;
     const storedRoot =
       workspaceRootMode === "sticky"
-        ? queryWorkspaceRoot ??
+        ? recoveryWorkspaceRoot ??
+          workspaceRootOverride ??
+          queryWorkspaceRoot ??
           window.localStorage.getItem(ACTIVE_WORKSPACE_STORAGE_KEY) ??
           defaultWorkspaceRoot
-        : queryWorkspaceRoot ?? defaultWorkspaceRoot;
+        : defaultWorkspaceRoot;
 
     setWorkspaceRoot(storedRoot);
     if (workspaceRootMode === "sticky") {
       window.localStorage.setItem(ACTIVE_WORKSPACE_STORAGE_KEY, storedRoot);
     }
-  }, [defaultWorkspaceRoot, queryWorkspaceRoot, workspaceRootMode]);
+  }, [defaultWorkspaceRoot, queryWorkspaceRoot, workspaceRootMode, workspaceRootOverride]);
+
+  useEffect(() => {
+    if (workspaceRootOverride && queryWorkspaceRoot === null) {
+      setWorkspaceRootOverride(null);
+    }
+  }, [queryWorkspaceRoot, workspaceRootOverride]);
+
+  useEffect(() => {
+    if (
+      workspaceRootMode === "sticky" &&
+      workspaceRoot === defaultWorkspaceRoot &&
+      loadedPagesWorkspaceRoot === defaultWorkspaceRoot
+    ) {
+      window.sessionStorage.removeItem(WIKI_WORKSPACE_RECOVERY_STORAGE_KEY);
+    }
+  }, [
+    defaultWorkspaceRoot,
+    loadedPagesWorkspaceRoot,
+    workspaceRoot,
+    workspaceRootMode,
+  ]);
 
   useEffect(() => {
     let isActive = true;
@@ -580,7 +743,7 @@ export function WikiBrowser({
       setErrorMessage(null);
 
       try {
-        const nextPages = await fetchPageList(workspaceRoot);
+        const nextPages = await fetchPageList(workspaceRoot, copy.wikiBrowser.failedToLoadPages);
 
         if (!isActive) {
           return;
@@ -593,8 +756,39 @@ export function WikiBrowser({
           return;
         }
 
+        if (
+          isWikiTimeoutError(error) &&
+          workspaceRootMode === "sticky" &&
+          workspaceRoot !== defaultWorkspaceRoot
+        ) {
+          window.localStorage.setItem(
+            ACTIVE_WORKSPACE_STORAGE_KEY,
+            defaultWorkspaceRoot,
+          );
+          window.sessionStorage.setItem(
+            WIKI_WORKSPACE_RECOVERY_STORAGE_KEY,
+            defaultWorkspaceRoot,
+          );
+          setWorkspaceRootOverride(defaultWorkspaceRoot);
+          setWorkspaceRoot(defaultWorkspaceRoot);
+          setPages([]);
+          setDetail(null);
+          setDraftContent("");
+          setLoadedPagesWorkspaceRoot(null);
+          setLoadedDetailKey(null);
+          setErrorMessage(null);
+          setIsEditing(false);
+          setShowCreateForm(false);
+          startTransition(() => {
+            router.replace(pathname);
+          });
+          return;
+        }
+
         setPages([]);
-        setErrorMessage(error instanceof Error ? error.message : "Failed to load wiki pages.");
+        setErrorMessage(
+          error instanceof Error ? error.message : copy.wikiBrowser.failedToLoadPages,
+        );
       } finally {
         if (isActive) {
           setIsLoadingPages(false);
@@ -609,7 +803,15 @@ export function WikiBrowser({
     return () => {
       isActive = false;
     };
-  }, [loadedPagesWorkspaceRoot, workspaceRoot]);
+  }, [
+    copy.wikiBrowser.failedToLoadPages,
+    defaultWorkspaceRoot,
+    loadedPagesWorkspaceRoot,
+    pathname,
+    router,
+    workspaceRoot,
+    workspaceRootMode,
+  ]);
 
   useEffect(() => {
     if (isLoadingPages || pages.length === 0) {
@@ -618,32 +820,58 @@ export function WikiBrowser({
 
     if (!selectedPageId) {
       const preferredPage =
-        pages.find((page) => page.path === selectedPagePath) ??
-        pages.find((page) => page.path === preferredInitialPagePath) ??
-        pages[0];
+        pages.find((page) => page.path === preferredInitialPagePath) ?? pages[0];
 
       if (!preferredPage) {
         return;
       }
 
-      const params = new URLSearchParams({
-        workspaceRoot,
+      const params = createBrowserRouteParams({
         pageId: preferredPage.id,
+        workspaceRoot,
+        workspaceRootMode,
+        defaultWorkspaceRoot,
       });
 
       startTransition(() => {
-        router.replace(`${pathname}?${params.toString()}`);
+        router.replace(buildPathWithParams(pathname, params));
       });
     }
   }, [
+    defaultWorkspaceRoot,
     isLoadingPages,
     pages,
     pathname,
     preferredInitialPagePath,
     router,
     selectedPageId,
-    selectedPagePath,
     workspaceRoot,
+    workspaceRootMode,
+  ]);
+
+  useEffect(() => {
+    if (!selectedPageId || !hasLegacyPagePath) {
+      return;
+    }
+
+    const params = createBrowserRouteParams({
+      pageId: selectedPageId,
+      workspaceRoot,
+      workspaceRootMode,
+      defaultWorkspaceRoot,
+    });
+
+    startTransition(() => {
+      router.replace(buildPathWithParams(pathname, params));
+    });
+  }, [
+    defaultWorkspaceRoot,
+    hasLegacyPagePath,
+    pathname,
+    router,
+    selectedPageId,
+    workspaceRoot,
+    workspaceRootMode,
   ]);
 
   useEffect(() => {
@@ -651,10 +879,7 @@ export function WikiBrowser({
 
     async function loadPageDetail() {
       if (!selectedPageId) {
-        const fallbackPage =
-          pages.find((page) => page.path === selectedPagePath) ??
-          pages.find((page) => page.path === preferredInitialPagePath) ??
-          pages[0];
+        const fallbackPage = pages.find((page) => page.path === preferredInitialPagePath) ?? pages[0];
 
         if (fallbackPage && detail?.id === fallbackPage.id) {
           setDraftContent(detail.rawContent);
@@ -674,7 +899,11 @@ export function WikiBrowser({
       setErrorMessage(null);
 
       try {
-        const nextDetail = await fetchPageDetail(workspaceRoot, selectedPageId);
+        const nextDetail = await fetchPageDetail(
+          workspaceRoot,
+          selectedPageId,
+          copy.wikiBrowser.failedToLoadPage,
+        );
 
         if (!isActive) {
           return;
@@ -688,9 +917,40 @@ export function WikiBrowser({
           return;
         }
 
+        if (
+          isWikiTimeoutError(error) &&
+          workspaceRootMode === "sticky" &&
+          workspaceRoot !== defaultWorkspaceRoot
+        ) {
+          window.localStorage.setItem(
+            ACTIVE_WORKSPACE_STORAGE_KEY,
+            defaultWorkspaceRoot,
+          );
+          window.sessionStorage.setItem(
+            WIKI_WORKSPACE_RECOVERY_STORAGE_KEY,
+            defaultWorkspaceRoot,
+          );
+          setWorkspaceRootOverride(defaultWorkspaceRoot);
+          setWorkspaceRoot(defaultWorkspaceRoot);
+          setPages([]);
+          setDetail(null);
+          setDraftContent("");
+          setLoadedPagesWorkspaceRoot(null);
+          setLoadedDetailKey(null);
+          setErrorMessage(null);
+          setIsEditing(false);
+          setShowCreateForm(false);
+          startTransition(() => {
+            router.replace(pathname);
+          });
+          return;
+        }
+
         setDetail(null);
         setDraftContent("");
-        setErrorMessage(error instanceof Error ? error.message : "Failed to load wiki page.");
+        setErrorMessage(
+          error instanceof Error ? error.message : copy.wikiBrowser.failedToLoadPage,
+        );
       } finally {
         if (isActive) {
           setIsLoadingDetail(false);
@@ -706,13 +966,17 @@ export function WikiBrowser({
       isActive = false;
     };
   }, [
+    copy.wikiBrowser.failedToLoadPage,
+    defaultWorkspaceRoot,
     detail,
     loadedDetailKey,
+    pathname,
     pages,
     preferredInitialPagePath,
+    router,
     selectedPageId,
-    selectedPagePath,
     workspaceRoot,
+    workspaceRootMode,
   ]);
 
   const groupedPages = useMemo(() => groupPagesByType(pages), [pages]);
@@ -726,13 +990,13 @@ export function WikiBrowser({
       } satisfies EnhancedRenderedArticle;
     }
 
-    return enhanceRenderedArticle(detail.renderedHtml, internalLinkBasePath);
-  }, [detail, internalLinkBasePath]);
+    return enhanceRenderedArticle(detail.renderedHtml, internalLinkBasePath, pages);
+  }, [detail, internalLinkBasePath, pages]);
 
   const articleLead = renderedArticle.leadHtml;
   const articleLeadText = renderedArticle.leadText;
   const articleHeadings = renderedArticle.headings;
-  const articleMeta = detail ? ARTICLE_ENTRY_META[detail.type] : null;
+  const articleMeta = detail ? getWikiEntryMeta(locale, detail.type) : null;
   const knowledgeRole = detail
     ? readFrontmatterStringValue(detail.frontmatter, "knowledge_role")
     : null;
@@ -744,6 +1008,35 @@ export function WikiBrowser({
     : null;
   const refreshTriggers = detail
     ? readFrontmatterStringArrayValue(detail.frontmatter, "refresh_triggers")
+    : [];
+  const isTopicWorkspaceView = internalLinkBasePath !== "/wiki";
+  const isTopicHomeEntry =
+    isTopicWorkspaceView && !!detail && detail.path === topicHomePagePath && !isEditing;
+  const articleSummaryFacts = detail
+    ? ((
+        isTopicHomeEntry
+          ? []
+          : [
+              {
+                label: copy.wikiBrowser.entry,
+                value: articleMeta?.label ?? getWikiPageTypeLabel(locale, detail.type),
+              },
+              knowledgeRole ? { label: copy.wikiBrowser.role, value: knowledgeRole } : null,
+              surfaceKind ? { label: copy.wikiBrowser.surface, value: surfaceKind } : null,
+              revisitCadence ? { label: copy.wikiBrowser.cadence, value: revisitCadence } : null,
+              {
+                label: copy.wikiBrowser.coverage,
+                value:
+                  locale === "zh"
+                    ? `${detail.sourceRefs.length} 条来源引用`
+                    : `${detail.sourceRefs.length} source ref${detail.sourceRefs.length === 1 ? "" : "s"}`,
+              },
+              {
+                label: copy.wikiBrowser.revised,
+                value: <LocalizedDateTime locale={locale} value={detail.updatedAt} />,
+              },
+            ]
+      ).filter(Boolean) as Array<{ label: string; value: ReactNode }>)
     : [];
   const relatedReferencePages = useMemo(() => {
     if (!detail) {
@@ -762,49 +1055,56 @@ export function WikiBrowser({
       return [] as WorkingCueSection[];
     }
 
-    return buildWorkingCueSections(detail, pages);
-  }, [detail, pages]);
+    return buildWorkingCueSections(locale, detail, pages);
+  }, [detail, locale, pages]);
   const articleNavigation = useMemo(() => {
-    const items = [...articleHeadings];
+    const items = articleHeadings.filter((heading) => heading.level === 2);
 
-    if (detail) {
+    if (detail && !isTopicHomeEntry) {
       items.push(
         {
           id: "references",
-          text: "References",
+          text: copy.wikiBrowser.references,
           level: 2,
         },
         {
-          id: "related-knowledge",
-          text: "Related knowledge",
+          id: "related-pages",
+          text: copy.wikiBrowser.relatedPages,
           level: 2,
         },
       );
     }
 
-    return items;
-  }, [articleHeadings, detail]);
-  const showFullPageHeader =
-    !detail || detail.path === "wiki/index.md" || (allowEdit && isEditing);
+    const uniqueItems = items.filter(
+      (heading, index) => items.findIndex((candidate) => candidate.id === heading.id) === index,
+    );
+
+    return isTopicHomeEntry ? [] : uniqueItems.slice(0, 6);
+  }, [articleHeadings, copy.wikiBrowser.references, copy.wikiBrowser.relatedPages, detail, isTopicHomeEntry]);
+  const showFullPageHeader = !detail || (allowEdit && isEditing);
+  const showLeftRail = !isTopicHomeEntry;
   const showRightRail = !detail || (allowEdit && isEditing);
 
   function navigateToPage(pageId: string, nextWorkspaceRoot: string, replace = false) {
-    const params = new URLSearchParams({
-      workspaceRoot: nextWorkspaceRoot,
+    const params = createBrowserRouteParams({
       pageId,
+      workspaceRoot: nextWorkspaceRoot,
+      workspaceRootMode,
+      defaultWorkspaceRoot,
     });
+    const href = buildPathWithParams(pathname, params);
 
     startTransition(() => {
       if (replace) {
-        router.replace(`${pathname}?${params.toString()}`);
+        router.replace(href);
       } else {
-        router.push(`${pathname}?${params.toString()}`);
+        router.push(href);
       }
     });
   }
 
   async function reloadPagesAndCurrentDetail(nextPageId?: string) {
-    const nextPages = await fetchPageList(workspaceRoot);
+    const nextPages = await fetchPageList(workspaceRoot, copy.wikiBrowser.failedToLoadPages);
     setPages(nextPages);
     setLoadedPagesWorkspaceRoot(workspaceRoot);
 
@@ -816,7 +1116,11 @@ export function WikiBrowser({
       return;
     }
 
-    const nextDetail = await fetchPageDetail(workspaceRoot, pageId);
+    const nextDetail = await fetchPageDetail(
+      workspaceRoot,
+      pageId,
+      copy.wikiBrowser.failedToLoadPage,
+    );
 
     setDetail(nextDetail);
     setDraftContent(nextDetail.rawContent);
@@ -847,7 +1151,7 @@ export function WikiBrowser({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message ?? "Failed to save wiki page.");
+        throw new Error(data.message ?? copy.wikiBrowser.failedToSavePage);
       }
 
       const nextDetail = wikiPageDetailSchema.parse(data);
@@ -857,7 +1161,7 @@ export function WikiBrowser({
       setIsEditing(false);
       await reloadPagesAndCurrentDetail(nextDetail.id);
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Failed to save wiki page.");
+      setErrorMessage(error instanceof Error ? error.message : copy.wikiBrowser.failedToSavePage);
     } finally {
       setIsSaving(false);
     }
@@ -884,7 +1188,7 @@ export function WikiBrowser({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message ?? "Failed to create wiki page.");
+        throw new Error(data.message ?? copy.wikiBrowser.failedToCreatePage);
       }
 
       const nextDetail = wikiPageDetailSchema.parse(data);
@@ -896,7 +1200,9 @@ export function WikiBrowser({
       setIsEditing(true);
       await reloadPagesAndCurrentDetail(nextDetail.id);
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Failed to create wiki page.");
+      setErrorMessage(
+        error instanceof Error ? error.message : copy.wikiBrowser.failedToCreatePage,
+      );
     } finally {
       setIsSaving(false);
     }
@@ -923,7 +1229,7 @@ export function WikiBrowser({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message ?? "Failed to refresh wiki links.");
+        throw new Error(data.message ?? copy.wikiBrowser.failedToRefreshLinks);
       }
 
       const nextDetail = wikiPageDetailSchema.parse(data);
@@ -932,7 +1238,7 @@ export function WikiBrowser({
       await reloadPagesAndCurrentDetail(nextDetail.id);
     } catch (error) {
       setErrorMessage(
-        error instanceof Error ? error.message : "Failed to refresh wiki links.",
+        error instanceof Error ? error.message : copy.wikiBrowser.failedToRefreshLinks,
       );
     } finally {
       setIsSaving(false);
@@ -947,442 +1253,339 @@ export function WikiBrowser({
       return;
     }
 
-    const href = anchor.getAttribute("href");
+    const rawHref = anchor.getAttribute("href");
 
-    if (!href?.startsWith("/wiki?")) {
+    if (!rawHref) {
+      return;
+    }
+
+    const normalizedHref = normalizeInternalAppHref(rawHref, internalLinkBasePath, pages);
+    const isUnsafeInternalFallback =
+      rawHref.includes("pagePath=") ||
+      rawHref.includes("workspaceRoot=") ||
+      /\.html(?:$|[?#])/.test(rawHref) ||
+      /\.md(?:$|[?#])/.test(rawHref);
+
+    if (!normalizedHref) {
+      if (isUnsafeInternalFallback) {
+        event.preventDefault();
+      }
       return;
     }
 
     event.preventDefault();
     startTransition(() => {
-      router.push(`${internalLinkBasePath}${href.slice("/wiki".length)}`);
+      router.push(normalizedHref);
     });
   }
 
   const leftRail = (
-    <div className="space-y-4 xl:sticky xl:top-6">
-      <Surface className="overflow-hidden bg-background/72 shadow-none">
-        <div className="border-b border-border/60 px-5 py-4">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div className="space-y-1.5">
+    <aside className="order-2 self-start border-t border-border/55 pt-6 2xl:order-1 2xl:border-t-0 2xl:pt-0 2xl:sticky 2xl:top-6">
+      <div className="space-y-5 2xl:border-r 2xl:border-border/55 2xl:pr-5">
+        <div className="space-y-2">
+          <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Knowledge index
+                {copy.wikiBrowser.pages}
               </div>
-              <div className="text-sm leading-6 text-muted-foreground">
-                {pages.length} indexed page{pages.length === 1 ? "" : "s"} organized as durable
-                article pages.
-              </div>
+            <div className="flex items-center gap-2">
+              <div className="text-[11px] leading-5 text-muted-foreground">{pages.length}</div>
+              {allowCreate ? (
+                <Button
+                  onClick={() => setShowCreateForm((current) => !current)}
+                  size="sm"
+                  variant="ghost"
+                >
+                  <FilePlus2 className="size-4" />
+                  {copy.wikiBrowser.new}
+                </Button>
+              ) : null}
             </div>
-            {allowCreate ? (
-              <Button
-                onClick={() => setShowCreateForm((current) => !current)}
-                size="sm"
-                variant="outline"
-              >
-                <FilePlus2 className="size-4" />
-                New page
-              </Button>
-            ) : null}
           </div>
         </div>
 
-        <div className="space-y-4 px-4 py-4">
-          {showWorkspaceRootCard ? (
-            <div className="border-b border-border/60 px-1 pb-4">
+        {showWorkspaceRootCard ? (
+            <div className="space-y-1 border-t border-border/55 pt-4">
               <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Workspace
+                {copy.wikiBrowser.workspace}
               </div>
-              <div className="mt-2 break-all font-mono text-[11px] leading-6 text-foreground/90">
-                {workspaceRoot}
-              </div>
+            <div className="break-all font-mono text-[11px] leading-6 text-foreground/88">
+              {workspaceRoot}
             </div>
-          ) : null}
+          </div>
+        ) : null}
 
-          {allowCreate && showCreateForm ? (
-            <form
-              className="space-y-3 rounded-[20px] bg-background/70 p-4 ring-1 ring-border/60"
-              onSubmit={handleCreatePage}
+        {allowCreate && showCreateForm ? (
+          <form className="space-y-3 border-t border-border/55 pt-4" onSubmit={handleCreatePage}>
+            <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+              {copy.wikiBrowser.createFromTemplate}
+            </div>
+            <Input
+              value={newTitle}
+              onChange={(event) => setNewTitle(event.target.value)}
+              placeholder={copy.wikiBrowser.newPageTitle}
+            />
+            <select
+              className="flex h-10 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground shadow-sm outline-none"
+              value={newType}
+              onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+                setNewType(event.target.value as Exclude<WikiPageType, "index">)
+              }
             >
-              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Create from template
-              </div>
-              <Input
-                value={newTitle}
-                onChange={(event) => setNewTitle(event.target.value)}
-                placeholder="New page title"
-              />
-              <select
-                className="flex h-10 w-full rounded-xl border border-border bg-background/80 px-3 py-2 text-sm text-foreground shadow-sm outline-none"
-                value={newType}
-                onChange={(event: ChangeEvent<HTMLSelectElement>) =>
-                  setNewType(event.target.value as Exclude<WikiPageType, "index">)
-                }
+              {WIKI_PAGE_TYPES.filter((type) => type !== "index").map((type) => (
+                <option key={type} value={type}>
+                  {getWikiPageTypeLabel(locale, type)}
+                </option>
+              ))}
+            </select>
+            <div className="flex gap-2">
+              <Button disabled={isSaving || !newTitle.trim()} size="sm" type="submit">
+                {copy.wikiBrowser.create}
+              </Button>
+              <Button
+                onClick={() => setShowCreateForm(false)}
+                size="sm"
+                type="button"
+                variant="ghost"
               >
-                {WIKI_PAGE_TYPES.filter((type) => type !== "index").map((type) => (
-                  <option key={type} value={type}>
-                    {WIKI_PAGE_TYPE_LABELS[type]}
-                  </option>
-                ))}
-              </select>
-              <div className="flex gap-2">
-                <Button disabled={isSaving || !newTitle.trim()} size="sm" type="submit">
-                  Create
-                </Button>
-                <Button
-                  onClick={() => setShowCreateForm(false)}
-                  size="sm"
-                  type="button"
-                  variant="ghost"
-                >
-                  Cancel
-                </Button>
-              </div>
-            </form>
-          ) : null}
+                {copy.wikiBrowser.cancel}
+              </Button>
+            </div>
+          </form>
+        ) : null}
 
-          {isLoadingPages ? (
-            <div className="rounded-[18px] bg-muted/55 px-4 py-4 text-sm text-muted-foreground">
-              Loading wiki pages...
-            </div>
-          ) : pages.length === 0 ? (
-            <div className="rounded-[18px] bg-muted/55 px-4 py-5 text-sm leading-7 text-muted-foreground">
-              No wiki pages were discovered yet.
-              {allowCreate
-                ? " Create the first page from a template or initialize a populated workspace."
-                : " Load a workspace snapshot to browse its compiled knowledge."}
-            </div>
-          ) : (
-            <div className="space-y-5">
-              {Array.from(groupedPages.entries()).map(([type, items]) =>
-                items.length === 0 ? null : (
-                  <div key={type} className="space-y-2">
-                    <div className="flex items-center justify-between gap-3 px-1">
-                      <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                        {WIKI_PAGE_TYPE_LABELS[type]}
-                      </div>
-                      <div className="text-xs text-muted-foreground">{items.length}</div>
+        {isLoadingPages ? (
+          <div className="text-sm leading-7 text-muted-foreground">{copy.wikiBrowser.loadingPages}</div>
+        ) : pages.length === 0 ? (
+          <div className="text-sm leading-7 text-muted-foreground">
+            {copy.wikiBrowser.noPages}
+            {allowCreate
+              ? ` ${copy.wikiBrowser.noPagesCreateHint}`
+              : ` ${copy.wikiBrowser.noPagesBrowseHint}`}
+          </div>
+        ) : (
+          <div className="space-y-5">
+            {Array.from(groupedPages.entries()).map(([type, items]) =>
+              items.length === 0 ? null : (
+                <section key={type} className="space-y-2">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                      {getWikiPageTypeLabel(locale, type)}
                     </div>
-                    <div className="space-y-1.5">
-                      {items.map((page) => (
-                        <button
-                          key={page.id}
-                          className={cn(
-                            "flex w-full items-start justify-between rounded-[14px] border-l-[3px] px-3 py-3 text-left transition-colors",
-                            selectedPageId === page.id
-                              ? "border-primary bg-foreground/[0.03] text-foreground"
-                              : "border-transparent bg-transparent text-muted-foreground hover:bg-foreground/[0.035] hover:text-foreground",
-                          )}
-                          onClick={() => navigateToPage(page.id, workspaceRoot)}
-                          type="button"
-                        >
-                          <div className="min-w-0">
-                            <div className="truncate text-sm font-medium">{page.title}</div>
-                            <div
-                              className={cn(
-                                "mt-1 truncate font-mono text-[11px] uppercase tracking-[0.14em]",
-                                selectedPageId === page.id
-                                  ? "text-foreground/65"
-                                  : "text-muted-foreground",
-                              )}
-                            >
-                              {page.path}
-                            </div>
-                          </div>
-                          {page.unresolvedOutgoingCount > 0 ? (
-                            <Badge variant="warning">{page.unresolvedOutgoingCount} unresolved</Badge>
-                          ) : null}
-                        </button>
-                      ))}
-                    </div>
+                    <div className="text-[11px] leading-5 text-muted-foreground">{items.length}</div>
                   </div>
-                ),
-              )}
-            </div>
-          )}
-        </div>
-      </Surface>
-    </div>
+                  <div className="space-y-1">
+                    {items.map((page) => (
+                      <button
+                        key={page.id}
+                        className={cn(
+                          "w-full border-l px-3 py-2 text-left transition-colors",
+                          selectedPageId === page.id
+                            ? "border-foreground/45 text-foreground"
+                            : "border-transparent text-muted-foreground hover:border-border hover:text-foreground",
+                        )}
+                        onClick={() => navigateToPage(page.id, workspaceRoot)}
+                        type="button"
+                      >
+                        <div className="truncate text-sm font-medium">{page.title}</div>
+                        <div className="mt-0.5 truncate font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+                          {page.path}
+                        </div>
+                        {page.unresolvedOutgoingCount > 0 ? (
+                          <div className="mt-1 text-[11px] leading-5 text-amber-800">
+                            {locale === "zh"
+                              ? `${page.unresolvedOutgoingCount} 条${copy.wikiBrowser.unresolved}`
+                              : `${page.unresolvedOutgoingCount} unresolved`}
+                          </div>
+                        ) : null}
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              ),
+            )}
+          </div>
+        )}
+      </div>
+    </aside>
   );
 
   const centerColumn = (
-    <Surface className="overflow-hidden bg-card/88 shadow-[0_18px_48px_-38px_rgba(15,23,42,0.2)]">
-      <div className="space-y-5 px-6 py-6">
+    <main className="order-1 min-w-0">
+      <div className="space-y-8">
+        {intro ? <div className="mx-auto max-w-[84ch]">{intro}</div> : null}
+
         {errorMessage ? (
-          <div className="rounded-[22px] border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm leading-7 text-destructive">
+          <div className="mx-auto max-w-[78ch] border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm leading-7 text-destructive">
             {errorMessage}
           </div>
         ) : null}
 
         {isLoadingDetail ? (
-          <div className="rounded-[24px] bg-muted/55 px-5 py-6 text-sm text-muted-foreground">
-            Loading page...
+          <div className="mx-auto max-w-[78ch] text-sm leading-7 text-muted-foreground">
+            {copy.wikiBrowser.loadingPage}
           </div>
         ) : !detail ? (
-          <div className="rounded-[24px] bg-muted/45 px-5 py-12 text-center text-sm leading-7 text-muted-foreground">
-            Select a wiki page from the left rail to enter the compiled knowledge base.
+          <div className="mx-auto max-w-[78ch] text-sm leading-7 text-muted-foreground">
+            {copy.wikiBrowser.selectPage}
           </div>
         ) : (
           <>
-            <div className="space-y-6 border-b border-border/60 px-1 pb-7">
-              <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_280px]">
-                <div className="space-y-6">
-                  <div className="flex flex-wrap items-start justify-between gap-4">
-                    <div className="max-w-[68ch] space-y-5">
-                      <div className="space-y-3">
-                        <div className="flex flex-wrap items-center gap-3">
-                          <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                            {articleMeta?.label ?? WIKI_PAGE_TYPE_LABELS[detail.type]}
-                          </div>
-                          <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground/80">
-                            {detail.path}
-                          </div>
-                        </div>
-                        <h1 className="max-w-[16ch] text-[clamp(2.5rem,3vw,4rem)] font-semibold leading-[0.98] tracking-[-0.055em] text-foreground">
-                          {detail.title}
-                        </h1>
-                        <p className="max-w-[64ch] text-sm leading-7 text-muted-foreground">
-                          {articleMeta?.description ??
-                            "A durable wiki entry in the compiled knowledge base."}
-                        </p>
+            <header className="mx-auto max-w-[84ch] space-y-4 border-b border-border/60 pb-7">
+              <div className="grid gap-5 2xl:grid-cols-[minmax(0,1fr)_210px]">
+                <div className="space-y-4">
+                  <div className="flex flex-wrap items-center gap-3">
+                    {!isTopicHomeEntry ? (
+                      <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                        {articleMeta?.label ?? getWikiPageTypeLabel(locale, detail.type)}
                       </div>
-                      {articleLead ? (
-                        <div
-                          className="max-w-[66ch] font-serif text-[1.14rem] leading-[2] text-foreground/88 [&_a]:text-primary [&_a]:underline [&_a]:decoration-primary/25 [&_a]:underline-offset-4 [&_strong]:font-semibold"
-                          dangerouslySetInnerHTML={{ __html: articleLead }}
-                        />
-                      ) : articleLeadText ? (
-                        <p className="max-w-[66ch] font-serif text-[1.14rem] leading-[2] text-foreground/88">
-                          {articleLeadText}
-                        </p>
-                      ) : null}
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {allowEdit && isEditing ? (
-                        <>
-                          <Button disabled={isSaving} onClick={handleSave} size="sm">
-                            <Save className="size-4" />
-                            Save markdown
-                          </Button>
-                          <Button
-                            disabled={isSaving}
-                            onClick={() => {
-                              setDraftContent(detail.rawContent);
-                              setIsEditing(false);
-                            }}
-                            size="sm"
-                            variant="ghost"
-                          >
-                            <X className="size-4" />
-                            Cancel
-                          </Button>
-                        </>
-                      ) : allowEdit ? (
-                        <Button onClick={() => setIsEditing(true)} size="sm" variant="ghost">
-                          <PencilLine className="size-4" />
-                          Edit source
-                        </Button>
-                      ) : (
-                        <Badge variant="outline">Article view</Badge>
-                      )}
-                    </div>
+                    ) : null}
+                    {!isTopicHomeEntry ? (
+                      <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground/80">
+                        {detail.path}
+                      </div>
+                    ) : null}
                   </div>
 
-                  <div className="flex flex-wrap gap-x-5 gap-y-2 text-[13px] leading-6 text-muted-foreground">
-                    <span>
-                      <span className="font-medium text-foreground/86">Review</span>{" "}
-                      {detail.reviewStatus}
-                    </span>
-                    <span>
-                      <span className="font-medium text-foreground/86">Status</span> {detail.status}
-                    </span>
-                    <span>
-                      <span className="font-medium text-foreground/86">Coverage</span>{" "}
-                      {detail.sourceRefs.length} source ref
-                      {detail.sourceRefs.length === 1 ? "" : "s"}
-                    </span>
-                    <span>
-                      <span className="font-medium text-foreground/86">Revised</span>{" "}
-                      <LocalizedDateTime value={detail.updatedAt} />
-                    </span>
-                  </div>
-
-                  {articleNavigation.length > 0 ? (
-                    <nav className="border-y border-border/55 py-5">
-                      <div className="grid gap-4 md:grid-cols-[108px_minmax(0,1fr)]">
-                        <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                          Contents
-                        </div>
-                        <div className="grid gap-x-6 gap-y-2 sm:grid-cols-2">
-                          {articleNavigation.map((heading) => (
-                            <a
-                              key={heading.id}
-                              className={cn(
-                                "text-sm leading-7 text-muted-foreground transition-colors hover:text-foreground",
-                                heading.level === 3 ? "sm:pl-4" : "",
-                              )}
-                              href={`#${heading.id}`}
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-start justify-between gap-4">
+                      <h1
+                        className={cn(
+                          "max-w-[24ch] text-balance font-semibold leading-[1.03] tracking-[-0.05em] text-foreground",
+                          isTopicHomeEntry
+                            ? "text-[clamp(1.95rem,2.2vw,2.85rem)]"
+                            : "text-[clamp(2.15rem,2.45vw,3.3rem)]",
+                        )}
+                      >
+                        {isTopicHomeEntry && header?.title ? header.title : detail.title}
+                      </h1>
+                      <div className="flex flex-wrap gap-2">
+                        {allowEdit && isEditing ? (
+                          <>
+                            <Button disabled={isSaving} onClick={handleSave} size="sm">
+                              <Save className="size-4" />
+                              {copy.wikiBrowser.saveMarkdown}
+                            </Button>
+                            <Button
+                              disabled={isSaving}
+                              onClick={() => {
+                                setDraftContent(detail.rawContent);
+                                setIsEditing(false);
+                              }}
+                              size="sm"
+                              variant="ghost"
                             >
-                              {heading.text}
-                            </a>
-                          ))}
-                        </div>
+                              <X className="size-4" />
+                              {copy.wikiBrowser.cancel}
+                            </Button>
+                          </>
+                        ) : allowEdit ? (
+                          <Button onClick={() => setIsEditing(true)} size="sm" variant="ghost">
+                            <PencilLine className="size-4" />
+                            {copy.wikiBrowser.editSource}
+                          </Button>
+                        ) : null}
                       </div>
-                    </nav>
-                  ) : null}
+                    </div>
+
+                    {articleLead ? (
+                      <div
+                        className={cn(
+                          "max-w-[64ch] font-serif text-foreground/88 [&_a]:text-primary [&_a]:underline [&_a]:decoration-primary/25 [&_a]:underline-offset-4 [&_strong]:font-semibold",
+                          isTopicHomeEntry
+                            ? "text-[0.98rem] leading-[1.78]"
+                            : "text-[1.02rem] leading-[1.85]",
+                        )}
+                        dangerouslySetInnerHTML={{ __html: articleLead }}
+                      />
+                    ) : articleLeadText ? (
+                      <p
+                        className={cn(
+                          "max-w-[64ch] font-serif text-foreground/88",
+                          isTopicHomeEntry
+                            ? "text-[0.98rem] leading-[1.78]"
+                            : "text-[1.02rem] leading-[1.85]",
+                        )}
+                      >
+                        {articleLeadText}
+                      </p>
+                    ) : (
+                      <p className="max-w-[64ch] text-sm leading-7 text-muted-foreground">
+                        {articleMeta?.description ?? copy.wikiBrowser.pageFallbackDescription}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
-                <aside className="rounded-[24px] border border-border/55 bg-background/68 px-4 py-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.32)]">
-                  <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                    Article summary
-                  </div>
-                  <div className="mt-4 border-y border-border/55 py-1">
-                    <SummaryFact
-                      label="Entry"
-                      value={articleMeta?.label ?? WIKI_PAGE_TYPE_LABELS[detail.type]}
-                    />
-                    {knowledgeRole ? (
-                      <SummaryFact label="Role" value={knowledgeRole} />
-                    ) : null}
-                    {surfaceKind ? (
-                      <SummaryFact label="Surface" value={surfaceKind} />
-                    ) : null}
-                    {detail.aliases.length > 0 ? (
-                      <SummaryFact label="Aliases" value={detail.aliases.join(", ")} />
-                    ) : null}
-                    <SummaryFact
-                      label="Coverage"
-                      value={`${detail.sourceRefs.length} source ref${detail.sourceRefs.length === 1 ? "" : "s"}`}
-                    />
-                    {revisitCadence ? (
-                      <SummaryFact label="Cadence" value={revisitCadence} />
-                    ) : null}
-                    {refreshTriggers.length > 0 ? (
-                      <SummaryFact label="Refresh" value={refreshTriggers.join("; ")} />
-                    ) : null}
-                    <SummaryFact label="Confidence" value={detail.confidence.toFixed(2)} />
-                    <SummaryFact
-                      label="Revised"
-                      value={<LocalizedDateTime value={detail.updatedAt} />}
-                    />
-                    <SummaryFact
-                      label="Indexed"
-                      value={<LocalizedDateTime value={detail.lastIndexedAt} />}
-                    />
-                  </div>
-                  <div className="mt-4 space-y-2">
+                {articleSummaryFacts.length > 0 ? (
+                  <aside className="space-y-2.5 xl:border-l xl:border-border/55 xl:pl-5">
                     <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                      Page cues
+                      {copy.wikiBrowser.atAGlance}
                     </div>
-                    <div className="space-y-2 text-sm leading-6 text-foreground">
-                      <div className="border-l border-border/60 pl-3">
-                        <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                          Path
-                        </div>
-                        <div className="mt-1 break-all font-mono text-xs text-foreground/88">
-                          {detail.path}
-                        </div>
-                      </div>
-                      <div className="border-l border-border/60 pl-3">
-                        <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                          Slug
-                        </div>
-                        <div className="mt-1 text-sm text-foreground/88">{detail.slug}</div>
-                      </div>
+                    <div className="space-y-1">
+                      {articleSummaryFacts.map((fact) => (
+                        <SummaryFact key={fact.label} label={fact.label} value={fact.value} />
+                      ))}
                     </div>
-                  </div>
-                  {detail.tags.length > 0 ? (
-                    <div className="mt-4 space-y-2">
-                      <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                        Categories
-                      </div>
-                      <div className="flex flex-wrap gap-2">
+                    {detail.tags.length > 0 && !isTopicHomeEntry ? (
+                      <div className="flex flex-wrap gap-2 pt-1">
                         {detail.tags.map((tag) => (
                           <Badge key={tag} variant="outline">
                             {tag}
                           </Badge>
                         ))}
                       </div>
-                    </div>
-                  ) : null}
-                </aside>
-              </div>
-
-              <div className="flex flex-wrap items-start justify-between gap-4 border-t border-border/55 pt-4">
-                <div className="space-y-1 border-l border-border/55 pl-3">
-                  <div className="text-sm leading-6 text-muted-foreground">
-                    {detail.sourceRefs.length} references · {detail.backlinks.length} related pages
-                    · Last revised <LocalizedDateTime value={detail.updatedAt} />
-                  </div>
-                </div>
-                {allowRefreshLinks ? (
-                  <Button
-                    disabled={isSaving}
-                    onClick={handleRefreshLinks}
-                    size="sm"
-                    variant="ghost"
-                  >
-                    <RefreshCw className="size-4" />
-                    Refresh links
-                  </Button>
+                    ) : null}
+                  </aside>
                 ) : null}
               </div>
 
-              {workingCueSections.length > 0 ? (
-                <section className="rounded-[24px] border border-border/55 bg-background/62 px-4 py-4">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                      Working cues
-                    </div>
-                    <div className="text-sm leading-6 text-muted-foreground">
-                      Use the sections already inside this page as the next-step work surface.
-                    </div>
-                  </div>
-                  <div className="mt-4 grid gap-4 lg:grid-cols-2">
-                    {workingCueSections.map((section) => (
-                      <div
-                        key={section.title}
-                        className="rounded-[18px] border border-border/50 bg-card/72 px-4 py-4"
-                      >
-                        <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                          {section.title}
-                        </div>
-                        <div className="mt-3 space-y-2">
-                          {section.items.map((item) => {
-                            const targetPage = item.targetTitle
-                              ? resolvePageReference(item.targetTitle, pages)
-                              : null;
+              {!isTopicHomeEntry ? (
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[12.5px] leading-5 text-muted-foreground">
+                  <span>{copy.wikiBrowser.review} {getReviewStatusLabel(locale, detail.reviewStatus)}</span>
+                  <span>{copy.wikiBrowser.status} {detail.status}</span>
+                  <span>
+                    {copy.wikiBrowser.sourceRefs(detail.sourceRefs.length)}
+                  </span>
+                  <span>
+                    {copy.wikiBrowser.revisedAt} <LocalizedDateTime locale={locale} value={detail.updatedAt} />
+                  </span>
+                  {allowRefreshLinks ? (
+                    <button
+                      className="font-medium text-foreground transition-colors hover:text-primary"
+                      disabled={isSaving}
+                      onClick={handleRefreshLinks}
+                      type="button"
+                    >
+                      {copy.wikiBrowser.refreshLinks}
+                    </button>
+                  ) : null}
+                </div>
+              ) : null}
 
-                            return targetPage ? (
-                              <button
-                                key={`${section.title}:${item.label}`}
-                                className="block w-full rounded-[14px] border border-border/45 px-3 py-2 text-left text-sm leading-6 text-foreground transition-colors hover:bg-foreground/[0.03]"
-                                onClick={() => navigateToPage(targetPage.id, workspaceRoot)}
-                                type="button"
-                              >
-                                {item.label}
-                              </button>
-                            ) : (
-                              <div
-                                key={`${section.title}:${item.label}`}
-                                className="rounded-[14px] border border-border/35 px-3 py-2 text-sm leading-6 text-muted-foreground"
-                              >
-                                {item.label}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
+              {articleNavigation.length > 0 ? (
+                <nav className="border-t border-border/55 pt-4">
+                  <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                    {copy.wikiBrowser.jumpTo}
+                  </div>
+                  <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
+                    {articleNavigation.map((heading) => (
+                      <a
+                        key={heading.id}
+                        className="text-sm leading-6 text-muted-foreground transition-colors hover:text-foreground"
+                        href={`#${heading.id}`}
+                      >
+                        {heading.text}
+                      </a>
                     ))}
                   </div>
-                </section>
+                </nav>
               ) : null}
-            </div>
+            </header>
 
             {allowEdit && isEditing ? (
-              <div className="space-y-3">
-                <div className="rounded-[22px] bg-muted/55 px-4 py-3 text-sm leading-7 text-muted-foreground">
-                  Editing raw Markdown. Frontmatter remains validated against the page path and the
-                  saved file stays the source of truth.
+          <div className="mx-auto max-w-[84ch] space-y-3">
+                <div className="text-sm leading-7 text-muted-foreground">
+                  {copy.wikiBrowser.editingMarkdown}
                 </div>
                 <Textarea
                   className="min-h-[760px] rounded-[24px] border-border/70 bg-background/80 font-mono text-xs leading-6"
@@ -1391,31 +1594,30 @@ export function WikiBrowser({
                 />
               </div>
             ) : (
-              <div className="rounded-[30px] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(249,248,244,0.97))] px-8 py-9 shadow-[inset_0_1px_0_rgba(255,255,255,0.74)] ring-1 ring-border/50">
+              <>
                 <article
-                  className="wiki-render px-1 font-serif text-[15.8px] leading-[1.98] text-foreground [&_a]:text-primary [&_a]:underline [&_a]:decoration-primary/25 [&_a]:underline-offset-4 [&_a:hover]:decoration-primary/55 [&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-4 [&_blockquote]:text-muted-foreground [&_code]:rounded [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_h1:first-child]:hidden [&_h2]:scroll-mt-28 [&_h2]:font-sans [&_h2]:mt-16 [&_h2]:border-b [&_h2]:border-border/55 [&_h2]:pb-3 [&_h2]:text-[1.72rem] [&_h2]:font-semibold [&_h2]:tracking-[-0.04em] [&_h3]:scroll-mt-28 [&_h3]:font-sans [&_h3]:mt-10 [&_h3]:text-[1.16rem] [&_h3]:font-semibold [&_h3]:tracking-[-0.03em] [&_hr]:my-10 [&_li]:ml-4 [&_li]:leading-8 [&_ol]:list-decimal [&_p]:my-4 [&_pre]:overflow-auto [&_pre]:rounded-2xl [&_pre]:bg-slate-950 [&_pre]:p-4 [&_pre]:font-mono [&_pre]:text-slate-100 [&_strong]:font-semibold [&_ul]:list-disc"
-                  onClick={handleRenderedClick}
+                  className="wiki-render font-serif text-[15.8px] leading-[1.96] text-foreground [&_a]:text-primary [&_a]:underline [&_a]:decoration-primary/25 [&_a]:underline-offset-4 [&_a:hover]:decoration-primary/55 [&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-4 [&_blockquote]:text-muted-foreground [&_code]:rounded [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_h1:first-child]:hidden [&_h2]:scroll-mt-28 [&_h2]:font-sans [&_h2]:mt-16 [&_h2]:border-b [&_h2]:border-border/55 [&_h2]:pb-3 [&_h2]:text-[1.7rem] [&_h2]:font-semibold [&_h2]:tracking-[-0.04em] [&_h3]:scroll-mt-28 [&_h3]:font-sans [&_h3]:mt-10 [&_h3]:text-[1.14rem] [&_h3]:font-semibold [&_h3]:tracking-[-0.03em] [&_hr]:my-10 [&_li]:ml-4 [&_li]:leading-8 [&_ol]:list-decimal [&_p]:my-4 [&_pre]:overflow-auto [&_pre]:rounded-2xl [&_pre]:bg-slate-950 [&_pre]:p-4 [&_pre]:font-mono [&_pre]:text-slate-100 [&_strong]:font-semibold [&_ul]:list-disc"
+                  onClickCapture={handleRenderedClick}
                 >
                   <div
-                    className="mx-auto max-w-[72ch]"
+                    className="mx-auto max-w-[78ch]"
                     dangerouslySetInnerHTML={{ __html: renderedArticle.html }}
                   />
                 </article>
 
                 <section
-                  className="mx-auto mt-12 max-w-[72ch] border-t border-border/60 pt-8"
+                  className="mx-auto mt-12 max-w-[78ch] border-t border-border/60 pt-8"
                   id="references"
                 >
                   <h2 className="font-sans text-[1.5rem] font-semibold tracking-[-0.04em] text-foreground">
-                    References
+                    {copy.wikiBrowser.references}
                   </h2>
                   <p className="mt-3 text-sm leading-7 text-muted-foreground">
-                    This article is grounded in imported source artifacts tracked inside the local
-                    workspace.
+                    {copy.wikiBrowser.sourceReferencesForPage}
                   </p>
                   {detail.sourceRefs.length === 0 ? (
                     <div className="mt-4 text-sm leading-7 text-muted-foreground">
-                      No source references have been attached to this article yet.
+                      {copy.wikiBrowser.noSourceReferences}
                     </div>
                   ) : (
                     <ol className="mt-5 space-y-3">
@@ -1432,7 +1634,7 @@ export function WikiBrowser({
                               {item}
                             </span>
                             <span className="mt-1 block font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                              Imported source artifact
+                              {copy.wikiBrowser.sourceLabel}
                             </span>
                           </span>
                         </li>
@@ -1442,34 +1644,28 @@ export function WikiBrowser({
                 </section>
 
                 <section
-                  className="mx-auto mt-12 max-w-[72ch] border-t border-border/60 pt-8"
-                  id="related-knowledge"
+                  className="mx-auto mt-12 max-w-[78ch] border-t border-border/60 pt-8"
+                  id="related-pages"
                 >
                   <h2 className="font-sans text-[1.5rem] font-semibold tracking-[-0.04em] text-foreground">
-                    Related knowledge
+                    {copy.wikiBrowser.relatedPages}
                   </h2>
-                  <p className="mt-3 text-sm leading-7 text-muted-foreground">
-                    Use nearby entries, backlinks, and linked concepts to move outward from the
-                    current article.
-                  </p>
 
                   {relatedReferencePages.length > 0 ? (
-                    <section className="mt-6 space-y-3 border-b border-border/55 pb-6">
+                    <section className="mt-5 space-y-3">
                       <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                        See also
+                        {copy.wikiBrowser.seeAlso}
                       </div>
-                      <div className="grid gap-3 sm:grid-cols-2">
+                      <div className="divide-y divide-border/55 border-y border-border/55">
                         {relatedReferencePages.map((item) =>
                           item.page ? (
                             <button
                               key={item.reference}
-                              className="rounded-[18px] border border-border/50 px-4 py-3 text-left transition-colors hover:bg-foreground/[0.03]"
+                              className="block w-full py-3 text-left text-sm leading-7 text-foreground transition-colors first:pt-3 last:pb-3 hover:text-foreground/80"
                               onClick={() => navigateToPage(item.page!.id, workspaceRoot)}
                               type="button"
                             >
-                              <span className="block text-sm font-medium text-foreground">
-                                {item.page!.title}
-                              </span>
+                              <span className="font-medium">{item.page!.title}</span>
                               <span className="mt-1 block font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
                                 {item.page!.path}
                               </span>
@@ -1477,7 +1673,7 @@ export function WikiBrowser({
                           ) : (
                             <div
                               key={item.reference}
-                              className="rounded-[18px] border border-border/50 px-4 py-3 text-sm leading-7 text-muted-foreground"
+                              className="py-3 text-sm leading-7 text-muted-foreground first:pt-3 last:pb-3"
                             >
                               {item.reference}
                             </div>
@@ -1487,14 +1683,14 @@ export function WikiBrowser({
                     </section>
                   ) : null}
 
-                  <div className="mt-6 grid gap-8 lg:grid-cols-2">
+                  <div className="mt-8 grid gap-8 lg:grid-cols-2">
                     <section className="space-y-3">
                       <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                        Backlinks
+                        {copy.wikiBrowser.backlinks}
                       </div>
                       {detail.backlinks.length === 0 ? (
                         <div className="text-sm leading-7 text-muted-foreground">
-                          No related article backlinks yet.
+                          {copy.wikiBrowser.noBacklinks}
                         </div>
                       ) : (
                         <div className="divide-y divide-border/55">
@@ -1522,11 +1718,11 @@ export function WikiBrowser({
 
                     <section className="space-y-3">
                       <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                        Linked concepts
+                        {copy.wikiBrowser.linkedConcepts}
                       </div>
                       {detail.outgoingLinks.length === 0 ? (
                         <div className="text-sm leading-7 text-muted-foreground">
-                          No resolved linked concepts or related pages yet.
+                          {copy.wikiBrowser.noResolvedLinks}
                         </div>
                       ) : (
                         <div className="divide-y divide-border/55">
@@ -1538,7 +1734,9 @@ export function WikiBrowser({
                               type="button"
                             >
                               <span className="text-sm text-foreground">{link.displayText}</span>
-                              <Badge variant="outline">{link.resolutionKind}</Badge>
+                              <Badge variant="outline">
+                                {getWikiLinkResolutionKindLabel(locale, link.resolutionKind)}
+                              </Badge>
                             </button>
                           ))}
                         </div>
@@ -1549,7 +1747,7 @@ export function WikiBrowser({
                   {detail.unresolvedLinks.length > 0 ? (
                     <div className="mt-8 space-y-3">
                       <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                        Open link gaps
+                        {copy.wikiBrowser.openLinkGaps}
                       </div>
                       <div className="space-y-2">
                         {detail.unresolvedLinks.map((link) => (
@@ -1561,85 +1759,75 @@ export function WikiBrowser({
                               {link.displayText}
                             </div>
                             <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.12em] text-amber-900">
-                              {link.reason}
+                              {getWikiLinkGapReasonLabel(locale, link.reason)}
                             </div>
                           </div>
                         ))}
                       </div>
                     </div>
                   ) : null}
-
-                  <div className="mt-8 grid gap-8 border-t border-border/55 pt-6 md:grid-cols-[minmax(0,1fr)_220px]">
-                    <section className="space-y-3">
-                      <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                        Article cues
-                      </div>
-                      <div className="grid gap-4 sm:grid-cols-3">
-                        <MetaBlock
-                          label="Path"
-                          value={<span className="font-mono text-xs">{detail.path}</span>}
-                        />
-                        <MetaBlock label="Slug" value={detail.slug} />
-                        <MetaBlock
-                          label="Last indexed"
-                          value={<LocalizedDateTime value={detail.lastIndexedAt} />}
-                        />
-                      </div>
-                    </section>
-
-                    <section className="space-y-3">
-                      <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                        Categories
-                      </div>
-                      {detail.tags.length === 0 ? (
-                        <div className="text-sm leading-7 text-muted-foreground">
-                          No categories or tags are attached to this article yet.
-                        </div>
-                      ) : (
-                        <div className="flex flex-wrap gap-2">
-                          {detail.tags.map((tag) => (
-                            <Badge key={tag} variant="outline">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      )}
-                    </section>
-                  </div>
                 </section>
-              </div>
+
+                <footer className="mx-auto mt-10 max-w-[78ch] space-y-3 border-t border-border/55 pt-5 text-[13px] leading-6 text-muted-foreground">
+                  <div className="flex flex-wrap gap-x-5 gap-y-2">
+                    <span className="font-mono text-[11px] uppercase tracking-[0.14em]">
+                      {detail.path}
+                    </span>
+                    <span>
+                      {copy.wikiBrowser.indexed} <LocalizedDateTime locale={locale} value={detail.lastIndexedAt} />
+                    </span>
+                    {detail.aliases.length > 0 ? (
+                      <span>{copy.wikiBrowser.aliases} {detail.aliases.join(", ")}</span>
+                    ) : null}
+                    {refreshTriggers.length > 0 ? (
+                      <span>{copy.wikiBrowser.refresh} {refreshTriggers.join("; ")}</span>
+                    ) : null}
+                  </div>
+                  {detail.tags.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {detail.tags.map((tag) => (
+                        <Badge key={tag} variant="outline">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  ) : null}
+                </footer>
+              </>
             )}
           </>
         )}
       </div>
-    </Surface>
+    </main>
   );
 
   const rightRail = (
-    <div className="space-y-4 xl:sticky xl:top-6">
-      <Surface className="overflow-hidden bg-background/72 shadow-none">
-        <SurfaceHeader
-          title="Knowledge navigation"
-          description="Use wiki relationships and page cues to move to adjacent entries without overwhelming the article."
-        />
+    <aside className="order-3 self-start border-t border-border/55 pt-6 2xl:border-t-0 2xl:pt-0 2xl:sticky 2xl:top-6">
+      <div className="space-y-6 2xl:border-l 2xl:border-border/55 2xl:pl-5">
+        <div className="space-y-1.5">
+          <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+            {copy.wikiBrowser.nearbyPages}
+          </div>
+        </div>
+
         {!detail ? (
-          <div className="px-5 py-5 text-sm leading-7 text-muted-foreground">
-            Related entries and page-level wiki cues appear here once an article is selected.
+          <div className="text-sm leading-7 text-muted-foreground">
+            {copy.wikiBrowser.selectPageForNearby}
           </div>
         ) : (
-          <div className="divide-y divide-border/60">
+          <>
             {workingCueSections.length > 0 ? (
-              <div className="space-y-4 px-5 py-5">
+              <section className="space-y-3">
                 <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                  Work next
+                  {copy.wikiBrowser.workNext}
                 </div>
-                <div className="space-y-4">
-                  {workingCueSections.slice(0, 3).map((section) => (
-                    <div key={section.title} className="space-y-2">
+                <div className="space-y-3">
+                  {workingCueSections.slice(0, 2).map((section) => (
+                    <div key={section.title} className="space-y-1.5">
                       <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
                         {section.title}
                       </div>
-                      <div className="space-y-2">
+                      <div className="space-y-1">
                         {section.items.slice(0, 3).map((item) => {
                           const targetPage = item.targetTitle
                             ? resolvePageReference(item.targetTitle, pages)
@@ -1648,7 +1836,7 @@ export function WikiBrowser({
                           return targetPage ? (
                             <button
                               key={`${section.title}:${item.label}`}
-                              className="block w-full rounded-[14px] border border-border/45 px-3 py-2 text-left text-sm leading-6 text-foreground transition-colors hover:bg-foreground/[0.03]"
+                              className="block w-full text-left text-sm leading-6 text-foreground transition-colors hover:text-primary"
                               onClick={() => navigateToPage(targetPage.id, workspaceRoot)}
                               type="button"
                             >
@@ -1657,7 +1845,7 @@ export function WikiBrowser({
                           ) : (
                             <div
                               key={`${section.title}:${item.label}`}
-                              className="rounded-[14px] border border-border/35 px-3 py-2 text-sm leading-6 text-muted-foreground"
+                              className="text-sm leading-6 text-muted-foreground"
                             >
                               {item.label}
                             </div>
@@ -1667,36 +1855,34 @@ export function WikiBrowser({
                     </div>
                   ))}
                 </div>
-              </div>
+              </section>
             ) : null}
 
-            <div className="space-y-4 px-5 py-5">
+            <section className="space-y-3">
               <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                See also
+                {copy.wikiBrowser.seeAlso}
               </div>
               {relatedReferencePages.length === 0 ? (
-                <div className="text-sm leading-7 text-muted-foreground">
-                  No explicit see-also references are attached to this article yet.
-                </div>
+                <div className="text-sm leading-7 text-muted-foreground">{copy.wikiBrowser.noLinkedPages}</div>
               ) : (
-                <div className="divide-y divide-border/55">
+                <div className="space-y-2">
                   {relatedReferencePages.map((item) =>
                     item.page ? (
                       <button
                         key={item.reference}
-                        className="block w-full py-3 text-left text-sm leading-7 text-foreground transition-colors first:pt-0 last:pb-0 hover:text-foreground/80"
+                        className="block w-full text-left text-sm leading-6 text-foreground transition-colors hover:text-primary"
                         onClick={() => navigateToPage(item.page!.id, workspaceRoot)}
                         type="button"
                       >
                         <span className="font-medium">{item.page!.title}</span>
-                        <span className="mt-1 block font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+                        <span className="mt-0.5 block font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
                           {item.page!.path}
                         </span>
                       </button>
                     ) : (
                       <div
                         key={item.reference}
-                        className="py-3 text-sm leading-7 text-muted-foreground first:pt-0 last:pb-0"
+                        className="text-sm leading-7 text-muted-foreground"
                       >
                         {item.reference}
                       </div>
@@ -1704,90 +1890,72 @@ export function WikiBrowser({
                   )}
                 </div>
               )}
-            </div>
+            </section>
 
-            <div className="space-y-4 px-5 py-5">
+            <section className="space-y-3">
               <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Page cues
+                {copy.wikiBrowser.pageNotes}
               </div>
-              <div className="space-y-4">
-                {surfaceKind ? <MetaBlock label="Surface" value={surfaceKind} /> : null}
-                {revisitCadence ? <MetaBlock label="Cadence" value={revisitCadence} /> : null}
-                <MetaBlock label="Path" value={<span className="font-mono text-xs">{detail.path}</span>} />
-                <MetaBlock label="Slug" value={detail.slug} />
-                <MetaBlock
-                  label="Last indexed"
-                  value={<LocalizedDateTime value={detail.lastIndexedAt} />}
+              <div className="space-y-1">
+                {surfaceKind ? <SummaryFact label={copy.wikiBrowser.surface} value={surfaceKind} /> : null}
+                {revisitCadence ? <SummaryFact label={copy.wikiBrowser.cadence} value={revisitCadence} /> : null}
+                <SummaryFact
+                  label={copy.wikiBrowser.path}
+                  value={<span className="font-mono text-xs">{detail.path}</span>}
+                />
+                <SummaryFact label={copy.wikiBrowser.slug} value={detail.slug} />
+                <SummaryFact
+                  label={copy.wikiBrowser.indexed}
+                  value={<LocalizedDateTime locale={locale} value={detail.lastIndexedAt} />}
                 />
               </div>
-            </div>
-
-            <div className="space-y-4 px-5 py-5">
-              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Categories
-              </div>
-              {detail.tags.length === 0 ? (
-                <div className="text-sm leading-7 text-muted-foreground">
-                  No categories or tags are attached to this article yet.
-                </div>
-              ) : (
-                <div className="flex flex-wrap gap-2">
-                  {detail.tags.map((tag) => (
-                    <Badge key={tag} variant="outline">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
+            </section>
+          </>
         )}
-      </Surface>
-    </div>
+      </div>
+    </aside>
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {showFullPageHeader ? (
         <PageHeader
-          eyebrow={header?.eyebrow ?? "Wiki browser"}
-          title={header?.title ?? "Enter the compiled wiki"}
-          description={
-            header?.description ??
-            "Read durable markdown knowledge pages with clear provenance, wikilink navigation, backlinks, and synchronized local metadata."
-          }
-          badge={header?.badge ?? "Compiled wiki"}
+          eyebrow={header?.eyebrow ?? copy.wikiBrowser.wikiBrowser}
+          title={header?.title ?? copy.wikiBrowser.browseWiki}
+          description={header?.description}
+          badge={header?.badge ?? copy.wikiBrowser.wiki}
           compact
         />
       ) : detail ? (
-        <div className="flex flex-wrap items-center justify-between gap-4 rounded-[22px] border border-border/55 bg-background/62 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.34)]">
-          <div className="space-y-1.5">
-            <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-              {header?.eyebrow ?? "Wiki browser"}
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              {header?.badge ? <Badge variant="outline">{header.badge}</Badge> : null}
-              <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                {detail.path}
-              </span>
+        isTopicHomeEntry ? null : (
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/55 pb-4">
+            <div className="space-y-1">
+              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                {header?.eyebrow ?? copy.wikiBrowser.wikiBrowser}
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                {header?.badge ? <Badge variant="outline">{header.badge}</Badge> : null}
+                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+                  {detail.path}
+                </span>
+              </div>
             </div>
           </div>
-          <div className="max-w-[44ch] text-sm leading-6 text-muted-foreground">
-            Markdown remains the source of truth; this page renders it as an article inside the
-            product.
-          </div>
-        </div>
+        )
       ) : null}
-      {intro}
       <div
         className={cn(
-          "grid gap-6",
-          showRightRail
-            ? "xl:grid-cols-[218px_minmax(0,1.4fr)_254px]"
-            : "xl:grid-cols-[198px_minmax(0,1fr)]",
+          "grid gap-8 2xl:gap-10",
+          showLeftRail && showRightRail
+            ? "2xl:grid-cols-[196px_minmax(0,1fr)_256px]"
+            : showLeftRail
+              ? "2xl:grid-cols-[196px_minmax(0,1fr)]"
+              : showRightRail
+                ? "2xl:grid-cols-[minmax(0,1fr)_256px]"
+                : undefined,
         )}
       >
-        {leftRail}
+        {showLeftRail ? leftRail : null}
         {centerColumn}
         {showRightRail ? rightRail : null}
       </div>

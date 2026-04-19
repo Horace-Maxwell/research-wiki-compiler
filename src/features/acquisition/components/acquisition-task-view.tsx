@@ -101,7 +101,7 @@ function Metric({
 }: {
   label: string;
   value: string;
-  detail: string;
+  detail?: string;
 }) {
   return (
     <div className="space-y-2 border-l border-border/60 pl-4 first:border-l-0 first:pl-0">
@@ -109,7 +109,7 @@ function Metric({
         {label}
       </div>
       <div className="text-[1.9rem] font-semibold tracking-[-0.05em] text-foreground">{value}</div>
-      <p className="max-w-[24ch] text-sm leading-6 text-muted-foreground">{detail}</p>
+      {detail ? <p className="max-w-[24ch] text-sm leading-6 text-muted-foreground">{detail}</p> : null}
     </div>
   );
 }
@@ -201,14 +201,7 @@ export function AcquisitionTaskView({
       <PageHeader
         eyebrow="Acquisition"
         title={
-          focusedTopic
-            ? `${focusedTopic.title} acquisition operations`
-            : "Acquisition turns missing evidence into bounded work"
-        }
-        description={
-          focusedTopic
-            ? "Use this operational lane after a gap or monitor has already defined what to collect, what to inspect first, and what success should unlock."
-            : "This is an operational lane across the portfolio for bounded collection work. Start here less often than in topics, questions, sessions, and syntheses."
+          focusedTopic ? `${focusedTopic.title} acquisition` : "Acquisition tasks"
         }
         badge={`${overview.summary.totalTasks} tasks`}
         actions={
@@ -216,20 +209,20 @@ export function AcquisitionTaskView({
             {focusedTopic ? (
               <>
                 <Button asChild variant="outline">
-                  <Link href={`/gaps?topic=${focusedTopic.id}`}>Open evidence blockers</Link>
+                  <Link href={`/gaps?topic=${focusedTopic.id}`}>Gaps</Link>
                 </Button>
                 <Button asChild variant="ghost">
-                  <Link href={`/monitoring?topic=${focusedTopic.id}`}>Open monitoring</Link>
+                  <Link href={`/monitoring?topic=${focusedTopic.id}`}>Monitoring</Link>
                 </Button>
               </>
             ) : (
               <Button asChild variant="outline">
-                <Link href="/topics">Open topic portfolio</Link>
+                <Link href="/topics">Topics</Link>
               </Button>
             )}
             <Button asChild>
               <Link href={focusedTopic ? `/topics/${focusedTopic.id}` : "/topics/openclaw"}>
-                {focusedTopic ? "Open topic home" : "Open flagship topic"}
+                {focusedTopic ? "Topic" : "Showcase"}
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
@@ -239,50 +232,19 @@ export function AcquisitionTaskView({
 
       <Surface className="px-5 py-5">
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-6">
-          <Metric
-            label="Tasks"
-            value={String(overview.summary.totalTasks)}
-            detail="Meaningful acquisition tasks currently modeled in the selected workspace scope."
-          />
-          <Metric
-            label="High priority"
-            value={String(overview.summary.highPriority)}
-            detail="Collection passes likely to move questions, syntheses, or maturity next."
-          />
-          <Metric
-            label="Session ready"
-            value={String(overview.summary.readyForSession)}
-            detail="Tasks that already have a clear session handoff, context packs, and success criteria."
-          />
-          <Metric
-            label="Awaiting ingestion"
-            value={String(overview.summary.awaitingIngestion)}
-            detail="Tasks where evidence was captured, but the system still needs the result integrated."
-          />
-          <Metric
-            label="Maturity blockers"
-            value={String(overview.summary.maturityBlockers)}
-            detail="Tasks tied to advancing a real maturity step rather than just adding more work."
-          />
-          <Metric
-            label="Integrated"
-            value={String(overview.summary.integrated)}
-            detail="Acquisition passes already folded back into the knowledge system."
-          />
+          <Metric label="Tasks" value={String(overview.summary.totalTasks)} />
+          <Metric label="High" value={String(overview.summary.highPriority)} />
+          <Metric label="Session" value={String(overview.summary.readyForSession)} />
+          <Metric label="Ingest" value={String(overview.summary.awaitingIngestion)} />
+          <Metric label="Maturity" value={String(overview.summary.maturityBlockers)} />
+          <Metric label="Integrated" value={String(overview.summary.integrated)} />
         </div>
       </Surface>
 
       <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
         <Surface>
           <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-            <div className="space-y-2">
-              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Focus task
-              </div>
-              <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                What should we collect next?
-              </h2>
-            </div>
+            <h2 className="text-xl font-semibold tracking-tight text-foreground">Focus</h2>
             <SearchCheck className="size-5 text-muted-foreground" />
           </div>
           <div className="px-5 py-5">
@@ -356,11 +318,11 @@ export function AcquisitionTaskView({
                 <div className="flex flex-wrap gap-2">
                   <Button asChild>
                     <Link href={focusTask.links.session.href}>
-                      {focusTask.nextSessionStatus === "active" ? "Continue session" : "Open session"}
+                      {focusTask.nextSessionStatus === "active" ? "Continue" : "Session"}
                     </Link>
                   </Button>
                   <Button asChild variant="outline">
-                    <Link href={focusTask.links.sources.href}>Open first inspection surface</Link>
+                    <Link href={focusTask.links.sources.href}>Sources</Link>
                   </Button>
                   <Button asChild variant="ghost">
                     <Link href={focusTask.links.canonicalReview.href}>
@@ -372,7 +334,7 @@ export function AcquisitionTaskView({
               </div>
             ) : (
               <div className="rounded-[22px] border border-border/50 bg-background/62 px-5 py-5 text-sm leading-6 text-muted-foreground">
-                No acquisition task is seeded yet for the selected scope.
+                No tasks yet.
               </div>
             )}
           </div>
@@ -380,14 +342,7 @@ export function AcquisitionTaskView({
 
         <Surface>
           <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-            <div className="space-y-2">
-              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Integration
-              </div>
-              <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                How it feeds back in
-              </h2>
-            </div>
+            <h2 className="text-xl font-semibold tracking-tight text-foreground">Impact</h2>
             <Sparkles className="size-5 text-muted-foreground" />
           </div>
           <div className="space-y-4 px-5 py-5">
@@ -396,7 +351,7 @@ export function AcquisitionTaskView({
               <div className="mt-2 text-sm leading-6 text-muted-foreground">
                 {focusTask?.linkedEvidenceGapTitles.length
                   ? focusTask.linkedEvidenceGapTitles.join("; ")
-                  : "No explicit evidence gap is linked to the focused task."}
+                  : "No linked gaps."}
               </div>
             </div>
             <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
@@ -413,13 +368,13 @@ export function AcquisitionTaskView({
                     ]
                       .filter(Boolean)
                       .join(" ")
-                  : "Select a task to see which research surfaces it is meant to unlock."}
+                  : "Select a task to see linked work."}
               </div>
             </div>
             <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
               <div className="text-sm font-medium text-foreground">Ingestion next step</div>
               <div className="mt-2 text-sm leading-6 text-muted-foreground">
-                {focusTask?.ingestionNextStep ?? "No ingestion step is recorded for the focused task."}
+                {focusTask?.ingestionNextStep ?? "No ingestion step yet."}
               </div>
             </div>
             <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
@@ -428,7 +383,7 @@ export function AcquisitionTaskView({
                 {focusTask?.resultSummary ??
                   (focusTask?.resultChangeTitles.length
                     ? focusTask.resultChangeTitles.join("; ")
-                    : "No downstream change or integrated result is recorded yet.")}
+                    : "No result recorded yet.")}
               </div>
             </div>
           </div>
@@ -446,7 +401,6 @@ export function AcquisitionTaskView({
                 <h2 className="text-xl font-semibold tracking-tight text-foreground">
                   {bucket.title}
                 </h2>
-                <p className="text-sm leading-6 text-muted-foreground">{bucket.description}</p>
               </div>
               <FlaskConical className="size-5 text-muted-foreground" />
             </div>
@@ -461,7 +415,7 @@ export function AcquisitionTaskView({
                 ))
               ) : (
                 <div className="rounded-[22px] border border-border/50 bg-background/62 px-5 py-5 text-sm leading-6 text-muted-foreground">
-                  No task currently lands in this bucket.
+                  No tasks here.
                 </div>
               )}
             </div>

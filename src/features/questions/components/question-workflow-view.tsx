@@ -5,10 +5,15 @@ import {
   CircleHelp,
   GitBranchPlus,
   Radar,
-  RefreshCw,
-  SearchCheck,
 } from "lucide-react";
 
+import type { AppLocale } from "@/lib/app-locale";
+import {
+  getLocaleCopy,
+  getPriorityLabel,
+  getQuestionStatusLabel,
+  getTopicMaturityStageLabel,
+} from "@/lib/app-locale";
 import type {
   QuestionWorkflowItem,
   QuestionWorkflowOverview,
@@ -84,17 +89,6 @@ function priorityVariant(priority: QuestionWorkflowItem["priority"]) {
   }
 }
 
-function humanizeStatus(status: QuestionWorkflowItem["status"]) {
-  switch (status) {
-    case "ready-for-synthesis":
-      return "ready for synthesis";
-    case "waiting-for-sources":
-      return "waiting for sources";
-    default:
-      return status.replace(/-/g, " ");
-  }
-}
-
 function buildSynthesisHref(question: QuestionWorkflowItem) {
   return question.synthesizeInto
     ? `/syntheses?topic=${question.topicId}&title=${encodeURIComponent(question.synthesizeInto)}`
@@ -108,7 +102,7 @@ function Metric({
 }: {
   label: string;
   value: string;
-  detail: string;
+  detail?: string;
 }) {
   return (
     <div className="space-y-2 border-l border-border/60 pl-4 first:border-l-0 first:pl-0">
@@ -116,63 +110,76 @@ function Metric({
         {label}
       </div>
       <div className="text-[1.9rem] font-semibold tracking-[-0.05em] text-foreground">{value}</div>
-      <p className="max-w-[24ch] text-sm leading-6 text-muted-foreground">{detail}</p>
+      {detail ? <p className="max-w-[24ch] text-sm leading-6 text-muted-foreground">{detail}</p> : null}
     </div>
   );
 }
 
 function QuestionCard({
   question,
+  locale,
   showTopic = true,
 }: {
   question: QuestionWorkflowItem;
+  locale: AppLocale;
   showTopic?: boolean;
 }) {
+  const copy = getLocaleCopy(locale);
   const synthesisHref = buildSynthesisHref(question);
 
   return (
     <div className="rounded-[22px] border border-border/50 bg-background/62 px-4 py-4">
       <div className="flex flex-wrap items-center gap-2">
-        <Badge variant={statusVariant(question.status)}>{humanizeStatus(question.status)}</Badge>
-        <Badge variant={priorityVariant(question.priority)}>{question.priority}</Badge>
-        <Badge variant="outline">{question.readinessPercent}% ready</Badge>
-        {showTopic ? <Badge variant={stageVariant(question.topicMaturityStage)}>{question.topicTitle}</Badge> : null}
+        <Badge variant={statusVariant(question.status)}>
+          {getQuestionStatusLabel(locale, question.status)}
+        </Badge>
+        <Badge variant={priorityVariant(question.priority)}>
+          {getPriorityLabel(locale, question.priority)}
+        </Badge>
+        <Badge variant="outline">
+          {locale === "zh" ? `${question.readinessPercent}% 就绪` : `${question.readinessPercent}% ready`}
+        </Badge>
+        {showTopic ? (
+          <Badge variant={stageVariant(question.topicMaturityStage)}>
+            {question.topicTitle}
+          </Badge>
+        ) : null}
       </div>
       <div className="mt-3 text-[15px] font-medium leading-7 text-foreground">{question.question}</div>
       <p className="mt-2 text-sm leading-6 text-muted-foreground">{question.summary}</p>
       <div className="mt-3 grid gap-2 text-sm leading-6 text-muted-foreground">
         <div>
-          <span className="font-medium text-foreground">Load first:</span> {question.contextPackTitle}
+          <span className="font-medium text-foreground">{copy.questions.load}:</span> {question.contextPackTitle}
         </div>
         <div>
-          <span className="font-medium text-foreground">Why now:</span> {question.whyNow}
+          <span className="font-medium text-foreground">{copy.questions.why}:</span> {question.whyNow}
         </div>
         {question.synthesizeInto ? (
           <div>
-            <span className="font-medium text-foreground">Promote into:</span> {question.synthesizeInto}
+            <span className="font-medium text-foreground">{copy.questions.synthesis}:</span>{" "}
+            {question.synthesizeInto}
           </div>
         ) : null}
         {question.sourceGaps.length > 0 ? (
           <div>
-            <span className="font-medium text-foreground">Missing evidence:</span>{" "}
-            {question.sourceGaps.join("; ")}
+            <span className="font-medium text-foreground">{copy.questions.gaps}:</span> {question.sourceGaps.join("; ")}
           </div>
         ) : null}
         {question.reopenTriggers.length > 0 ? (
           <div>
-            <span className="font-medium text-foreground">Reopen if:</span>{" "}
+            <span className="font-medium text-foreground">{copy.questions.reopenLabel}:</span>{" "}
             {question.reopenTriggers.join("; ")}
           </div>
         ) : null}
         {question.sessionCount > 0 ? (
           <div>
-            <span className="font-medium text-foreground">Session lane:</span>{" "}
-            {question.nextSessionTitle ?? question.latestSessionTitle ?? "Session history available"}
+            <span className="font-medium text-foreground">{copy.questions.session}:</span>{" "}
+            {question.nextSessionTitle ?? question.latestSessionTitle ?? (locale === "zh" ? "已有轮次记录" : "Session history available")}
           </div>
         ) : null}
         {question.latestStatusChangeReason ? (
           <div>
-            <span className="font-medium text-foreground">Last state change:</span>{" "}
+            <span className="font-medium text-foreground">{copy.questions.last}:</span>{" "}
             {question.latestStatusChangeReason}
           </div>
         ) : null}
@@ -180,28 +187,28 @@ function QuestionCard({
       <div className="mt-4 flex flex-wrap gap-2">
         <Button asChild size="sm">
           <Link href={question.links.sessionWorkspace.href}>
-            {question.hasActiveSession ? "Continue session" : "Open session"}
+            {question.hasActiveSession ? copy.questions.continue : copy.questions.session}
           </Link>
         </Button>
         <Button asChild size="sm" variant="outline">
-          <Link href={question.links.openQuestions.href}>Open question note</Link>
+          <Link href={question.links.openQuestions.href}>{copy.questions.note}</Link>
         </Button>
         <Button asChild size="sm" variant="ghost">
-          <Link href={question.links.maintenance.href}>Maintenance</Link>
+          <Link href={question.links.maintenance.href}>{copy.questions.maintenance}</Link>
         </Button>
         {question.sourceGaps.length > 0 ? (
           <Button asChild size="sm" variant="ghost">
-            <Link href={`/gaps?topic=${question.topicId}`}>Evidence gaps</Link>
+            <Link href={`/gaps?topic=${question.topicId}`}>{copy.questions.gaps}</Link>
           </Button>
         ) : null}
         {synthesisHref ? (
           <Button asChild size="sm" variant="ghost">
-            <Link href={synthesisHref}>Synthesis target</Link>
+            <Link href={synthesisHref}>{copy.questions.synthesis}</Link>
           </Button>
         ) : null}
         <Button asChild size="sm" variant="ghost">
           <Link href={question.links.canonicalTarget.href}>
-            Grounding
+            {copy.questions.page}
             <ArrowUpRight className="size-4" />
           </Link>
         </Button>
@@ -212,41 +219,39 @@ function QuestionCard({
 
 export function QuestionWorkflowView({
   overview,
+  locale,
 }: {
   overview: QuestionWorkflowOverview;
+  locale: AppLocale;
 }) {
+  const copy = getLocaleCopy(locale);
   const focusedTopic = overview.focusedTopic;
 
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow="Research workflow"
-        title={focusedTopic ? `${focusedTopic.title} question queue` : "Questions drive the research"}
-        description={
-          focusedTopic
-            ? "This is the primary lane after topic home. Use it to choose the next question, see which one is closest to synthesis, and only branch into evidence lanes when missing evidence is actually the blocker."
-            : "Questions are the main working lane after topics. Use them to decide what to read next, which context pack to load, what still needs evidence, and what is actually ready to become durable synthesis."
-        }
-        badge={`${overview.summary.totalQuestions} questions`}
+        eyebrow={copy.questions.eyebrow}
+        title={copy.questions.pageTitle(focusedTopic?.title)}
+        badge={copy.questions.badge(overview.summary.totalQuestions)}
         actions={
           <div className="flex flex-wrap gap-2">
             {focusedTopic ? (
               <>
                 <Button asChild variant="outline">
-                  <Link href={`/sessions?topic=${focusedTopic.id}`}>Open session queue</Link>
+                  <Link href={`/sessions?topic=${focusedTopic.id}`}>{copy.questions.sessions}</Link>
                 </Button>
                 <Button asChild variant="ghost">
-                  <Link href={`/syntheses?topic=${focusedTopic.id}`}>Open syntheses</Link>
+                  <Link href={`/syntheses?topic=${focusedTopic.id}`}>{copy.questions.syntheses}</Link>
                 </Button>
               </>
             ) : (
               <Button asChild variant="outline">
-                <Link href="/topics">Open topic portfolio</Link>
+                <Link href="/topics">{copy.questions.topics}</Link>
               </Button>
             )}
             <Button asChild>
               <Link href={focusedTopic ? `/topics/${focusedTopic.id}` : "/topics/openclaw"}>
-                {focusedTopic ? "Open topic home" : "Open flagship topic"}
+                {focusedTopic ? copy.questions.topic : copy.questions.showcase}
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
@@ -256,61 +261,31 @@ export function QuestionWorkflowView({
 
       <Surface className="px-5 py-5">
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-6">
-          <Metric
-            label="Questions"
-            value={String(overview.summary.totalQuestions)}
-            detail="Explicit research questions currently modeled in the selected workspace scope."
-          />
-          <Metric
-            label="Work next"
-            value={String(overview.summary.workQueue)}
-            detail="Questions that should actively shape the next research pass."
-          />
-          <Metric
-            label="Ready"
-            value={String(overview.summary.readyForSynthesis)}
-            detail="Questions that look close enough to durable synthesis to promote soon."
-          />
-          <Metric
-            label="Need sources"
-            value={String(overview.summary.needsSources)}
-            detail="Questions that still need more evidence before they should harden."
-          />
-          <Metric
-            label="Reopen watch"
-            value={String(overview.summary.watchForReopen)}
-            detail="Grounded questions that should reopen if monitoring signals or topic framing change."
-          />
-          <Metric
-            label="Grounded"
-            value={String(overview.summary.synthesized)}
-            detail="Questions that already have a durable page, synthesis, or archived answer behind them."
-          />
+          <Metric label={copy.questions.eyebrow} value={String(overview.summary.totalQuestions)} />
+          <Metric label={copy.questions.next} value={String(overview.summary.workQueue)} />
+          <Metric label={copy.questions.ready} value={String(overview.summary.readyForSynthesis)} />
+          <Metric label={copy.questions.needSources} value={String(overview.summary.needsSources)} />
+          <Metric label={copy.questions.reopen} value={String(overview.summary.watchForReopen)} />
+          <Metric label={copy.questions.grounded} value={String(overview.summary.synthesized)} />
         </div>
       </Surface>
 
       <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
         <Surface>
           <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-            <div className="space-y-2">
-              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Focus queue
-              </div>
-              <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                Which question should we work on next?
-              </h2>
-            </div>
+            <h2 className="text-xl font-semibold tracking-tight text-foreground">{copy.questions.next}</h2>
             <CircleHelp className="size-5 text-muted-foreground" />
           </div>
           <div className="space-y-4 px-5 py-5">
             {overview.focusQueue.length === 0 ? (
               <div className="rounded-[18px] bg-background/65 px-4 py-5 text-sm leading-6 text-muted-foreground">
-                No active research questions are currently queued.
+                {copy.questions.noQueuedQuestions}
               </div>
             ) : (
               overview.focusQueue.map((question) => (
                 <QuestionCard
                   key={`${question.topicId}-${question.id}`}
+                  locale={locale}
                   question={question}
                   showTopic={!focusedTopic}
                 />
@@ -321,14 +296,7 @@ export function QuestionWorkflowView({
 
         <Surface>
           <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-            <div className="space-y-2">
-              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Research lenses
-              </div>
-              <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                Read the queue by workflow need
-              </h2>
-            </div>
+            <h2 className="text-xl font-semibold tracking-tight text-foreground">{copy.questions.byStatus}</h2>
             <Radar className="size-5 text-muted-foreground" />
           </div>
           <div className="space-y-4 px-5 py-5">
@@ -338,7 +306,6 @@ export function QuestionWorkflowView({
                   <Badge variant="outline">{bucket.questions.length}</Badge>
                   <div className="text-sm font-medium text-foreground">{bucket.title}</div>
                 </div>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">{bucket.description}</p>
                 <div className="mt-3 space-y-2">
                   {bucket.questions.slice(0, 3).map((question) => (
                     <Link
@@ -347,7 +314,9 @@ export function QuestionWorkflowView({
                       className="block rounded-[16px] border border-border/50 bg-background/75 px-3 py-3 transition-colors hover:bg-background"
                     >
                       <div className="flex flex-wrap items-center gap-2">
-                        <Badge variant={statusVariant(question.status)}>{humanizeStatus(question.status)}</Badge>
+                        <Badge variant={statusVariant(question.status)}>
+                          {getQuestionStatusLabel(locale, question.status)}
+                        </Badge>
                         {focusedTopic ? null : (
                           <span className="text-xs text-muted-foreground">{question.topicTitle}</span>
                         )}
@@ -356,7 +325,7 @@ export function QuestionWorkflowView({
                     </Link>
                   ))}
                   {bucket.questions.length === 0 ? (
-                    <div className="text-sm leading-6 text-muted-foreground">Nothing currently in this lane.</div>
+                    <div className="text-sm leading-6 text-muted-foreground">{copy.questions.nothingHere}</div>
                   ) : null}
                 </div>
               </div>
@@ -367,14 +336,7 @@ export function QuestionWorkflowView({
 
       <Surface>
         <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-          <div className="space-y-2">
-            <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-              Topic queues
-            </div>
-            <h2 className="text-xl font-semibold tracking-tight text-foreground">
-              How the questions differ by topic
-            </h2>
-          </div>
+          <h2 className="text-xl font-semibold tracking-tight text-foreground">{copy.questions.topicsSection}</h2>
           <GitBranchPlus className="size-5 text-muted-foreground" />
         </div>
         <div>
@@ -390,36 +352,36 @@ export function QuestionWorkflowView({
                       {topic.topicTitle}
                     </Link>
                     <Badge variant={stageVariant(topic.topicMaturityStage)}>
-                      {topic.topicMaturityStage}
+                      {getTopicMaturityStageLabel(locale, topic.topicMaturityStage)}
                     </Badge>
-                    <Badge variant="outline">{topic.questionCount} questions</Badge>
+                    <Badge variant="outline">{copy.questions.badge(topic.questionCount)}</Badge>
                   </div>
                   <p className="max-w-[75ch] text-sm leading-7 text-muted-foreground">{topic.summary}</p>
                   <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
-                    <span>{topic.readyForSynthesisCount} ready for synthesis</span>
-                    <span>{topic.needsSourcesCount} need sources</span>
-                    <span>{topic.watchForReopenCount} watch for reopen</span>
+                    <span>{copy.questions.summaryReady(topic.readyForSynthesisCount)}</span>
+                    <span>{copy.questions.summaryNeedSources(topic.needsSourcesCount)}</span>
+                    <span>{copy.questions.summaryWatchForReopen(topic.watchForReopenCount)}</span>
                   </div>
                   {topic.topQuestion ? (
                     <div className="rounded-[18px] bg-background/65 px-4 py-3 ring-1 ring-border/50">
                       <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                        Highest-leverage question
+                        {copy.questions.nextQuestion}
                       </div>
                       <div className="mt-2 text-sm font-medium text-foreground">
                         {topic.topQuestion.question}
                       </div>
                       <div className="mt-1 text-sm leading-6 text-muted-foreground">
-                        Load {topic.topQuestion.contextPackTitle} first.
+                        {copy.questions.loadFirst(topic.topQuestion.contextPackTitle)}
                       </div>
                     </div>
                   ) : null}
                 </div>
                 <div className="flex shrink-0 flex-wrap gap-2">
                   <Button asChild variant="outline">
-                    <Link href={`/questions?topic=${topic.topicId}`}>Topic question queue</Link>
+                    <Link href={`/questions?topic=${topic.topicId}`}>{copy.questions.eyebrow}</Link>
                   </Button>
                   <Button asChild variant="ghost">
-                    <Link href={`/topics/${topic.topicId}`}>Topic home</Link>
+                    <Link href={`/topics/${topic.topicId}`}>{copy.questions.topic}</Link>
                   </Button>
                   {topic.topQuestion?.synthesizeInto ? (
                     <Button asChild variant="ghost">
@@ -428,7 +390,7 @@ export function QuestionWorkflowView({
                           topic.topQuestion.synthesizeInto,
                         )}`}
                       >
-                        Synthesis target
+                        {copy.questions.synthesisTarget}
                       </Link>
                     </Button>
                   ) : null}
@@ -439,37 +401,6 @@ export function QuestionWorkflowView({
         </div>
       </Surface>
 
-      <Surface className="px-5 py-5">
-        <div className="grid gap-4 lg:grid-cols-3">
-          <div className="rounded-[20px] border border-border/50 bg-background/60 px-4 py-4">
-            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <SearchCheck className="size-4" />
-              Context first
-            </div>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Every question now names the first context pack to load, so research starts with the smallest useful bundle instead of the whole graph.
-            </p>
-          </div>
-          <div className="rounded-[20px] border border-border/50 bg-background/60 px-4 py-4">
-            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <ArrowUpRight className="size-4" />
-              Promotion path
-            </div>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Ready questions point toward the synthesis or durable page they should become next, so research progression stays visible.
-            </p>
-          </div>
-          <div className="rounded-[20px] border border-border/50 bg-background/60 px-4 py-4">
-            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <RefreshCw className="size-4" />
-              Reopen honestly
-            </div>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Grounded questions stay linked to reopen triggers, so archived answers and syntheses can re-enter the workflow when the topic changes.
-            </p>
-          </div>
-        </div>
-      </Surface>
     </div>
   );
 }

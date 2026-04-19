@@ -20,6 +20,7 @@ import {
   type TopicBootstrapConfig,
   type TopicBootstrapManifest,
 } from "@/lib/contracts/topic-bootstrap";
+import { buildTopicPageHref } from "@/server/lib/page-route-hrefs";
 import { OPENCLAW_EXAMPLE_ROOT, TOPICS_ROOT } from "@/server/lib/repo-paths";
 import { openClawKnowledgeMethodData } from "@/server/services/openclaw-knowledge-method";
 import { getTopicPortfolioOverview } from "@/server/services/topic-portfolio-service";
@@ -201,7 +202,7 @@ function buildSessionItem(
       questionNote: {
         label: "Open question note",
         href: openQuestionsPath
-          ? `${topicHome}?pagePath=${encodeURIComponent(openQuestionsPath)}`
+          ? buildTopicPageHref(source.topic.id, openQuestionsPath)
           : topicHome,
       },
       topicHome: {
@@ -211,13 +212,13 @@ function buildSessionItem(
       maintenance: {
         label: "Open maintenance rhythm",
         href: maintenancePath
-          ? `${topicHome}?pagePath=${encodeURIComponent(maintenancePath)}`
+          ? buildTopicPageHref(source.topic.id, maintenancePath)
           : source.topic.links.maintenance.href,
       },
       canonicalTarget: {
         label: canonicalTargetPath ? "Open target context" : "Open topic grounding",
         href: canonicalTargetPath
-          ? `${topicHome}?pagePath=${encodeURIComponent(canonicalTargetPath)}`
+          ? buildTopicPageHref(source.topic.id, canonicalTargetPath)
           : source.topic.links.canonical.href,
       },
     },

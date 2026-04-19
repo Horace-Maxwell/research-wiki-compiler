@@ -17,6 +17,11 @@ describe("question workflow service", () => {
     expect(
       overview.buckets.find((bucket) => bucket.id === "ready-for-synthesis")?.questions.length,
     ).toBeGreaterThan(0);
+    expect(
+      overview.buckets
+        .find((bucket) => bucket.id === "needs-sources")
+        ?.questions.every((question) => !question.readyForSynthesis),
+    ).toBe(true);
   });
 
   it("supports filtering the question queue down to a single topic workspace", async () => {
@@ -32,5 +37,16 @@ describe("question workflow service", () => {
     expect(localFirst?.questions.some((question) => question.links.sessionWorkspace.href.includes("/sessions"))).toBe(
       true,
     );
+  });
+
+  it("keeps ready-for-synthesis questions out of the need-sources lane", async () => {
+    const openClaw = await getTopicQuestionWorkflow("openclaw");
+    const providerExposureQuestion = openClaw?.questions.find(
+      (question) => question.id === "provider-exposure-map",
+    );
+
+    expect(providerExposureQuestion).toBeTruthy();
+    expect(providerExposureQuestion?.readyForSynthesis).toBe(true);
+    expect(providerExposureQuestion?.needsSources).toBe(false);
   });
 });

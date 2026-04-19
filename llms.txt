@@ -1,0 +1,31 @@
+# Research Wiki Compiler
+
+Research Wiki Compiler is a local-first research workspace for compact, durable knowledge work.
+
+Official verified boundary:
+- `/verified-path.json`
+- `/SUPPORT.md`
+
+AI maintainer start:
+- `/AGENTS.md`
+- `/MAINTAIN_THIS_REPO.md`
+- `/MAINTAIN_SHOWCASE.md`
+- `/ROUTING_REGRESSION_GUARD.md`
+
+Official showcase:
+- `/docs/official-showcase.md`
+- `/examples/openclaw-wiki/README.md`
+
+Main product path:
+- `/topics`
+- `/topics/openclaw`
+- `/questions?topic=openclaw`
+- `/sessions?topic=openclaw`
+- `/syntheses?topic=openclaw`
+- `/examples/openclaw`
+
+Validation:
+- `npm run env:check`
+- `npm run verify:local`
+- `npm run verify:routes`
+- `npm run test:e2e:navigation`

@@ -22,6 +22,7 @@ import {
   type TopicBootstrapConfig,
   type TopicBootstrapManifest,
 } from "@/lib/contracts/topic-bootstrap";
+import { buildTopicPageHref } from "@/server/lib/page-route-hrefs";
 import { OPENCLAW_EXAMPLE_ROOT, TOPICS_ROOT } from "@/server/lib/repo-paths";
 import { openClawKnowledgeMethodData } from "@/server/services/openclaw-knowledge-method";
 import { getTopicPortfolioOverview } from "@/server/services/topic-portfolio-service";
@@ -142,14 +143,13 @@ function findSynthesis(source: EvidenceGapSource, synthesisId: string) {
 }
 
 function buildCanonicalReviewHref(source: EvidenceGapSource, titles: string[]) {
-  const topicHome = source.topic.links.home.href;
   const targetPath =
     unique(titles)
       .map((title) => findPagePath(source, title))
       .find((candidate): candidate is string => Boolean(candidate)) ?? null;
 
   return targetPath
-    ? `${topicHome}?pagePath=${encodeURIComponent(targetPath)}`
+    ? buildTopicPageHref(source.topic.id, targetPath)
     : source.topic.links.canonical.href;
 }
 
@@ -259,7 +259,7 @@ function buildGapItem(
       maintenance: {
         label: "Open maintenance rhythm",
         href: maintenancePath
-          ? `${topicHome}?pagePath=${encodeURIComponent(maintenancePath)}`
+          ? buildTopicPageHref(source.topic.id, maintenancePath)
           : source.topic.links.maintenance.href,
       },
       canonicalReview: {

@@ -1,6 +1,7 @@
 import type { DashboardOverview } from "@/lib/contracts/dashboard";
 import { dashboardOverviewSchema } from "@/lib/contracts/dashboard";
 import { WIKI_PAGE_TYPES } from "@/lib/constants";
+import { buildWorkspacePageHref } from "@/server/lib/page-route-hrefs";
 import { listRecentActivityLogs } from "@/server/services/logs-service";
 import { getWorkspaceContext } from "@/server/services/workspace-context-service";
 import { getWorkspaceStatus } from "@/server/services/workspace-service";
@@ -120,10 +121,7 @@ export async function getDashboardOverview(workspaceRoot: string): Promise<Dashb
       sourceRefCount: row.sourceRefsJson.length,
       pageRefCount: row.pageRefsJson.length,
       updatedAt: row.updatedAt.toISOString(),
-      href: `/wiki?${new URLSearchParams({
-        workspaceRoot: normalizedWorkspaceRoot,
-        pageId: row.id,
-      }).toString()}`,
+      href: buildWorkspacePageHref("/wiki", normalizedWorkspaceRoot, row.path),
     }));
 
   const recentSources = sourceRows

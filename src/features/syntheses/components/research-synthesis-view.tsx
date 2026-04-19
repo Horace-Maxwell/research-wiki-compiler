@@ -6,9 +6,17 @@ import {
   GitBranchPlus,
   Lightbulb,
   Radar,
-  Scale,
 } from "lucide-react";
 
+import type { AppLocale } from "@/lib/app-locale";
+import {
+  getLocaleCopy,
+  getQuestionEffectLabel,
+  getSynthesisDecisionTypeLabel,
+  getSynthesisStatusLabel,
+  getTopicMaturityStageLabel,
+  localeToIntlTag,
+} from "@/lib/app-locale";
 import type {
   ResearchSynthesisDecisionType,
   ResearchSynthesisItem,
@@ -86,25 +94,8 @@ function decisionVariant(type: ResearchSynthesisDecisionType) {
   }
 }
 
-function humanizeStatus(status: ResearchSynthesisItem["status"]) {
-  return status.replace(/-/g, " ");
-}
-
-function humanizeDecisionType(type: ResearchSynthesisDecisionType) {
-  switch (type) {
-    case "not-enough-evidence":
-      return "not enough evidence";
-    default:
-      return type.replace(/-/g, " ");
-  }
-}
-
-function humanizeQuestionEffect(effect: ResearchSynthesisItem["questionImpacts"][number]["effect"]) {
-  return effect.replace(/-/g, " ");
-}
-
-function formatDate(value: string) {
-  return new Intl.DateTimeFormat("en-US", {
+function formatDate(locale: AppLocale, value: string) {
+  return new Intl.DateTimeFormat(localeToIntlTag(locale), {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -118,7 +109,7 @@ function Metric({
 }: {
   label: string;
   value: string;
-  detail: string;
+  detail?: string;
 }) {
   return (
     <div className="space-y-2 border-l border-border/60 pl-4 first:border-l-0 first:pl-0">
@@ -126,16 +117,19 @@ function Metric({
         {label}
       </div>
       <div className="text-[1.9rem] font-semibold tracking-[-0.05em] text-foreground">{value}</div>
-      <p className="max-w-[24ch] text-sm leading-6 text-muted-foreground">{detail}</p>
+      {detail ? <p className="max-w-[24ch] text-sm leading-6 text-muted-foreground">{detail}</p> : null}
     </div>
   );
 }
 
 export function ResearchSynthesisView({
   overview,
+  locale,
 }: {
   overview: ResearchSynthesisOverview;
+  locale: AppLocale;
 }) {
+  const copy = getLocaleCopy(locale);
   const focusedTopic = overview.focusedTopic;
   const focusSynthesis = overview.focusSynthesis;
   const decisionLoopCount = overview.summary.candidate + overview.summary.inProgress;
@@ -143,39 +137,28 @@ export function ResearchSynthesisView({
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow="Research syntheses"
-        title={
-          focusSynthesis
-            ? focusedTopic
-              ? `${focusedTopic.title} synthesis loop`
-              : "Syntheses turn research into durable judgment"
-            : "Syntheses turn research into durable judgment"
-        }
-        description={
-          focusedTopic
-            ? "This is the primary hardening lane after sessions. Use it to see what is ready to publish, what still belongs in the decision loop, and what canonical or maintenance surfaces should change next."
-            : "Syntheses are the third main working lane after topics, questions, and sessions. Use them to decide when evidence is strong enough to harden, what stays provisional, and what changed in the canonical wiki because a synthesis was published."
-        }
-        badge={`${overview.summary.totalSyntheses} syntheses`}
+        eyebrow={copy.syntheses.eyebrow}
+        title={copy.syntheses.pageTitle(focusedTopic?.title)}
+        badge={copy.syntheses.badge(overview.summary.totalSyntheses)}
         actions={
           <div className="flex flex-wrap gap-2">
             {focusedTopic ? (
               <>
                 <Button asChild variant="outline">
-                  <Link href={`/sessions?topic=${focusedTopic.id}`}>Open session queue</Link>
+                  <Link href={`/sessions?topic=${focusedTopic.id}`}>{copy.syntheses.sessions}</Link>
                 </Button>
                 <Button asChild variant="ghost">
-                  <Link href={`/questions?topic=${focusedTopic.id}`}>Open question queue</Link>
+                  <Link href={`/questions?topic=${focusedTopic.id}`}>{copy.syntheses.questions}</Link>
                 </Button>
               </>
             ) : (
               <Button asChild variant="outline">
-                <Link href="/topics">Open topic portfolio</Link>
+                <Link href="/topics">{copy.syntheses.topics}</Link>
               </Button>
             )}
             <Button asChild>
               <Link href={focusedTopic ? `/topics/${focusedTopic.id}` : "/topics/openclaw"}>
-                {focusedTopic ? "Open topic home" : "Open flagship topic"}
+                {focusedTopic ? copy.syntheses.topic : copy.syntheses.showcase}
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
@@ -185,50 +168,19 @@ export function ResearchSynthesisView({
 
       <Surface className="px-5 py-5">
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-6">
-          <Metric
-            label="Syntheses"
-            value={String(overview.summary.totalSyntheses)}
-            detail="Explicit synthesis objects currently modeled in the selected workspace scope."
-          />
-          <Metric
-            label="Ready"
-            value={String(overview.summary.ready)}
-            detail="Syntheses that should plausibly publish on the next bounded pass."
-          />
-          <Metric
-            label="Decision loop"
-            value={String(decisionLoopCount)}
-            detail="Candidates and in-progress syntheses still converting session evidence into durable judgment."
-          />
-          <Metric
-            label="Published"
-            value={String(overview.summary.published)}
-            detail="Durable syntheses already shaping the canonical and maintenance layers."
-          />
-          <Metric
-            label="Changed canon"
-            value={String(overview.summary.changedCanonical)}
-            detail="Syntheses that already changed a canonical page or visibly narrowed durable guidance."
-          />
-          <Metric
-            label="Watch impact"
-            value={String(overview.summary.introducedWatchpoints)}
-            detail="Syntheses that introduced or sharpened monitoring and watchpoint logic."
-          />
+          <Metric label={copy.syntheses.eyebrow} value={String(overview.summary.totalSyntheses)} />
+          <Metric label={copy.syntheses.ready} value={String(overview.summary.ready)} />
+          <Metric label={copy.syntheses.loop} value={String(decisionLoopCount)} />
+          <Metric label={copy.syntheses.published} value={String(overview.summary.published)} />
+          <Metric label={copy.syntheses.canon} value={String(overview.summary.changedCanonical)} />
+          <Metric label={copy.syntheses.watch} value={String(overview.summary.introducedWatchpoints)} />
         </div>
       </Surface>
 
       <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
         <Surface>
           <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-            <div className="space-y-2">
-              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Focus synthesis
-              </div>
-              <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                What is this synthesis changing?
-              </h2>
-            </div>
+            <h2 className="text-xl font-semibold tracking-tight text-foreground">{copy.syntheses.focus}</h2>
             <Lightbulb className="size-5 text-muted-foreground" />
           </div>
           <div className="px-5 py-5">
@@ -236,13 +188,17 @@ export function ResearchSynthesisView({
               <div className="space-y-4 rounded-[22px] border border-border/50 bg-background/62 px-5 py-5">
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge variant={statusVariant(focusSynthesis.status)}>
-                    {humanizeStatus(focusSynthesis.status)}
+                    {getSynthesisStatusLabel(locale, focusSynthesis.status)}
                   </Badge>
-                  <Badge variant="outline">{focusSynthesis.confidencePercent}% confidence</Badge>
+                  <Badge variant="outline">
+                    {locale === "zh"
+                      ? `${focusSynthesis.confidencePercent}% 置信度`
+                      : `${focusSynthesis.confidencePercent}% confidence`}
+                  </Badge>
                   <Badge variant={stageVariant(focusSynthesis.topicMaturityStage)}>
                     {focusSynthesis.topicTitle}
                   </Badge>
-                  <Badge variant="outline">{formatDate(focusSynthesis.updatedAt)}</Badge>
+                  <Badge variant="outline">{formatDate(locale, focusSynthesis.updatedAt)}</Badge>
                 </div>
                 <div>
                   <div className="text-lg font-semibold tracking-tight text-foreground">
@@ -254,29 +210,29 @@ export function ResearchSynthesisView({
                 </div>
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
-                    <div className="text-sm font-medium text-foreground">Source questions</div>
+                    <div className="text-sm font-medium text-foreground">{copy.syntheses.questionsField}</div>
                     <p className="mt-1 text-sm leading-6 text-muted-foreground">
                       {focusSynthesis.sourceQuestions.join("; ")}
                     </p>
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-foreground">Source sessions</div>
+                    <div className="text-sm font-medium text-foreground">{copy.syntheses.sessionsField}</div>
                     <p className="mt-1 text-sm leading-6 text-muted-foreground">
                       {focusSynthesis.sourceSessions.length > 0
                         ? focusSynthesis.sourceSessions.join("; ")
-                        : "No source sessions are explicitly linked yet."}
+                        : copy.syntheses.noLinkedSessions}
                     </p>
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm font-medium text-foreground">Durable conclusion</div>
+                  <div className="text-sm font-medium text-foreground">{copy.syntheses.conclusion}</div>
                   <p className="mt-1 text-sm leading-6 text-muted-foreground">
                     {focusSynthesis.durableConclusion}
                   </p>
                 </div>
                 {focusSynthesis.provisionalBoundary ? (
                   <div>
-                    <div className="text-sm font-medium text-foreground">Still provisional</div>
+                    <div className="text-sm font-medium text-foreground">{copy.syntheses.openEdge}</div>
                     <p className="mt-1 text-sm leading-6 text-muted-foreground">
                       {focusSynthesis.provisionalBoundary}
                     </p>
@@ -284,14 +240,14 @@ export function ResearchSynthesisView({
                 ) : null}
                 {focusSynthesis.changedCanonicalSummary ? (
                   <div>
-                    <div className="text-sm font-medium text-foreground">Canonical change</div>
+                    <div className="text-sm font-medium text-foreground">{copy.syntheses.pageChange}</div>
                     <p className="mt-1 text-sm leading-6 text-muted-foreground">
                       {focusSynthesis.changedCanonicalSummary}
                     </p>
                   </div>
                 ) : null}
                 <div>
-                  <div className="text-sm font-medium text-foreground">Decision layer</div>
+                  <div className="text-sm font-medium text-foreground">{copy.syntheses.decisions}</div>
                   <div className="mt-3 grid gap-3 md:grid-cols-2">
                     {focusSynthesis.decisions.map((decision) => (
                       <div
@@ -300,7 +256,7 @@ export function ResearchSynthesisView({
                       >
                         <div className="flex flex-wrap items-center gap-2">
                           <Badge variant={decisionVariant(decision.type)}>
-                            {humanizeDecisionType(decision.type)}
+                            {getSynthesisDecisionTypeLabel(locale, decision.type)}
                           </Badge>
                         </div>
                         <div className="mt-3 text-sm font-medium text-foreground">
@@ -316,7 +272,7 @@ export function ResearchSynthesisView({
                 </div>
                 {focusSynthesis.questionImpacts.length > 0 ? (
                   <div>
-                    <div className="text-sm font-medium text-foreground">Question effects</div>
+                    <div className="text-sm font-medium text-foreground">{copy.syntheses.questionEffects}</div>
                     <div className="mt-3 space-y-2">
                       {focusSynthesis.questionImpacts.map((impact) => (
                         <div
@@ -324,7 +280,7 @@ export function ResearchSynthesisView({
                           className="rounded-[16px] border border-border/50 bg-background/75 px-3 py-3 text-sm leading-6 text-muted-foreground"
                         >
                           <span className="font-medium text-foreground">
-                            {humanizeQuestionEffect(impact.effect)}:
+                            {getQuestionEffectLabel(locale, impact.effect)}:
                           </span>{" "}
                           {impact.note}
                         </div>
@@ -334,26 +290,26 @@ export function ResearchSynthesisView({
                 ) : null}
                 <div className="flex flex-wrap gap-2">
                   <Button asChild>
-                    <Link href={focusSynthesis.links.questionQueue.href}>Question queue</Link>
+                    <Link href={focusSynthesis.links.questionQueue.href}>{copy.syntheses.questions}</Link>
                   </Button>
                   <Button asChild variant="outline">
-                    <Link href={`/gaps?topic=${focusSynthesis.topicId}`}>Evidence gaps</Link>
+                    <Link href={`/gaps?topic=${focusSynthesis.topicId}`}>{copy.syntheses.gaps}</Link>
                   </Button>
                   <Button asChild variant="outline">
-                    <Link href={focusSynthesis.links.sessionWorkspace.href}>Source sessions</Link>
+                    <Link href={focusSynthesis.links.sessionWorkspace.href}>{copy.syntheses.sessions}</Link>
                   </Button>
                   <Button asChild variant="ghost">
-                    <Link href={focusSynthesis.links.maintenance.href}>Maintenance rhythm</Link>
+                    <Link href={focusSynthesis.links.maintenance.href}>{copy.syntheses.maintenance}</Link>
                   </Button>
                   <Button asChild variant="ghost">
                     <Link href={focusSynthesis.links.publishedPage.href}>
-                      {focusSynthesis.hasPublishedPage ? "Published page" : "Synthesis target"}
+                      {focusSynthesis.hasPublishedPage ? copy.syntheses.publishedPage : copy.syntheses.targetPage}
                       <ArrowUpRight className="size-4" />
                     </Link>
                   </Button>
                   <Button asChild variant="ghost">
                     <Link href={focusSynthesis.links.canonicalTarget.href}>
-                      Canonical target
+                      {copy.syntheses.page}
                       <FileSymlink className="size-4" />
                     </Link>
                   </Button>
@@ -361,7 +317,7 @@ export function ResearchSynthesisView({
               </div>
             ) : (
               <div className="rounded-[18px] bg-background/65 px-4 py-5 text-sm leading-6 text-muted-foreground">
-                No syntheses are currently seeded.
+                {copy.syntheses.noSyntheses}
               </div>
             )}
           </div>
@@ -369,14 +325,7 @@ export function ResearchSynthesisView({
 
         <Surface>
           <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-            <div className="space-y-2">
-              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Research lenses
-              </div>
-              <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                Read syntheses by workflow need
-              </h2>
-            </div>
+            <h2 className="text-xl font-semibold tracking-tight text-foreground">{copy.syntheses.byStatus}</h2>
             <Radar className="size-5 text-muted-foreground" />
           </div>
           <div className="space-y-4 px-5 py-5">
@@ -386,7 +335,6 @@ export function ResearchSynthesisView({
                   <Badge variant="outline">{bucket.syntheses.length}</Badge>
                   <div className="text-sm font-medium text-foreground">{bucket.title}</div>
                 </div>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">{bucket.description}</p>
                 <div className="mt-3 space-y-2">
                   {bucket.syntheses.slice(0, 3).map((synthesis) => (
                     <Link
@@ -396,7 +344,7 @@ export function ResearchSynthesisView({
                     >
                       <div className="flex flex-wrap items-center gap-2">
                         <Badge variant={statusVariant(synthesis.status)}>
-                          {humanizeStatus(synthesis.status)}
+                          {getSynthesisStatusLabel(locale, synthesis.status)}
                         </Badge>
                         {focusedTopic ? null : (
                           <span className="text-xs text-muted-foreground">{synthesis.topicTitle}</span>
@@ -409,7 +357,7 @@ export function ResearchSynthesisView({
                     </Link>
                   ))}
                   {bucket.syntheses.length === 0 ? (
-                    <div className="text-sm leading-6 text-muted-foreground">Nothing currently in this lane.</div>
+                    <div className="text-sm leading-6 text-muted-foreground">{copy.syntheses.nothingHere}</div>
                   ) : null}
                 </div>
               </div>
@@ -420,14 +368,7 @@ export function ResearchSynthesisView({
 
       <Surface>
         <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-          <div className="space-y-2">
-            <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-              Topic syntheses
-            </div>
-            <h2 className="text-xl font-semibold tracking-tight text-foreground">
-              How durable synthesis depth differs by topic
-            </h2>
-          </div>
+          <h2 className="text-xl font-semibold tracking-tight text-foreground">{copy.syntheses.topicsSection}</h2>
           <GitBranchPlus className="size-5 text-muted-foreground" />
         </div>
         <div>
@@ -443,51 +384,50 @@ export function ResearchSynthesisView({
                       {topic.topicTitle}
                     </Link>
                     <Badge variant={stageVariant(topic.topicMaturityStage)}>
-                      {topic.topicMaturityStage}
+                      {getTopicMaturityStageLabel(locale, topic.topicMaturityStage)}
                     </Badge>
-                    <Badge variant="outline">{topic.synthesisCount} syntheses</Badge>
+                    <Badge variant="outline">{copy.syntheses.badge(topic.synthesisCount)}</Badge>
                   </div>
                   <p className="max-w-[75ch] text-sm leading-7 text-muted-foreground">{topic.summary}</p>
                   <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
-                    <span>{topic.readyCount} ready</span>
-                    <span>{topic.inProgressCount} in progress</span>
-                    <span>{topic.publishedCount} published</span>
-                    <span>{topic.changedCanonicalCount} changed canonical</span>
+                    <span>{copy.syntheses.summaryReady(topic.readyCount)}</span>
+                    <span>{copy.syntheses.summaryInProgress(topic.inProgressCount)}</span>
+                    <span>{copy.syntheses.summaryPublished(topic.publishedCount)}</span>
+                    <span>{copy.syntheses.summaryChangedCanonical(topic.changedCanonicalCount)}</span>
                   </div>
                   <div className="grid gap-3 xl:grid-cols-2">
                     <div className="rounded-[18px] bg-background/65 px-4 py-3 ring-1 ring-border/50">
                       <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                        Next synthesis
+                        {copy.syntheses.nextSynthesis}
                       </div>
                       <div className="mt-2 text-sm font-medium text-foreground">
-                        {topic.nextSynthesis?.title ?? "No active synthesis candidate is currently seeded."}
+                        {topic.nextSynthesis?.title ?? copy.syntheses.noActiveCandidate}
                       </div>
                       <div className="mt-1 text-sm leading-6 text-muted-foreground">
-                        {topic.nextSynthesis?.recommendedNextStep ??
-                          "The next durable synthesis will appear here once the topic accumulates one."}
+                        {topic.nextSynthesis?.recommendedNextStep ?? copy.syntheses.nextSynthesisHint}
                       </div>
                     </div>
                     <div className="rounded-[18px] bg-background/65 px-4 py-3 ring-1 ring-border/50">
                       <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                        Recent durable synthesis
+                        {copy.syntheses.recentDurableSynthesis}
                       </div>
                       <div className="mt-2 text-sm font-medium text-foreground">
-                        {topic.recentPublished?.title ?? "No published synthesis yet."}
+                        {topic.recentPublished?.title ?? copy.syntheses.noPublishedSynthesis}
                       </div>
                       <div className="mt-1 text-sm leading-6 text-muted-foreground">
                         {topic.recentPublished?.changedCanonicalSummary ??
                           topic.recentPublished?.durableConclusion ??
-                          "Once a synthesis publishes, its canonical effect will surface here."}
+                          copy.syntheses.publishedImpactHint}
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="flex shrink-0 flex-wrap gap-2">
                   <Button asChild variant="outline">
-                    <Link href={`/syntheses?topic=${topic.topicId}`}>Topic syntheses</Link>
+                    <Link href={`/syntheses?topic=${topic.topicId}`}>{copy.syntheses.eyebrow}</Link>
                   </Button>
                   <Button asChild variant="ghost">
-                    <Link href={`/topics/${topic.topicId}`}>Topic home</Link>
+                    <Link href={`/topics/${topic.topicId}`}>{copy.syntheses.topic}</Link>
                   </Button>
                 </div>
               </div>
@@ -496,37 +436,6 @@ export function ResearchSynthesisView({
         </div>
       </Surface>
 
-      <Surface className="px-5 py-5">
-        <div className="grid gap-4 lg:grid-cols-3">
-          <div className="rounded-[20px] border border-border/50 bg-background/60 px-4 py-4">
-            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <Scale className="size-4" />
-              Publish honestly
-            </div>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Ready and in-progress syntheses now stay separate from published pages, so provisional judgment does not quietly masquerade as durable knowledge.
-            </p>
-          </div>
-          <div className="rounded-[20px] border border-border/50 bg-background/60 px-4 py-4">
-            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <ArrowUpRight className="size-4" />
-              Show canonical effects
-            </div>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Each synthesis now makes its canonical targets, maintenance updates, and watchpoint consequences explicit instead of leaving them implicit in prose.
-            </p>
-          </div>
-          <div className="rounded-[20px] border border-border/50 bg-background/60 px-4 py-4">
-            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <FileSymlink className="size-4" />
-              Keep decisions resumable
-            </div>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Decision cards, question effects, and source-session links make it much clearer why a synthesis advanced and what should happen next.
-            </p>
-          </div>
-        </div>
-      </Surface>
     </div>
   );
 }

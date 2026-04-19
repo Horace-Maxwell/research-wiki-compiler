@@ -93,7 +93,7 @@ function Metric({
 }: {
   label: string;
   value: string;
-  detail: string;
+  detail?: string;
 }) {
   return (
     <div className="space-y-2 border-l border-border/60 pl-4 first:border-l-0 first:pl-0">
@@ -101,7 +101,7 @@ function Metric({
         {label}
       </div>
       <div className="text-[1.9rem] font-semibold tracking-[-0.05em] text-foreground">{value}</div>
-      <p className="max-w-[24ch] text-sm leading-6 text-muted-foreground">{detail}</p>
+      {detail ? <p className="max-w-[24ch] text-sm leading-6 text-muted-foreground">{detail}</p> : null}
     </div>
   );
 }
@@ -185,30 +185,23 @@ export function EvidenceChangeView({
       <PageHeader
         eyebrow="Evidence changes"
         title={
-          focusedTopic
-            ? `${focusedTopic.title} evidence shifts`
-            : "Evidence shifts that may reopen work"
-        }
-        description={
-          focusedTopic
-            ? "Use this supporting lane when new evidence might reopen a question, stale a synthesis, or trigger bounded canonical review."
-            : "This is a supporting lane across the portfolio for meaningful evidence shifts, not a default daily front door."
+          focusedTopic ? `${focusedTopic.title} changes` : "Evidence changes"
         }
         badge={`${overview.summary.totalChanges} changes`}
         actions={
           <div className="flex flex-wrap gap-2">
             {focusedTopic ? (
               <Button asChild variant="outline">
-                <Link href={`/syntheses?topic=${focusedTopic.id}`}>Open syntheses</Link>
+                <Link href={`/syntheses?topic=${focusedTopic.id}`}>Syntheses</Link>
               </Button>
             ) : (
               <Button asChild variant="outline">
-                <Link href="/topics">Open topic portfolio</Link>
+                <Link href="/topics">Topics</Link>
               </Button>
             )}
             <Button asChild>
               <Link href={focusedTopic ? `/topics/${focusedTopic.id}` : "/topics/openclaw"}>
-                {focusedTopic ? "Open topic home" : "Open flagship topic"}
+                {focusedTopic ? "Topic" : "Showcase"}
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
@@ -218,50 +211,19 @@ export function EvidenceChangeView({
 
       <Surface className="px-5 py-5">
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-6">
-          <Metric
-            label="Changes"
-            value={String(overview.summary.totalChanges)}
-            detail="Meaningful evidence shifts currently modeled in the selected workspace scope."
-          />
-          <Metric
-            label="Reopen now"
-            value={String(overview.summary.reopened)}
-            detail="Changes that materially reopen questions or stale a previously durable synthesis."
-          />
-          <Metric
-            label="Review needed"
-            value={String(overview.summary.reviewNeeded)}
-            detail="Changes that call for bounded canonical or maintenance review before trust increases."
-          />
-          <Metric
-            label="Stable signals"
-            value={String(overview.summary.stabilized)}
-            detail="Changes that also narrow work by showing what probably does not need a rewrite."
-          />
-          <Metric
-            label="Canon review"
-            value={String(overview.summary.canonicalReview)}
-            detail="Canonical pages or durable notes explicitly marked for re-check."
-          />
-          <Metric
-            label="Questions reopened"
-            value={String(overview.summary.reopenedQuestions)}
-            detail="Question lanes that should move back into active evidence and synthesis work."
-          />
+          <Metric label="Changes" value={String(overview.summary.totalChanges)} />
+          <Metric label="Reopen" value={String(overview.summary.reopened)} />
+          <Metric label="Review" value={String(overview.summary.reviewNeeded)} />
+          <Metric label="Stable" value={String(overview.summary.stabilized)} />
+          <Metric label="Canon" value={String(overview.summary.canonicalReview)} />
+          <Metric label="Questions" value={String(overview.summary.reopenedQuestions)} />
         </div>
       </Surface>
 
       <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
         <Surface>
           <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-            <div className="space-y-2">
-              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Focus change
-              </div>
-              <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                What moved, and what should we do?
-              </h2>
-            </div>
+            <h2 className="text-xl font-semibold tracking-tight text-foreground">Focus</h2>
             <RefreshCw className="size-5 text-muted-foreground" />
           </div>
           <div className="px-5 py-5">
@@ -318,17 +280,17 @@ export function EvidenceChangeView({
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <Button asChild>
-                    <Link href={focusChange.links.maintenance.href}>Open maintenance rhythm</Link>
+                    <Link href={focusChange.links.maintenance.href}>Maintenance</Link>
                   </Button>
                   <Button asChild variant="outline">
-                    <Link href={`/monitoring?topic=${focusChange.topicId}`}>Monitoring queue</Link>
+                    <Link href={`/monitoring?topic=${focusChange.topicId}`}>Monitoring</Link>
                   </Button>
                   <Button asChild variant="outline">
-                    <Link href={focusChange.links.questionQueue.href}>Open question queue</Link>
+                    <Link href={focusChange.links.questionQueue.href}>Questions</Link>
                   </Button>
                   <Button asChild variant="ghost">
                     <Link href={focusChange.links.canonicalReview.href}>
-                      Review canonical target
+                      Review target
                       <ArrowUpRight className="size-4" />
                     </Link>
                   </Button>
@@ -344,14 +306,7 @@ export function EvidenceChangeView({
 
         <Surface>
           <div className="flex items-start justify-between gap-4 border-b border-border/60 px-5 py-4">
-            <div className="space-y-2">
-              <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Consequences
-              </div>
-              <h2 className="text-xl font-semibold tracking-tight text-foreground">
-                Reopen, review, or keep stable
-              </h2>
-            </div>
+            <h2 className="text-xl font-semibold tracking-tight text-foreground">Impact</h2>
             <Scale className="size-5 text-muted-foreground" />
           </div>
           <div className="space-y-4 px-5 py-5">
@@ -360,7 +315,7 @@ export function EvidenceChangeView({
               <div className="mt-2 text-sm leading-6 text-muted-foreground">
                 {focusChange?.reopenQuestions.length
                   ? focusChange.reopenQuestions.join("; ")
-                  : "No question lanes were explicitly reopened by the focused change."}
+                  : "No reopened questions."}
               </div>
             </div>
             <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
@@ -372,11 +327,11 @@ export function EvidenceChangeView({
               </div>
             </div>
             <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
-              <div className="text-sm font-medium text-foreground">Canonical review targets</div>
+              <div className="text-sm font-medium text-foreground">Review targets</div>
               <div className="mt-2 text-sm leading-6 text-muted-foreground">
                 {focusChange?.canonicalReviewTitles.length
                   ? focusChange.canonicalReviewTitles.join("; ")
-                  : "The focused change does not currently require a canonical review target."}
+                  : "No review targets."}
               </div>
             </div>
             <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4">
@@ -413,7 +368,6 @@ export function EvidenceChangeView({
                 <h2 className="text-xl font-semibold tracking-tight text-foreground">
                   {bucket.title}
                 </h2>
-                <p className="text-sm leading-6 text-muted-foreground">{bucket.description}</p>
               </div>
               <Radar className="size-5 text-muted-foreground" />
             </div>
@@ -428,7 +382,7 @@ export function EvidenceChangeView({
                 ))
               ) : (
                 <div className="rounded-[18px] border border-border/50 bg-background/60 px-4 py-4 text-sm leading-6 text-muted-foreground">
-                  Nothing is currently seeded in this lane.
+                  Nothing here.
                 </div>
               )}
             </div>
@@ -445,9 +399,6 @@ export function EvidenceChangeView({
             <h2 className="text-xl font-semibold tracking-tight text-foreground">
               Which topics moved most?
             </h2>
-            <p className="text-sm leading-6 text-muted-foreground">
-              These summaries keep reopen pressure, canonical review, and stable signals visible at the topic level.
-            </p>
           </div>
           <GitBranchPlus className="size-5 text-muted-foreground" />
         </div>
@@ -462,7 +413,7 @@ export function EvidenceChangeView({
                 <Badge variant="outline">{topic.changeCount} changes</Badge>
                 <Badge variant="outline">{topic.reopenedCount} reopened</Badge>
                 <Badge variant="outline">{topic.reviewNeededCount} review needed</Badge>
-                <Badge variant="outline">{topic.canonicalReviewCount} canon review</Badge>
+                <Badge variant="outline">{topic.canonicalReviewCount} review</Badge>
               </div>
               <p className="mt-3 text-sm leading-6 text-muted-foreground">{topic.summary}</p>
               {topic.latestChange ? (

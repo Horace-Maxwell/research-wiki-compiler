@@ -1,4 +1,5 @@
 import { ResearchSessionView } from "@/features/sessions/components/research-session-view";
+import { readRequestLocale } from "@/lib/app-locale-server";
 import { getResearchSessionOverview } from "@/server/services/research-session-service";
 
 export const dynamic = "force-dynamic";
@@ -12,6 +13,7 @@ function readParam(value: string | string[] | undefined) {
 }
 
 export default async function SessionsPage({ searchParams }: SessionsPageProps) {
+  const locale = await readRequestLocale();
   const routeParams = searchParams ? await searchParams : {};
   const topicId = readParam(routeParams.topic);
   const questionId = readParam(routeParams.question);
@@ -20,5 +22,5 @@ export default async function SessionsPage({ searchParams }: SessionsPageProps) 
     focusQuestionId: questionId ?? null,
   });
 
-  return <ResearchSessionView overview={overview} />;
+  return <ResearchSessionView locale={locale} overview={overview} />;
 }

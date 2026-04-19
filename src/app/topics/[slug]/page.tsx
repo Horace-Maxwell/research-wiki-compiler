@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 
 import { TopicWorkspaceIntro } from "@/features/topics/components/topic-workspace-intro";
+import { getLocaleCopy, getTopicMaturityStageLabel } from "@/lib/app-locale";
+import { readRequestLocale } from "@/lib/app-locale-server";
 import { WikiBrowser } from "@/features/wiki/components/wiki-browser";
 import type { WikiPageDetail, WikiPageSummary } from "@/lib/contracts/wiki";
 import { getTopicAcquisitionTaskSummary } from "@/server/services/acquisition-task-service";
@@ -26,6 +28,31 @@ function readParam(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
 }
 
+function normalizePageTitle(value: string) {
+  return value.trim().toLowerCase();
+}
+
+function findTopicHomePagePath(
+  pages: WikiPageSummary[],
+  topicTitle: string,
+) {
+  const normalizedTitle = normalizePageTitle(topicTitle);
+
+  return (
+    pages.find(
+      (page) =>
+        normalizePageTitle(page.title) === normalizedTitle &&
+        (page.type === "topic" || page.type === "entity"),
+    )?.path ??
+    pages.find(
+      (page) =>
+        normalizePageTitle(page.canonicalTitle) === normalizedTitle &&
+        (page.type === "topic" || page.type === "entity"),
+    )?.path ??
+    "wiki/index.md"
+  );
+}
+
 async function resolveWorkspaceRoot(slug: string) {
   if (slug === "openclaw") {
     return ensureOpenClawRenderedWorkspace();
@@ -38,6 +65,8 @@ export default async function TopicWorkspacePage({
   params,
   searchParams,
 }: TopicWorkspacePageProps) {
+  const locale = await readRequestLocale();
+  const copy = getLocaleCopy(locale);
   const { slug } = await params;
   const portfolio = await getTopicPortfolioOverview();
   const topic = portfolio.topics.find((item) => item.id === slug) ?? null;
@@ -48,7 +77,6 @@ export default async function TopicWorkspacePage({
 
   const routeParams = searchParams ? await searchParams : {};
   const requestedPageId = readParam(routeParams.pageId);
-  const requestedPagePath = readParam(routeParams.pagePath);
   const workspaceRoot = await resolveWorkspaceRoot(slug);
   const [
     questionWorkflow,
@@ -68,10 +96,10 @@ export default async function TopicWorkspacePage({
     getTopicMonitoringSummary(slug),
   ]);
   const initialPages: WikiPageSummary[] = await listWikiPages(workspaceRoot);
+  const topicHomePagePath = findTopicHomePagePath(initialPages, topic.title);
   const initialPage =
     initialPages.find((page) => page.id === requestedPageId) ??
-    initialPages.find((page) => page.path === requestedPagePath) ??
-    initialPages.find((page) => page.path === "wiki/index.md") ??
+    initialPages.find((page) => page.path === topicHomePagePath) ??
     initialPages[0] ??
     null;
   const initialDetail: WikiPageDetail | null = initialPage
@@ -88,26 +116,24 @@ export default async function TopicWorkspacePage({
       initialDetail={initialDetail}
       initialPages={initialPages}
       internalLinkBasePath={`/topics/${slug}`}
+      preferredInitialPagePath={topicHomePagePath}
       showWorkspaceRootCard={false}
+      topicHomePagePath={topicHomePagePath}
       workspaceRootMode="fixed"
       header={{
-        eyebrow: "Topic home",
-        title: `${topic.title} workspace`,
-        description:
-          slug === "openclaw"
-            ? "A flagship topic home that combines rendered wiki reading, maturity awareness, and next-action guidance in one place."
-            : "A rendered topic home that combines the canonical wiki with maturity guidance and the next steps required to deepen the workspace honestly.",
+        eyebrow: copy.shell.headerTopic,
+        title: topic.title,
         badge:
           slug === "openclaw"
-            ? `${manifest?.generatedMode ?? "reference"} example`
-            : topic.maturityStage,
+            ? copy.topicHome.openClawBadge(manifest?.generatedMode ?? "reference")
+            : getTopicMaturityStageLabel(locale, topic.maturityStage),
       }}
       intro={
         <TopicWorkspaceIntro
           acquisitionSummary={acquisitionSummary}
-          comparisonSpotlight={portfolio.comparisonSpotlight}
           evidenceChangeSummary={evidenceChangeSummary}
           evidenceGapSummary={evidenceGapSummary}
+          locale={locale}
           monitoringSummary={monitoringSummary}
           questionWorkflow={questionWorkflow}
           sessionSummary={sessionSummary}

@@ -2,14 +2,24 @@
 
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { cleanup, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
 
+import { AppLocaleProvider } from "@/components/app-locale-provider";
 import { DashboardWorkbench } from "@/features/dashboard/components/dashboard-workbench";
+import { ACTIVE_WORKSPACE_STORAGE_KEY } from "@/lib/constants";
 
 vi.mock("next/link", () => ({
   default: ({ href, children }: { href: string; children: ReactNode }) => (
     <a href={href}>{children}</a>
   ),
+}));
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    refresh: vi.fn(),
+  }),
 }));
 
 vi.mock("@/features/workspace/components/workspace-setup-panel", () => ({
@@ -144,6 +154,17 @@ function createDashboardPayload() {
   };
 }
 
+function createDashboardOverview(overrides?: Partial<ReturnType<typeof createDashboardPayload>["dashboard"]>) {
+  return {
+    ...createDashboardPayload().dashboard,
+    ...overrides,
+  };
+}
+
+function renderWithLocale(ui: ReactNode) {
+  return render(<AppLocaleProvider initialLocale="en">{ui}</AppLocaleProvider>);
+}
+
 describe("dashboard workbench", () => {
   beforeEach(() => {
     const storage = new Map<string, string>();
@@ -172,10 +193,11 @@ describe("dashboard workbench", () => {
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
+    vi.useRealTimers();
     window.localStorage.clear();
   });
 
-  it("renders workspace metrics and recent activity from the dashboard API", async () => {
+  it("renders the calmer workspace home from the dashboard API", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(JSON.stringify(createDashboardPayload()), {
         status: 200,
@@ -185,15 +207,34 @@ describe("dashboard workbench", () => {
       }),
     );
 
-    render(<DashboardWorkbench defaultWorkspaceRoot="/tmp/research-demo" />);
+    renderWithLocale(<DashboardWorkbench defaultWorkspaceRoot="/tmp/research-demo" />);
 
     expect(await screen.findByText(/Research Wiki Demo/)).toBeTruthy();
-    expect(screen.getByText("Open wiki")).toBeTruthy();
-    expect(screen.getAllByText("Knowledge workspace").length).toBeGreaterThan(0);
-    expect(screen.getByText("Pages worth opening next")).toBeTruthy();
-    expect(screen.getByText("Review focus")).toBeTruthy();
-    expect(screen.getByText("Recent movement")).toBeTruthy();
-    expect(screen.getAllByText("Patch proposal approved").length).toBeGreaterThan(0);
+    expect(screen.getByText("Topics")).toBeTruthy();
+    expect(screen.getByText("Pages")).toBeTruthy();
+    expect(screen.getByRole("link", { name: "Settings" }).getAttribute("href")).toBe("/settings");
+    expect(screen.getByRole("button", { name: "Workspace tools" })).toBeTruthy();
+  });
+
+  it("keeps workspace tools separate from the settings route", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(JSON.stringify(createDashboardPayload()), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    );
+
+    renderWithLocale(<DashboardWorkbench defaultWorkspaceRoot="/tmp/research-demo" />);
+
+    expect(await screen.findByText(/Research Wiki Demo/)).toBeTruthy();
+    expect(screen.queryByText(/Active root:/)).toBeNull();
+
+    await screen.getByRole("button", { name: "Workspace tools" }).click();
+
+    expect(await screen.findByText(/Active root:/)).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Hide tools" })).toBeTruthy();
   });
 
   it("shows an inline error when the dashboard API request fails", async () => {
@@ -211,8 +252,139 @@ describe("dashboard workbench", () => {
       ),
     );
 
-    render(<DashboardWorkbench defaultWorkspaceRoot="/tmp/research-demo" />);
+    renderWithLocale(<DashboardWorkbench defaultWorkspaceRoot="/tmp/research-demo" />);
 
     expect(await screen.findByText("Dashboard overview failed.")).toBeTruthy();
   });
+
+  it("normalizes dashboard wiki targets so file-like or workspace-scoped hrefs never render", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          dashboard: createDashboardOverview({
+            featuredPages: [
+              {
+                id: "page_1",
+                title: "Compiled research wiki",
+                type: "topic",
+                path: "wiki/topics/compiled-research-wiki.md",
+                reviewStatus: "approved",
+                sourceRefCount: 2,
+                pageRefCount: 1,
+                updatedAt: "2026-04-05T18:00:00.000Z",
+                href: "/wiki?workspaceRoot=%2Ftmp%2Fresearch-demo&pageId=page_1&pagePath=wiki%2Ftopics%2Fcompiled-research-wiki.md",
+              },
+            ],
+          }),
+        }),
+        {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      ),
+    );
+
+    renderWithLocale(<DashboardWorkbench defaultWorkspaceRoot="/tmp/research-demo" />);
+
+    expect(await screen.findByText(/Research Wiki Demo/)).toBeTruthy();
+    expect(screen.getByRole("link", { name: "Wiki" }).getAttribute("href")).toBe(
+      "/wiki?pageId=page_1",
+    );
+    expect(screen.getByRole("link", { name: "All pages" }).getAttribute("href")).toBe("/wiki");
+    expect(screen.getByRole("link", { name: /Compiled research wiki/ }).getAttribute("href")).toBe(
+      "/wiki?pageId=page_1",
+    );
+  });
+
+  it("hides stale page links while switching to the stored workspace root", async () => {
+    const nextWorkspaceRoot = "/tmp/other-workspace";
+    const initialDashboard = createDashboardOverview();
+    let resolveFetch: ((value: Response) => void) | null = null;
+
+    window.localStorage.setItem(ACTIVE_WORKSPACE_STORAGE_KEY, nextWorkspaceRoot);
+
+    vi.spyOn(globalThis, "fetch").mockImplementation(
+      () =>
+        new Promise<Response>((resolve) => {
+          resolveFetch = resolve;
+        }),
+    );
+
+    const { container } = renderWithLocale(
+      <DashboardWorkbench
+        defaultWorkspaceRoot="/tmp/research-demo"
+        initialDashboard={initialDashboard}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(
+        container.querySelector('a[href="/wiki?pageId=page_1"]'),
+      ).toBeNull();
+    });
+
+    resolveFetch?.(
+      new Response(
+        JSON.stringify({
+          dashboard: createDashboardOverview({
+            workspaceRoot: nextWorkspaceRoot,
+            initialized: false,
+            workspaceName: null,
+            counts: null,
+            featuredPages: [],
+          }),
+        }),
+        {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      ),
+    );
+
+    expect(await screen.findByText("Set up a local workspace.")).toBeTruthy();
+    expect(container.querySelector('a[href*="pagePath="]')).toBeNull();
+  });
+
+  it(
+    "falls back to the default workspace when a stored workspace root leaves the dashboard request hanging",
+    async () => {
+    vi.useFakeTimers();
+
+    const nextWorkspaceRoot = "/Volumes/disconnected-workspace";
+    const initialDashboard = createDashboardOverview();
+
+    window.localStorage.setItem(ACTIVE_WORKSPACE_STORAGE_KEY, nextWorkspaceRoot);
+
+    vi.spyOn(globalThis, "fetch").mockImplementation(
+      (_input, init) =>
+        new Promise<Response>((_resolve, reject) => {
+          init?.signal?.addEventListener("abort", () => {
+            reject(new DOMException("The operation was aborted.", "AbortError"));
+          });
+        }),
+    );
+
+    renderWithLocale(
+      <DashboardWorkbench
+        defaultWorkspaceRoot="/tmp/research-demo"
+        initialDashboard={initialDashboard}
+      />,
+    );
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10_100);
+      await Promise.resolve();
+    });
+
+      expect(screen.getByText(/Research Wiki Demo/)).toBeTruthy();
+      expect(window.localStorage.getItem(ACTIVE_WORKSPACE_STORAGE_KEY)).toBe(
+        "/tmp/research-demo",
+      );
+    },
+    15_000,
+  );
 });
